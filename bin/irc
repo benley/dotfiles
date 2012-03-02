@@ -1,0 +1,6 @@
+#!/bin/bash
+
+source $HOME/bin/benlib.sh
+
+kderp && exec ssh -t benley@catbus.corp.google.com screen -RDU irc || \
+    read -s -n1 -p "kerberos didn't work.  Press any key to quit.";echo
