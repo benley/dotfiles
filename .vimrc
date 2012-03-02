@@ -58,14 +58,6 @@ autocmd FileType py set autoindent
 "highlight RedundantSpaces ctermbg=red guibg=red
 "match RedundantSpaces /\s\+$\| \+\ze\t/
 
-"source /home/build/public/eng/vim/google.vim
-"source /google/src/head/depot/eng/vim/google.vim
-"source /usr/share/vim/google/google.vim
-
-"runtime perforce/perforcemenu.vim
-
-"source /home/build/nonconf/google3/tools/tags/gtags.vim
-
 if &diff
   set lines=50
   set columns=180
@@ -92,10 +84,6 @@ augroup end
 "  hi LineNr ctermfg=red ctermbg=black
 "  se cul cuc
 "endif
-
-"source /google/src/head/depot/google3/util/shell/gbash/tools/vim/autogen.vim
-
-"source /google/src/head/depot/google3/tools/gsearch/contrib/csearch.vim
 
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
