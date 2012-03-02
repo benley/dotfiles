@@ -8,6 +8,8 @@ OS=$(uname)
 #  . /etc/bashrc
 #fi
 
+alias c='ssh catbus'
+
 export EDITOR=vim
 export PATH="$HOME/bin:$HOME/android-sdk/tools:${PATH}"
 export DEBEMAIL='benley@zoiks.net'
@@ -23,7 +25,11 @@ case "${OS}" in
     ;;
   "Darwin")
     export CLICOLOR="true"
-    export LSCOLORS="DeGxxxxxCx"
+    # Colors I picked out long ago or something?
+    #export LSCOLORS="DeGxxxxxCx"
+    # Solarized-like colors:
+    export LSCOLORS=gxfxbEaEBxxEhEhBaDaCaD
+    export CLICOLOR=1
     ;;
 esac
 
