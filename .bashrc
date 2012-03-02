@@ -33,7 +33,6 @@ fi
 
 [[ -f /etc/bash_completion ]] && source /etc/bash_completion
 
-#export PS1="[\u@\h \W]\$ "
 case $TERM in
   xterm*)
     # Set the title bar to include the current directory.

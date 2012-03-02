@@ -16,7 +16,7 @@ if has("mouse")
   set mouse=a
 endif
 
-"  set   autowrite
+  set   autowrite
 "  set  nobackup
 "  set   hidden
 "  set   highlight=8r,db,es,hs,mb,Mr,nu,rs,sr,tb,vr,ws
