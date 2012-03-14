@@ -8,7 +8,8 @@ OS=$(uname)
 #  . /etc/bashrc
 #fi
 
-alias c='ssh catbus'
+source $HOME/bin/benlib.sh
+alias c='kssh catbus'
 
 export EDITOR=vim
 export PATH="$HOME/bin:$HOME/android-sdk/tools:${PATH}"
