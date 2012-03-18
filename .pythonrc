@@ -4,4 +4,7 @@ except ImportError:
   print "Module readline not available."
 else:
   import rlcompleter
+  # This works on linux
   readline.parse_and_bind("tab: complete")
+  # And this works on osx. Weird.
+  readline.parse_and_bind("bind ^i rl_complete")
