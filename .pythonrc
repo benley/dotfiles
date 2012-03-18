@@ -1,3 +1,9 @@
+# To use this, put this in your .bashrc or other shell login file:
+# export PYTHONSTARTUP="${HOME}/.pythonrc"
+# This makes tab-completion work in interactive python interpreters, as long
+# as they are compiled with gnu readline support. If not, python will still
+# work, just without tab completion.
+
 try:
   import readline
 except ImportError:
