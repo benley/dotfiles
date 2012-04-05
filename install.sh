@@ -58,6 +58,8 @@ function SymlinkIfDiffer() {
 
 function DoCleanUps() {
   # Some cleanups that should only be needed once per machine.
+  # This isn't quite right; readlink doesn't necessarily return a canonical
+  # path, but $PWD/blabla is one.
   if [[ -L "$HOME/.pythonrc" ]] && \
      [[ $(readlink "$HOME/.pythonrc") == "$PWD/.pythonrc" ]]; then
     rm "$HOME/.pythonrc"
