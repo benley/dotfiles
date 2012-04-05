@@ -14,19 +14,19 @@ function kssh() {
 }
 
 function irc() {
-  local pre=""
-  local msg=""
+  local cmd="kssh -t benley@catbus.corp.google.com screen -RDU irc"
   case $1 in
     "-p"|"--prompt")
-      pre="waitonfail -T"
       msg="This is clearly not an irc session. Press a key to quit."
+      waitonfail -T "$msg" $cmd
       ;;
     "-r"|"--retry")
-      pre="retryonfail -p"
       msg="ssh session died. Reconnect?"
+      retryonfail -p "$msg" $cmd
       ;;
+    *)
+      $cmd
   esac
-  $pre "$msg" kssh -t benley@catbus.corp.google.com screen -RDU irc
 }
 
 function waitonfail() {
