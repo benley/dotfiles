@@ -30,7 +30,7 @@ function SameFile() {
       ;;
     "Linux")
       inode1=$(stat -L -c%i $1 2>/dev/null)
-      inodw2=$(stat -L -c%i $2 2>/dev/null)
+      inode2=$(stat -L -c%i $2 2>/dev/null)
       ;;
     *)
       echo "ERROR: unknown OS: \"$OS\"" >> /dev/stderr
