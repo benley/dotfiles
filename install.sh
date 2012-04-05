@@ -56,6 +56,14 @@ function SymlinkIfDiffer() {
   fi
 }
 
+function DoCleanUps() {
+  # Some cleanups that should only be needed once per machine.
+  if [[ -l "$HOME/.pythonrc" ]] && \
+     [[ $(readlink "$HOME/.pythonrc") == "$PWD/.pythonrc" ]]; then
+    rm "$HOME/.pythonrc"
+  fi
+}
+
 mkdir -p "$HOME/bin"
 for file in bin/* .inputrc .bash_logout .bash_profile .bashrc .dircolors .pythonrc.py .screenrc .tmuxrc; do
   src="$PWD/$file"
@@ -65,3 +73,5 @@ done
 
 SymlinkIfDiffer "$PWD/vim/vimrc" "$HOME/.vimrc"
 SymlinkIfDiffer "$PWD/vim/dotvim" "$HOME/.vim"
+
+DoCleanUps
