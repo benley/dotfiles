@@ -12,7 +12,6 @@ else:
   import rlcompleter
   import os
   sysname = os.uname()[0]
-  print sysname
   if sysname == 'Linux':
     readline.parse_and_bind("tab: complete")
   elif sysname == 'Darwin':
