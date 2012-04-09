@@ -1,5 +1,5 @@
 # To use this, put this in your .bashrc or other shell login file:
-# export PYTHONSTARTUP="${HOME}/.pythonrc"
+# export PYTHONSTARTUP="${HOME}/.pythonrc.py"
 
 # This makes tab-completion work in interactive python interpreters, as long
 # as they are compiled with gnu readline support. If not, python will still
