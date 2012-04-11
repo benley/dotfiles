@@ -42,9 +42,9 @@ function Symlink() {
   # Symlink $1 to $2.
   # If force=1, don't confirm before overwriting existing files.
   if ((force)); then
-    ln -sfn "$1" "$2"
+    ln -sfn "$1" "$2" || true
   else
-    ln -sin "$1" "$2"
+    ln -sin "$1" "$2" || true
   fi
 }
 
