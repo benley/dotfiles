@@ -20,7 +20,7 @@
 use strict;
 use vars qw($VERSION %IRSSI);
 
-$VERSION = "1.4-benley1";
+$VERSION = "1.4-benley2";
 %IRSSI = (
     authors     => 'Jakub Jankowski',
     contact     => 'shasta@atn.pl',
@@ -65,7 +65,7 @@ sub make_colors {
 		$newstr .= (($char eq ",") ? ",," : $char);
 	}
 
-	return $newstr;
+	return $newstr . "\003"; # One last ^C to return to normal text color.
 }
 
 # void rsay($text, $server, $destination)
