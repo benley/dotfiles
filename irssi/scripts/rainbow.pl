@@ -13,6 +13,9 @@
 #
 # /RKICK <nick> [reason]
 #  - kicks nick from the current channel with coloured reason
+#
+# rainbow:<word> followed by <TAB>
+#  - Replaces <word> with rainbow-colored word inline
 
 # Written by Jakub Jankowski <shasta@atn.pl>
 # for Irssi 0.7.98.4 and newer
