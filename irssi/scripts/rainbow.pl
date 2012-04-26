@@ -16,6 +16,7 @@
 
 # Written by Jakub Jankowski <shasta@atn.pl>
 # for Irssi 0.7.98.4 and newer
+# Tab completion by Benjamin Staffin <benley@gmail.com>
 
 use strict;
 use vars qw($VERSION %IRSSI);
