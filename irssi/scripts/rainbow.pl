@@ -20,7 +20,7 @@
 use strict;
 use vars qw($VERSION %IRSSI);
 
-$VERSION = "1.4";
+$VERSION = "1.4-benley1";
 %IRSSI = (
     authors     => 'Jakub Jankowski',
     contact     => 'shasta@atn.pl',
@@ -31,6 +31,7 @@ $VERSION = "1.4";
 );
 
 use Irssi;
+use Irssi qw/signal_add_last/;
 use Irssi::Irc;
 
 # colors list
@@ -132,6 +133,17 @@ sub rkick {
 	}
 }
 
+# Bind tab completion: typing rainbow:<whatevertext> -> colorize <whatevertext>
+signal_add_last 'complete word' => sub {
+    my ($complist, $window, $word, $linestart, $want_space) = @_;
+    
+    if($word =~ /^rainbow:(.*)$/) {
+      my($text) = $1;
+      push @$complist, make_colors($text);
+    }
+};
+
+
 Irssi::command_bind("rsay", "rsay");
 Irssi::command_bind("rtopic", "rtopic");
 Irssi::command_bind("rme", "rme");
@@ -144,3 +156,4 @@ Irssi::command_bind("rkick", "rkick");
 # 29.01.2002: /rsay works with dcc chats now (v1.2)
 # 02.02.2002: make_colors() doesn't assign any color to spaces (v1.3)
 # 23.02.2002: /rkick added
+# 26.04.2012: Tab completion binding (v1.4-benley1)
