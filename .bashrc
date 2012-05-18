@@ -1,5 +1,7 @@
 # .bashrc
 
+export TZ='America/Los_Angeles'
+
 OS=$(uname)
 
 # This is unnecessary: see bash manpage's INVOCATION section.
