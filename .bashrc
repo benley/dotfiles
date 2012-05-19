@@ -1,6 +1,6 @@
 # .bashrc
 
-export TZ='America/Los_Angeles'
+[[ $HOSTNAME == 'osric' ]] && export TZ='America/Los_Angeles'
 
 OS=$(uname)
 
