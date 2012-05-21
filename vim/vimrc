@@ -88,7 +88,6 @@ augroup end
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 if has("syntax")
-"        so $VIM/vim58/syntax/syntax.vim
   set background=dark
   syntax on
 "       hi! Comment  term=bold  ctermfg=cyan  guifg=Blue
