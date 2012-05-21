@@ -45,7 +45,13 @@ autocmd FileType c,cpp set ts=4 formatoptions=cro cindent smarttab tw=0 nowrap s
 autocmd FileType php3,php4 set ts=4 formatoptions=cro smartindent smarttab tw=0 nowrap sidescroll=20 listchars=extends:$
 autocmd FileType c,cpp nmap <tab> =0<CR>
 autocmd FileType mail set tw=72 nowrap
-autocmd FileType py set autoindent
+autocmd FileType python call BenCode() | set omnifunc=pythoncomplete#Complete
+autocmd FileType sh call BenCode()
+
+fun! BenCode()
+  setl shiftwidth=2 smartindent autoindent expandtab
+  setl foldcolumn=4 foldmethod=indent
+endfun
 
 "if &term=="rxvt"
 "        set t_Co=8
@@ -85,8 +91,6 @@ augroup end
 "  hi LineNr ctermfg=red ctermbg=black
 "  se cul cuc
 "endif
-
-autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 if has("syntax")
   set background=dark
