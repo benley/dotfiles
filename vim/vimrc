@@ -6,7 +6,7 @@ set esckeys
 set incsearch
 " This will highlight all matches from the previous search.
 " set hlsearch
-" set ignorecase
+set ignorecase
 set smartcase
 set joinspaces
 
