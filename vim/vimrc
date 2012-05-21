@@ -58,10 +58,11 @@ autocmd FileType py set autoindent
 "highlight RedundantSpaces ctermbg=red guibg=red
 "match RedundantSpaces /\s\+$\| \+\ze\t/
 
-if &diff
-  set lines=50
-  set columns=180
-endif
+" Oh man this is annoying. Resizes your window. Maybe okay in gui mode?
+"if &diff
+"  set lines=50
+"  set columns=180
+"endif
 
 fun! FixDescription()
   if search("<enter description here>") > 0
