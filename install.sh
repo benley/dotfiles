@@ -73,6 +73,10 @@ for file in bin/* .inputrc .bash_logout .bash_profile .bashrc .dircolors .python
   SymlinkIfDiffer "$PWD/$file" "$HOME/$file"
 done
 
+mkdir -p $HOME/.ssh
+SymlinkIfDiffer "$PWD/ssh/config" "$HOME/.ssh/config"
+
+mkdir -p $HOME/.vim
 SymlinkIfDiffer "$PWD/vim/vimrc" "$HOME/.vimrc"
 SymlinkIfDiffer "$PWD/vim/dotvim" "$HOME/.vim"
 
