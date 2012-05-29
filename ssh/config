@@ -1,0 +1,41 @@
+Host * *.i *.corp.google.com
+  GSSAPIAuthentication yes
+  GSSAPIDelegateCredentials yes
+  GSSAPIKeyExchange yes
+  GSSAPITrustDNS yes
+  PreferredAuthentications gssapi-keyex,gssapi-with-mic,gssapi,publickey,password,keyboard-interactive
+  ForwardAgent yes
+  Compression no
+  ForwardX11 yes
+  ForwardX11Trusted yes
+
+Host *.*
+  GSSAPIAuthentication no
+  GSSAPIDelegateCredentials no
+  GSSAPIKeyExchange yes
+  GSSAPITrustDNS no
+  ForwardAgent no
+  Compression yes
+  ForwardX11 no
+  ForwardX11Trusted no
+
+Host zoiks.net *.zoiks.net
+  GSSAPIAuthentication no
+  GSSAPIKeyExchange no
+  PreferredAuthentications publickey,password
+  ForwardAgent yes
+  Compression yes
+
+Host catbus catbus.i catbus.i.corp.google.com catbus.corp.google.com
+  HostName catbus.i.corp.google.com
+  Port 8103
+  ControlMaster auto
+  ControlPersist yes
+  ControlPath /Users/benley/.ssh/.control_%r@%h:%p.%l
+
+Host chimoltrufia chimoltrufia.corp.google.com chimoltrufia.mtv chimoltrufia.mtv.corp.google.com
+  Hostname chimoltrufia.mtv.corp.google.com
+  Port 8103
+  ControlMaster auto
+  ControlPersist yes
+  ControlPath /Users/benley/.ssh/.control_%r@%h:%p.%l
