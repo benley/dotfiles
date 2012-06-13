@@ -12,6 +12,7 @@ OS=$(uname)
 
 source $HOME/bin/benlib.sh
 alias c='kssh catbus'
+alias mz='mosh zoiks.net'
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # don't overwrite GNU Midnight Commander's setting of `ignorespace'.
