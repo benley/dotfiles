@@ -1,5 +1,7 @@
 # .bashrc
 
+[[ $HOSTNAME == 'osric' ]] && export TZ='America/Los_Angeles'
+
 OS=$(uname)
 
 # This is unnecessary: see bash manpage's INVOCATION section.
@@ -10,6 +12,7 @@ OS=$(uname)
 
 source $HOME/bin/benlib.sh
 alias c='kssh catbus'
+alias mz='mosh zoiks.net'
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # don't overwrite GNU Midnight Commander's setting of `ignorespace'.
