@@ -6,7 +6,7 @@ set esckeys
 set incsearch
 " This will highlight all matches from the previous search.
 " set hlsearch
-" set ignorecase
+set ignorecase
 set smartcase
 set joinspaces
 
@@ -43,11 +43,17 @@ set   whichwrap=b,s,h,l,<,>,[,]
 
 filetype plugin indent on
 
-autocmd FileType c,cpp set ts=4 formatoptions=cro cindent smarttab tw=0 nowrap sidescroll=20 listchars=extends:$
-autocmd FileType php3,php4 set ts=4 formatoptions=cro smartindent smarttab tw=0 nowrap sidescroll=20 listchars=extends:$
-autocmd FileType c,cpp nmap <tab> =0<CR>
+"autocmd FileType c,cpp set ts=4 formatoptions=cro cindent smarttab tw=0 nowrap sidescroll=20 listchars=extends:$
+"autocmd FileType php3,php4 set ts=4 formatoptions=cro smartindent smarttab tw=0 nowrap sidescroll=20 listchars=extends:$
+"autocmd FileType c,cpp nmap <tab> =0<CR>
 autocmd FileType mail set tw=72 nowrap
-autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType python call BenCode() | set omnifunc=pythoncomplete#Complete
+autocmd FileType sh call BenCode()
+
+fun! BenCode()
+  setl shiftwidth=2 smartindent autoindent expandtab
+  setl foldcolumn=4 foldmethod=indent
+endfun
 
 "if &term=="rxvt"
 "        set t_Co=8
@@ -60,10 +66,11 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 "highlight RedundantSpaces ctermbg=red guibg=red
 "match RedundantSpaces /\s\+$\| \+\ze\t/
 
-if &diff
-  set lines=50
-  set columns=180
-endif
+" Oh man this is annoying. Resizes your window. Maybe okay in gui mode?
+"if &diff
+"  set lines=50
+"  set columns=180
+"endif
 
 fun! FixDescription()
   if search("<enter description here>") > 0
@@ -87,9 +94,7 @@ augroup end
 "  se cul cuc
 "endif
 
-
 if has("syntax")
-"        so $VIM/vim58/syntax/syntax.vim
   set background=dark
   syntax on
 "       hi! Comment  term=bold  ctermfg=cyan  guifg=Blue
