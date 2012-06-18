@@ -1,13 +1,8 @@
 #!/bin/bash
 
+#TODO(benley): --dryrun isn't actually implemented.
+
 set -o errexit
-
-force=0
-if [[ "$1" == "-f" ]] || [[ "$1" == "--force" ]]; then
-  readonly force=1
-fi
-
-set -o nounset
 
 OS=$(uname)
 case $OS in
@@ -19,6 +14,16 @@ case $OS in
   exit 1
   ;;
 esac
+
+function LogError() {
+  [[ $# -lt 1 ]] && LogError "LogError: no error text given"
+  echo "ERROR: $(basename $0): $@" >> /dev/stderr
+}
+
+function PrintUsage() {
+#FIXME(benley): implement this
+;
+}
 
 function SameFile() {
   # Return 0 if $1 and $2 are hard or soft links to the same file.
@@ -41,7 +46,7 @@ function SameFile() {
 function Symlink() {
   # Symlink $1 to $2.
   # If force=1, don't confirm before overwriting existing files.
-  if ((force)); then
+  if ((FLAGS_force)); then
     ln -sfn "$1" "$2" || true
   else
     ln -sin "$1" "$2" || true
@@ -66,14 +71,46 @@ function DoCleanUps() {
   fi
 }
 
-mkdir -p "$HOME/bin"
-for file in bin/* .inputrc .bash_logout .bash_profile .bashrc .dircolors .pythonrc.py .screenrc .tmuxrc; do
-  src="$PWD/$file"
-  dst="$HOME/$file"
-  SymlinkIfDiffer "$PWD/$file" "$HOME/$file"
-done
+function main() {
+  export FLAGS_force=0
+  export FLAGS_dryrun=0
+  #TODO(benley): is export necessary here?
 
-SymlinkIfDiffer "$PWD/vim/vimrc" "$HOME/.vimrc"
-SymlinkIfDiffer "$PWD/vim/dotvim" "$HOME/.vim"
+  for arg in $@; do
+    case $arg in
+      "-f" | "--force")
+        readonly FLAGS_force=1
+      ;;
+      "--dryrun")
+        readonly FLAGS_dryrun=0
+      ;;
+      "-h"|"-?"|"--help")
+        PrintUsage >> /dev/stdout
+        exit 0
+        ;;
+      *)
+        LogError "Unrecognized option: $arg"
+        PrintUsage >> /dev/stderr
+        exit 1
+      ;;
+    esac
+  done
+  
+  set -o nounset
+  mkdir -p "$HOME/bin"
+  for file in bin/* .inputrc .bash_logout .bash_profile .bashrc .dircolors .pythonrc.py .screenrc .tmuxrc; do
+    src="$PWD/$file"
+    dst="$HOME/$file"
+    SymlinkIfDiffer "$PWD/$file" "$HOME/$file"
+  done
+  
+  mkdir -p $HOME/.ssh
+  SymlinkIfDiffer "$PWD/ssh/config" "$HOME/.ssh/config"
 
-DoCleanUps
+  SymlinkIfDiffer "$PWD/vim/vimrc" "$HOME/.vimrc"
+  SymlinkIfDiffer "$PWD/vim/dotvim" "$HOME/.vim"
+  
+  DoCleanUps
+}
+
+main "$@"
