@@ -5,6 +5,9 @@
 # This is how one can set a reattach password:
 # password ODSJQf.4IJN7E    # "1234"
 
+# Everybody likes 256 color terminals.
+term screen-256color
+
 # for the love of god, use unicode
 defutf8 on
 
