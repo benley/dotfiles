@@ -3,6 +3,7 @@
 [[ $HOSTNAME == 'osric' ]] && export TZ='America/Los_Angeles'
 
 OS=$(uname)
+PLATFORM=$(uname -sm | tr " " "-")
 
 # This is unnecessary: see bash manpage's INVOCATION section.
 # Bash will source /etc/bash.bashrc by itself.
@@ -33,8 +34,14 @@ shopt -s checkwinsize
 #[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 export EDITOR=vim
-export PATH="$HOME/bin:$HOME/android-sdk/tools:${PATH}"
 export DEBEMAIL='benley@zoiks.net'
+
+for dir in \
+    "$HOME/bin" "$HOME/android-sdk/tools" "/opt/local/bin" \
+    "$HOME/Dropbox/bin/$PLATFORM"; do
+  [[ -d "$dir" ]] && PATH="$PATH:$dir"
+done
+export PATH
 
 # Fancy timestamps in .bash_history woooooo
 export HISTTIMEFORMAT='%Y-%m-%d %T '
@@ -46,6 +53,7 @@ case "${OS}" in
     eval $(dircolors ~/.dircolors)
     ;;
   "Darwin")
+    [[ -f /opt/local/etc/bash_completion ]] && source /opt/local/etc/bash_completion
     export CLICOLOR="true"
     # Colors I picked out long ago or something?
     #export LSCOLORS="DeGxxxxxCx"
