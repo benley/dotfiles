@@ -41,6 +41,8 @@ set   whichwrap=b,s,h,l,<,>,[,]
 
 "map   K  gq
 
+filetype plugin indent on
+
 "autocmd FileType c,cpp set ts=4 formatoptions=cro cindent smarttab tw=0 nowrap sidescroll=20 listchars=extends:$
 "autocmd FileType php3,php4 set ts=4 formatoptions=cro smartindent smarttab tw=0 nowrap sidescroll=20 listchars=extends:$
 "autocmd FileType c,cpp nmap <tab> =0<CR>
