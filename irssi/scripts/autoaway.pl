@@ -15,7 +15,10 @@
 # Note that using the /away command will disable the autoaway mechanism, as
 # well as the autoreturn. (when you unmark yourself, the autoaway wil
 # restart again)
-
+#
+# You can /set autoaway_message <your message here> to configure the away
+# message.
+#
 # Thanks to Adam Monsen for multiserver and config file fix
 
 use Irssi;
@@ -30,11 +33,11 @@ $VERSION = "0.3";
     description => 'Automatically goes  away after defined inactivity',
     license => 'BSD',
     url => 'http://www.flamingpackets.net/~vizzie/irssi/',
-    changed => 'Tue Oct 19 14:41:15 CDT 2010',
-    changes => 'Applied multiserver/store config patch from Adam Monsen'
+    changed => 'Mon Jul 09 04:29:15 PDT 2012',
+    changes => 'Added configurable away message setting.'
 );
 
-my ($autoaway_sec, $autoaway_to_tag, $autoaway_state);
+my ($autoaway_sec, $autoaway_to_tag, $autoaway_state, $autoaway_msg);
 $autoaway_state = 0;
 
 #
@@ -100,7 +103,7 @@ sub auto_timeout {
   # we're in the process.. don't touch anything.
   $autoaway_state = 3;
   foreach my $server (Irssi::servers()) {
-      $server->command("/AWAY autoaway after $autoaway_sec seconds");
+      $server->command("/AWAY $autoaway_msg");
   }
 
   Irssi::timeout_remove($autoaway_to_tag);
@@ -129,8 +132,11 @@ sub reset_timer {
 }
 
 Irssi::settings_add_int("misc", "autoaway_timeout", 0);
+Irssi::settings_add_str("misc", "autoaway_message",
+                        "auto-away: I've been idle for a while.");
 
 $autoaway_default = Irssi::settings_get_int("autoaway_timeout");
+$autoaway_msg = Irssi::settings_get_str("autoaway_message");
 if ($autoaway_default) {
   $autoaway_to_tag =
     Irssi::timeout_add($autoaway_default*1000, "auto_timeout", "");
