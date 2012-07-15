@@ -100,6 +100,8 @@ if has("syntax")
   syntax on
 "       hi! Comment  term=bold  ctermfg=cyan  guifg=Blue
   let g:solarized_termtrans=1
+" To use it with chrome ssh:
+"  let g:solarized_termcolors=256
   colorscheme solarized
 endif
 
