@@ -49,6 +49,7 @@ filetype plugin indent on
 autocmd FileType mail set tw=72 nowrap
 autocmd FileType python call BenCode() | set omnifunc=pythoncomplete#Complete
 autocmd FileType sh call BenCode()
+autocmd FileType vim call BenCode()
 
 fun! BenCode()
   setl shiftwidth=2 smartindent autoindent expandtab
@@ -100,4 +101,11 @@ if has("syntax")
 "       hi! Comment  term=bold  ctermfg=cyan  guifg=Blue
   let g:solarized_termtrans=1
   colorscheme solarized
+endif
+
+if has("unix")
+  let s:uname = system("uname")
+  if s:uname == "Darwin\n"
+    let Tlist_Ctags_Cmd = "/opt/local/bin/ctags"
+  endif
 endif
