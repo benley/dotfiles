@@ -53,7 +53,7 @@ case "${OS}" in
     eval $(dircolors ~/.dircolors)
     ;;
   "Darwin")
-    [[ -f /opt/local/etc/bash_completion ]] && source /opt/local/etc/bash_completion
+    [[ -e /opt/local/etc/bash_completion ]] && source /opt/local/etc/bash_completion
     export CLICOLOR="true"
     # Colors I picked out long ago or something?
     #export LSCOLORS="DeGxxxxxCx"
@@ -67,7 +67,7 @@ if grep --version|grep -q GNU; then
   export GREP_OPTIONS="--color"
 fi
 
-[[ -f /etc/bash_completion ]] && source /etc/bash_completion
+[[ -e /etc/bash_completion ]] && source /etc/bash_completion
 
 case $TERM in
   xterm*)
