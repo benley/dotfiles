@@ -12,7 +12,7 @@ OS=$(uname)
 
 source $HOME/bin/benlib.sh
 alias c='kssh catbus'
-alias mz='mosh zoiks.net'
+alias mz='mosh zoiks.net -- $@'
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # don't overwrite GNU Midnight Commander's setting of `ignorespace'.
@@ -33,7 +33,10 @@ shopt -s checkwinsize
 #[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 export EDITOR=vim
-export PATH="$HOME/bin:$HOME/android-sdk/tools:${PATH}"
+PATH="$HOME/bin:$PATH"
+[[ -e "$HOME/android-sdk/tools" ]] && PATH="$HOME/android-sdk/tools:$PATH"
+[[ -e "$HOME/p/depot_tools" ]] && PATH="$HOME/p/depot_tools:$PATH"
+export PATH
 export DEBEMAIL='benley@zoiks.net'
 
 # Fancy timestamps in .bash_history woooooo
