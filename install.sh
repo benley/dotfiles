@@ -22,7 +22,7 @@ function LogError() {
 
 function PrintUsage() {
 #FIXME(benley): implement this
-;
+:
 }
 
 function SameFile() {
