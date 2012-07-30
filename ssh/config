@@ -26,6 +26,22 @@ Host zoiks.net *.zoiks.net
   ForwardAgent yes
   Compression yes
 
+Host aram.xkcd.com
+  ForwardAgent yes
+  Compression yes
+
+Host github.com
+  ForwardX11 no
+  ForwardX11Trusted no
+
+Host wakko
+  ForwardX11 yes
+  ForwardX11Trusted yes
+  Compression yes
+  ForwardAgent yes
+  HostName sf.zoiks.net
+  Port 2223
+
 Host catbus catbus.i catbus.i.corp.google.com catbus.corp.google.com
   HostName catbus.i.corp.google.com
   Port 8103
