@@ -98,7 +98,7 @@ function main() {
   
   set -o nounset
   mkdir -p "$HOME/bin"
-  for file in bin/* .inputrc .bash_logout .bash_profile .bashrc .dircolors .pythonrc.py .screenrc .tmuxrc; do
+  for file in bin/* .inputrc .bash_logout .bash_profile .bashrc .dircolors .pythonrc.py .screenrc .tmuxrc .quiltrc-dpkg; do
     src="$PWD/$file"
     dst="$HOME/$file"
     SymlinkIfDiffer "$PWD/$file" "$HOME/$file"
