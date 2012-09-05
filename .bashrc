@@ -36,8 +36,11 @@ shopt -s checkwinsize
 export EDITOR=vim
 
 for dir in \
-    "$HOME/bin" "$HOME"/android-sdk/{platform-,}tools "/opt/local/bin" \
-    "$HOME/Dropbox/bin/$PLATFORM" "$HOME/p/depot_tools" \
+    "$HOME/bin" \
+    "$HOME"/p/{android-ndk,android-sdk/{platform-,}tools} \
+    "$HOME/Dropbox/bin/$PLATFORM" \
+    "$HOME/p/depot_tools" \
+    "/opt/local/bin" \
     "/opt/node/bin"; do
   [[ -d "$dir/" ]] && PATH="$PATH:$dir"
 done
@@ -53,7 +56,6 @@ case "${OS}" in
     eval $(dircolors ~/.dircolors)
     ;;
   "Darwin")
-    [[ -e /opt/local/etc/bash_completion ]] && source /opt/local/etc/bash_completion
     export CLICOLOR="true"
     # Colors I picked out long ago or something?
     #export LSCOLORS="DeGxxxxxCx"
@@ -67,7 +69,11 @@ if grep --version|grep -q GNU; then
   export GREP_OPTIONS="--color"
 fi
 
-[[ -e /etc/bash_completion ]] && source /etc/bash_completion
+if [[ -e /opt/local/etc/bash_completion ]]; then
+  source /opt/local/etc/bash_completion
+elif [[ -e /etc/bash_completion ]]; then
+  source /etc/bash_completion
+fi
 
 case $TERM in
   xterm*)
