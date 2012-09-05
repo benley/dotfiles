@@ -1,5 +1,9 @@
 # .bashrc
 
+addpath() {
+  [[ -d "$1"/ ]] && PATH="$PATH:$1" || return 1
+}
+
 [[ $HOSTNAME == 'osric' ]] && export TZ='America/Los_Angeles'
 
 OS=$(uname)
@@ -40,11 +44,13 @@ for dir in \
     "$HOME"/p/{android-ndk,android-sdk/{platform-,}tools} \
     "$HOME/Dropbox/bin/$PLATFORM" \
     "$HOME/p/depot_tools" \
-    "/opt/local/bin" \
-    "/opt/node/bin"; do
-  [[ -d "$dir/" ]] && PATH="$PATH:$dir"
+    "/opt/local/bin"; do
+  addpath "$dir"
 done
 export PATH
+
+# NodeJS
+addpath "/opt/node/bin" || addpath "$HOME/opt/node/bin" && . <(npm completion)
 
 # Fancy timestamps in .bash_history woooooo
 export HISTTIMEFORMAT='%Y-%m-%d %T '
