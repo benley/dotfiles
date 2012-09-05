@@ -37,7 +37,8 @@ export EDITOR=vim
 
 for dir in \
     "$HOME/bin" "$HOME/android-sdk/tools" "/opt/local/bin" \
-    "$HOME/Dropbox/bin/$PLATFORM" "$HOME/p/depot_tools"; do
+    "$HOME/Dropbox/bin/$PLATFORM" "$HOME/p/depot_tools" \
+    "/opt/node/bin"; do
   [[ -d "$dir" ]] && PATH="$PATH:$dir"
 done
 export PATH
