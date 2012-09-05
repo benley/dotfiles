@@ -36,9 +36,9 @@ shopt -s checkwinsize
 export EDITOR=vim
 
 for dir in \
-    "$HOME/bin" "$HOME/android-sdk/tools" "/opt/local/bin" \
+    "$HOME/bin" "$HOME"/android-sdk/{platform-,}tools "/opt/local/bin" \
     "$HOME/Dropbox/bin/$PLATFORM" "$HOME/p/depot_tools"; do
-  [[ -d "$dir" ]] && PATH="$PATH:$dir"
+  [[ -d "$dir/" ]] && PATH="$PATH:$dir"
 done
 export PATH
 
