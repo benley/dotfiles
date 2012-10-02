@@ -34,6 +34,13 @@ Host github.com
   ForwardX11 no
   ForwardX11Trusted no
 
+Host maya maya.zoiks.net
+  ForwardX11 no
+  Compression yes
+  ForwardAgent yes
+  HostName maya.zoiks.net
+  Port 2222
+
 Host wakko
   ForwardX11 yes
   ForwardX11Trusted yes
