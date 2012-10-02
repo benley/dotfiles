@@ -1,5 +1,9 @@
 # .bashrc
 
+addpath() {
+  [[ -d "$1"/ ]] && PATH="$PATH:$1" || return 1
+}
+
 [[ $HOSTNAME == 'osric' ]] && export TZ='America/Los_Angeles'
 
 OS=$(uname)
@@ -34,14 +38,19 @@ shopt -s checkwinsize
 #[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 export EDITOR=vim
-export DEBEMAIL='benley@zoiks.net'
 
 for dir in \
-    "$HOME/bin" "$HOME/android-sdk/tools" "/opt/local/bin" \
-    "$HOME/Dropbox/bin/$PLATFORM" "$HOME/p/depot_tools"; do
-  [[ -d "$dir" ]] && PATH="$PATH:$dir"
+    "$HOME/bin" \
+    "$HOME"/p/{android-ndk,android-sdk/{platform-,}tools} \
+    "$HOME/Dropbox/bin/$PLATFORM" \
+    "$HOME/p/depot_tools" \
+    "/opt/local/bin"; do
+  addpath "$dir"
 done
 export PATH
+
+# NodeJS
+addpath "/opt/node/bin" || addpath "$HOME/opt/node/bin" && . <(npm completion)
 
 # Fancy timestamps in .bash_history woooooo
 export HISTTIMEFORMAT='%Y-%m-%d %T '
@@ -53,7 +62,6 @@ case "${OS}" in
     eval $(dircolors ~/.dircolors)
     ;;
   "Darwin")
-    [[ -e /opt/local/etc/bash_completion ]] && source /opt/local/etc/bash_completion
     export CLICOLOR="true"
     # Colors I picked out long ago or something?
     #export LSCOLORS="DeGxxxxxCx"
@@ -67,7 +75,11 @@ if grep --version|grep -q GNU; then
   export GREP_OPTIONS="--color"
 fi
 
-[[ -e /etc/bash_completion ]] && source /etc/bash_completion
+if [[ -e /opt/local/etc/bash_completion ]]; then
+  source /opt/local/etc/bash_completion
+elif [[ -e /etc/bash_completion ]]; then
+  source /etc/bash_completion
+fi
 
 case $TERM in
   xterm*)
@@ -82,17 +94,39 @@ esac
 # This is nifty but messes up display of long history lines.
 #export PS1='\[┌─\](\w)\[────\]\n\[└\][\h]\$ '
 
-# fancy-ass manpage colors!
-export LESS_TERMCAP_mb=$'\E[01;31m'
-export LESS_TERMCAP_md=$'\E[01;31m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;44;33m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[01;32m'
+# fancy-ass manpage colors! (classic)
+#export LESS_TERMCAP_mb=$'\E[01;31m'
+#export LESS_TERMCAP_md=$'\E[01;31m'
+#export LESS_TERMCAP_me=$'\E[0m'
+#export LESS_TERMCAP_se=$'\E[0m'
+#export LESS_TERMCAP_so=$'\E[01;44;33m'
+#export LESS_TERMCAP_ue=$'\E[0m'
+#export LESS_TERMCAP_us=$'\E[01;32m'
+
+# Less colors, solarized.
+export LESS_TERMCAP_mb=$'\E[5m'           # begin blinking
+export LESS_TERMCAP_md=$'\E[0;33m'        # begin bold
+#export LESS_TERMCAP_md=$'\E[01;38;5;74m' # begin bold  (light blue)
+export LESS_TERMCAP_me=$'\E[0m'           # end mode
+export LESS_TERMCAP_se=$'\E[0m'           # end standout-mode
+export LESS_TERMCAP_so=$'\E[1;30;43m'     # begin standout-mode - info box
+export LESS_TERMCAP_ue=$'\E[0m'           # end underline
+export LESS_TERMCAP_us=$'\E[4;32m'        # begin underline
+
+# Have less use the extended status prompt.
+export LESS="-M"
+
+# I like shiny things.
+[[ -x $(which colorgcc) ]] && export CC=colorgcc
 
 export PYTHONSTARTUP="${HOME}/.pythonrc.py"
 
 # MOAR HISTORY
 export HISTSIZE=9999
 export HISTFILESIZE=9999
+
+# Debian dev stuff
+export DEBEMAIL='benley@zoiks.net'
+export DEBFULLNAME='Benjamin Staffin'
+alias dquilt="quilt --quiltrc=${HOME}/.quiltrc-dpkg"
+alias lintian="lintian --color=auto"
