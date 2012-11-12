@@ -50,7 +50,7 @@ done
 export PATH
 
 # NodeJS
-addpath "/opt/node/bin" || addpath "$HOME/opt/node/bin" && . <(npm completion)
+addpath "$HOME/opt/node/bin" && . <(npm completion)
 
 # Fancy timestamps in .bash_history woooooo
 export HISTTIMEFORMAT='%Y-%m-%d %T '
