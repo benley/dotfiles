@@ -47,7 +47,8 @@ filetype plugin indent on
 "autocmd FileType php3,php4 set ts=4 formatoptions=cro smartindent smarttab tw=0 nowrap sidescroll=20 listchars=extends:$
 "autocmd FileType c,cpp nmap <tab> =0<CR>
 autocmd FileType mail set tw=72 nowrap
-autocmd FileType python call BenCode() | set omnifunc=pythoncomplete#Complete
+autocmd FileType python call BenCode()
+      \ | set omnifunc=pythoncomplete#Complete
 autocmd FileType sh call BenCode()
 autocmd FileType vim call BenCode()
 
