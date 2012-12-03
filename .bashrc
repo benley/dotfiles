@@ -50,6 +50,9 @@ for dir in \
 done
 export PATH
 
+# NodeJS
+addpath "$HOME/opt/node/bin" && . <(npm completion)
+
 # Fancy timestamps in .bash_history woooooo
 export HISTTIMEFORMAT='%Y-%m-%d %T '
 
@@ -128,8 +131,3 @@ export DEBEMAIL='benley@zoiks.net'
 export DEBFULLNAME='Benjamin Staffin'
 alias dquilt="quilt --quiltrc=${HOME}/.quiltrc-dpkg"
 alias lintian="lintian --color=auto"
-
-# NodeJS
-addpath "/opt/node/bin" \
-    || addpath "$HOME/opt/node/bin" \
-    && source <(npm completion)
