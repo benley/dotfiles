@@ -34,24 +34,29 @@ Host github.com
   ForwardX11 no
   ForwardX11Trusted no
 
-Host wakko
+Host z.nyanbox
   ForwardX11 yes
   ForwardX11Trusted yes
   Compression yes
   ForwardAgent yes
   HostName sf.zoiks.net
-  Port 2223
+  Port 2224
 
 Host catbus catbus.i catbus.i.corp.google.com catbus.corp.google.com
   HostName catbus.i.corp.google.com
   Port 8103
   ControlMaster auto
   #ControlPersist yes
-  ControlPath /Users/benley/.ssh/.control_%r@%h:%p.%l
+  #ControlPath /Users/benley/.ssh/.control_%r@%h:%p.%l
 
 Host chimoltrufia chimoltrufia.corp.google.com chimoltrufia.mtv chimoltrufia.mtv.corp.google.com
   Hostname chimoltrufia.mtv.corp.google.com
   Port 8103
   ControlMaster auto
   #ControlPersist yes
-  ControlPath /Users/benley/.ssh/.control_%r@%h:%p.%l
+  #ControlPath /Users/benley/.ssh/.control_%r@%h:%p.%l
+
+Host t.blarg
+  HostName localhost
+  Port 2424
+  ControlMaster auto
