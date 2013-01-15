@@ -21,6 +21,7 @@ PLATFORM=$(uname -sm | tr " " "-")
 
 source $HOME/bin/benlib.sh
 alias c='kssh catbus'
+alias ch='kssh chimoltrufia'
 alias mz='mosh zoiks.net -- $@'
 
 # don't put duplicate lines in the history. See bash(1) for more options
@@ -55,7 +56,7 @@ prefixpath "$HOME/Library/Haskell/bin"
 export PATH
 
 # NodeJS
-addpath "/opt/node/bin" || addpath "$HOME/opt/node/bin" && . <(npm completion)
+addpath "$HOME/opt/node/bin" && . <(npm completion)
 
 # Fancy timestamps in .bash_history woooooo
 export HISTTIMEFORMAT='%Y-%m-%d %T '
