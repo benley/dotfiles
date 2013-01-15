@@ -4,6 +4,10 @@ addpath() {
   [[ -d "$1"/ ]] && PATH="$PATH:$1" || return 1
 }
 
+prefixpath() {
+  [[ -d "$1"/ ]] && PATH="$1:$PATH" || return 1
+}
+
 [[ $HOSTNAME == 'osric' ]] && export TZ='America/Los_Angeles'
 
 OS=$(uname)
@@ -47,6 +51,7 @@ for dir in \
     "/opt/local/bin"; do
   addpath "$dir"
 done
+prefixpath "$HOME/Library/Haskell/bin"
 export PATH
 
 # NodeJS
