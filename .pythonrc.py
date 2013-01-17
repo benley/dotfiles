@@ -7,7 +7,7 @@
 try:
   import readline
 except ImportError:
-  print "Module readline not available."
+  print "This python lacks readline, so history and tab completion won't work."
 else:
   import rlcompleter
   import os
@@ -20,10 +20,11 @@ else:
 
 # Restore our command-line history, and save it when Python exits.
 # Similar to how bash does it with .bash_history.
-import atexit
-import os.path
-history_path = os.path.expanduser('~/.python_history')
-if os.path.isfile(history_path):
-   readline.read_history_file(history_path)
-atexit.register(lambda x=history_path: readline.write_history_file(x))
-del history_path
+if readline:
+  import atexit
+  import os.path
+  history_path = os.path.expanduser('~/.python_history')
+  if os.path.isfile(history_path):
+     readline.read_history_file(history_path)
+  atexit.register(lambda x=history_path: readline.write_history_file(x))
+  del history_path

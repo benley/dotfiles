@@ -34,6 +34,13 @@ Host github.com
   ForwardX11 no
   ForwardX11Trusted no
 
+Host maya maya.zoiks.net
+  ForwardX11 no
+  Compression yes
+  ForwardAgent yes
+  HostName maya.zoiks.net
+  Port 2222
+
 Host wakko
   ForwardX11 yes
   ForwardX11Trusted yes
@@ -46,12 +53,12 @@ Host catbus catbus.i catbus.i.corp.google.com catbus.corp.google.com
   HostName catbus.i.corp.google.com
   Port 8103
   ControlMaster auto
-  #ControlPersist yes
-  ControlPath /Users/benley/.ssh/.control_%r@%h:%p.%l
+  ControlPersist yes
+  ControlPath /tmp/.sshcontrol_catbus
 
 Host chimoltrufia chimoltrufia.corp.google.com chimoltrufia.mtv chimoltrufia.mtv.corp.google.com
   Hostname chimoltrufia.mtv.corp.google.com
   Port 8103
   ControlMaster auto
-  #ControlPersist yes
-  ControlPath /Users/benley/.ssh/.control_%r@%h:%p.%l
+  ControlPersist yes
+  ControlPath /tmp/.sshcontrol_chimoltrufia

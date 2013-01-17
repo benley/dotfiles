@@ -4,6 +4,10 @@ addpath() {
   [[ -d "$1"/ ]] && PATH="$PATH:$1" || return 1
 }
 
+prefixpath() {
+  [[ -d "$1"/ ]] && PATH="$1:$PATH" || return 1
+}
+
 [[ $HOSTNAME == 'osric' ]] && export TZ='America/Los_Angeles'
 
 OS=$(uname)
@@ -17,6 +21,7 @@ PLATFORM=$(uname -sm | tr " " "-")
 
 source $HOME/bin/benlib.sh
 alias c='kssh catbus'
+alias ch='kssh chimoltrufia'
 alias mz='mosh zoiks.net -- $@'
 
 # don't put duplicate lines in the history. See bash(1) for more options
@@ -47,10 +52,11 @@ for dir in \
     "/opt/local/bin"; do
   addpath "$dir"
 done
+prefixpath "$HOME/Library/Haskell/bin"
 export PATH
 
 # NodeJS
-addpath "/opt/node/bin" || addpath "$HOME/opt/node/bin" && . <(npm completion)
+addpath "$HOME/opt/node/bin" && . <(npm completion)
 
 # Fancy timestamps in .bash_history woooooo
 export HISTTIMEFORMAT='%Y-%m-%d %T '
