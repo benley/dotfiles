@@ -111,3 +111,10 @@ if has("unix")
     let Tlist_Ctags_Cmd = "/opt/local/bin/ctags"
   endif
 endif
+
+if has("gui")
+  " I don't know why this doesn't work when quoted.
+  set guifont=Inconsolata:h16
+  " Turn off the toolbar.
+  set guioptions-=T
+endif

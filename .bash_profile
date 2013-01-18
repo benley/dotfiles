@@ -1,2 +1,2 @@
 # yes, really.
-source .bashrc
+source "$HOME"/.bashrc
