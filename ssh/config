@@ -34,6 +34,13 @@ Host github.com
   ForwardX11 no
   ForwardX11Trusted no
 
+Host maya maya.zoiks.net
+  ForwardX11 no
+  Compression yes
+  ForwardAgent yes
+  HostName maya.zoiks.net
+  Port 2222
+
 Host z.nyanbox
   ForwardX11 yes
   ForwardX11Trusted yes
@@ -60,3 +67,5 @@ Host t.blarg
   HostName localhost
   Port 2424
   ControlMaster auto
+  ControlPersist yes
+  ControlPath /tmp/.sshcontrol_chimoltrufia

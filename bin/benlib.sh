@@ -14,7 +14,7 @@ function kssh() {
 }
 
 function irc() {
-  local cmd="kssh -t benley@catbus.corp.google.com tmux attach -t irc"
+  local cmd="kssh -t benley@catbus.corp.google.com screen -rdU irc"
   case $1 in
     "-p"|"--prompt")
       msg="This is clearly not an irc session. Press a key to quit."
