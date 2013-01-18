@@ -10,7 +10,21 @@ set ignorecase
 set smartcase
 set joinspaces
 
-call pathogen#infect()
+"call pathogen#infect()
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+"Add bundles here
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'Conque-Shell'
+Bundle 'pythoncomplete'
+
+" :BundleList          - list configured bundles
+" :BundleInstall(!)    - install(update) bundles
+" :BundleSearch(!) foo - search(or refresh cache first) for foo
+" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+
+filetype plugin indent on
+
 
 if has("mouse")
   set mouse=a
@@ -111,4 +125,11 @@ if has("unix")
   if s:uname == "Darwin\n"
     let Tlist_Ctags_Cmd = "/opt/local/bin/ctags"
   endif
+endif
+
+if has("gui")
+  " I don't know why this doesn't work when quoted.
+  set guifont=Inconsolata:h16
+  " Turn off the toolbar.
+  set guioptions-=T
 endif

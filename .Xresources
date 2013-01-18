@@ -60,6 +60,8 @@ wterm.font: fixed
 !! wterm.color15: White
 wterm.scrollBar: false
 
+!! solarized xdefaults is the worst idea ever. STOP WANTING THAT.
+
 
 !! drop in Solarized colorscheme for Xresources/Xdefaults
 

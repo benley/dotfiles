@@ -1,4 +1,54 @@
-Host * *.i *.corp.google.com
+Host aram.xkcd.com
+  ForwardAgent yes
+  Compression yes
+
+Host github.com
+  Compression yes
+  ForwardAgent no
+  ForwardX11 no
+  ForwardX11Trusted no
+
+Host maya maya.zoiks.net
+  ForwardX11 no
+  ForwardX11Trusted no
+  Hostname maya.zoiks.net
+  Port 2222
+  Compression yes
+  ControlMaster auto
+  ControlPersist yes
+  ControlPath /tmp/.control_%r@%h:%p.%l
+
+Host nyanbox.z
+  ForwardX11 yes
+  ForwardX11Trusted yes
+  Compression yes
+  ForwardAgent yes
+  HostName sf.zoiks.net
+  Port 2224
+  ControlMaster auto
+  ControlPersist yes
+  ControlPath /tmp/.control_%r@%h:%p.%l
+
+Host wakko
+  ForwardX11 yes
+  ForwardX11Trusted yes
+  Compression yes
+  ForwardAgent yes
+  HostName sf.zoiks.net
+  Port 2223
+  ControlMaster auto
+  #ControlPersist yes
+  ControlPath /tmp/.control_%r@%h:%p.%l
+
+Host zoiks.net *.zoiks.net
+  GSSAPIAuthentication no
+  GSSAPIKeyExchange no
+  PreferredAuthentications publickey,password
+  ForwardAgent yes
+  Compression yes
+
+
+Host * *.i *.mtv *.cbf *.hot *.dls *.corp *.corp.google.com
   GSSAPIAuthentication yes
   GSSAPIDelegateCredentials yes
   GSSAPIKeyExchange yes
@@ -10,7 +60,7 @@ Host * *.i *.corp.google.com
   ForwardX11Trusted yes
 
 Host *.*
-  GSSAPIAuthentication no
+  GSSAPIAuthentication yes
   GSSAPIDelegateCredentials no
   GSSAPIKeyExchange yes
   GSSAPITrustDNS no
@@ -19,46 +69,9 @@ Host *.*
   ForwardX11 no
   ForwardX11Trusted no
 
-Host zoiks.net *.zoiks.net
-  GSSAPIAuthentication no
-  GSSAPIKeyExchange no
-  PreferredAuthentications publickey,password
-  ForwardAgent yes
-  Compression yes
-
-Host aram.xkcd.com
-  ForwardAgent yes
-  Compression yes
-
-Host github.com
-  ForwardX11 no
-  ForwardX11Trusted no
-
-Host maya maya.zoiks.net
-  ForwardX11 no
-  Compression yes
-  ForwardAgent yes
-  HostName maya.zoiks.net
-  Port 2222
-
-Host wakko
-  ForwardX11 yes
-  ForwardX11Trusted yes
-  Compression yes
-  ForwardAgent yes
-  HostName sf.zoiks.net
-  Port 2223
-
 Host catbus catbus.i catbus.i.corp.google.com catbus.corp.google.com
   HostName catbus.i.corp.google.com
   Port 8103
   ControlMaster auto
   #ControlPersist yes
-  ControlPath /tmp/.sshcontrol_catbus
-
-Host chimoltrufia chimoltrufia.corp.google.com chimoltrufia.mtv chimoltrufia.mtv.corp.google.com
-  Hostname chimoltrufia.mtv.corp.google.com
-  Port 8103
-  ControlMaster auto
-  #ControlPersist yes
-  ControlPath /tmp/.sshcontrol_chimoltrufia
+  #ControlPath /Users/benley/.ssh/.control_%r@%h:%p.%l
