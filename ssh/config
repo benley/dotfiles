@@ -15,7 +15,7 @@ Host maya maya.zoiks.net
   Port 2222
   Compression yes
   ControlMaster auto
-  ControlPersist yes
+  #ControlPersist yes
   ControlPath /tmp/.control_%r@%h:%p.%l
 
 Host nyanbox.z
@@ -26,7 +26,7 @@ Host nyanbox.z
   HostName sf.zoiks.net
   Port 2224
   ControlMaster auto
-  ControlPersist yes
+  #ControlPersist yes
   ControlPath /tmp/.control_%r@%h:%p.%l
 
 Host wakko
