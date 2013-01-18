@@ -73,16 +73,5 @@ Host catbus catbus.i catbus.i.corp.google.com catbus.corp.google.com
   HostName catbus.i.corp.google.com
   Port 8103
   ControlMaster auto
-  ControlPersist yes
-  ControlPath /tmp/.control_%r@catbus
-
-Host chimoltrufia chimoltrufia.corp.google.com chimoltrufia.mtv chimoltrufia.mtv.corp.google.com
-  Hostname chimoltrufia.mtv.corp.google.com
-  Port 8103
-  ControlMaster auto
-  ControlPersist yes
-  # This results in a path that is too long to be a unix socket.
-  # Some version of openssh later than 5.6p1 appears to add a hash to the end
-  # of the controlpath, so in the future I can probably just use that.
+  #ControlPersist yes
   #ControlPath /Users/benley/.ssh/.control_%r@%h:%p.%l
-  ControlPath /tmp/.control_%r@chimoltrufia

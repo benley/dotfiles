@@ -10,7 +10,21 @@ set ignorecase
 set smartcase
 set joinspaces
 
-call pathogen#infect()
+"call pathogen#infect()
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+"Add bundles here
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'Conque-Shell'
+Bundle 'pythoncomplete'
+
+" :BundleList          - list configured bundles
+" :BundleInstall(!)    - install(update) bundles
+" :BundleSearch(!) foo - search(or refresh cache first) for foo
+" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+
+filetype plugin indent on
+
 
 if has("mouse")
   set mouse=a
@@ -47,7 +61,8 @@ filetype plugin indent on
 "autocmd FileType php3,php4 set ts=4 formatoptions=cro smartindent smarttab tw=0 nowrap sidescroll=20 listchars=extends:$
 "autocmd FileType c,cpp nmap <tab> =0<CR>
 autocmd FileType mail set tw=72 nowrap
-autocmd FileType python call BenCode() | set omnifunc=pythoncomplete#Complete
+autocmd FileType python call BenCode()
+      \ | set omnifunc=pythoncomplete#Complete
 autocmd FileType sh call BenCode()
 autocmd FileType vim call BenCode()
 
