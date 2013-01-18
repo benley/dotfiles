@@ -13,7 +13,13 @@ Bundle 'Ambient-Color-Scheme'
 Bundle 'clarity.vim'
 Bundle 'oceandeep'
 Bundle 'Cthulhian'
-"Bundle 'Conque-Shell'  " This is broken upstream???
+Bundle 'Conque-Shell'
+Bundle 'pythoncomplete'
+
+" :BundleList          - list configured bundles
+" :BundleInstall(!)    - install(update) bundles
+" :BundleSearch(!) foo - search(or refresh cache first) for foo
+" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 
 filetype plugin indent on
 
@@ -35,8 +41,6 @@ set wildmenu
 set hidden
 set magic
 set laststatus=2 " Keep the status bar even when there's only one window.
-
-"call pathogen#infect()
 
 if has("mouse")
   set mouse=a
@@ -185,3 +189,10 @@ cabbrev pv Pv
 let g:winManagerWindowLayout = "BufExplorer,FileExplorer|TagList"
 
 highlight OverLength ctermfg=red guifg=red
+
+if has("gui")
+  " I don't know why this doesn't work when quoted.
+  set guifont=Inconsolata:h16
+  " Turn off the toolbar.
+  set guioptions-=T
+endif
