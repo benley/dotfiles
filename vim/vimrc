@@ -192,7 +192,8 @@ highlight OverLength ctermfg=red guifg=red
 
 if has("gui")
   " I don't know why this doesn't work when quoted.
-  set guifont=Inconsolata:h16
+  "set guifont=Inconsolata:h16
+  set guifont=Monofur\ 13
   " Turn off the toolbar.
   set guioptions-=T
 endif
