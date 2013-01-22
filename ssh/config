@@ -47,7 +47,6 @@ Host zoiks.net *.zoiks.net
   ForwardAgent yes
   Compression yes
 
-
 Host * *.i *.mtv *.cbf *.hot *.dls *.corp *.corp.google.com
   GSSAPIAuthentication yes
   GSSAPIDelegateCredentials yes
@@ -68,10 +67,3 @@ Host *.*
   Compression yes
   ForwardX11 no
   ForwardX11Trusted no
-
-Host catbus catbus.i catbus.i.corp.google.com catbus.corp.google.com
-  HostName catbus.i.corp.google.com
-  Port 8103
-  ControlMaster auto
-  #ControlPersist yes
-  #ControlPath /Users/benley/.ssh/.control_%r@%h:%p.%l
