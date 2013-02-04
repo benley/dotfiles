@@ -15,6 +15,7 @@ Bundle 'oceandeep'
 Bundle 'Cthulhian'
 Bundle 'Conque-Shell'
 Bundle 'pythoncomplete'
+Bundle 'vim-json-bundle'
 
 " :BundleList          - list configured bundles
 " :BundleInstall(!)    - install(update) bundles
@@ -80,7 +81,7 @@ autocmd FileType mail set tw=72 nowrap
 autocmd FileType python call BenCode()
       \ | set omnifunc=pythoncomplete#Complete
 
-autocmd FileType conf setlocal foldcolumn=0 modeline
+autocmd FileType conf setlocal foldcolumn=0 modeline modelines=5
 autocmd FileType sh call BenCode()
 autocmd FileType vim call BenCode()
 
