@@ -85,6 +85,8 @@ autocmd FileType python call BenCode()
 autocmd FileType conf setlocal foldcolumn=0 modeline
 autocmd FileType sh call BenCode()
 autocmd FileType vim call BenCode()
+autocmd FileType ruby match OverLength /\%>80v.\+/
+      \ | set shiftwidth=2
 
 fun! BenCode()
   "I hate this right now for some reason
@@ -131,6 +133,13 @@ augroup end
 "  hi LineNr ctermfg=red ctermbg=black
 "  se cul cuc
 "endif
+
+autocmd ColorScheme * highlight OverLength ctermfg=red guifg=red
+
+" http://vim.wikia.com/wiki/Highlight_unwanted_spaces
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+autocmd InsertEnter * match ExtraWhitespace /\s\+%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 
 if has("syntax")
   set background=dark
@@ -189,8 +198,6 @@ cabbrev pv Pv
 
 " WinManager blahblah
 let g:winManagerWindowLayout = "BufExplorer,FileExplorer|TagList"
-
-highlight OverLength ctermfg=red guifg=red
 
 if has("gui")
   " I don't know why this doesn't work when quoted.
