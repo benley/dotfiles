@@ -48,7 +48,7 @@ ForwardAgent yes
 Compression yes
 
 # CS
-Host lab04 lab04.hc
+Host lab04 lab04.hc lab04.hc.cloudscaling.com
 HostName lab04.hc.cloudscaling.com
 User ben
 Port 3223
