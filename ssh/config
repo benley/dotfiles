@@ -1,64 +1,71 @@
-Host * *.i *.corp.google.com
-  GSSAPIAuthentication yes
-  GSSAPIDelegateCredentials yes
-  GSSAPIKeyExchange yes
-  GSSAPITrustDNS yes
-  PreferredAuthentications gssapi-keyex,gssapi-with-mic,gssapi,publickey,password,keyboard-interactive
-  ForwardAgent yes
-  Compression no
-  ForwardX11 yes
-  ForwardX11Trusted yes
+Host aram.xkcd.com
+ForwardAgent yes
+Compression yes
+
+Host github.com
+Compression yes
+ForwardAgent no
+ForwardX11 no
+ForwardX11Trusted no
+
+Host maya maya.zoiks.net
+ForwardX11 no
+ForwardX11Trusted no
+Hostname maya.zoiks.net
+#Port 2222
+Compression yes
+ControlMaster auto
+#ControlPersist yes
+ControlPath /tmp/.control_%r@%h:%p.%l
+
+Host nyanbox.z
+ForwardX11 yes
+ForwardX11Trusted yes
+Compression yes
+ForwardAgent yes
+HostName sf.zoiks.net
+Port 2224
+ControlMaster auto
+#ControlPersist yes
+ControlPath /tmp/.control_%r@%h:%p.%l
+
+Host wakko
+ForwardX11 yes
+ForwardX11Trusted yes
+Compression yes
+ForwardAgent yes
+HostName sf.zoiks.net
+Port 2223
+ControlMaster auto
+#ControlPersist yes
+ControlPath /tmp/.control_%r@%h:%p.%l
+
+Host zoiks.net *.zoiks.net
+GSSAPIAuthentication no
+GSSAPIKeyExchange no
+PreferredAuthentications publickey,password
+ForwardAgent yes
+Compression yes
+
+# CS
+Host lab04 lab04.hc lab04.hc.cloudscaling.com
+HostName lab04.hc.cloudscaling.com
+User ben
+Port 3223
+ForwardAgent yes
+ForwardX11 yes
+ForwardX11Trusted yes
+Compression yes
+ControlMaster auto
+ControlPersist 3600
+ControlPath /tmp/.ssh_%r@%h:%p
 
 Host *.*
   GSSAPIAuthentication no
   GSSAPIDelegateCredentials no
-  GSSAPIKeyExchange yes
+  GSSAPIKeyExchange no
   GSSAPITrustDNS no
   ForwardAgent no
   Compression yes
   ForwardX11 no
   ForwardX11Trusted no
-
-Host zoiks.net *.zoiks.net
-  GSSAPIAuthentication no
-  GSSAPIKeyExchange no
-  PreferredAuthentications publickey,password
-  ForwardAgent yes
-  Compression yes
-
-Host aram.xkcd.com
-  ForwardAgent yes
-  Compression yes
-
-Host github.com
-  ForwardX11 no
-  ForwardX11Trusted no
-
-Host maya maya.zoiks.net
-  ForwardX11 no
-  Compression yes
-  ForwardAgent yes
-  #HostName maya.zoiks.net
-  #Port 2222
-
-Host wakko
-  ForwardX11 yes
-  ForwardX11Trusted yes
-  Compression yes
-  ForwardAgent yes
-  HostName sf.zoiks.net
-  Port 2223
-
-Host catbus catbus.i catbus.i.corp.google.com catbus.corp.google.com
-  HostName catbus.i.corp.google.com
-  Port 8103
-  ControlMaster auto
-  ControlPersist yes
-  ControlPath /tmp/.sshcontrol_catbus
-
-Host chimoltrufia chimoltrufia.corp.google.com chimoltrufia.mtv chimoltrufia.mtv.corp.google.com
-  Hostname chimoltrufia.mtv.corp.google.com
-  Port 8103
-  ControlMaster auto
-  ControlPersist yes
-  ControlPath /tmp/.sshcontrol_chimoltrufia

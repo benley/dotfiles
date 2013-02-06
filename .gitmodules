@@ -1,9 +1,9 @@
-[submodule "vim/dotvim/bundle/vim-colors-solarized"]
-	path = vim/dotvim/bundle/vim-colors-solarized
-	url = git://github.com/altercation/vim-colors-solarized.git
 [submodule "external/git-flow-completion"]
 	path = external/git-flow-completion
 	url = git://github.com/bobthecow/git-flow-completion.git
 [submodule "external/shFlags"]
 	path = external/shFlags
 	url = https://github.com/nvie/shFlags.git
+[submodule "vim/dotvim/bundle/vundle"]
+	path = vim/dotvim/bundle/vundle
+	url = https://github.com/gmarik/vundle.git

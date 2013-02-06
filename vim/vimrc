@@ -1,4 +1,30 @@
 set nocompatible
+filetype off
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+Bundle 'gmarik/vundle'
+Bundle 'tpope/vim-fugitive'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'benmills/vimux'
+Bundle 'fholgado/minibufexpl.vim'
+Bundle 'vim-scripts/genutils'
+Bundle 'instant-markdown.vim'
+Bundle 'Ambient-Color-Scheme'
+Bundle 'clarity.vim'
+Bundle 'oceandeep'
+Bundle 'Cthulhian'
+"Bundle 'Conque-Shell'
+Bundle 'rosenfeld/conque-term'
+Bundle 'pythoncomplete'
+Bundle 'vim-json-bundle'
+
+" :BundleList          - list configured bundles
+" :BundleInstall(!)    - install(update) bundles
+" :BundleSearch(!) foo - search(or refresh cache first) for foo
+" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+
+filetype plugin indent on
+
 set backspace=indent,eol,start
 set expandtab
 set noerrorbells
@@ -9,39 +35,45 @@ set incsearch
 set ignorecase
 set smartcase
 set joinspaces
-
-call pathogen#infect()
+set autowrite
+" Ignore compiled files when completing paths:
+set wildignore=*.o,*~,*.pyc,*.pyo,*.class,*.hi,*.obj
+set wildmenu
+"set nobackup
+set hidden
+set magic
+set laststatus=2 " Keep the status bar even when there's only one window.
 
 if has("mouse")
   set mouse=a
 endif
 
-  set   autowrite
-"  set  nobackup
+"  set   autowrite
+"  set   nobackup
 "  set   hidden
 "  set   highlight=8r,db,es,hs,mb,Mr,nu,rs,sr,tb,vr,ws
-  set   magic
+set   magic
 "  set   modelines=1    default is 5
-  set   ruler
+set   ruler
 "set   shiftwidth=4
-  set   showcmd
-  set   showmatch
-  set   showmode
-  set   nostartofline
-  set   tabstop=8
-  set   textwidth=78
-  set   visualbell t_vb=
+set   showcmd
+set   showmatch
+set   showmode
+set   nostartofline
+"set   tabstop=8
+set   textwidth=80
+set   visualbell t_vb=
 "       much more precise without these.  only practical in a few situations, so
 "       leave it here for easy editing
 set   whichwrap=b,s,h,l,<,>,[,]
-  "set  nowrapscan
-  set   nowritebackup
+"set  nowrapscan
+set   nowritebackup
 
 " autocmd!
 
 "map   K  gq
 
-filetype plugin indent on
+set nonumber
 
 "autocmd FileType c,cpp set ts=4 formatoptions=cro cindent smarttab tw=0 nowrap sidescroll=20 listchars=extends:$
 "autocmd FileType php3,php4 set ts=4 formatoptions=cro smartindent smarttab tw=0 nowrap sidescroll=20 listchars=extends:$
@@ -49,12 +81,18 @@ filetype plugin indent on
 autocmd FileType mail set tw=72 nowrap
 autocmd FileType python call BenCode()
       \ | set omnifunc=pythoncomplete#Complete
+
+autocmd FileType conf setlocal foldcolumn=0 modeline modelines=5
 autocmd FileType sh call BenCode()
 autocmd FileType vim call BenCode()
+autocmd FileType ruby match OverLength /\%>80v.\+/
+      \ | set shiftwidth=2
 
 fun! BenCode()
+  "I hate this right now for some reason
+  "setlocal colorcolumn=+1,+2 foldcolumn=5 foldmethod=indent number foldnestmax=4
+  match OverLength /\%>80v.\+/
   setl shiftwidth=2 smartindent autoindent expandtab
-  setl foldcolumn=4 foldmethod=indent
 endfun
 
 "if &term=="rxvt"
@@ -96,6 +134,13 @@ augroup end
 "  se cul cuc
 "endif
 
+autocmd ColorScheme * highlight OverLength ctermfg=red guifg=red
+
+" http://vim.wikia.com/wiki/Highlight_unwanted_spaces
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+autocmd InsertEnter * match ExtraWhitespace /\s\+%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+
 if has("syntax")
   set background=dark
   syntax on
@@ -106,9 +151,58 @@ if has("syntax")
   colorscheme solarized
 endif
 
+let g:ConqueTerm_Color=0
+
 if has("unix")
   let s:uname = system("uname")
   if s:uname == "Darwin\n"
     let Tlist_Ctags_Cmd = "/opt/local/bin/ctags"
   endif
+endif
+
+" Show the tags menu in gvim.
+let Tlist_Show_Menu = 1
+
+" Make TagList process files even if the taglist window isn't open.
+let Tlist_Process_File_Always = 1
+
+" Set the terminal window title bar to be the current tag. Awesome.
+" (this benefits from Tlist_Process_File_Always=1)
+set title titlestring=%<%f\ %([%{Tlist_Get_Tagname_By_Line()}]%)
+
+" From http://vim.wikia.com/wiki/Accessing_the_system_clipboard:
+" Some hackery to get clipboard support back when running with mouse support in
+" a non-X11 terminal (like iterm2).
+" enter visual selection, then:
+" :cz to copy to the x11 Clipboard
+" :cx to copy to x11 Primary Selection
+" :cv to copy to x11 Secondary Selection (wtf is this for, even?)
+" :pz to paste from x11 Clipboard
+" :px to paste from x11 Primary Selection
+" :pv to paste vrom x11 Secondary Selection
+" TODO(benley): I'm sure there is a way to do this without needing a : first
+command -range Cz :silent :<line1>,<line2>w !xsel -i -b
+command -range Cx :silent :<line1>,<line2>w !xsel -i -p
+command -range Cv :silent :<line1>,<line2>w !xsel -i -s
+cabbrev cz Cz
+cabbrev cx Cx
+cabbrev cv Cv
+
+command -range Pz :silent :r !xsel -o -b
+command -range Px :silent :r !xsel -o -p
+command -range Pv :silent :r !xsel -o -s
+
+cabbrev pz Pz
+cabbrev px Px
+cabbrev pv Pv
+
+" WinManager blahblah
+let g:winManagerWindowLayout = "BufExplorer,FileExplorer|TagList"
+
+if has("gui")
+  " I don't know why this doesn't work when quoted.
+  "set guifont=Inconsolata:h16
+  set guifont=Monofur\ 13
+  " Turn off the toolbar.
+  set guioptions-=T
 endif

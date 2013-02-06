@@ -59,6 +59,10 @@ wterm.font: fixed
 !! wterm.color14: Cyan
 !! wterm.color15: White
 wterm.scrollBar: false
+
+!! solarized xdefaults is the worst idea ever. STOP WANTING THAT.
+
+
 !! drop in Solarized colorscheme for Xresources/Xdefaults
 
 !!SOLARIZED HEX     16/8 TERMCOL  XTERM/HEX   L*A*B      RGB         HSB

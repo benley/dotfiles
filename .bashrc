@@ -49,8 +49,9 @@ for dir in \
     "$HOME"/p/{android-ndk,android-sdk/{platform-,}tools} \
     "$HOME/Dropbox/bin/$PLATFORM" \
     "$HOME/p/depot_tools" \
-    "/opt/local/bin"; do
-  addpath "$dir"
+    "/opt/local/bin"
+  do
+    addpath "$dir"
 done
 prefixpath "$HOME/Library/Haskell/bin"
 export PATH
