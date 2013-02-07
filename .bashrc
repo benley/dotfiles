@@ -20,8 +20,7 @@ PLATFORM=$(uname -sm | tr " " "-")
 #fi
 
 source $HOME/bin/benlib.sh
-alias c='kssh catbus'
-alias ch='kssh chimoltrufia'
+alias getenv='source "$HOME"/.ssh/.getenv'
 alias mz='mosh zoiks.net -- $@'
 
 # don't put duplicate lines in the history. See bash(1) for more options
@@ -137,3 +136,8 @@ export DEBEMAIL='benley@zoiks.net'
 export DEBFULLNAME='Benjamin Staffin'
 alias dquilt="quilt --quiltrc=${HOME}/.quiltrc-dpkg"
 alias lintian="lintian --color=auto"
+
+# Insheeption-Aliases
+if [ -f /home/ben/.bashrc.d/sheep ]; then
+  . /home/ben/.bashrc.d/sheep
+fi
