@@ -95,22 +95,22 @@ function main() {
       ;;
     esac
   done
-  
+
   set -o nounset
   mkdir -p "$HOME/bin"
   dotfiles="bin/* .inputrc .bash_logout .bash_profile .bashrc .dircolors
-            .pythonrc.py .screenrc .tmux.conf .quiltrc-dpkg .Xresources"
+            .pythonrc.py .screenrc .tmux.conf .quiltrc-dpkg .Xresources .irbrc"
   for file in $dotfiles; do
     src="$PWD/$file"
     dst="$HOME/$file"
     SymlinkIfDiffer "$PWD/$file" "$HOME/$file"
   done
-  
+
   mkdir -p $HOME/.ssh
   SymlinkIfDiffer "$PWD/ssh/config" "$HOME/.ssh/config"
   SymlinkIfDiffer "$PWD/vim/vimrc" "$HOME/.vimrc"
   SymlinkIfDiffer "$PWD/vim/dotvim" "$HOME/.vim"
-  
+
   DoCleanUps
 }
 
