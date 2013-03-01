@@ -17,7 +17,7 @@ Bundle 'Cthulhian'
 Bundle 'rosenfeld/conque-term'
 Bundle 'pythoncomplete'
 Bundle 'vim-json-bundle'
-Bundle 'The-NERD-Tree'
+Bundle 'scrooloose/nerdtree'
 Bundle 'vim-scripts/Zenburn'
 
 " :BundleList          - list configured bundles
