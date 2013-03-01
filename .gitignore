@@ -1,4 +1,4 @@
 .netrwhist
 *.py[co]
 vim/dotvim/bundle/*
-!vim/dotvim/bundle/vundle/
+#!vim/dotvim/bundle/vundle

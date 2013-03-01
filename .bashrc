@@ -48,7 +48,8 @@ for dir in \
     "$HOME"/p/{android-ndk,android-sdk/{platform-,}tools} \
     "$HOME/Dropbox/bin/$PLATFORM" \
     "$HOME/p/depot_tools" \
-    "/opt/local/bin"
+    "/opt/local/bin" \
+    "/usr/local/sbin"
   do
     addpath "$dir"
 done
@@ -56,7 +57,7 @@ prefixpath "$HOME/Library/Haskell/bin"
 export PATH
 
 # NodeJS
-addpath "$HOME/opt/node/bin" && . <(npm completion)
+addpath "$HOME/opt/node/bin" || addpath "/usr/local/share/npm/bin" && . <(npm completion)
 
 # Fancy timestamps in .bash_history woooooo
 export HISTTIMEFORMAT='%Y-%m-%d %T '
@@ -81,8 +82,11 @@ if grep --version|grep -q GNU; then
   export GREP_OPTIONS="--color"
 fi
 
+brew_prefix=$(brew --prefix 2>/dev/null)
 if [[ -e /opt/local/etc/bash_completion ]]; then
   source /opt/local/etc/bash_completion
+elif [[ -f "$brew_prefix/etc/bash_completion" ]]; then
+  source "$brew_prefix/etc/bash_completion"
 elif [[ -e /etc/bash_completion ]]; then
   source /etc/bash_completion
 fi
@@ -138,6 +142,11 @@ alias dquilt="quilt --quiltrc=${HOME}/.quiltrc-dpkg"
 alias lintian="lintian --color=auto"
 
 # Insheeption-Aliases
-if [ -f /home/ben/.bashrc.d/sheep ]; then
-  . /home/ben/.bashrc.d/sheep
+if [[ -f "$HOME/.bashrc.d/sheep" ]]; then
+  . "$HOME/.bashrc.d/sheep"
 fi
+
+# Ruby?
+[[ -e /usr/local/bin/ruby19 ]] && alias ruby=/usr/local/bin/ruby19
+[[ -e /usr/local/bin/irb19 ]] && alias irb=/usr/local/bin/irb19
+[[ -e /usr/local/bin/gem19 ]] && alias gem=/usr/local/bin/gem19

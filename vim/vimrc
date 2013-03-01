@@ -17,6 +17,8 @@ Bundle 'Cthulhian'
 Bundle 'rosenfeld/conque-term'
 Bundle 'pythoncomplete'
 Bundle 'vim-json-bundle'
+Bundle 'The-NERD-Tree'
+Bundle 'vim-scripts/Zenburn'
 
 " :BundleList          - list configured bundles
 " :BundleInstall(!)    - install(update) bundles
@@ -85,23 +87,15 @@ autocmd FileType python call BenCode()
 autocmd FileType conf setlocal foldcolumn=0 modeline modelines=5
 autocmd FileType sh call BenCode()
 autocmd FileType vim call BenCode()
-autocmd FileType ruby match OverLength /\%>80v.\+/
-      \ | set shiftwidth=2
+autocmd FileType ruby call BenCode()
 
 fun! BenCode()
   "I hate this right now for some reason
   "setlocal colorcolumn=+1,+2 foldcolumn=5 foldmethod=indent number foldnestmax=4
   match OverLength /\%>80v.\+/
-  setl shiftwidth=2 smartindent autoindent expandtab
+  "setlocal shiftwidth=2 smartindent autoindent expandtab
+  setlocal shiftwidth=2 expandtab
 endfun
-
-"if &term=="rxvt"
-"        set t_Co=8
-"        set t_Sf=^[[3%dm
-"        set t_Sb=^[[4%dm
-"        set t_AB=^[[%?%p1%{8}%<%t%p1%{40}%+%e%p1%{92}%+%;%dm
-"        set t_AF=^[[%?%p1%{8}%<%t%p1%{30}%+%e%p1%{82}%+%;%dm
-"endif
 
 "highlight RedundantSpaces ctermbg=red guibg=red
 "match RedundantSpaces /\s\+$\| \+\ze\t/
@@ -112,6 +106,7 @@ endfun
 "  set columns=180
 "endif
 
+" This was for perforce or something.
 fun! FixDescription()
   if search("<enter description here>") > 0
     normal C
@@ -138,17 +133,18 @@ autocmd ColorScheme * highlight OverLength ctermfg=red guifg=red
 
 " http://vim.wikia.com/wiki/Highlight_unwanted_spaces
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+autocmd ColorScheme * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 
 if has("syntax")
-  set background=dark
   syntax on
-"       hi! Comment  term=bold  ctermfg=cyan  guifg=Blue
+  " The terminal is already set to the right bg/fg colors, so:
   let g:solarized_termtrans=1
-" To use it with chrome ssh:
-"  let g:solarized_termcolors=256
-  colorscheme solarized
+  set bg=dark
+  colorscheme zenburn
+  " Looks nice with zenburn:
+  hi ColorColumn guibg=#484848
 endif
 
 let g:ConqueTerm_Color=0
@@ -156,7 +152,11 @@ let g:ConqueTerm_Color=0
 if has("unix")
   let s:uname = system("uname")
   if s:uname == "Darwin\n"
-    let Tlist_Ctags_Cmd = "/opt/local/bin/ctags"
+    if filereadable("/opt/local/bin/ctags")
+      let Tlist_Ctags_Cmd = "/opt/local/bin/ctags"
+    elseif filereadable("/usr/local/bin/ctags")
+      let Tlist_Ctags_Cmd = "/usr/local/bin/ctags"
+    endif
   endif
 endif
 
@@ -202,7 +202,9 @@ let g:winManagerWindowLayout = "BufExplorer,FileExplorer|TagList"
 if has("gui")
   " I don't know why this doesn't work when quoted.
   "set guifont=Inconsolata:h16
-  set guifont=Monofur\ 13
+  "set guifont=Monofur\ 13
+  set guifont=Menlo\ Regular\:h14
+  set bg=dark
   " Turn off the toolbar.
-  set guioptions-=T
+  "set guioptions-=T
 endif

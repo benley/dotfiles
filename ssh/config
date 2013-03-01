@@ -43,11 +43,14 @@ ControlPath /tmp/.control_%r@%h:%p.%l
 Host zoiks.net *.zoiks.net
 GSSAPIAuthentication no
 GSSAPIKeyExchange no
-PreferredAuthentications publickey,password
+#PreferredAuthentications publickey,password
 ForwardAgent yes
 Compression yes
 
 # CS
+Host *.cloudscaling.com
+Port 3223
+
 Host lab04 lab04.hc lab04.hc.cloudscaling.com
 HostName lab04.hc.cloudscaling.com
 User ben
@@ -60,12 +63,24 @@ ControlMaster auto
 ControlPersist 3600
 ControlPath /tmp/.ssh_%r@%h:%p
 
+Host lab16 lab16.hc lab16.hc.cloudscaling.com
+HostName lab16.hc.cloudscaling.com
+User ben
+Port 3223
+ForwardAgent yes
+ForwardX11 yes
+ForwardX11Trusted yes
+Compression yes
+ControlMaster auto
+ControlPersist 3600
+ControlPath /tmp/.ssh_%r@%h:%p
+
 Host *.*
-  GSSAPIAuthentication no
-  GSSAPIDelegateCredentials no
-  GSSAPIKeyExchange no
-  GSSAPITrustDNS no
-  ForwardAgent no
-  Compression yes
-  ForwardX11 no
-  ForwardX11Trusted no
+GSSAPIAuthentication no
+GSSAPIDelegateCredentials no
+GSSAPIKeyExchange no
+GSSAPITrustDNS no
+ForwardAgent no
+Compression yes
+ForwardX11 no
+ForwardX11Trusted no
