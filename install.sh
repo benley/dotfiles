@@ -99,7 +99,8 @@ function main() {
   set -o nounset
   mkdir -p "$HOME/bin"
   dotfiles="bin/* .inputrc .bash_logout .bash_profile .bashrc .dircolors
-            .pythonrc.py .screenrc .tmux.conf .quiltrc-dpkg .Xresources .irbrc"
+            .pythonrc.py .screenrc .tmux.conf .quiltrc-dpkg .Xresources .irbrc
+            .gitconfig"
   for file in $dotfiles; do
     src="$PWD/$file"
     dst="$HOME/$file"
