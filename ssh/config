@@ -29,17 +29,6 @@ ControlMaster auto
 #ControlPersist yes
 ControlPath /tmp/.control_%r@%h:%p.%l
 
-Host wakko
-ForwardX11 yes
-ForwardX11Trusted yes
-Compression yes
-ForwardAgent yes
-HostName sf.zoiks.net
-Port 2223
-ControlMaster auto
-#ControlPersist yes
-ControlPath /tmp/.control_%r@%h:%p.%l
-
 Host zoiks.net *.zoiks.net
 GSSAPIAuthentication no
 GSSAPIKeyExchange no
@@ -68,12 +57,20 @@ HostName lab16.hc.cloudscaling.com
 User ben
 Port 3223
 ForwardAgent yes
-ForwardX11 yes
-ForwardX11Trusted yes
 Compression yes
 ControlMaster auto
 ControlPersist 3600
 ControlPath /tmp/.ssh_%r@%h:%p
+
+Host 172.31.0.* 192.168.129.*
+Port 3223
+StrictHostKeyChecking no
+ForwardAgent yes
+ForwardX11 no
+ForwardX11Trusted no
+Compression no
+UserKnownHostsFile ~/sheep/tmp/sheep_known_hosts
+HashKnownHosts no
 
 Host *.*
 GSSAPIAuthentication no
