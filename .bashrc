@@ -49,6 +49,7 @@ for dir in \
     "$HOME/Dropbox/bin/$PLATFORM" \
     "$HOME/p/depot_tools" \
     "/opt/local/bin" \
+    "/usr/local/opt/ruby/bin" \
     "/usr/local/sbin"
   do
     addpath "$dir"
