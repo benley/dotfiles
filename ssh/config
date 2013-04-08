@@ -39,6 +39,13 @@ Compression yes
 # CS
 Host *.cloudscaling.com
 Port 3223
+User ben
+
+Host pd pd.cloudscaling.com
+Port 22
+HostName pd.cloudscaling.com
+User ben
+
 
 Host lab04 lab04.hc lab04.hc.cloudscaling.com
 HostName lab04.hc.cloudscaling.com
