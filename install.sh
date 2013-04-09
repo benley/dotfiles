@@ -109,6 +109,7 @@ function main() {
 
   mkdir -p $HOME/.ssh
   SymlinkIfDiffer "$PWD/ssh/config" "$HOME/.ssh/config"
+  SymlinkIfDiffer "$PWD/ssh/rc" "$HOME/.ssh/rc"
   SymlinkIfDiffer "$PWD/vim/vimrc" "$HOME/.vimrc"
   SymlinkIfDiffer "$PWD/vim/dotvim" "$HOME/.vim"
 

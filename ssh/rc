@@ -1,0 +1,19 @@
+# NOTE! sshd executes this in /bin/sh, *NOT* the user's chosen shell.
+
+OUT="$HOME/.ssh/.getenv"
+> "$OUT"
+chmod 0600 "$OUT"
+
+set|grep -E "^(SSH_(CLIENT|AUTH_SOCK|CONNECTION)|DISPLAY)=" >> "$OUT"
+sed -i "s/^/export /" "$OUT"
+
+# If this file didn't exist, sshd would do thie xauth stuff by itself:
+if read proto cookie && [ -n "$DISPLAY" ]; then
+  if [ $(echo $DISPLAY |cut -c1-10) = 'localhost:' ]; then
+    # X11UseLocalhost=yes
+    echo add unix:$(echo $DISPLAY | cut -c11-) $proto $cookie
+  else
+    # X11UseLocalhost=no
+    echo add $DISPLAY $proto $cookie
+  fi | xauth -q -
+fi
