@@ -1,17 +1,30 @@
 # .bashrc
 
-addpath() {
-  [[ -d "$1"/ ]] && PATH="$PATH:$1" || return 1
-}
+OS=$(uname)
+PLATFORM=$(uname -sm | tr " " "-")
+export EDITOR=vim
+
+# In most places I'll keep the system's timezone. Makes reading logfiles easier.
+[[ "$HOSTNAME" == 'osric' ]] && export TZ='America/Los_Angeles'
 
 prefixpath() {
   [[ -d "$1"/ ]] && PATH="$1:$PATH" || return 1
 }
 
-[[ $HOSTNAME == 'osric' ]] && export TZ='America/Los_Angeles'
+prefixpath "$HOME/Library/Haskell/bin"
 
-OS=$(uname)
-PLATFORM=$(uname -sm | tr " " "-")
+dopath() {
+  local addpaths=(
+      $HOME/bin
+      $HOME/p/{depot_tools,android-ndk,android-sdk/{platform-,}tools}
+      $HOME/Dropbox/bin/{,$PLATFORM}
+      /{usr,opt}/local/{bin,sbin}
+      /usr/local/opt/ruby/bin
+      $HOME/opt/node/bin /usr/local/share/npm/bin)
+  for dir in ${addpaths[@]}; do
+    [[ -d "$dir"/ ]] && PATH="${PATH}:${dir}"
+  done
+}; dopath
 
 # This is unnecessary: see bash manpage's INVOCATION section.
 # Bash will source /etc/bash.bashrc by itself.
@@ -25,7 +38,7 @@ alias mz='mosh zoiks.net -- $@'
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # don't overwrite GNU Midnight Commander's setting of `ignorespace'.
-export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
+#export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 # ... or force ignoredups and ignorespace
 export HISTCONTROL=ignoreboth
 
@@ -41,36 +54,16 @@ shopt -s checkwinsize
 # make less more friendly for non-text input files, see lesspipe(1)
 #[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-export EDITOR=vim
-
-for dir in \
-    "$HOME/bin" \
-    "$HOME"/p/{android-ndk,android-sdk/{platform-,}tools} \
-    "$HOME/Dropbox/bin/$PLATFORM" \
-    "$HOME/p/depot_tools" \
-    "/opt/local/bin" \
-    "/usr/local/opt/ruby/bin" \
-    "/usr/local/sbin"
-  do
-    addpath "$dir"
-done
-prefixpath "$HOME/Library/Haskell/bin"
-export PATH
-
-# NodeJS
-addpath "$HOME/opt/node/bin" || addpath "/usr/local/share/npm/bin" && . <(npm completion)
-
 # Fancy timestamps in .bash_history woooooo
 export HISTTIMEFORMAT='%Y-%m-%d %T '
 
-case "${OS}" in
+case "$OS" in
   "Linux")
-    export P4EDITOR="${EDITOR}"
     alias ls='ls --color=auto'
     eval $(dircolors ~/.dircolors)
     ;;
   "Darwin")
-    export CLICOLOR="true"
+    brew_prefix=$(brew --prefix 2>/dev/null)
     # Colors I picked out long ago or something?
     #export LSCOLORS="DeGxxxxxCx"
     # Solarized-like colors:
@@ -83,14 +76,28 @@ if grep --version|grep -q GNU; then
   export GREP_OPTIONS="--color"
 fi
 
-brew_prefix=$(brew --prefix 2>/dev/null)
-if [[ -e /opt/local/etc/bash_completion ]]; then
-  source /opt/local/etc/bash_completion
-elif [[ -f "$brew_prefix/etc/bash_completion" ]]; then
-  source "$brew_prefix/etc/bash_completion"
-elif [[ -e /etc/bash_completion ]]; then
-  source /etc/bash_completion
-fi
+
+loadcompletion() {
+  local spot cmpl _completion_on=0
+  for spot in {/opt/local,$brew_prefix,}/etc/bash_completion; do
+    if [[ -e $spot ]]; then
+      source $spot
+      _completion_on=1
+      break
+    fi
+  done
+
+  if ((_completion_on)); then
+    for cmpl in $HOME/.bash_completion.d/*; do
+      source $cmpl
+    done
+
+    if [[ $(type -t _npm_completion) != 'function' && -x $(which npm) ]]; then
+      npm completion > "$HOME/.bash_completion.d/npm_completion.sh"
+      source "${HOME}/.bash_completion.d/npm_completion.sh"
+    fi
+  fi
+}; loadcompletion
 
 case $TERM in
   xterm*)
@@ -144,10 +151,15 @@ alias lintian="lintian --color=auto"
 
 # Insheeption-Aliases
 if [[ -f "$HOME/.bashrc.d/sheep" ]]; then
-  . "$HOME/.bashrc.d/sheep"
+  source "$HOME/.bashrc.d/sheep"
 fi
 
 # Ruby?
 [[ -e /usr/local/bin/ruby19 ]] && alias ruby=/usr/local/bin/ruby19
 [[ -e /usr/local/bin/irb19 ]] && alias irb=/usr/local/bin/irb19
 [[ -e /usr/local/bin/gem19 ]] && alias gem=/usr/local/bin/gem19
+
+if [[ $- =~ i && -x $(which keychain) ]]; then
+  KEYS=".ssh/id_dsa .ssh/id_rsa .ssh/id_ben_cs .ssh/id_cloudscaling"
+  eval $(keychain --eval --ignore-missing --nogui --quiet --quick ${KEYS})
+fi
