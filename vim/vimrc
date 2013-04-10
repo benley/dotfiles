@@ -2,23 +2,7 @@ set nocompatible
 filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
-Bundle 'gmarik/vundle'
-Bundle 'tpope/vim-fugitive'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'benmills/vimux'
-"Bundle 'fholgado/minibufexpl.vim'
-Bundle 'vim-scripts/genutils'
-"Bundle 'instant-markdown.vim'
-Bundle 'Ambient-Color-Scheme'
-Bundle 'clarity.vim'
-Bundle 'oceandeep'
-Bundle 'Cthulhian'
-"Bundle 'Conque-Shell'
-Bundle 'rosenfeld/conque-term'
-Bundle 'pythoncomplete'
-Bundle 'vim-json-bundle'
-Bundle 'scrooloose/nerdtree'
-Bundle 'vim-scripts/Zenburn'
+source ~/.vim/bundlelist.vim
 
 " :BundleList          - list configured bundles
 " :BundleInstall(!)    - install(update) bundles

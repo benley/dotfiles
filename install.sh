@@ -7,12 +7,12 @@ set -o errexit
 OS=$(uname)
 case $OS in
   "Darwin"|"Linux")
-  : # Do nothing.
-  ;;
+    : # Do nothing.
+    ;;
   *)
-  echo "ERROR: unknown OS: \"${OS}\"; can't continue." >> /dev/stderr
-  exit 1
-  ;;
+    echo "ERROR: unknown OS: \"${OS}\"; can't continue." >> /dev/stderr
+    exit 1
+    ;;
 esac
 
 function LogError() {
@@ -54,7 +54,7 @@ function Symlink() {
 }
 
 function SymlinkIfDiffer() {
-  # If $1 and $2 are not the same file or symlinks to the same file, symlink $1
+  # Unless $1 and $2 are the same file or symlinks to the same file, symlink $1
   # to $2.
   if ! SameFile "$1" "$2"; then
     Symlink "$1" "$2"
@@ -63,11 +63,10 @@ function SymlinkIfDiffer() {
 
 function DoCleanUps() {
   # Some cleanups that should only be needed once per machine.
-  # This isn't quite right; readlink doesn't necessarily return a canonical
-  # path, but $PWD/blabla is one.
-  if [[ -L "$HOME/.pythonrc" ]] && \
-     [[ $(readlink "$HOME/.pythonrc") == "$PWD/.pythonrc" ]]; then
-    rm "$HOME/.pythonrc"
+  # .pythonrc was renamed to .pythonrc.py
+  if [[ -L "$HOME/.pythonrc" ]]; then
+    SameFile "$HOME/.pythonrc" "$(basename $0)/.pythonrc" && \
+        rm "$HOME/.pythonrc"
   fi
 }
 
@@ -102,16 +101,20 @@ function main() {
             .pythonrc.py .screenrc .tmux.conf .quiltrc-dpkg .Xresources .irbrc
             .gitconfig"
   for file in $dotfiles; do
-    src="$PWD/$file"
-    dst="$HOME/$file"
     SymlinkIfDiffer "$PWD/$file" "$HOME/$file"
   done
 
-  mkdir -p $HOME/.ssh
+  mkdir -p "$HOME/.ssh"
   SymlinkIfDiffer "$PWD/ssh/config" "$HOME/.ssh/config"
   SymlinkIfDiffer "$PWD/ssh/rc" "$HOME/.ssh/rc"
   SymlinkIfDiffer "$PWD/vim/vimrc" "$HOME/.vimrc"
   SymlinkIfDiffer "$PWD/vim/dotvim" "$HOME/.vim"
+
+  if [[ ! -e $HOME/.vim/bundle/vundle ]]; then
+    echo "Installing vundle."
+    git clone "http://github.com/gmarik/vundle.git" "$HOME/.vim/bundle/vundle"
+    vim -u $(basename $0)/vim/vimrc.bootstrap
+  fi
 
   DoCleanUps
 }
