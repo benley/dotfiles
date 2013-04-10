@@ -84,36 +84,43 @@ function main() {
         readonly FLAGS_dryrun=0
       ;;
       "-h"|"-?"|"--help")
-        PrintUsage >> /dev/stdout
+        PrintUsage
         exit 0
         ;;
       *)
         LogError "Unrecognized option: $arg"
-        PrintUsage >> /dev/stderr
+        PrintUsage >&2
         exit 1
       ;;
     esac
   done
 
+  readonly rootdir=$(cd $(dirname $0); pwd)
+
   set -o nounset
   mkdir -p "$HOME/bin"
-  dotfiles="bin/* .inputrc .bash_logout .bash_profile .bashrc .dircolors
+  dotfiles=(bin/* .inputrc .bash_logout .bash_profile .bashrc .dircolors
             .pythonrc.py .screenrc .tmux.conf .quiltrc-dpkg .Xresources .irbrc
-            .gitconfig"
-  for file in $dotfiles; do
-    SymlinkIfDiffer "$PWD/$file" "$HOME/$file"
+            .gitconfig)
+  for file in ${dotfiles[@]}; do
+    SymlinkIfDiffer "$rootdir/$file" "$HOME/$file"
+  done
+
+  mkdir -p "$HOME/.bash_completion.d"
+  for file in $rootdir/bash_completion.d/*; do
+    SymlinkIfDiffer "$file" "$HOME/.bash_completion.d/$(basename $file)"
   done
 
   mkdir -p "$HOME/.ssh"
-  SymlinkIfDiffer "$PWD/ssh/config" "$HOME/.ssh/config"
-  SymlinkIfDiffer "$PWD/ssh/rc" "$HOME/.ssh/rc"
-  SymlinkIfDiffer "$PWD/vim/vimrc" "$HOME/.vimrc"
-  SymlinkIfDiffer "$PWD/vim/dotvim" "$HOME/.vim"
+  SymlinkIfDiffer "$rootdir/ssh/config" "$HOME/.ssh/config"
+  SymlinkIfDiffer "$rootdir/ssh/rc" "$HOME/.ssh/rc"
+  SymlinkIfDiffer "$rootdir/vim/vimrc" "$HOME/.vimrc"
+  SymlinkIfDiffer "$rootdir/vim/dotvim" "$HOME/.vim"
 
-  if [[ ! -e $HOME/.vim/bundle/vundle ]]; then
+  if [[ ! -e "$HOME/.vim/bundle/vundle" ]]; then
     echo "Installing vundle."
     git clone "http://github.com/gmarik/vundle.git" "$HOME/.vim/bundle/vundle"
-    vim -u $(basename $0)/vim/vimrc.bootstrap
+    vim -u "$rootdir/vim/vimrc.bootstrap"
   fi
 
   DoCleanUps
