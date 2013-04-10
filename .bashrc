@@ -161,5 +161,5 @@ fi
 
 if [[ $- =~ i && -x $(which keychain) ]]; then
   KEYS=".ssh/id_dsa .ssh/id_rsa .ssh/id_ben_cs .ssh/id_cloudscaling"
-  eval $(keychain --eval --ignore-missing --nogui --quiet --quick ${KEYS})
+  eval $(keychain --inherit any --eval --ignore-missing --nogui --quiet --quick ${KEYS})
 fi
