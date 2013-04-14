@@ -37,10 +37,6 @@ ForwardAgent yes
 Compression yes
 
 # CS
-Host *.cloudscaling.com
-Port 3223
-User ben
-
 Host pd pd.cloudscaling.com
 Port 22
 HostName pd.cloudscaling.com
@@ -68,6 +64,10 @@ Compression yes
 ControlMaster auto
 ControlPersist 3600
 ControlPath /tmp/.ssh_%r@%h:%p
+
+Host *.cloudscaling.com
+Port 3223
+User ben
 
 Host 172.31.0.* 192.168.129.*
 Port 3223

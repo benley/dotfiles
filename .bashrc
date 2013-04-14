@@ -16,13 +16,14 @@ prefixpath "$HOME/Library/Haskell/bin"
 dopath() {
   local addpaths=(
       $HOME/bin
+      $HOME/arcanist/arcanist/bin
       $HOME/p/{depot_tools,android-ndk,android-sdk/{platform-,}tools}
       $HOME/Dropbox/bin/{,$PLATFORM}
       /{usr,opt}/local/{bin,sbin}
       /usr/local/opt/ruby/bin
       $HOME/opt/node/bin /usr/local/share/npm/bin)
   for dir in ${addpaths[@]}; do
-    [[ -d "$dir"/ ]] && PATH="${PATH}:${dir}"
+    [[ -d "$dir"/ ]] && PATH+=":${dir}"
   done
 }; dopath
 
@@ -163,3 +164,5 @@ if [[ $- =~ i && -x $(which keychain) ]]; then
   KEYS=".ssh/id_dsa .ssh/id_rsa .ssh/id_ben_cs .ssh/id_cloudscaling"
   eval $(keychain --inherit any --eval --ignore-missing --nogui --quiet --quick ${KEYS})
 fi
+
+alias gerrit="ssh ben@pd.cloudscaling.com -p 29418 -- gerrit \$@"
