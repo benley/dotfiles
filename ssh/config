@@ -1,3 +1,6 @@
+# ControlPersist doesn't work with OpenSSH_5.5p1 from debian Squeeze (stable)
+# It *does* work with: Ubuntu 12.04, Ubuntu 12.10, MacOS 10.8, [...]
+
 Host aram.xkcd.com
 ForwardAgent yes
 Compression yes
@@ -62,7 +65,7 @@ ForwardX11 yes
 ForwardX11Trusted yes
 Compression yes
 ControlMaster auto
-ControlPersist 3600
+#ControlPersist 3600
 ControlPath /tmp/.ssh_%r@%h:%p
 
 Host lab16 lab16.hc lab16.hc.cloudscaling.com
