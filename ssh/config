@@ -75,7 +75,7 @@ Port 3223
 ForwardAgent yes
 Compression yes
 ControlMaster auto
-ControlPersist 3600
+#ControlPersist 3600
 ControlPath /tmp/.ssh_%r@%h:%p
 
 Host *.cloudscaling.com
