@@ -15,4 +15,4 @@ Bundle 'pythoncomplete'
 Bundle 'vim-json-bundle'
 Bundle 'scrooloose/nerdtree'
 Bundle 'vim-scripts/Zenburn'
-
+Bundle 'Tagbar'
