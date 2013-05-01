@@ -7,7 +7,7 @@
 try:
   import readline
 except ImportError:
-  print "This python lacks readline, so history and tab completion won't work."
+  print("This python lacks readline, so history and tab completion won't work.")
 else:
   import rlcompleter
   import os
