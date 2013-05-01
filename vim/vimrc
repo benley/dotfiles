@@ -38,7 +38,6 @@ endif
 "  set   nobackup
 "  set   hidden
 "  set   highlight=8r,db,es,hs,mb,Mr,nu,rs,sr,tb,vr,ws
-set   magic
 "  set   modelines=1    default is 5
 set   ruler
 "set   shiftwidth=4
@@ -47,7 +46,7 @@ set   showmatch
 set   showmode
 set   nostartofline
 "set   tabstop=8
-set   textwidth=80
+set   textwidth=79
 set   visualbell t_vb=
 "       much more precise without these.  only practical in a few situations, so
 "       leave it here for easy editing
