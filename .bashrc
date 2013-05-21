@@ -169,3 +169,4 @@ if [[ $- =~ i && -x $(which keychain) ]]; then
 fi
 
 alias gerrit="ssh ben@pd.cloudscaling.com -p 29418 -- gerrit \$@"
+alias pants="$HOME/p/commons/pants"
