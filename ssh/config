@@ -39,6 +39,14 @@ GSSAPIKeyExchange no
 ForwardAgent yes
 Compression yes
 
+# VMs
+Host vm-ubudev1.local vm1
+HostName vm-ubudev1.local
+ForwardAgent yes
+Compression no
+ForwardX11 yes
+ForwardX11Trusted yes
+
 # CS
 Host *.jenkins.cloudscaling.com
 Port 51225
@@ -76,11 +84,35 @@ ControlMaster auto
 #ControlPersist 3600
 ControlPath /tmp/.ssh_%r@%h:%p
 
+Host lab09 lab09.hc lab09.hc.cloudscaling.com
+HostName lab09.hc.cloudscaling.com
+User ben
+Port 3223
+ForwardAgent yes
+ForwardX11 yes
+ForwardX11Trusted yes
+Compression yes
+ControlMaster auto
+#ControlPersist 3600
+ControlPath /tmp/.ssh_%r@%h:%p
+
 Host lab16 lab16.hc lab16.hc.cloudscaling.com
 HostName lab16.hc.cloudscaling.com
 User ben
 Port 3223
 ForwardAgent yes
+Compression yes
+ControlMaster auto
+#ControlPersist 3600
+ControlPath /tmp/.ssh_%r@%h:%p
+
+Host lab17 lab17.hc lab17.hc.cloudscaling.com
+HostName lab17.hc.cloudscaling.com
+User ben
+Port 3223
+ForwardAgent yes
+ForwardX11 yes
+ForwardX11Trusted yes
 Compression yes
 ControlMaster auto
 #ControlPersist 3600
