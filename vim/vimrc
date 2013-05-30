@@ -65,8 +65,8 @@ set nonumber
 "autocmd FileType c,cpp nmap <tab> =0<CR>
 autocmd FileType mail set tw=72 nowrap
 autocmd FileType python call BenCode()
-      \ | setlocal omnifunc=pythoncomplete#Complete
       \ | setlocal indentexpr=GetGooglePythonIndent(v:lnum)
+      "\ | setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType conf setlocal foldcolumn=0 modeline modelines=5
 autocmd FileType sh call BenCode()
 autocmd FileType vim call BenCode()
@@ -210,7 +210,11 @@ if has("gui")
   " I don't know why this doesn't work when quoted.
   "set guifont=Inconsolata:h16
   "set guifont=Monofur\ 13
-  set guifont=Menlo\ Regular\:h14
+  if has("macunix")
+    set guifont=Menlo\ Regular\:h14
+  else
+    set guifont=DejaVu\ Sans\ Mono\ 12
+  endif
   set bg=dark
   " Turn off the toolbar.
   "set guioptions-=T
