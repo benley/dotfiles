@@ -140,6 +140,7 @@ export LESS="-M -R"
 
 # I like shiny things.
 [[ -x $(which colorgcc) ]] && export CC=colorgcc
+[[ -x $(which colormake) ]] && alias make=colormake
 
 export PYTHONSTARTUP="${HOME}/.pythonrc.py"
 
@@ -148,15 +149,14 @@ export HISTSIZE=9999
 export HISTFILESIZE=9999
 
 # Debian dev stuff
-export DEBEMAIL='benley@zoiks.net'
+export DEBEMAIL='ben@cloudscaling.com'
 export DEBFULLNAME='Benjamin Staffin'
 alias dquilt="quilt --quiltrc=${HOME}/.quiltrc-dpkg"
 alias lintian="lintian --color=auto"
 
-# Insheeption-Aliases
-if [[ -f "$HOME/.bashrc.d/sheep" ]]; then
-  source "$HOME/.bashrc.d/sheep"
-fi
+for file in "$HOME"/.bashrc.d/*; do
+  source "$file"
+done
 
 # Ruby?
 [[ -e /usr/local/bin/ruby19 ]] && alias ruby=/usr/local/bin/ruby19
@@ -169,4 +169,3 @@ if [[ $- =~ i && -x $(which keychain) ]]; then
 fi
 
 alias gerrit="ssh ben@pd.cloudscaling.com -p 29418 -- gerrit \$@"
-alias pants="$HOME/p/commons/pants"

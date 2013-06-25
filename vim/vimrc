@@ -66,11 +66,13 @@ set nonumber
 autocmd FileType mail set tw=72 nowrap
 autocmd FileType python call BenCode()
       \ | setlocal indentexpr=GetGooglePythonIndent(v:lnum)
-      "\ | setlocal omnifunc=pythoncomplete#Complete
+      \ | setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType conf setlocal foldcolumn=0 modeline modelines=5
 autocmd FileType sh call BenCode()
 autocmd FileType vim call BenCode()
 autocmd FileType ruby call BenCode()
+autocmd FileType gitcommit set tw=71
+autocmd FileType make set noexpandtab
 
 fun! BenCode()
   "I hate this right now for some reason
