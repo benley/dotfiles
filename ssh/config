@@ -21,16 +21,17 @@ ControlMaster auto
 #ControlPersist yes
 ControlPath /tmp/.control_%r@%h:%p.%l
 
-Host nyanbox.z
+Host nyanbox.z nb.z
 ForwardX11 yes
 ForwardX11Trusted yes
 Compression yes
 ForwardAgent yes
-HostName sf.zoiks.net
-Port 2224
-ControlMaster auto
-#ControlPersist yes
-ControlPath /tmp/.control_%r@%h:%p.%l
+ProxyCommand ssh -q sf.zoiks.net nc -q0 nb 22
+#HostName sf.zoiks.net
+#Port 2224
+#ControlMaster auto
+##ControlPersist yes
+#ControlPath /tmp/.control_%r@%h:%p.%l
 
 Host zoiks.net *.zoiks.net
 GSSAPIAuthentication no
@@ -70,6 +71,7 @@ ForwardAgent yes
 ForwardX11 no
 ForwardX11Trusted no
 Compression yes
+ControlPersist 180
 ControlMaster auto
 
 Host lab04 lab04.hc lab04.hc.cloudscaling.com
@@ -81,7 +83,7 @@ ForwardX11 yes
 ForwardX11Trusted yes
 Compression yes
 ControlMaster auto
-#ControlPersist 3600
+ControlPersist 180
 ControlPath /tmp/.ssh_%r@%h:%p
 
 Host lab09 lab09.hc lab09.hc.cloudscaling.com
@@ -93,7 +95,7 @@ ForwardX11 yes
 ForwardX11Trusted yes
 Compression yes
 ControlMaster auto
-#ControlPersist 3600
+ControlPersist 180
 ControlPath /tmp/.ssh_%r@%h:%p
 
 Host lab16 lab16.hc lab16.hc.cloudscaling.com
@@ -103,7 +105,7 @@ Port 3223
 ForwardAgent yes
 Compression yes
 ControlMaster auto
-#ControlPersist 3600
+ControlPersist 180
 ControlPath /tmp/.ssh_%r@%h:%p
 
 Host lab17 lab17.hc lab17.hc.cloudscaling.com
@@ -116,6 +118,18 @@ ForwardX11Trusted yes
 Compression yes
 ControlMaster auto
 #ControlPersist 3600
+ControlPath /tmp/.ssh_%r@%h:%p
+
+Host zm.sv zm.sv.cloudscaling.com
+HostName zm.sv.cloudscaling.com
+User ben
+Port 3223
+ForwardAgent yes
+ForwardX11 no
+ForwardX11Trusted no
+Compression yes
+ControlMaster auto
+ControlPersist 180
 ControlPath /tmp/.ssh_%r@%h:%p
 
 Host *.cloudscaling.com
