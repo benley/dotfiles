@@ -58,7 +58,6 @@ HashKnownHosts no
 StrictHostKeyChecking no
 
 Host pd pd.cloudscaling.com
-Port 22
 HostName pd.cloudscaling.com
 User ben
 
@@ -74,50 +73,13 @@ Compression yes
 ControlPersist 180
 ControlMaster auto
 
-Host lab04 lab04.hc lab04.hc.cloudscaling.com
-HostName lab04.hc.cloudscaling.com
-User ben
-Port 3223
-ForwardAgent yes
-ForwardX11 yes
-ForwardX11Trusted yes
-Compression yes
-ControlMaster auto
-ControlPersist 180
-ControlPath /tmp/.ssh_%r@%h:%p
-
-Host lab09 lab09.hc lab09.hc.cloudscaling.com
-HostName lab09.hc.cloudscaling.com
-User ben
-Port 3223
-ForwardAgent yes
-ForwardX11 yes
-ForwardX11Trusted yes
-Compression yes
-ControlMaster auto
-ControlPersist 180
-ControlPath /tmp/.ssh_%r@%h:%p
-
 Host lab16 lab16.hc lab16.hc.cloudscaling.com
 HostName lab16.hc.cloudscaling.com
 User ben
-Port 3223
 ForwardAgent yes
 Compression yes
 ControlMaster auto
 ControlPersist 180
-ControlPath /tmp/.ssh_%r@%h:%p
-
-Host lab17 lab17.hc lab17.hc.cloudscaling.com
-HostName lab17.hc.cloudscaling.com
-User ben
-Port 3223
-ForwardAgent yes
-ForwardX11 yes
-ForwardX11Trusted yes
-Compression yes
-ControlMaster auto
-#ControlPersist 3600
 ControlPath /tmp/.ssh_%r@%h:%p
 
 Host zm.sv zm.sv.cloudscaling.com
@@ -132,12 +94,7 @@ ControlMaster auto
 ControlPersist 180
 ControlPath /tmp/.ssh_%r@%h:%p
 
-Host *.cloudscaling.com
-Port 3223
-User ben
-
 Host 172.31.0.* 192.168.129.*
-Port 3223
 StrictHostKeyChecking no
 ForwardAgent yes
 ForwardX11 no
