@@ -5,6 +5,7 @@
 	excludesfile = /Users/benley/.gitignore_global
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
 [mergetool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
@@ -22,3 +23,5 @@
 	tool = vimdiff
 [alias]
 	st = status
+[gui]
+	recentrepo = /Users/benley/cs/chef-internal
