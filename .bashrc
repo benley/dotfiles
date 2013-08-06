@@ -11,10 +11,10 @@ prefixpath() {
   [[ -d "$1"/ ]] && PATH="$1:$PATH" || return 1
 }
 
-prefixpath "$HOME/Library/Haskell/bin"
-prefixpath "$HOME/.cabal/bin"
-
 dopath() {
+  prefixpath "$HOME/Library/Haskell/bin"
+  prefixpath "$HOME/.cabal/bin"
+  prefixpath /usr/local/opt/ruby/bin
   local addpaths=(
       $HOME/bin
       $HOME/arcanist/arcanist/bin
@@ -22,7 +22,6 @@ dopath() {
       $HOME/Dropbox/bin/{,$PLATFORM}
       $HOME/.local/share/Steam/debian_bin
       /{usr,opt}/local/{bin,sbin}
-      /usr/local/opt/ruby/bin
       $HOME/opt/node/bin
       /usr/local/share/npm/bin)
   for dir in ${addpaths[@]}; do

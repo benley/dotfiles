@@ -75,19 +75,9 @@ Compression yes
 ControlPersist 180
 ControlMaster auto
 
-Host lab18 lab18.hc lab18.hc.cloudscaling.com
-HostName lab18.hc.cloudscaling.com
-ForwardAgent yes
-User ben
-
-Host lab16 lab16.hc lab16.hc.cloudscaling.com
-HostName lab16.hc.cloudscaling.com
+Host lab*
 User ben
 ForwardAgent yes
-Compression yes
-ControlMaster auto
-ControlPersist 180
-ControlPath /tmp/.ssh_%r@%h:%p
 
 Host zm.sv zm.sv.cloudscaling.com
 HostName zm.sv.cloudscaling.com
