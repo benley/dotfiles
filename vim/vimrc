@@ -65,14 +65,30 @@ set nonumber
 "autocmd FileType c,cpp nmap <tab> =0<CR>
 autocmd FileType mail set tw=72 nowrap
 autocmd FileType python call BenCode()
+      \ | setlocal tags+=$HOME/.vim/tags/python27.tags
       \ | setlocal indentexpr=GetGooglePythonIndent(v:lnum)
       \ | setlocal omnifunc=pythoncomplete#Complete
+      \ | call PythonGFJump()
+" Trim trailing whitespace on save: (I can't seem to make this work)
+" autocmd BufWritePre *.py normal m`:%s/\s\+$//e``
 autocmd FileType conf setlocal foldcolumn=0 modeline modelines=5
 autocmd FileType sh call BenCode()
 autocmd FileType vim call BenCode()
 autocmd FileType ruby call BenCode()
 autocmd FileType gitcommit set tw=71
 autocmd FileType make set noexpandtab
+
+fun! PythonGFJump()
+  " Attempts to make `gf` file jumping work for python imports.
+  python << EOF
+import os
+import sys
+import vim
+for p in sys.path:
+  if os.path.isdir(p):
+    vim.command(r"set path+=%s" % p.replace(" ", r"\ "))
+EOF
+endfun
 
 fun! BenCode()
   "I hate this right now for some reason
@@ -259,3 +275,4 @@ let pyindent_open_paren="&sw*2"
 let g:syntastic_check_on_open = 1
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
+
