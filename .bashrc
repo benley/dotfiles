@@ -1,5 +1,7 @@
 # .bashrc
 
+umask 0022
+
 OS=$(uname)
 PLATFORM=$(uname -sm | tr " " "-")
 export EDITOR=vim
