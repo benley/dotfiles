@@ -155,12 +155,11 @@ export DEBFULLNAME='Benjamin Staffin'
 alias dquilt="quilt --quiltrc=${HOME}/.quiltrc-dpkg"
 alias lintian="lintian --color=auto"
 
-rcfiles="$HOME"/.bashrc.d/*
-if [[ "$rcfiles" != "$HOME/.bashrc.d/*" ]]; then
-  for file in $rcfiles; do
+if [[ -d "$HOME/.bashrc.d" ]]; then
+  for file in $(find "$HOME/.bashrc.d" -type f -or -type l); do
     source "$file"
   done
-fi; unset rcfiles
+fi
 
 # Ruby?
 [[ -e /usr/local/bin/ruby19 ]] && alias ruby=/usr/local/bin/ruby19
