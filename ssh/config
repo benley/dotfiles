@@ -70,6 +70,7 @@ User ben
 Host admin.lab admin.lab.cloudscaling.com
 HostName admin.lab.cloudscaling.com
 User ben
+Port 3223
 ForwardAgent yes
 ForwardX11 no
 ForwardX11Trusted no
