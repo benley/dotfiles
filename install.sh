@@ -101,7 +101,7 @@ function main() {
   mkdir -p "$HOME/bin"
   dotfiles=(bin/* .inputrc .bash_logout .bash_profile .bashrc .dircolors
             .pythonrc.py .screenrc .tmux.conf .quiltrc-dpkg .Xresources .irbrc
-            .gitconfig .ctags)
+            .gitconfig .ctags .devscripts)
   for file in ${dotfiles[@]}; do
     SymlinkIfDiffer "$rootdir/$file" "$HOME/$file"
   done

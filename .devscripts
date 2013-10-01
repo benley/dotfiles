@@ -1,0 +1,13 @@
+# See /etc/devscripts.conf
+##### debsign
+#
+# Maintainer name (only used to determine GPG keyid; -m option)
+DEBSIGN_MAINT='ben@cloudscaling.com'
+#
+# GPG keyid to use (-k option)
+# DEBSIGN_KEYID=
+
+##### dscverify
+#
+# A colon separated list of extra keyrings to read.
+DSCVERIFY_KEYRINGS="~/.gnupg/pubring.gpg"
