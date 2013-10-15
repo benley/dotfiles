@@ -138,15 +138,6 @@ autocmd ColorScheme * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 
-if has("syntax")
-  syntax on
-  " The terminal is already set to the right bg/fg colors, so:
-  let g:solarized_termtrans=1
-  set bg=dark
-  colorscheme zenburn
-  " Looks nice with zenburn:
-  hi ColorColumn guibg=#484848
-endif
 
 let g:ConqueTerm_Color=0
 
@@ -276,3 +267,10 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 
+syntax on
+" The terminal is already set to the right bg/fg colors, so:
+let g:solarized_termtrans=1
+set bg=dark
+colorscheme zenburn
+" Looks nice with zenburn:
+hi ColorColumn guibg=#484848
