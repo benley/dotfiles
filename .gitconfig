@@ -24,3 +24,5 @@
 	st = status
 [gui]
 	warndetachedcommit = true
+[init]
+        templatedir = ~/.git_template

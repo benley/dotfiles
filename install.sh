@@ -116,6 +116,7 @@ function main() {
   SymlinkIfDiffer "$rootdir/ssh/rc" "$HOME/.ssh/rc"
   SymlinkIfDiffer "$rootdir/vim/vimrc" "$HOME/.vimrc"
   SymlinkIfDiffer "$rootdir/vim/dotvim" "$HOME/.vim"
+  SymlinkIfDiffer "$rootdir/.git_template" "$HOME/.git_template"
 
   if [[ ! -e "$HOME/.vim/bundle/vundle" ]]; then
     echo "Installing vundle."
