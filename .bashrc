@@ -105,19 +105,6 @@ loadcompletion() {
   fi
 }; loadcompletion
 
-case $TERM in
-  xterm*)
-    # Set the title bar to include the current directory.
-    PS1="\[\033]0;\u@\h: \w\007\][\u@\h \W]\\$ "
-    ;;
-  *)
-    PS1="[\u@\h \W]\\$ "
-    ;;
-esac
-
-# This is nifty but messes up display of long history lines.
-#export PS1='\[┌─\](\w)\[────\]\n\[└\][\h]\$ '
-
 # fancy-ass manpage colors! (classic)
 #export LESS_TERMCAP_mb=$'\E[01;31m'
 #export LESS_TERMCAP_md=$'\E[01;31m'
@@ -177,3 +164,20 @@ alias gerrit="ssh ben@pd.cloudscaling.com -p 29418 -- gerrit \$@"
 
 [[ "$OS" == "Darwin" && -e '/usr/local/bin/ctags' ]] && \
     alias ctags='/usr/local/bin/ctags'
+
+GIT_PS1_SHOWDIRTYSTATE=true
+GIT_PS1_SHOWCOLORHINTS=1
+GIT_PS1_DESCRIBE_STYLE=branch
+
+case $TERM in
+  xterm*)
+    # Set the title bar to include the current directory.
+    PROMPT_COMMAND="__git_ps1 '\[\033]0;\u@\h: \w\007\]\u@\h:\w' '\\\$ '"
+    ;;
+  *)
+    PROMPT_COMMAND="__git_ps1 '\u@\h:\w' '\\\$ '"
+    ;;
+esac
+
+# This is nifty but messes up display of long history lines.
+#PS1='\[┌─\](\w)\[────\]\n\[└\][\h]\$ '
