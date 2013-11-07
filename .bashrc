@@ -17,13 +17,14 @@ dopath() {
   prefixpath "$HOME/Library/Haskell/bin"
   prefixpath "$HOME/.cabal/bin"
   prefixpath /usr/local/opt/ruby/bin
+  prefixpath /usr/local/bin
   local addpaths=(
       $HOME/bin
       $HOME/arcanist/arcanist/bin
       $HOME/p/{depot_tools,android-ndk,android-sdk/{platform-,}tools}
       $HOME/Dropbox/bin/{,$PLATFORM}
       $HOME/.local/share/Steam/debian_bin
-      /{usr,opt}/local/{bin,sbin}
+      /{usr,opt}/local/sbin
       $HOME/opt/node/bin
       /usr/local/share/npm/bin)
   for dir in ${addpaths[@]}; do
@@ -84,7 +85,7 @@ fi
 
 loadcompletion() {
   local spot cmpl _completion_on=0
-  for spot in {/opt/local,$brew_prefix,}/etc/bash_completion; do
+  for spot in {/opt/local,"${brew_prefix}",}/etc/bash_completion; do
     if [[ -e $spot ]]; then
       source $spot
       _completion_on=1
@@ -168,7 +169,11 @@ fi
 
 if [[ $- =~ i && -x $(which keychain) ]]; then
   KEYS=".ssh/id_dsa .ssh/id_rsa .ssh/id_ben_cs .ssh/id_cloudscaling"
-  eval $(keychain --inherit any --eval --ignore-missing --nogui --quiet --quick ${KEYS})
+  eval $(keychain --inherit any --eval --ignore-missing \
+                  --nogui --quiet --quick ${KEYS})
 fi
 
 alias gerrit="ssh ben@pd.cloudscaling.com -p 29418 -- gerrit \$@"
+
+[[ "$OS" == "Darwin" && -e '/usr/local/bin/ctags' ]] && \
+    alias ctags='/usr/local/bin/ctags'

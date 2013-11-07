@@ -15,7 +15,13 @@ else:
   if sysname == 'Linux':
     readline.parse_and_bind("tab: complete")
   elif sysname == 'Darwin':
-    readline.parse_and_bind("bind ^i rl_complete")
+    # brew python:
+    readline.parse_and_bind("tab: complete")
+    # mac python:
+    #readline.parse_and_bind("bind ^i rl_complete")
+    # I think macos doesn't use gnu readline, but rather BSD libedit, which
+    # acts like it but isn't quite the same. Brew uses actual gnu readline when
+    # building python.
   del sysname
 
 # Restore our command-line history, and save it when Python exits.

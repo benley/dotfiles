@@ -107,8 +107,13 @@ function main() {
   done
 
   mkdir -p "$HOME/.bash_completion.d"
-  for file in $rootdir/bash_completion.d/*; do
+  for file in $rootdir/.bash_completion.d/*; do
     SymlinkIfDiffer "$file" "$HOME/.bash_completion.d/$(basename $file)"
+  done
+
+  mkdir -p "$HOME/.bashrc.d"
+  for file in $rootdir/.bashrc.d/*; do
+    SymlinkIfDiffer "$file" "$HOME/.bashrc.d/$(basename $file)"
   done
 
   mkdir -p "$HOME/.ssh"

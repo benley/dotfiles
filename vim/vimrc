@@ -77,6 +77,7 @@ autocmd FileType vim call BenCode()
 autocmd FileType ruby call BenCode()
 autocmd FileType gitcommit set tw=71
 autocmd FileType make set noexpandtab
+autocmd FileType yaml setlocal sw=2 ts=2 modeline modelines=5 ai
 
 fun! PythonGFJump()
   " Attempts to make `gf` file jumping work for python imports.

@@ -67,6 +67,11 @@ User ben
 Host lab*
 User ben
 
+Host gw.sfo.cloudscaling.com gw.sfo
+HostName gw.sfo.cloudscaling.com
+User ben
+Port 2022
+
 Host admin.lab admin.lab.cloudscaling.com
 HostName admin.lab.cloudscaling.com
 User ben
@@ -82,8 +87,16 @@ Host lab*
 User ben
 ForwardAgent yes
 
-Host zm.sv zm.sv.cloudscaling.com
-HostName zm.sv.cloudscaling.com
+Host lambchop lambchop.sfo lambchop.sfo.cloudscaling.com
+HostName lambchop.sfo.cloudscaling.com
+User ben
+ForwardAgent yes
+ForwardX11 yes
+ForwardX11Trusted yes
+#ProxyCommand ssh -q admin.lab.cloudscaling.com nc -q0 lambchop.sfo.cloudscaling.com 22
+
+Host zm.sv zm.blab zm.blab.cloudscaling.com zm.sv.cloudscaling.com
+#HostName zm.sv.cloudscaling.com
 User ben
 ForwardAgent yes
 ForwardX11 no

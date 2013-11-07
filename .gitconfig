@@ -5,6 +5,7 @@
 	excludesfile = /Users/benley/.gitignore_global
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
 [mergetool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
@@ -13,10 +14,10 @@
 [color]
 	ui = auto
 	diff = auto
-        pager = true
+	pager = true
 	status = auto
-        showbranch = auto
-        interactive = auto
+	showbranch = auto
+	interactive = auto
 [diff]
 	guitool = gvimdiff
 	tool = vimdiff
@@ -25,4 +26,4 @@
 [gui]
 	warndetachedcommit = true
 [init]
-        templatedir = ~/.git_template
+	templatedir = ~/.git_template
