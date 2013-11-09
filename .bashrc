@@ -169,8 +169,8 @@ GIT_PS1_SHOWDIRTYSTATE=true
 GIT_PS1_SHOWCOLORHINTS=1
 GIT_PS1_DESCRIBE_STYLE=branch
 
-prompt1='┌─( \u )─( \w )'
-prompt2='\n└[\h]─\$ '
+prompt1='┌─( \u@\h )─( \w )'
+prompt2='\n└─($?)─> \$ '
 prompt3='─( %s )'
 
 case $TERM in
