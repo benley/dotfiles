@@ -118,8 +118,33 @@ fun! FixDescription()
   endif
 endfun
 
+""" Begin paste copied from /usr/share/vim/vim73/filetype.vim:
+" Pattern used to match file names which should not be inspected.
+" Currently finds compressed files.
+if !exists("g:ft_ignore_pat")
+  let g:ft_ignore_pat = '\.\(Z\|gz\|bz2\|zip\|tgz\)$'
+endif
+
+" Function used for patterns that end in a star: don't set the filetype if the
+" file name matches ft_ignore_pat.
+func! s:StarSetf(ft)
+  if expand("<amatch>") !~ g:ft_ignore_pat
+    exe 'setf ' . a:ft
+  endif
+endfunc
+""" End paste
+
 augroup filetypedetect
-  au BufNewFile,BufRead /tmp/*[pg]4[_-]* setl wrap noet tw=65 | call FixDescription()
+  " auto handling for perforce commit messages:
+  au BufNewFile,BufRead /tmp/*[pg]4[_-]*
+        \ setlocal wrap noexpandtabs
+        \ setlocal tw=65
+        \ call FixDescription()
+  " Handle more filenames for bind configs and zone files
+  au BufNewFile,BufRead named.conf.*,zones.*
+        \ call s:StarSetf('named')
+  au BufNewFile,BufRead */zones/db.*
+        \ call s:StarSetf('bindzone')
 augroup end
 
 " obnoxious crosshairs thing
@@ -139,7 +164,8 @@ autocmd ColorScheme * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 
-
+" ConqueTerm is more than willing to use vim syntax highlighting, but it makes
+" shells really quite slow.
 let g:ConqueTerm_Color=0
 
 Bundle "Tagbar"
@@ -157,6 +183,7 @@ if has("unix")
 endif
 
 " https://github.com/majutsushi/tagbar/wiki
+" (requires custom stuff in ~/.ctags as well)
 let g:tagbar_type_markdown = {
       \ 'ctagstype': 'markdown',
       \ 'kinds': ['h:Heading_L1',
@@ -230,7 +257,7 @@ if has("gui")
   "set guioptions-=T
 endif
 
-
+""" Begin python style
 " From http://google-styleguide.googlecode.com/svn/trunk/google_python_style.vim
 " See also http://google-styleguide.googlecode.com/svn/trunk/pyguide.html
 let s:maxoff = 50 " maximum number of lines to look backwards.
@@ -260,9 +287,15 @@ function GetGooglePythonIndent(lnum)
   return GetPythonIndent(a:lnum)
 endfunction
 
-let pyindent_nested_paren="&sw*2"
-let pyindent_open_paren="&sw*2"
-" End google python style
+" This will double-indent nested and open-paren indents:
+"let pyindent_nested_paren="&sw*2"
+"let pyindent_open_paren="&sw*2"
+
+" But if we're doing pep8 style (4-space indent) we just want 1x, which is
+" conveniently the same value as a double-indent in google style, so:
+let pyindent_nested_paren = 4
+let pyindent_open_paren = 4
+""" End python style
 
 let g:syntastic_check_on_open = 1
 let g:syntastic_error_symbol = '✗'
