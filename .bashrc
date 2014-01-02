@@ -153,12 +153,6 @@ fi
 [[ -e /usr/local/bin/irb19 ]] && alias irb=/usr/local/bin/irb19
 [[ -e /usr/local/bin/gem19 ]] && alias gem=/usr/local/bin/gem19
 
-#if [[ $- =~ i && -x $(which keychain) ]]; then
-#  KEYS=".ssh/id_dsa .ssh/id_rsa .ssh/id_ben_cs .ssh/id_cloudscaling"
-#  eval $(keychain --inherit any --eval --ignore-missing \
-#                  --nogui --quick ${KEYS})
-#fi
-
 alias gerrit="ssh ben@pd.cloudscaling.com -p 29418 -- gerrit \$@"
 
 [[ "$OS" == "Darwin" && -e '/usr/local/bin/ctags' ]] && \
@@ -188,3 +182,5 @@ PROMPT_COMMAND="__git_ps1 '${prompt1}' '${prompt2}' '${prompt3}'"
 unset prompt1 prompt2 prompt3
 
 [[ -e /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
+
+return 0
