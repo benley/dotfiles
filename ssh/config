@@ -63,6 +63,8 @@ StrictHostKeyChecking no
 Host pd pd.cloudscaling.com
 HostName pd.cloudscaling.com
 User ben
+ControlMaster auto
+ControlPath /tmp/.ssh_%r@%h:%p
 
 Host lab*
 User ben

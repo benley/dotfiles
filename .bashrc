@@ -153,23 +153,28 @@ fi
 [[ -e /usr/local/bin/irb19 ]] && alias irb=/usr/local/bin/irb19
 [[ -e /usr/local/bin/gem19 ]] && alias gem=/usr/local/bin/gem19
 
-if [[ $- =~ i && -x $(which keychain) ]]; then
-  KEYS=".ssh/id_dsa .ssh/id_rsa .ssh/id_ben_cs .ssh/id_cloudscaling"
-  eval $(keychain --inherit any --eval --ignore-missing \
-                  --nogui --quiet --quick ${KEYS})
-fi
+#if [[ $- =~ i && -x $(which keychain) ]]; then
+#  KEYS=".ssh/id_dsa .ssh/id_rsa .ssh/id_ben_cs .ssh/id_cloudscaling"
+#  eval $(keychain --inherit any --eval --ignore-missing \
+#                  --nogui --quick ${KEYS})
+#fi
 
 alias gerrit="ssh ben@pd.cloudscaling.com -p 29418 -- gerrit \$@"
 
 [[ "$OS" == "Darwin" && -e '/usr/local/bin/ctags' ]] && \
     alias ctags='/usr/local/bin/ctags'
 
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
 GIT_PS1_SHOWDIRTYSTATE=true
 GIT_PS1_SHOWCOLORHINTS=1
 GIT_PS1_DESCRIBE_STYLE=branch
 
-prompt1='┌─( \u@\h )─( \w )'
-prompt2='\n└─($?)─> \$ '
+prompt1='┌─( \[\033[01;32m\]\u\[\033[00m\]@\h )─( \[\033[01;34m\]\w\[\033[00m\] )'
+prompt2='\n└─${debian_chroot:+(\[\033[01;35m\]$debian_chroot\[\033[00m\])-}\[\033[00m\]($?)─> \$ '
 prompt3='─( %s )'
 
 case $TERM in
