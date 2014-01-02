@@ -100,7 +100,7 @@ function main() {
   set -o nounset
   mkdir -p "$HOME/bin"
   dotfiles=(bin/* .inputrc .bash_logout .bash_profile .bashrc .dircolors
-            .pythonrc.py .screenrc .tmux.conf .quiltrc-dpkg .Xresources .irbrc
+            .pythonrc.py .screenrc .tmux.conf .quiltrc .Xresources .irbrc
             .gitconfig .ctags .devscripts)
   for file in ${dotfiles[@]}; do
     SymlinkIfDiffer "$rootdir/$file" "$HOME/$file"

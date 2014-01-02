@@ -4,5 +4,6 @@ set visible-stats on
 set show-all-if-ambiguous on
 set completion-ignore-case on
 set completion-map-case on
-set mark-modified-lines on
+# This gets messy with my two-line prompt for some reason so I turned it off:
+set mark-modified-lines off
 set bell-style visible

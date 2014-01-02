@@ -67,8 +67,8 @@ autocmd FileType mail set tw=72 nowrap
 autocmd FileType python call BenCode()
       \ | setlocal tags+=$HOME/.vim/tags/python27.tags
       \ | setlocal indentexpr=GetGooglePythonIndent(v:lnum)
-      \ | setlocal omnifunc=pythoncomplete#Complete
       \ | call PythonGFJump()
+      "\ | setlocal omnifunc=pythoncomplete#Complete
 " Trim trailing whitespace on save: (I can't seem to make this work)
 " autocmd BufWritePre *.py normal m`:%s/\s\+$//e``
 autocmd FileType conf setlocal foldcolumn=0 modeline modelines=5
@@ -301,6 +301,20 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 
+" This helps syntastic work with virtualenv.
+if has("python") && !empty($VIRTUAL_ENV)
+  python << EOF
+import os
+import sys
+a = os.environ['VIRTUAL_ENV'] + '/bin/activate_this.py'
+execfile(a, dict(__file__ = a))
+if 'PYTHONPATH' not in os.environ:
+  os.environ['PYTHONPATH'] = ''
+  os.environ['PYTHONPATH'] += ":"+os.getcwd()
+  os.environ['PYTHONPATH'] += ":".join(sys.path)
+EOF
+endif
+
 syntax on
 " The terminal is already set to the right bg/fg colors, so:
 let g:solarized_termtrans=1
@@ -308,3 +322,6 @@ set bg=dark
 colorscheme zenburn
 " Looks nice with zenburn:
 hi ColorColumn guibg=#484848
+
+let g:virtualenv_stl_format='[%n]'
+set statusline=%<%f\ %h%m%r%{VirtualEnvStatusline()}%=%-14.(%l,%c%V%)\ %P

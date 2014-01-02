@@ -140,7 +140,6 @@ export HISTFILESIZE=9999
 # Debian dev stuff
 export DEBEMAIL='ben@cloudscaling.com'
 export DEBFULLNAME='Benjamin Staffin'
-alias dquilt="quilt --quiltrc=${HOME}/.quiltrc-dpkg"
 alias lintian="lintian --color=auto"
 
 if [[ -d "$HOME/.bashrc.d" ]]; then
@@ -182,3 +181,5 @@ esac
 
 PROMPT_COMMAND="__git_ps1 '${prompt1}' '${prompt2}' '${prompt3}'"
 unset prompt1 prompt2 prompt3
+
+[[ -e /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
