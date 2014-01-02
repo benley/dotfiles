@@ -145,6 +145,9 @@ augroup filetypedetect
         \ call s:StarSetf('named')
   au BufNewFile,BufRead */zones/db.*
         \ call s:StarSetf('bindzone')
+  " Match nginx configs
+  au BufNewFile,BufRead /etc/nginx/*,/usr/local/nginx/conf/*
+        \ if &ft=='' | setfiletype nginx | endif
 augroup end
 
 " obnoxious crosshairs thing
