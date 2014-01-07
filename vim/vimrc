@@ -226,7 +226,7 @@ let g:tagbar_type_markdown = {
 " :cv to copy to x11 Secondary Selection (wtf is this for, even?)
 " :pz to paste from x11 Clipboard
 " :px to paste from x11 Primary Selection
-" :pv to paste vrom x11 Secondary Selection
+" :pv to paste from x11 Secondary Selection
 " TODO(benley): I'm sure there is a way to do this without needing a : first
 command -range Cz :silent :<line1>,<line2>w !xsel -i -b
 command -range Cx :silent :<line1>,<line2>w !xsel -i -p
