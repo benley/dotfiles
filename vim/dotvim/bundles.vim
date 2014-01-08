@@ -1,3 +1,12 @@
+set nocompatible
+filetype off
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" :BundleList          - list configured bundles
+" :BundleInstall(!)    - install(update) bundles
+" :BundleSearch(!) foo - search(or refresh cache first) for foo
+" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 Bundle 'gmarik/vundle'
 Bundle 'tpope/vim-fugitive'
 Bundle 'benmills/vimux'
@@ -43,3 +52,5 @@ Bundle 'afterimage.vim'
 " This isn't as cool as I thought it would be:
 "Bundle 'UpdateDNSSerial'
 Bundle 'Valloric/YouCompleteMe'
+
+filetype plugin indent on

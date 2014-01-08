@@ -1,6 +1,0 @@
-set nocompatible
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-source ~/.vim/bundlelist.vim
-BundleUpdate
-quitall

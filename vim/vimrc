@@ -1,15 +1,4 @@
-set nocompatible
-filetype off
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-source ~/.vim/bundlelist.vim
-
-" :BundleList          - list configured bundles
-" :BundleInstall(!)    - install(update) bundles
-" :BundleSearch(!) foo - search(or refresh cache first) for foo
-" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
-
-filetype plugin indent on
+source ~/.vim/bundles.vim
 
 set backspace=indent,eol,start
 set expandtab
