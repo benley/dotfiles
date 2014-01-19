@@ -181,6 +181,7 @@ esac
 PROMPT_COMMAND="__git_ps1 '${prompt1}' '${prompt2}' '${prompt3}'"
 unset prompt1 prompt2 prompt3
 
+[[ "$COLORTERM" == 'gnome-terminal' ]] && export TERM='gnome-256color'
 [[ -e /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
 
 return 0
