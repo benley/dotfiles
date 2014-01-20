@@ -101,7 +101,7 @@ function main() {
   mkdir -p "$HOME/bin"
   dotfiles=(bin/* .inputrc .bash_logout .bash_profile .bashrc .dircolors
             .pythonrc.py .screenrc .tmux.conf .quiltrc .Xresources .irbrc
-            .gitconfig .ctags .devscripts)
+            .gitconfig .ctags .devscripts .xmobarrc)
   for file in ${dotfiles[@]}; do
     SymlinkIfDiffer "$rootdir/$file" "$HOME/$file"
   done
@@ -114,6 +114,11 @@ function main() {
   mkdir -p "$HOME/.bashrc.d"
   for file in $rootdir/.bashrc.d/*; do
     SymlinkIfDiffer "$file" "$HOME/.bashrc.d/$(basename $file)"
+  done
+
+  mkdir -p "$HOME/.xmonad"
+  for file in $rootdir/.xmonad/*; do
+    SymlinkIfDiffer "$file" "$HOME/.xmonad/$(basename $file)"
   done
 
   mkdir -p "$HOME/.ssh"
