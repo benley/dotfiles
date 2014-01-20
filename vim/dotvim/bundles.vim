@@ -45,6 +45,10 @@ Bundle 'vim-coffee-script'
 " http://www.vim.org/scripts/script.php?script_id=790 :
 Bundle 'hdima/python-syntax'
 
+" woo haskell
+Bundle 'indenthaskell.vim'
+" This is cute but really obnoxious:
+"Bundle 'frerich/unicode-haskell'
 
 "Bundle 'insanum/votl'   " I should learn how to use this
 Bundle 'virtualenv.vim'
