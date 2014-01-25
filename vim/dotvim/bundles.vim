@@ -57,5 +57,6 @@ Bundle 'afterimage.vim'
 " This isn't as cool as I thought it would be:
 "Bundle 'UpdateDNSSerial'
 Bundle 'Valloric/YouCompleteMe'
+Bundle 'Puppet-Syntax-Highlighting'
 
 filetype plugin indent on
