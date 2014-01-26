@@ -30,6 +30,9 @@ dopath() {
   for dir in ${addpaths[@]}; do
     [[ -d "$dir"/ ]] && PATH+=":${dir}"
   done
+
+  [[ -e /etc/arch-release && -e /usr/bin/ruby ]] && \
+    PATH+="$(ruby -rubygems -e 'puts Gem.user_dir')/bin"
 }; dopath
 
 # This is unnecessary: see bash manpage's INVOCATION section.

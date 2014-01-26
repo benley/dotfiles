@@ -131,8 +131,8 @@ function main() {
   if [[ ! -e "$HOME/.vim/bundle/vundle" ]]; then
     echo "Installing vundle."
     git clone "http://github.com/gmarik/vundle.git" "$HOME/.vim/bundle/vundle"
-    vim -u "$rootdir/vim/vimrc.bootstrap"
   fi
+  vim -u "$HOME/.vim/bundles.vim" +BundleInstall +q
 
   DoCleanUps
 }
