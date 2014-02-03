@@ -171,6 +171,9 @@ prompt1='┌─( \[\033[01;32m\]\u\[\033[00m\]@\h )─( \[\033[01;34m\]\w\[\033[
 prompt2='\n└─${debian_chroot:+(\[\033[01;35m\]$debian_chroot\[\033[00m\])-}\[\033[00m\]($?)─> \$ '
 prompt3='─( %s )'
 
+# Cloudscaling logo:
+#PS1='\[\033[1;30;47m\]cloud\[\033[0;31;47m\]scaling\[\033[;91m\] OCS 2.6.1\[\033[00m\]\n[\u@\h] \W \$ '
+
 case $TERM in
   xterm*)
     # Set the title bar to include the current directory.

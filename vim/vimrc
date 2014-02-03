@@ -85,7 +85,7 @@ fun! BenCode()
   "setlocal colorcolumn=+1,+2 foldcolumn=5 foldmethod=indent number foldnestmax=4
   match OverLength /\%>80v.\+/
   "setlocal shiftwidth=2 smartindent autoindent expandtab
-  setlocal shiftwidth=2 expandtab
+  setlocal shiftwidth=4 expandtab
 endfun
 
 "highlight RedundantSpaces ctermbg=red guibg=red

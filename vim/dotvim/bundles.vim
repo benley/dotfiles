@@ -44,6 +44,7 @@ Bundle 'nginx.vim'
 Bundle 'vim-coffee-script'
 " http://www.vim.org/scripts/script.php?script_id=790 :
 Bundle 'hdima/python-syntax'
+Bundle 'newlisp'
 
 " woo haskell
 Bundle 'indenthaskell.vim'

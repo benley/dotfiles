@@ -60,6 +60,11 @@ UserKnownHostsFile ~/.ssh/jenkins_known_hosts
 HashKnownHosts no
 StrictHostKeyChecking no
 
+Host lab21.hc.cloudscaling.com
+ControlPersist 180
+ControlMaster auto
+ControlPath /tmp/.ssh_%r@%h:%p
+
 Host pd pd.cloudscaling.com
 HostName pd.cloudscaling.com
 User ben
