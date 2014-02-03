@@ -6,8 +6,6 @@
 # This is useful for things like:
 # xargs wc -l *.txt | grep -v " total$" | dongs.pl
 
-# (Note: for this use, maybe include | grep -v " total$") before | dongs.pl
-
 # if, say, 'file' contains:
 
 # 5 bob
@@ -25,9 +23,9 @@
 # ed          8======D
 # 4           8==D
 
-# By Randall Munroe, if you must ask.  Written as a quick hack while on Jeph 
-# Jacques' living room floor while waiting for him to wake up.
-# Thanks go to to his rabbits, who kept me company and helped with debugging.
+# By Randall Munroe, although he denies it.  Hacked together while sitting
+# on Jeph Jacques' living room floor while waiting for him to wake up.
+# Thank you to his rabbits, who kept me company and helped with debugging.
 
 use List::Util qw(first max maxstr min minstr reduce shuffle sum);
 
