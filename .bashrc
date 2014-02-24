@@ -130,10 +130,6 @@ export LESS_TERMCAP_us=$'\E[4;32m'        # begin underline
 # Have less use the extended status prompt, and display ANSI colors.
 export LESS="-M -R"
 
-# I like shiny things.
-[[ -x $(which colorgcc) ]] && export CC=colorgcc
-[[ -x $(which colormake) ]] && alias make=colormake
-
 export PYTHONSTARTUP="${HOME}/.pythonrc.py"
 
 # MOAR HISTORY

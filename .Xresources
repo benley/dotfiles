@@ -7,6 +7,8 @@ XTerm.vt100.scrollBar: false
 !! XTerm.vt100.foreground: white
 XTerm.vt100.geometry: 80x40
 
+XTerm.vt100.RenderFont: default
+
 !! XTerm.vtMenu.background: green
 !! XTerm.fontMenu.background: blue
 !! XTerm.mainMenu.background: red

@@ -242,7 +242,7 @@ if has("gui")
   if has("macunix")
     set guifont=Menlo\ Regular\:h14
   else
-    set guifont=DejaVu\ Sans\ Mono\ 12
+    set guifont=DejaVu\ Sans\ Mono\ 10
   endif
   set bg=dark
   " Turn off the toolbar.
