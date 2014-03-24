@@ -59,5 +59,6 @@ Bundle 'afterimage.vim'
 "Bundle 'UpdateDNSSerial'
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'Puppet-Syntax-Highlighting'
+Bundle 'airblade/vim-gitgutter'
 
 filetype plugin indent on

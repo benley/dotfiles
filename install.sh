@@ -132,7 +132,7 @@ function main() {
     echo "Installing vundle."
     git clone "http://github.com/gmarik/vundle.git" "$HOME/.vim/bundle/vundle"
   fi
-  vim -u "$HOME/.vim/bundles.vim" +BundleInstall +q
+  vim -u "$HOME/.vim/bundles.vim" +BundleInstall +qa
 
   DoCleanUps
 }
