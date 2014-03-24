@@ -317,3 +317,5 @@ hi ColorColumn guibg=#484848
 
 let g:virtualenv_stl_format='[%n]'
 set statusline=%<%f\ %h%m%r%{VirtualEnvStatusline()}%=%-14.(%l,%c%V%)\ %P
+
+set secure
