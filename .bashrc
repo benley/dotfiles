@@ -186,5 +186,7 @@ unset prompt1 prompt2 prompt3
 [[ "$COLORTERM" == 'gnome-terminal' ]] && export TERM='gnome-256color'
 [[ -e /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
 
-PROJECT_HOME="$HOME/projects"
+# for virtualenvwrapper
+export PROJECT_HOME="$HOME/projects"
+
 return 0
