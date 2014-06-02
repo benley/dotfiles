@@ -1,4 +1,4 @@
-Host zoiks.net *.zoiks.net *.xkcd.com
+Host zoiks.net *.zoiks.net *.xkcd.com nyan*.*
 User benley
 
 Host *

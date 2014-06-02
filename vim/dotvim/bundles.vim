@@ -28,6 +28,7 @@ Bundle 'pythoncomplete'
 Bundle 'vim-json-bundle'
 Bundle 'scrooloose/nerdtree'
 Bundle 'Tagbar'
+
 Bundle 'taglist.vim'
 Bundle 'Syntastic'
 Bundle 'python_ifold'
@@ -47,6 +48,15 @@ Bundle 'hdima/python-syntax'
 Bundle 'newlisp'
 Bundle 'mustache/vim-mustache-handlebars'
 
+"Bundle 'VimClojure'
+Bundle 'guns/vim-clojure-static'
+Bundle 'kien/rainbow_parentheses.vim'
+Bundle 'guns/vim-clojure-highlight'
+Bundle 'tpope/vim-leiningen'
+Bundle 'tpope/vim-projectionist'
+Bundle 'tpope/vim-dispatch'
+Bundle 'tpope/vim-fireplace'
+
 " woo haskell
 Bundle 'indenthaskell.vim'
 " This is cute but really obnoxious:
@@ -57,8 +67,9 @@ Bundle 'virtualenv.vim'
 Bundle 'afterimage.vim'
 " This isn't as cool as I thought it would be:
 "Bundle 'UpdateDNSSerial'
-Bundle 'Valloric/YouCompleteMe'
 Bundle 'Puppet-Syntax-Highlighting'
 Bundle 'airblade/vim-gitgutter'
+
+Bundle 'Valloric/YouCompleteMe'
 
 filetype plugin indent on

@@ -22,7 +22,7 @@
 	guitool = gvimdiff
 	tool = vimdiff
 [difftool]
-        prompt = false
+	prompt = false
 [alias]
 	st = status
 [gui]

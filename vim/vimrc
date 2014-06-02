@@ -57,6 +57,7 @@ autocmd FileType python call BenCode()
       \ | setlocal tags+=$HOME/.vim/tags/python27.tags
       \ | setlocal indentexpr=GetGooglePythonIndent(v:lnum)
       \ | call PythonGFJump()
+      \ | setlocal sw=4
       "\ | setlocal omnifunc=pythoncomplete#Complete
 " Trim trailing whitespace on save: (I can't seem to make this work)
 " autocmd BufWritePre *.py normal m`:%s/\s\+$//e``
@@ -85,7 +86,7 @@ fun! BenCode()
   "setlocal colorcolumn=+1,+2 foldcolumn=5 foldmethod=indent number foldnestmax=4
   match OverLength /\%>80v.\+/
   "setlocal shiftwidth=2 smartindent autoindent expandtab
-  setlocal shiftwidth=4 expandtab
+  setlocal shiftwidth=2 expandtab
 endfun
 
 "highlight RedundantSpaces ctermbg=red guibg=red
@@ -160,7 +161,7 @@ autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 " shells really quite slow.
 let g:ConqueTerm_Color=0
 
-Bundle "Tagbar"
+" Bundle 'Tagbar'
 nnoremap <silent> <F9> :TagbarToggle<CR>
 set title titlestring=%<%f\ %(%{tagbar#currenttag('[%s]','','s')}%)
 if has("unix")
@@ -317,5 +318,15 @@ hi ColorColumn guibg=#484848
 
 let g:virtualenv_stl_format='[%n]'
 set statusline=%<%f\ %h%m%r%{VirtualEnvStatusline()}%=%-14.(%l,%c%V%)\ %P
+
+""""""""""""
+" Clojure!
+"
+"let g:vimclojure#HighlightBuiltins = 1
+"let g:vimclojure#ParenRainbow = 1
+"let g:vimclojure#DynamicHighlighting = 1
+"let g:vimclojure#WantNailgun = 1
+
+let g:clojure_align_multiline_strings = 1
 
 set secure

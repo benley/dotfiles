@@ -88,7 +88,7 @@ fi
 
 loadcompletion() {
   local spot cmpl _completion_on=0
-  for spot in {/opt/local,"${brew_prefix}",}/etc/bash_completion; do
+  for spot in {/opt/local,"${brew_prefix}",}/{etc,share/bash-completion}/bash_completion; do
     if [[ -e $spot ]]; then
       source $spot
       _completion_on=1
@@ -186,4 +186,5 @@ unset prompt1 prompt2 prompt3
 [[ "$COLORTERM" == 'gnome-terminal' ]] && export TERM='gnome-256color'
 [[ -e /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
 
+PROJECT_HOME="$HOME/projects"
 return 0
