@@ -14,7 +14,6 @@
 [color]
 	ui = auto
 	diff = auto
-	pager = true
 	status = auto
 	showbranch = auto
 	interactive = auto
@@ -25,9 +24,19 @@
 	prompt = false
 [alias]
 	st = status
+        lg = log --graph --pretty=format:'%Cred%h%Creset - %Cgreen%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
 [gui]
 	warndetachedcommit = true
 [init]
 	templatedir = ~/.git_template
 [push]
 	default = simple
+[merge "dpkg-mergechangelogs"]
+        name = debian/changelog merge driver
+        driver = dpkg-mergechangelogs -m %O %A %B %A
+[merge]
+        tool = diffconflicts
+[mergetool "diffconflicts"]
+        cmd = diffconflicts gvim \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+        trustExitCode = true
+        keepBackup = false
