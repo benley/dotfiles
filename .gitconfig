@@ -30,7 +30,7 @@
 [init]
 	templatedir = ~/.git_template
 [push]
-	default = simple
+	default = nothing
 [merge "dpkg-mergechangelogs"]
         name = debian/changelog merge driver
         driver = dpkg-mergechangelogs -m %O %A %B %A
