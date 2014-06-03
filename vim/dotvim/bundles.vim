@@ -39,6 +39,7 @@ Bundle 'gitv'
 Bundle 'pydoc.vim'
 
 " Syntax highlighting:
+Bundle 'pantsbuild/vim-pants'
 Bundle 'ekalinin/Dockerfile.vim'
 Bundle 'nginx.vim'
 "Bundle 'fish.vim'
@@ -71,5 +72,6 @@ Bundle 'Puppet-Syntax-Highlighting'
 Bundle 'airblade/vim-gitgutter'
 
 Bundle 'Valloric/YouCompleteMe'
+Bundle 'AnsiEsc.vim'
 
 filetype plugin indent on
