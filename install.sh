@@ -134,6 +134,9 @@ function main() {
   fi
   vim -u "$HOME/.vim/bundles.vim" +BundleInstall +qa
 
+  # for virtualenvwrapper
+  mkdir -p "$HOME/projects"
+
   DoCleanUps
 }
 
