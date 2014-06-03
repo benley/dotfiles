@@ -1,6 +1,3 @@
-[submodule "external/git-flow-completion"]
-	path = external/git-flow-completion
-	url = git://github.com/bobthecow/git-flow-completion.git
 [submodule "external/shFlags"]
 	path = external/shFlags
 	url = https://github.com/nvie/shFlags.git
