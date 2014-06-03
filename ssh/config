@@ -141,6 +141,11 @@ GSSAPIDelegateCredentials yes
 GSSAPIKeyExchange yes
 GSSAPITrustDNS yes
 
+Host *
+GSSAPIAuthentication yes
+GSSAPIDelegateCredentials yes
+GSSAPIKeyExchange yes
+
 Host *.*
 GSSAPIAuthentication yes
 GSSAPIDelegateCredentials no
