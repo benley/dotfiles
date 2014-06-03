@@ -57,7 +57,7 @@ autocmd FileType python call BenCode()
       \ | setlocal tags+=$HOME/.vim/tags/python27.tags
       \ | setlocal indentexpr=GetGooglePythonIndent(v:lnum)
       \ | call PythonGFJump()
-      \ | setlocal sw=4
+      \ | setlocal shiftwidth=4
       "\ | setlocal omnifunc=pythoncomplete#Complete
 " Trim trailing whitespace on save: (I can't seem to make this work)
 " autocmd BufWritePre *.py normal m`:%s/\s\+$//e``
@@ -86,7 +86,7 @@ fun! BenCode()
   "setlocal colorcolumn=+1,+2 foldcolumn=5 foldmethod=indent number foldnestmax=4
   match OverLength /\%>80v.\+/
   "setlocal shiftwidth=2 smartindent autoindent expandtab
-  setlocal shiftwidth=2 expandtab
+  setlocal shiftwidth=4 expandtab
 endfun
 
 "highlight RedundantSpaces ctermbg=red guibg=red
@@ -314,7 +314,7 @@ let g:solarized_termtrans=1
 set bg=dark
 colorscheme zenburn
 " Looks nice with zenburn:
-hi ColorColumn guibg=#484848
+highlight ColorColumn ctermbg=238 guibg=#484848
 
 let g:virtualenv_stl_format='[%n]'
 set statusline=%<%f\ %h%m%r%{VirtualEnvStatusline()}%=%-14.(%l,%c%V%)\ %P
@@ -329,4 +329,19 @@ set statusline=%<%f\ %h%m%r%{VirtualEnvStatusline()}%=%-14.(%l,%c%V%)\ %P
 
 let g:clojure_align_multiline_strings = 1
 
+let g:NERDTreeIgnore=['\~$', '\.pyc$']
+if version >= 703
+  " Show line numbers relative to cursor position
+  set relativenumber
+  au BufReadPost * set relativenumber
+
+  " Color current line number in obnoxious magenta
+  "highlight CursorLineNr ctermfg=130 guifg=#ff5fd7
+
+  " Subtly show column 80
+  set colorcolumn=+1
+  highlight ColorColumn ctermbg=238 guibg=#121212
+endif
+
 set secure
+
