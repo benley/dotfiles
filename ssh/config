@@ -67,10 +67,12 @@ ControlPath /tmp/.ssh_%r@%h:%p
 Host *.jenkins.cloudscaling.com
 Port 51225
 User ben@cloudscaling.com
-ProxyCommand ssh -q -l "ben@cloudscaling.com" -p 51225 jenkins.cloudscaling.com diagnose-tunnel -suffix .jenkins.cloudscaling.com %h
+ProxyCommand ssh -q -l "ben@cloudscaling.com" -p 51225 lab21.hc.cloudscaling.com diagnose-tunnel -suffix .jenkins.cloudscaling.com %h
 UserKnownHostsFile ~/.ssh/jenkins_known_hosts
 HashKnownHosts no
 StrictHostKeyChecking no
+GSSAPIAuthentication no
+GSSAPIKeyExchange no
 
 Host lab21.hc.cloudscaling.com
 ControlPersist 180
