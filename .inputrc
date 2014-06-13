@@ -1,4 +1,5 @@
 # http://cnswww.cns.cwru.edu/php/chet/readline/rluserman.html#SEC10
+# http://www.gnu.org/software/bash/manual/html_node/Miscellaneous-Commands.html
 
 set visible-stats on
 set show-all-if-ambiguous on
@@ -7,3 +8,46 @@ set completion-map-case on
 # This gets messy with my two-line prompt for some reason so I turned it off:
 set mark-modified-lines off
 set bell-style visible
+
+# omfg why didn't I know about these before
+set blink-matching-paren on
+set colored-stats on
+
+# You'd think I would set this to vi, but that actually drives me crazy.
+set editing-mode emacs
+
+set menu-complete-display-prefix on
+set skip-completed-text on
+
+# Macros that are convenient for shell interaction
+$if Bash
+# edit the path
+"\C-xp": "PATH=${PATH}\e\C-e\C-a\ef\C-f"
+
+# prepare to type a quoted word --
+# insert open and close double quotes
+# and move to just after the open quote
+#"\C-x\"": "\"\"\C-b"
+
+# insert a backslash (testing backslash escapes
+# in sequences and macros)
+#"\C-x\\": "\\"
+
+# Quote the current or previous word
+"\C-x\'": "\eb\"\ef\""
+
+# Add a binding to refresh the line, which is unbound
+"\C-xr": redraw-current-line
+
+# I can't figure out how to make this work:
+# Edit variable on current line.
+#"\M-\C-v": "\C-a\C-k$\C-y\M-\C-e\C-a\C-y="
+
+# tab does normal completion, and ctrl-meta-j/k do menu completion.
+"\C-\M-j": menu-complete
+"\C-\M-k": menu-complete-backward
+TAB: complete
+
+# Holy fucking shit
+Space: magic-space
+$endif
