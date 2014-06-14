@@ -63,8 +63,10 @@ autocmd FileType python call BenCode()
 " autocmd BufWritePre *.py normal m`:%s/\s\+$//e``
 autocmd FileType conf setlocal foldcolumn=0 modeline modelines=5
 autocmd FileType sh call BenCode()
+      \ | setlocal shiftwidth=2
 autocmd FileType vim call BenCode()
 autocmd FileType ruby call BenCode()
+      \ | setlocal shiftwidth=2
 autocmd FileType gitcommit set tw=71
 autocmd FileType make set noexpandtab
 autocmd FileType yaml setlocal sw=2 ts=2 modeline modelines=5 ai
