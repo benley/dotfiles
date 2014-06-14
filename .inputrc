@@ -8,23 +8,31 @@ set completion-map-case on
 # This gets messy with my two-line prompt for some reason so I turned it off:
 set mark-modified-lines off
 set bell-style visible
+set menu-complete-display-prefix on
+set skip-completed-text on
 
-# omfg why didn't I know about these before
+# Holy cow awesome
 set blink-matching-paren on
+
+# Colorful completion list display
 set colored-stats on
 
 # You'd think I would set this to vi, but that actually drives me crazy.
 set editing-mode emacs
 
-set menu-complete-display-prefix on
-set skip-completed-text on
+# Add quotes/parens/braces/brackets/chevrons around the current or previous word
+"\C-x\'": "\eb'\ef'"
+"\C-x\"": "\eb\"\ef\""
+"\C-x(": "\eb(\ef)"
+"\C-x[": "\eb[\ef]"
+"\C-x{": "\eb{\ef}"
+"\C-x<": "\eb<\ef>"
 
 # Macros that are convenient for shell interaction
 $if Bash
 # edit the path
 "\C-xp": "PATH=${PATH}\e\C-e\C-a\ef\C-f"
 
-# prepare to type a quoted word --
 # insert open and close double quotes
 # and move to just after the open quote
 #"\C-x\"": "\"\"\C-b"
@@ -32,9 +40,6 @@ $if Bash
 # insert a backslash (testing backslash escapes
 # in sequences and macros)
 #"\C-x\\": "\\"
-
-# Quote the current or previous word
-"\C-x\'": "\eb\"\ef\""
 
 # Add a binding to refresh the line, which is unbound
 "\C-xr": redraw-current-line
