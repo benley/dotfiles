@@ -1,9 +1,6 @@
 Host zoiks.net *.zoiks.net *.xkcd.com nyan*.*
 User benley
 
-Host *
-User ben
-
 # ControlPersist doesn't work with OpenSSH_4.5p1 from debian Squeeze (stable)
 # It *does* work with: Ubuntu 12.04, Ubuntu 12.10, MacOS 10.8, [...]
 
@@ -63,25 +60,24 @@ ControlPersist yes
 ControlMaster auto
 ControlPath /tmp/.ssh_%r@%h:%p
 
-# CS
+Host jenkins
+Port 51225
+User "ben@cloudscaling.com"
+RequestTTY yes
+HostName lab21.hc.cloudscaling.com
+
 Host *.jenkins.cloudscaling.com
 Port 51225
 User ben@cloudscaling.com
-ProxyCommand ssh -q -l "ben@cloudscaling.com" -p 51225 lab21.hc.cloudscaling.com diagnose-tunnel -suffix .jenkins.cloudscaling.com %h
+ProxyCommand ssh -l ben@cloudscaling.com -p 51225 lab21.hc.cloudscaling.com diagnose-tunnel -suffix .jenkins.cloudscaling.com %h
 UserKnownHostsFile ~/.ssh/jenkins_known_hosts
 HashKnownHosts no
 StrictHostKeyChecking no
 GSSAPIAuthentication no
 GSSAPIKeyExchange no
 
-Host lab21.hc.cloudscaling.com
-ControlPersist 180
-ControlMaster auto
-ControlPath /tmp/.ssh_%r@%h:%p
-
 Host pd pd.cloudscaling.com
 HostName pd.cloudscaling.com
-User ben
 GSSAPIAuthentication no
 GSSAPITrustDNS no
 GSSAPIKeyExchange no
@@ -91,17 +87,8 @@ ForwardX11Trusted no
 ControlMaster auto
 ControlPath /tmp/.ssh_%r@%h:%p
 
-#Host apathy.sfo.cloudscaling.com apathy.sfo apathy
-#HostName apathy.sfo.cloudscaling.com
-#User ben
-#
-#Host sfonas sfonas.sfo sfonas.sfo.cloudscaling.com
-#HostName sfonas.sfo.cloudscaling.com
-#User ben
-
 Host admin.lab admin.lab.cloudscaling.com
 HostName admin.lab.cloudscaling.com
-User ben
 Port 3223
 ForwardAgent yes
 ForwardX11 no
@@ -116,25 +103,12 @@ GSSAPITrustDNS no
 
 Host lambchop lambchop.sfo lambchop.sfo.cloudscaling.com
 HostName lambchop.sfo.cloudscaling.com
-User ben
 ForwardAgent yes
 ForwardX11 yes
 ForwardX11Trusted yes
 #ProxyCommand ssh -q admin.lab.cloudscaling.com nc -q0 lambchop.sfo.cloudscaling.com 22
 
-Host zm.sv zm.blab zm.blab.cloudscaling.com zm.sv.cloudscaling.com
-#HostName zm.sv.cloudscaling.com
-User ben
-ForwardAgent yes
-ForwardX11 no
-ForwardX11Trusted no
-Compression yes
-ControlMaster auto
-ControlPersist 180
-ControlPath /tmp/.ssh_%r@%h:%p
-
 Host *.cloudscaling.com *.sfo *.hc *.dev *.lab
-User ben
 ForwardX11 yes
 ForwardX11Trusted yes
 ForwardAgent yes
@@ -159,7 +133,6 @@ ForwardX11 no
 ForwardX11Trusted no
 
 Host lab*
-User ben
 ForwardX11 yes
 ForwardX11Trusted yes
 ForwardAgent yes
@@ -169,6 +142,7 @@ GSSAPIKeyExchange yes
 GSSAPITrustDNS yes
 
 Host *
+User ben
 GSSAPIAuthentication yes
 GSSAPIDelegateCredentials yes
 GSSAPIKeyExchange yes
