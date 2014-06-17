@@ -71,9 +71,10 @@ autocmd FileType sh call BenCode()
 autocmd FileType vim call BenCode()
 autocmd FileType ruby call BenCode()
       \ | setlocal shiftwidth=2
-autocmd FileType gitcommit set tw=71
+autocmd FileType gitcommit set textwidth=71
 autocmd FileType make set noexpandtab
-autocmd FileType yaml setlocal sw=2 ts=2 modeline modelines=5 ai
+autocmd FileType yaml
+      \ setlocal shiftwidth=2 tabstop=2 modeline modelines=5 autoindent
 
 fun! PythonGFJump()
   " Attempts to make `gf` file jumping work for python imports.
