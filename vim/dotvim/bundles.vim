@@ -9,6 +9,8 @@ call vundle#rc()
 " :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 Bundle 'gmarik/vundle'
 Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-eunuch'
+Bundle 'tpope/vim-jdaddy'
 Bundle 'benmills/vimux'
 "Bundle 'fholgado/minibufexpl.vim'
 Bundle 'vim-scripts/genutils'
