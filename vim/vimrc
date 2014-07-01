@@ -18,9 +18,9 @@ set wildmenu
 set hidden
 set magic
 set laststatus=2 " Keep the status bar even when there's only one window.
-set listchars=tab:»·  " Loudly highlight the damn tabs
+set listchars=tab:⇥\   " Loudly highlight the damn tabs
 set invlist
-set scrolloff=7
+set scrolloff=2
 set shiftround
 
 if has("mouse")
