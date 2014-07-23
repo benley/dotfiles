@@ -32,11 +32,11 @@
 [push]
 	default = nothing
 [merge "dpkg-mergechangelogs"]
-        name = debian/changelog merge driver
-        driver = dpkg-mergechangelogs -m %O %A %B %A
+	name = debian/changelog merge driver
+	driver = dpkg-mergechangelogs -m %O %A %B %A
 [merge]
-        tool = diffconflicts
+	tool = diffconflicts
 [mergetool "diffconflicts"]
-        cmd = diffconflicts gvim \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
-        trustExitCode = true
-        keepBackup = false
+	cmd = diffconflicts gvim \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+	trustExitCode = true
+	keepBackup = false
