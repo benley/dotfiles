@@ -4,9 +4,9 @@ User benley
 # ControlPersist doesn't work with OpenSSH_4.5p1 from debian Squeeze (stable)
 # It *does* work with: Ubuntu 12.04, Ubuntu 12.10, MacOS 10.8, [...]
 
-#Host gitlab*.cloudscaling.com
-#ForwardAgent no
-#ForwardX11 no
+Host gitlab gitlab.*
+ForwardAgent no
+ForwardX11 no
 #GSSAPIAuthentication no
 #GSSAPIKeyExchange no
 
