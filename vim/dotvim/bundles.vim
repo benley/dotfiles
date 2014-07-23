@@ -76,4 +76,8 @@ Bundle 'airblade/vim-gitgutter'
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'AnsiEsc.vim'
 
+" Smart selection of the closest text object
+Bundle 'gcmt/wildfire.vim'
+Bundle 'bling/vim-airline'
+
 filetype plugin indent on

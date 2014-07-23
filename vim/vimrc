@@ -69,12 +69,14 @@ autocmd FileType conf setlocal foldcolumn=0 modeline modelines=5
 autocmd FileType sh call BenCode()
       \ | setlocal shiftwidth=2
 autocmd FileType vim call BenCode()
+      \ | setlocal shiftwidth=2
 autocmd FileType ruby call BenCode()
       \ | setlocal shiftwidth=2
 autocmd FileType gitcommit set textwidth=71
 autocmd FileType make set noexpandtab
 autocmd FileType yaml
       \ setlocal shiftwidth=2 tabstop=2 modeline modelines=5 autoindent
+autocmd FileType man set nolist
 
 fun! PythonGFJump()
   " Attempts to make `gf` file jumping work for python imports.
@@ -300,7 +302,7 @@ let pyindent_open_paren = 4
 let g:syntastic_check_on_open = 1
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
-let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+let g:syntastic_ruby_checkers = ['rubocop', 'mri']
 
 " This helps syntastic work with virtualenv.
 if has("python") && !empty($VIRTUAL_ENV)
@@ -319,13 +321,13 @@ endif
 syntax on
 " The terminal is already set to the right bg/fg colors, so:
 let g:solarized_termtrans=1
-set bg=dark
-colorscheme zenburn
+set bg=light
+colorscheme solarized
 " Looks nice with zenburn:
-highlight ColorColumn ctermbg=238 guibg=#484848
+"highlight ColorColumn ctermbg=238 guibg=#484848
 
 let g:virtualenv_stl_format='[%n]'
-set statusline=%<%f\ %h%m%r%{VirtualEnvStatusline()}%=%-14.(%l,%c%V%)\ %P
+"set statusline=%<%f\ %h%m%r%{VirtualEnvStatusline()}%=%-14.(%l,%c%V%)\ %P
 
 """"""""""""
 " Clojure!
@@ -348,8 +350,25 @@ if version >= 703
 
   " Subtly show column 80
   set colorcolumn=+1
-  highlight ColorColumn ctermbg=238 guibg=#121212
+  "highlight ColorColumn ctermbg=238 guibg=#121212
 endif
 
-set secure
+" http://vim.wikia.com/wiki/View_man_pages_in_Vim
+runtime ftplugin/man.vim
 
+let g:ycm_filetype_blacklist = {
+      \ 'notes': 1,
+      \ 'markdown': 1,
+      \ 'unite': 1,
+      \ 'tagbar': 1,
+      \ 'pandoc': 1,
+      \ 'qf': 1,
+      \ 'vimwiki': 1,
+      \ 'text': 1,
+      \ 'infolog': 1,
+      \ 'mail': 1,
+      \ 'yaml': 1,
+      \ 'clojure': 1
+      \ }
+
+set secure
