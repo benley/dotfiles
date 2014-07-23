@@ -21,7 +21,8 @@ set laststatus=2 " Keep the status bar even when there's only one window.
 set listchars=tab:⇥\   " Loudly highlight the damn tabs
 set invlist
 set scrolloff=2
-set shiftround
+" This screws things up when you use >> and <<:
+"set shiftround
 
 if has("mouse")
   set mouse=a
@@ -254,7 +255,7 @@ if has("gui")
   else
     set guifont=DejaVu\ Sans\ Mono\ 10
   endif
-  set bg=dark
+  "set bg=dark
   " Turn off the toolbar.
   "set guioptions-=T
 endif
@@ -321,7 +322,7 @@ endif
 syntax on
 " The terminal is already set to the right bg/fg colors, so:
 let g:solarized_termtrans=1
-set bg=light
+"set bg=dark
 colorscheme solarized
 " Looks nice with zenburn:
 "highlight ColorColumn ctermbg=238 guibg=#484848

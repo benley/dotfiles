@@ -27,7 +27,7 @@ Bundle 'altercation/vim-colors-solarized'
 "Bundle 'Conque-Shell'
 Bundle 'rosenfeld/conque-term'
 Bundle 'pythoncomplete'
-Bundle 'vim-json-bundle'
+Bundle 'rogerz/vim-json'
 Bundle 'scrooloose/nerdtree'
 Bundle 'Tagbar'
 
