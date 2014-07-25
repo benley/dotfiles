@@ -57,8 +57,10 @@ set nonumber
 "autocmd FileType c,cpp set ts=4 formatoptions=cro cindent smarttab tw=0 nowrap sidescroll=20 listchars=extends:$
 "autocmd FileType php3,php4 set ts=4 formatoptions=cro smartindent smarttab tw=0 nowrap sidescroll=20 listchars=extends:$
 "autocmd FileType c,cpp nmap <tab> =0<CR>
-autocmd FileType mail set tw=72 nowrap
-autocmd FileType python call BenCode()
+autocmd FileType mail
+      \ setlocal tw=72 nowrap
+autocmd FileType python
+      \ call BenCode()
       \ | setlocal tags+=$HOME/.vim/tags/python27.tags
       \ | setlocal indentexpr=GetGooglePythonIndent(v:lnum)
       \ | call PythonGFJump()
@@ -66,20 +68,29 @@ autocmd FileType python call BenCode()
       "\ | setlocal omnifunc=pythoncomplete#Complete
 " Trim trailing whitespace on save: (I can't seem to make this work)
 " autocmd BufWritePre *.py normal m`:%s/\s\+$//e``
-autocmd FileType conf setlocal foldcolumn=0 modeline modelines=5
-autocmd FileType sh call BenCode()
+autocmd FileType conf
+      \ setlocal foldcolumn=0 modeline modelines=5
+autocmd FileType sh
+      \ call BenCode()
       \ | setlocal shiftwidth=2
-autocmd FileType vim call BenCode()
+autocmd FileType vim
+      \ call BenCode()
       \ | setlocal shiftwidth=2
-autocmd FileType ruby call BenCode()
+autocmd FileType ruby
+      \ call BenCode()
       \ | setlocal shiftwidth=2
-autocmd FileType gitcommit set textwidth=71
-autocmd FileType make set noexpandtab
+autocmd FileType gitcommit
+      \ setlocal textwidth=71
+autocmd FileType make
+      \ setlocal noexpandtab
 autocmd FileType yaml
-      \ setlocal shiftwidth=2 tabstop=2 modeline modelines=5 autoindent
-autocmd FileType man set nolist
+      \ set shiftwidth=2 tabstop=2 modeline modelines=5 autoindent
+autocmd FileType man
+      \ setlocal nolist
 autocmd FileType scheme
       \ setlocal lisp
+autocmd FileType markdown
+      \ setlocal formatoptions+=a
 
 fun! PythonGFJump()
   " Attempts to make `gf` file jumping work for python imports.
