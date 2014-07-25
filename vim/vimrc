@@ -372,4 +372,6 @@ let g:ycm_filetype_blacklist = {
       \ 'clojure': 1
       \ }
 
+let g:airline_powerline_fonts = 1
+
 set secure

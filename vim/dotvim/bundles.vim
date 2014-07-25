@@ -33,7 +33,7 @@ Bundle 'Tagbar'
 
 Bundle 'taglist.vim'
 Bundle 'Syntastic'
-Bundle 'python_ifold'
+"Bundle 'python_ifold'
 Bundle 'SuperTab-continued.'
 Bundle 'RDoc'
 "Bundle 'confluencewiki.vim'
