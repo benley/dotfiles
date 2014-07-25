@@ -33,7 +33,11 @@ Bundle 'Tagbar'
 
 Bundle 'taglist.vim'
 Bundle 'Syntastic'
+
+" I think this does some messy stuff that interferes with things other than
+" Python. Grr.
 "Bundle 'python_ifold'
+
 Bundle 'SuperTab-continued.'
 Bundle 'RDoc'
 "Bundle 'confluencewiki.vim'

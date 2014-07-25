@@ -22,7 +22,7 @@ dopath() {
       $HOME/bin
       $HOME/arcanist/arcanist/bin
       $HOME/p/{depot_tools,android-ndk,android-sdk/{platform-,}tools}
-      $HOME/Dropbox/bin/{,$PLATFORM}
+      $HOME/Dropbox/bin{,/$PLATFORM}
       $HOME/.local/share/Steam/debian_bin
       /{usr,opt}/local/sbin
       $HOME/opt/node/bin

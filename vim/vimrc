@@ -78,6 +78,8 @@ autocmd FileType make set noexpandtab
 autocmd FileType yaml
       \ setlocal shiftwidth=2 tabstop=2 modeline modelines=5 autoindent
 autocmd FileType man set nolist
+autocmd FileType scheme
+      \ setlocal lisp
 
 fun! PythonGFJump()
   " Attempts to make `gf` file jumping work for python imports.
@@ -156,7 +158,7 @@ augroup end
 "  hi clear CursorLine
 "  hi CursorLine term=reverse ctermbg=grey
 "  hi LineNr ctermfg=red ctermbg=black
-"  se cul cuc
+"  set cursorline cursorcolumn
 "endif
 
 autocmd ColorScheme * highlight OverLength ctermfg=red guifg=red
