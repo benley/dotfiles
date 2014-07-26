@@ -84,9 +84,9 @@ autocmd FileType gitcommit
 autocmd FileType make
       \ setlocal noexpandtab
 autocmd FileType yaml
-      \ set shiftwidth=2 tabstop=2 modeline modelines=5 autoindent
+      \ setlocal shiftwidth=2 tabstop=2 modeline modelines=5 autoindent
 autocmd FileType man
-      \ setlocal nolist
+      \ setlocal nolist tw=0
 autocmd FileType scheme
       \ setlocal lisp
 autocmd FileType markdown
@@ -264,7 +264,8 @@ if has("gui")
   "set guifont=Inconsolata:h16
   "set guifont=Monofur\ 13
   if has("macunix")
-    set guifont=Menlo\ Regular\:h14
+    "set guifont=Menlo\ Regular\:h14
+    set guifont=Meslo\ LG\ S\ for\ Powerline:h12
   else
     set guifont=DejaVu\ Sans\ Mono\ 10
   endif
