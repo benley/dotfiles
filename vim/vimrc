@@ -264,10 +264,9 @@ if has("gui")
   "set guifont=Inconsolata:h16
   "set guifont=Monofur\ 13
   if has("macunix")
-    "set guifont=Menlo\ Regular\:h14
-    set guifont=Meslo\ LG\ S\ for\ Powerline:h12
+    set guifont=Meslo\ LG\ S\ for\ Powerline:h12,Menlo\ Regular\:h12
   else
-    set guifont=DejaVu\ Sans\ Mono\ 10
+    set guifont=Meslo\ LG\ S\ for\ Powerline\ 10,DejaVu\ Sans\ Mono\ 10
   endif
   "set bg=dark
   " Turn off the toolbar.
@@ -337,9 +336,9 @@ syntax on
 " The terminal is already set to the right bg/fg colors, so:
 let g:solarized_termtrans=1
 "set bg=dark
-colorscheme solarized
+colorscheme zenburn
 " Looks nice with zenburn:
-"highlight ColorColumn ctermbg=238 guibg=#484848
+highlight ColorColumn ctermbg=238 guibg=#484848
 
 let g:virtualenv_stl_format='[%n]'
 "set statusline=%<%f\ %h%m%r%{VirtualEnvStatusline()}%=%-14.(%l,%c%V%)\ %P
