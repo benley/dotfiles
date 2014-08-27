@@ -22,20 +22,20 @@ _bundler() {
 
 # Overwrite berks to use bundler if defined
 _berks() {
-  [ _bundler ] && bundle exec berks $@ || berks $@
+  _bundler && bundle exec berks "$@" || berks "$@"
 }
 
 _berkshelf_commands() {
   local cachefile=~/.berkshelf/.commands
-  [ ! -f $cachefile ] && $(_berks help | grep berks | cut -d " " -f 4 > $cachefile)
+  [ ! -f $cachefile ] && { _berks help | grep -E '^\s+berks\s+' | awk '{print $2}' > $cachefile; }
   cat $cachefile
 }
 
 _berkshelf_cookbooks() {
   local file=${BERKSHELF_BERKSFILE:-Berksfile}
-  if [ -e $file ]; then
+  if [ -e "$file" ]; then
     # strip all quotes from cookbook name and remove trailing comma, if any
-    grep -w '^cookbook' $file \
+    grep -w '^cookbook' "$file" \
       | awk '{ print $2 }' \
       | sed 's/"//g' \
       | sed "s/'//g" \
@@ -54,13 +54,13 @@ _berkshelf() {
   prev="${COMP_WORDS[COMP_CWORD-1]}"
 
   # List of commands to complete
-  commands=`_berkshelf_commands`
+  commands=$(_berkshelf_commands)
 
   case "${prev}" in
     "open"|"outdated"|"show"|"update"|"upload")
-      local berkshelf_cookbooks=`_berkshelf_cookbooks`
-      local local_cookbooks=`_local_cookbooks`
-      local cookbooks=`echo $berkshelf_cookbooks $local_cookbooks | sort -n | uniq`
+      local berkshelf_cookbooks=$(_berkshelf_cookbooks)
+      local local_cookbooks=$(_local_cookbooks)
+      local cookbooks=$(echo $berkshelf_cookbooks $local_cookbooks | sort -n | uniq)
       COMPREPLY=($(compgen -W "${cookbooks}" -- ${curr}))
       return 0
       ;;
