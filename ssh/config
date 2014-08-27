@@ -1,3 +1,5 @@
+HashKnownHosts no
+
 Host zoiks.net *.zoiks.net *.xkcd.com nyan*.*
 User benley
 
@@ -107,6 +109,9 @@ ForwardAgent yes
 ForwardX11 yes
 ForwardX11Trusted yes
 #ProxyCommand ssh -q admin.lab.cloudscaling.com nc -q0 lambchop.sfo.cloudscaling.com 22
+
+Host *.folsomlabs.com
+ForwardAgent yes
 
 Host *.cloudscaling.com *.sfo *.hc *.dev *.lab
 ForwardX11 yes
