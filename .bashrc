@@ -20,13 +20,17 @@ dopath() {
   prefixpath /usr/local/bin
   local addpaths=(
       $HOME/bin
+      $HOME/.local/bin
       $HOME/arcanist/arcanist/bin
       $HOME/p/{depot_tools,android-ndk,android-sdk/{platform-,}tools}
       $HOME/Dropbox/bin{,/$PLATFORM}
       $HOME/.local/share/Steam/debian_bin
       /{usr,opt}/local/sbin
       $HOME/opt/node/bin
-      /usr/local/share/npm/bin)
+      /usr/local/share/npm/bin
+      /usr/local/heroku/bin
+      $HOME/.gem/ruby/1.9.1/bin
+      )
   for dir in ${addpaths[@]}; do
     [[ -d "$dir"/ ]] && PATH+=":${dir}"
   done
@@ -152,7 +156,9 @@ fi
 [[ -e /usr/local/bin/irb19 ]] && alias irb=/usr/local/bin/irb19
 [[ -e /usr/local/bin/gem19 ]] && alias gem=/usr/local/bin/gem19
 
-alias gerrit="ssh ben@pd.cloudscaling.com -p 29418 -- gerrit \$@"
+gerrit() {
+  ssh ben@pd.cloudscaling.com -p 29418 -- gerrit "$@"
+}
 
 [[ "$OS" == "Darwin" && -e '/usr/local/bin/ctags' ]] && \
     alias ctags='/usr/local/bin/ctags'
