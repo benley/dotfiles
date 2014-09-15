@@ -14,13 +14,13 @@ prefixpath() {
 }
 
 dopath() {
+  prefixpath "$HOME/.local/bin"  # Python user installs
   prefixpath "$HOME/Library/Haskell/bin"
   prefixpath "$HOME/.cabal/bin"
   prefixpath /usr/local/opt/ruby/bin
   prefixpath /usr/local/bin
   local addpaths=(
       $HOME/bin
-      $HOME/.local/bin
       $HOME/arcanist/arcanist/bin
       $HOME/p/{depot_tools,android-ndk,android-sdk/{platform-,}tools}
       $HOME/Dropbox/bin{,/$PLATFORM}
@@ -31,7 +31,7 @@ dopath() {
       /usr/local/heroku/bin
       $HOME/.gem/ruby/1.9.1/bin
       )
-  for dir in ${addpaths[@]}; do
+  for dir in "${addpaths[@]}"; do
     [[ -d "$dir"/ ]] && PATH+=":${dir}"
   done
 
@@ -45,9 +45,12 @@ dopath() {
 #  . /etc/bashrc
 #fi
 
-source $HOME/bin/benlib.sh
+source "$HOME/bin/benlib.sh"
 alias getenv='source "$HOME"/.ssh/.getenv'
-alias mz='mosh zoiks.net -- $@'
+
+mz() {
+  mosh zoiks.net -- "$@"
+}
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # don't overwrite GNU Midnight Commander's setting of `ignorespace'.
@@ -92,9 +95,17 @@ fi
 
 loadcompletion() {
   local spot cmpl _completion_on=0
-  for spot in {/opt/local,"${brew_prefix}",}/{etc,share/bash-completion}/bash_completion; do
-    if [[ -e $spot ]]; then
-      source $spot
+  local completion_dirs=(
+    /opt/local/etc
+    /opt/local/share/bash-completion
+    "${brew_prefix}/etc"
+    "${brew_prefix}/share/bash-completion"
+    /etc
+    )
+
+  for spot in "${completion_dirs[@]}"; do
+    if [[ -e ${spot}/bash_completion ]]; then
+      source "${spot}/bash_completion"
       _completion_on=1
       break
     fi
@@ -102,7 +113,7 @@ loadcompletion() {
 
   if ((_completion_on)); then
     for cmpl in $HOME/.bash_completion.d/*; do
-      source $cmpl
+      source "$cmpl"
     done
 
     if [[ $(type -t _npm_completion) != 'function' && -x $(which npm) ]]; then
@@ -150,11 +161,6 @@ if [[ -d "$HOME/.bashrc.d" ]]; then
     source "$file"
   done
 fi
-
-# Ruby?
-[[ -e /usr/local/bin/ruby19 ]] && alias ruby=/usr/local/bin/ruby19
-[[ -e /usr/local/bin/irb19 ]] && alias irb=/usr/local/bin/irb19
-[[ -e /usr/local/bin/gem19 ]] && alias gem=/usr/local/bin/gem19
 
 gerrit() {
   ssh ben@pd.cloudscaling.com -p 29418 -- gerrit "$@"
