@@ -19,6 +19,7 @@ set hidden
 set magic
 set laststatus=2 " Keep the status bar even when there's only one window.
 set listchars=tab:⇥\   " Loudly highlight the damn tabs
+set fillchars=vert:┃,fold:-,diff:╳
 set invlist
 set scrolloff=2
 " This screws things up when you use >> and <<:
@@ -63,6 +64,7 @@ set nonumber
 "autocmd FileType c,cpp nmap <tab> =0<CR>
 autocmd FileType mail
       \ setlocal tw=72 nowrap
+autocmd FileType pants setl indentexpr=GetPythonIndent(v:lnum) sw=4
 autocmd FileType python
       \ call BenCode()
       \ | setlocal tags+=$HOME/.vim/tags/python27.tags
@@ -156,9 +158,7 @@ endfunc
 augroup filetypedetect
   " auto handling for perforce commit messages:
   au BufNewFile,BufRead /tmp/*[pg]4[_-]*
-        \ setlocal wrap noexpandtabs
-        \ setlocal tw=65
-        \ call FixDescription()
+        \ setlocal wrap noexpandtabs tw=65 | call FixDescription()
   " Handle more filenames for bind configs and zone files
   au BufNewFile,BufRead named.conf.*,zones.*
         \ call s:StarSetf('named')
@@ -167,6 +167,8 @@ augroup filetypedetect
   " Match nginx configs
   au BufNewFile,BufRead /etc/nginx/*,/usr/local/nginx/conf/*
         \ if &ft=='' | setfiletype nginx | endif
+  au BufNewFile,BufRead /etc/haproxy/haproxy*
+        \ setlocal filetype=haproxy
 augroup end
 
 " obnoxious crosshairs thing
@@ -272,7 +274,7 @@ if has("gui")
   if has("macunix")
     set guifont=Meslo\ LG\ S\ for\ Powerline:h12,Menlo\ Regular\:h12
   else
-    set guifont=Meslo\ LG\ S\ for\ Powerline\ 10,DejaVu\ Sans\ Mono\ 10
+    set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 8,DejaVu\ Sans\ Mono\ 8
   endif
   "set bg=dark
 
@@ -328,19 +330,19 @@ let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_ruby_checkers = ['rubocop', 'mri']
 
-" This helps syntastic work with virtualenv.
-if has("python") && !empty($VIRTUAL_ENV)
-  python << EOF
-import os
-import sys
-a = os.environ['VIRTUAL_ENV'] + '/bin/activate_this.py'
-execfile(a, dict(__file__ = a))
-if 'PYTHONPATH' not in os.environ:
-  os.environ['PYTHONPATH'] = ''
-  os.environ['PYTHONPATH'] += ":"+os.getcwd()
-  os.environ['PYTHONPATH'] += ":".join(sys.path)
-EOF
-endif
+"" This helps syntastic work with virtualenv.
+"if has("python") && !empty($VIRTUAL_ENV)
+"  python << EOF
+"import os
+"import sys
+"a = os.environ['VIRTUAL_ENV'] + '/bin/activate_this.py'
+"execfile(a, dict(__file__ = a))
+"if 'PYTHONPATH' not in os.environ:
+"  os.environ['PYTHONPATH'] = ''
+"  os.environ['PYTHONPATH'] += ":"+os.getcwd()
+"  os.environ['PYTHONPATH'] += ":".join(sys.path)
+"EOF
+"endif
 
 syntax on
 " The terminal is already set to the right bg/fg colors, so:

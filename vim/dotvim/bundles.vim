@@ -20,6 +20,7 @@ Bundle 'vim-scripts/genutils'
 Bundle 'Ambient-Color-Scheme'
 "Bundle 'clarity.vim'
 "Bundle 'oceandeep'
+Bundle 'oceanlight'
 "Bundle 'Cthulhian'
 Bundle 'vim-scripts/Zenburn'
 Bundle 'altercation/vim-colors-solarized'
@@ -62,6 +63,10 @@ Bundle 'newlisp'
 Bundle 'mustache/vim-mustache-handlebars'
 " This is the same as vim's markdown support, plus it covers *.md
 Bundle 'tpope/vim-markdown'
+Bundle 'haproxy'
+Bundle 'fatih/vim-go'
+Bundle 'derekwyatt/vim-scala'
+
 
 "Bundle 'VimClojure'
 Bundle 'guns/vim-clojure-static'
