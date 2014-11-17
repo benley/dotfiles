@@ -1,6 +1,6 @@
 [user]
 	name = Benjamin Staffin
-	email = ben@cloudscaling.com
+	email = ben@folsomlabs.com
 [core]
 	excludesfile = /Users/benley/.gitignore_global
 [difftool "sourcetree"]

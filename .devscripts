@@ -2,7 +2,7 @@
 ##### debsign
 #
 # Maintainer name (only used to determine GPG keyid; -m option)
-DEBSIGN_MAINT='ben@cloudscaling.com'
+DEBSIGN_MAINT='ben@folsomlabs.com'
 #
 # GPG keyid to use (-k option)
 # DEBSIGN_KEYID=
