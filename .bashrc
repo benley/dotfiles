@@ -1,5 +1,4 @@
 # .bashrc
-
 umask 0022
 
 OS=$(uname)
@@ -14,13 +13,14 @@ prefixpath() {
 }
 
 dopath() {
+  prefixpath /usr/local/bin
+  prefixpath "$HOME/go/bin"
   prefixpath "$HOME/.local/bin"  # Python user installs
   prefixpath "$HOME/Library/Haskell/bin"
   prefixpath "$HOME/.cabal/bin"
   prefixpath /usr/local/opt/ruby/bin
-  prefixpath /usr/local/bin
+  prefixpath "$HOME/bin"
   local addpaths=(
-      $HOME/bin
       $HOME/arcanist/arcanist/bin
       $HOME/p/{depot_tools,android-ndk,android-sdk/{platform-,}tools}
       $HOME/Dropbox/bin{,/$PLATFORM}
