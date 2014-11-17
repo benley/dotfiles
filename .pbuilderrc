@@ -1,0 +1,7 @@
+CCACHEDIR=/var/cache/pbuilder/ccache
+COMPONENTS="main universe"
+HOOKDIR="${HOME}/.config/pbuilder/hooks"
+# OTHERMIRROR="deb http://blahblah foo main|deb http://blahblah bar main"
+MIRRORSITE=http://127.0.0.1:3142/ubuntu/
+
+export DEB_BUILD_OPTIONS="parallel=4 nocheck"
