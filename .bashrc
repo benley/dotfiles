@@ -201,4 +201,12 @@ unset prompt1 prompt2 prompt3
 # for virtualenvwrapper
 export PROJECT_HOME="$HOME/projects"
 
+export GOPATH="$HOME/go"
+
 return 0
+
+# NOTE: gvm does some crap where it talks to the internet *every time you open
+# a shell*.  WTF.
+
+#THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
+# [[ -s "/home/benley/.gvm/bin/gvm-init.sh" ]] && source "/home/benley/.gvm/bin/gvm-init.sh"
