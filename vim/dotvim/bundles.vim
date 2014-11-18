@@ -32,22 +32,22 @@ VAMActivate genutils
 "Bundle 'Ambient-Color-Scheme'
 "Bundle 'clarity.vim'
 "Bundle 'oceandeep'
-Bundle 'oceanlight'
+VAMActivate oceanlight
 "Bundle 'Cthulhian'
 VAMActivate Zenburn
 VAMActivate Solarized
 VAMActivate darktango
-Bundle 'morhetz/gruvbox'
+VAMActivate gruvbox
 "Bundle 'chriskempson/base16-vim'
-Bundle 'jonathanfilip/vim-lucius'
-Bundle 'tomasr/molokai'
-Bundle 'sickill/vim-monokai'
+VAMActivate Lucius
+VAMActivate molokai
+VAMActivate monokai
 
 "Bundle 'Conque-Shell'
 Bundle 'rosenfeld/conque-term'
 VAMActivate pythoncomplete
 Bundle 'rogerz/vim-json'
-VAMActivate github:scrooloose/nerdtree
+VAMActivate The_NERD_tree
 VAMActivate Tagbar
 
 VAMActivate taglist
@@ -78,10 +78,10 @@ VAMActivate newlisp
 Bundle 'mustache/vim-mustache-handlebars'
 " This is the same as vim's markdown support, plus it covers *.md
 Bundle 'tpope/vim-markdown'
-Bundle 'haproxy'
-Bundle 'fatih/vim-go'
-Bundle 'derekwyatt/vim-scala'
-
+VAMActivate haproxy
+VAMActivate vim-go
+VAMActivate vim-scala
+VAMActivate Puppet_Syntax_Highlighting
 
 " NIX NIX NIX
 VAMActivate vim-addon-nix
@@ -105,8 +105,7 @@ VAMActivate virtualenv
 VAMActivate afterimage
 " This isn't as cool as I thought it would be:
 "Bundle 'UpdateDNSSerial'
-Bundle 'Puppet_Syntax_Highlighting'
-Bundle 'airblade/vim-gitgutter'
+VAMActivate vim-gitgutter
 
 VAMActivate YouCompleteMe
 VAMActivate AnsiEsc
