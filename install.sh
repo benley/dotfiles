@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #TODO(benley): --dryrun isn't actually implemented.
 
