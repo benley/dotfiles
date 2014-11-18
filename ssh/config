@@ -1,6 +1,6 @@
 HashKnownHosts no
 
-Host zoiks.net *.zoiks.net *.xkcd.com nyan*.*
+Host zoiks.net *.zoiks.net *.xkcd.com nyan*.* *.local
 User benley
 
 # ControlPersist doesn't work with OpenSSH_4.5p1 from debian Squeeze (stable)
