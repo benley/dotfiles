@@ -1,4 +1,5 @@
 .netrwhist
 *.py[co]
 vim/dotvim/bundle/*
+vim/dotvim/vim-addons
 *.swp

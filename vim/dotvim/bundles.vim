@@ -1,30 +1,42 @@
-set nocompatible
-filetype off
-set rtp+=~/.vim/bundle/vundle/
+set nocompatible | filetype indent plugin on | syn on
+
+fun! SetupVAM()
+  let c = get(g:, 'vim_addon_manager', {})
+  let g:vim_addon_manager = c
+  let c.plugin_root_dir = expand('$HOME', 1) . '/.vim/vim-addons'
+  " most used options you may want to use:
+  " let c.log_to_buf = 1
+  " let c.auto_install = 0
+  let &rtp.=(empty(&rtp)?'':',').c.plugin_root_dir.'/vim-addon-manager'
+  if !isdirectory(c.plugin_root_dir.'/vim-addon-manager/autoload')
+    execute '!git clone --depth=1 git://github.com/MarcWeber/vim-addon-manager '
+        \       shellescape(c.plugin_root_dir.'/vim-addon-manager', 1)
+  endif
+
+  " This provides the VAMActivate command. You could be passing plugin names, too
+  call vam#ActivateAddons([], {})
+endfun
+call SetupVAM()
+
 call vundle#rc()
 
-" :BundleList          - list configured bundles
-" :BundleInstall(!)    - install(update) bundles
-" :BundleSearch(!) foo - search(or refresh cache first) for foo
-" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
-Bundle 'gmarik/vundle'
-Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-eunuch'
-Bundle 'tpope/vim-jdaddy'
-Bundle 'benmills/vimux'
+VAMActivate vim-fugitive
+VAMActivate vim-eunuch
+VAMActivate vim-jdaddy
+VAMActivate vimux
 "Bundle 'fholgado/minibufexpl.vim'
-Bundle 'vim-scripts/genutils'
+VAMActivate genutils
 "Bundle 'instant-markdown.vim'
 
 " Color schemes:
-Bundle 'Ambient-Color-Scheme'
+"Bundle 'Ambient-Color-Scheme'
 "Bundle 'clarity.vim'
 "Bundle 'oceandeep'
 Bundle 'oceanlight'
 "Bundle 'Cthulhian'
-Bundle 'vim-scripts/Zenburn'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'darktango.vim'
+VAMActivate Zenburn
+VAMActivate Solarized
+VAMActivate darktango
 Bundle 'morhetz/gruvbox'
 "Bundle 'chriskempson/base16-vim'
 Bundle 'jonathanfilip/vim-lucius'
@@ -33,33 +45,36 @@ Bundle 'sickill/vim-monokai'
 
 "Bundle 'Conque-Shell'
 Bundle 'rosenfeld/conque-term'
-Bundle 'pythoncomplete'
+VAMActivate pythoncomplete
 Bundle 'rogerz/vim-json'
-Bundle 'scrooloose/nerdtree'
-Bundle 'Tagbar'
+VAMActivate github:scrooloose/nerdtree
+VAMActivate Tagbar
 
-Bundle 'taglist.vim'
-Bundle 'Syntastic'
+VAMActivate taglist
+VAMActivate Syntastic
 
 " I think this does some messy stuff that interferes with things other than
 " Python. Grr.
 "Bundle 'python_ifold'
 
-Bundle 'SuperTab-continued.'
-Bundle 'RDoc'
+VAMActivate Supertab
+Bundle 'depuracao/vim-rdoc'
+
+"Bundle 'RDoc'
 "Bundle 'confluencewiki.vim'
-Bundle 'gitv'
-Bundle 'pydoc.vim'
+VAMActivate gitv
+"Bundle 'pydoc.vim'
+"VAMActivate pydoc
 
 " Syntax highlighting:
 Bundle 'pantsbuild/vim-pants'
 Bundle 'ekalinin/Dockerfile.vim'
-Bundle 'nginx.vim'
+VAMActivate nginx
 "Bundle 'fish.vim'
-Bundle 'vim-coffee-script'
+VAMActivate vim-coffee-script
 " http://www.vim.org/scripts/script.php?script_id=790 :
 Bundle 'hdima/python-syntax'
-Bundle 'newlisp'
+VAMActivate newlisp
 Bundle 'mustache/vim-mustache-handlebars'
 " This is the same as vim's markdown support, plus it covers *.md
 Bundle 'tpope/vim-markdown'
@@ -68,33 +83,36 @@ Bundle 'fatih/vim-go'
 Bundle 'derekwyatt/vim-scala'
 
 
+" NIX NIX NIX
+VAMActivate vim-addon-nix
+
 "Bundle 'VimClojure'
 Bundle 'guns/vim-clojure-static'
 Bundle 'kien/rainbow_parentheses.vim'
 Bundle 'guns/vim-clojure-highlight'
 Bundle 'tpope/vim-leiningen'
-Bundle 'tpope/vim-projectionist'
-Bundle 'tpope/vim-dispatch'
-Bundle 'tpope/vim-fireplace'
+VAMActivate projectionist
+VAMActivate dispatch
+VAMActivate fireplace
 
 " woo haskell
-Bundle 'indenthaskell.vim'
+VAMActivate indenthaskell
 " This is cute but really obnoxious:
 "Bundle 'frerich/unicode-haskell'
 
 "Bundle 'insanum/votl'   " I should learn how to use this
-Bundle 'virtualenv.vim'
-Bundle 'afterimage.vim'
+VAMActivate virtualenv
+VAMActivate afterimage
 " This isn't as cool as I thought it would be:
 "Bundle 'UpdateDNSSerial'
-Bundle 'Puppet-Syntax-Highlighting'
+Bundle 'Puppet_Syntax_Highlighting'
 Bundle 'airblade/vim-gitgutter'
 
-Bundle 'Valloric/YouCompleteMe'
-Bundle 'AnsiEsc.vim'
+VAMActivate YouCompleteMe
+VAMActivate AnsiEsc
 
 " Smart selection of the closest text object
-Bundle 'gcmt/wildfire.vim'
-Bundle 'bling/vim-airline'
+VAMActivate wildfire
+VAMActivate vim-airline
 
 filetype plugin indent on
