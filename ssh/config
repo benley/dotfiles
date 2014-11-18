@@ -6,12 +6,6 @@ User benley
 # ControlPersist doesn't work with OpenSSH_4.5p1 from debian Squeeze (stable)
 # It *does* work with: Ubuntu 12.04, Ubuntu 12.10, MacOS 10.8, [...]
 
-Host gitlab gitlab.*
-ForwardAgent no
-ForwardX11 no
-#GSSAPIAuthentication no
-#GSSAPIKeyExchange no
-
 Host aram.xkcd.com
 ForwardAgent yes
 Compression yes
@@ -45,8 +39,6 @@ ProxyCommand ssh -q sf.zoiks.net nc -q0 nb 22
 #ControlPath /tmp/.control_%r@%h:%p.%l
 
 Host zoiks.net *.zoiks.net
-GSSAPIAuthentication no
-GSSAPIKeyExchange no
 #PreferredAuthentications publickey,password
 ForwardAgent yes
 Compression yes
@@ -75,80 +67,15 @@ ProxyCommand ssh -l ben@cloudscaling.com -p 51225 lab21.hc.cloudscaling.com diag
 UserKnownHostsFile ~/.ssh/jenkins_known_hosts
 HashKnownHosts no
 StrictHostKeyChecking no
-GSSAPIAuthentication no
-GSSAPIKeyExchange no
-
-Host pd pd.cloudscaling.com
-HostName pd.cloudscaling.com
-GSSAPIAuthentication no
-GSSAPITrustDNS no
-GSSAPIKeyExchange no
-GSSAPIDelegateCredentials no
-ForwardX11 no
-ForwardX11Trusted no
-ControlMaster auto
-ControlPath /tmp/.ssh_%r@%h:%p
-
-Host admin.lab admin.lab.cloudscaling.com
-HostName admin.lab.cloudscaling.com
-Port 3223
-ForwardAgent yes
-ForwardX11 no
-ForwardX11Trusted no
-Compression yes
-ControlPersist 180
-ControlMaster auto
-GSSAPIAuthentication yes
-GSSAPIKeyExchange yes
-GSSAPIDelegateCredentials yes
-GSSAPITrustDNS no
-
-Host lambchop lambchop.sfo lambchop.sfo.cloudscaling.com
-HostName lambchop.sfo.cloudscaling.com
-ForwardAgent yes
-ForwardX11 yes
-ForwardX11Trusted yes
-#ProxyCommand ssh -q admin.lab.cloudscaling.com nc -q0 lambchop.sfo.cloudscaling.com 22
 
 Host *.folsomlabs.com
 ForwardAgent yes
 
-Host *.cloudscaling.com *.sfo *.hc *.dev *.lab
-ForwardX11 yes
-ForwardX11Trusted yes
-ForwardAgent yes
-GSSAPIAuthentication yes
-GSSAPIDelegateCredentials yes
-GSSAPIKeyExchange yes
-GSSAPITrustDNS yes
-
-Host *
-GSSAPIAuthentication yes
-GSSAPIDelegateCredentials yes
-GSSAPIKeyExchange yes
-
 Host *.*
-GSSAPIAuthentication yes
-GSSAPIDelegateCredentials no
-GSSAPIKeyExchange yes
-GSSAPITrustDNS no
 ForwardAgent no
 Compression yes
 ForwardX11 no
 ForwardX11Trusted no
 
-Host lab*
-ForwardX11 yes
-ForwardX11Trusted yes
-ForwardAgent yes
-GSSAPIAuthentication yes
-GSSAPIDelegateCredentials yes
-GSSAPIKeyExchange yes
-GSSAPITrustDNS yes
-
 Host *
 User ben
-GSSAPIAuthentication yes
-GSSAPIDelegateCredentials yes
-GSSAPIKeyExchange yes
-GSSAPITrustDNS no
