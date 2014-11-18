@@ -20,18 +20,18 @@ call SetupVAM()
 
 call vundle#rc()
 
-VAMActivate vim-fugitive
-VAMActivate vim-eunuch
-VAMActivate vim-jdaddy
+VAMActivate fugitive
+VAMActivate eunuch
+VAMActivate jdaddy
 VAMActivate vimux
 "Bundle 'fholgado/minibufexpl.vim'
 VAMActivate genutils
 "Bundle 'instant-markdown.vim'
 
 " Color schemes:
-"Bundle 'Ambient-Color-Scheme'
-"Bundle 'clarity.vim'
-"Bundle 'oceandeep'
+VAMActivate Ambient_Color_Scheme
+VAMActivate clarity
+VAMActivate oceandeep
 VAMActivate oceanlight
 "Bundle 'Cthulhian'
 VAMActivate Zenburn
