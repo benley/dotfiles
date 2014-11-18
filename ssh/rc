@@ -1,5 +1,10 @@
 # NOTE! sshd executes this in /bin/sh, *NOT* the user's chosen shell.
 
+# NixOS is crazy, so chmod/grep/sed aren't where sshd assumes they are.
+if [ -e /etc/NIXOS ]; then
+  PATH="/run/current-system/sw/bin:/run/current-system/sw/sbin:$PATH"
+fi
+
 OUT="$HOME/.ssh/.getenv"
 > "$OUT"
 chmod 0600 "$OUT"
