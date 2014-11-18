@@ -121,12 +121,6 @@ main() {
   SymlinkIfDiffer "$rootdir/vim/dotvim" "$HOME/.vim"
   SymlinkIfDiffer "$rootdir/.git_template" "$HOME/.git_template"
 
-  if [[ ! -e "$HOME/.vim/bundle/vundle" ]]; then
-    echo "Installing vundle."
-    git clone "http://github.com/gmarik/vundle.git" "$HOME/.vim/bundle/vundle"
-  fi
-  vim -u "$HOME/.vim/bundles.vim" +BundleInstall +qa
-
   # for virtualenvwrapper
   mkdir -p "$HOME/projects"
 }
