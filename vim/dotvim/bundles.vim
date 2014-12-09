@@ -83,6 +83,9 @@ VAMActivate vim-go
 VAMActivate vim-scala
 VAMActivate Puppet_Syntax_Highlighting
 
+" provides :Vagrant
+VAMActivate vim-vagrant
+
 " NIX NIX NIX
 VAMActivate vim-addon-nix
 
