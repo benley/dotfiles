@@ -152,7 +152,7 @@ export HISTSIZE=9999
 export HISTFILESIZE=9999
 
 # Debian dev stuff
-export DEBEMAIL='ben@cloudscaling.com'
+export DEBEMAIL='ben@folsomlabs.com'
 export DEBFULLNAME='Benjamin Staffin'
 alias lintian="lintian --color=auto"
 
