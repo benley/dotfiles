@@ -35,7 +35,9 @@ XTerm.vt100.scrollBar: false
 !! XTerm.vt100.foreground: white
 XTerm.vt100.geometry: 80x40
 
-XTerm.vt100.RenderFont: default
+XTerm.vt100.RenderFont: true
+XTerm.vt100.faceName: Source Code Pro for Powerline
+XTerm.vt100.faceSize: 12.0
 
 !! XTerm.vtMenu.background: green
 !! XTerm.fontMenu.background: blue
