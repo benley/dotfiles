@@ -99,6 +99,8 @@ autocmd FileType markdown
       \ setlocal formatoptions+=a
 autocmd FileType javascript
       \ setlocal shiftwidth=2
+autocmd FileType nix
+      \ setlocal smartindent autoindent
 
 fun! PythonGFJump()
   " Attempts to make `gf` file jumping work for python imports.

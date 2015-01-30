@@ -82,6 +82,7 @@ VAMActivate haproxy
 VAMActivate vim-go
 VAMActivate vim-scala
 VAMActivate Puppet_Syntax_Highlighting
+VAMActivate github:kevints/vim-aurora-syntax
 
 " provides :Vagrant
 VAMActivate vim-vagrant
