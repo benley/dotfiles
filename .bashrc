@@ -48,10 +48,6 @@ dopath() {
 source "$HOME/bin/benlib.sh"
 alias getenv='source "$HOME"/.ssh/.getenv'
 
-mz() {
-  mosh zoiks.net -- "$@"
-}
-
 # don't put duplicate lines in the history. See bash(1) for more options
 # don't overwrite GNU Midnight Commander's setting of `ignorespace'.
 #export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
@@ -67,6 +63,9 @@ shopt -s histappend
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+# Enable extended ** glob expansion
+shopt -s globstar
+
 # make less more friendly for non-text input files, see lesspipe(1)
 #[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -76,7 +75,7 @@ export HISTTIMEFORMAT='%Y-%m-%d %T '
 case "$OS" in
   "Linux")
     alias ls='ls --color=auto'
-    eval $(dircolors ~/.dircolors)
+    eval "$(dircolors ~/.dircolors)"
     ;;
   "Darwin")
     brew_prefix=$(brew --prefix 2>/dev/null)
@@ -202,6 +201,9 @@ unset prompt1 prompt2 prompt3
 export PROJECT_HOME="$HOME/projects"
 
 export GOPATH="$HOME/go"
+
+# I can pipe things to less when I want an interactive pager, thank you very much.
+export NIX_PAGER=
 
 return 0
 
