@@ -1,6 +1,6 @@
--- Heinously stolen from awesome-freedesktop project.
--- https://github.com/terceiro/awesome-freedesktop
--- All attribution should go to Antonio Terceiro.
+-- Downloaded from https://github.com/alexander-yakushev/menubar
+-- Partially backported from awesomeWM master:
+-- https://github.com/awesomeWM/awesome/blob/d268dba0758b34a3dbb0658080d91508e05b2f52/lib/menubar/utils.lua.in
 
 -- Grab environment
 
@@ -91,21 +91,36 @@ end
 
 --- Parse a .desktop file
 -- @param file The .desktop file
--- @param requested_icon_sizes A list of icon sizes (optional). If this list is given, it will be used as a priority list for icon sizes when looking up for icons. If you want large icons, for example, you can put '128x128' as the first item in the list.
 -- @return A table with file entries.
-function parse(file, requested_icon_sizes)
+function parse(file)
    local program = { show = true, file = file }
+   local desktop_entry = false
+
    for line in io.lines(file) do
-      for key, value in line:gmatch("(%w+)=(.+)") do
-         program[key] = value
+      if line:find("^%s*#") then
+         -- Skip comments.
+      elseif not desktop_entry and line == "[Desktop Entry]" then
+         desktop_entry = true
+      else
+         if line:sub(1, 1) == "[" and line:sub(-1) == "]" then
+            -- A declaration of a new group - stop parsing
+            break
+         end
+
+         -- Grab the values
+         for key, value in line:gmatch("(%w+)%s*=%s*(.+)") do
+            program[key] = value
+         end
       end
    end
+
+   if not desktop_entry then return nil end
 
    -- Don't show program if NoDisplay attribute is false
    if program.NoDisplay and string.lower(program.NoDisplay) == "true" then
       program.show = false
    end
-   
+
    -- Only show the program if there is not OnlyShowIn attribute
    -- or if it's equal to 'awesome'
    if program.OnlyShowIn ~= nil and program.OnlyShowIn ~= "awesome" then
@@ -117,7 +132,8 @@ function parse(file, requested_icon_sizes)
       program.icon_path = lookup_icon(program.Icon)
    end
 
-   -- Split categories into a table.
+   -- Split categories into a table. Categories are written in one
+   -- line separated by semicolon.
    if program.Categories then
       program.categories = {}
       for category in program.Categories:gfind('[^;]+') do
@@ -126,6 +142,11 @@ function parse(file, requested_icon_sizes)
    end
 
    if program.Exec then
+      -- Substitute Exec special codes as specified in
+      -- http://standards.freedesktop.org/desktop-entry-spec/1.1/ar01s06.html
+      if program.Name == nil then
+         program.Name = '[' .. file:match("([^/]+)%.desktop$") .. ']'
+      end
       local cmdline = program.Exec:gsub('%%c', program.Name)
       cmdline = cmdline:gsub('%%[fuFU]', '')
       cmdline = cmdline:gsub('%%k', program.file)
@@ -145,13 +166,15 @@ end
 
 --- Parse a directory with .desktop files
 -- @param dir The directory.
--- @param icons_size, The icons sizes, optional.
 -- @return A table with all .desktop entries.
 function parse_dir(dir)
    local programs = {}
-   local files = io.popen('find '.. dir ..' -maxdepth 1 -name "*.desktop"'):lines()
-   for file in files do
-      table.insert(programs, parse(file))
+   local files = io.popen('find '.. dir ..' -maxdepth 1 -name "*.desktop" 2>/dev/null')
+   for file in files:lines() do
+      local program = parse(file)
+      if program then
+         table.insert(programs, program)
+      end
    end
    return programs
 end
