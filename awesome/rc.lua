@@ -6,9 +6,10 @@ require("awful.rules")
 require("beautiful")
 -- Notification library
 require("naughty")
-
--- Load Debian menu entries
 require("debian.menu")
+require("menubar")
+
+vicious = require("vicious")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -37,12 +38,19 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+
+-- the superfluous join is to make gf work in vim
+-- beautiful.init(awful.util.getdir("config") .. "/" .. "themes/zenburn/theme.lua")
+beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
+beautiful.border_width = "5"
 
 -- This is used later as the default terminal and editor to run.
-terminal = "x-terminal-emulator"
-editor = os.getenv("EDITOR") or "editor"
+terminal = "terminator"
+editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
+
+-- It would be great if awesome knew about screen dpi
+awesome.font = "Source Code Pro 19"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -52,8 +60,7 @@ editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
-layouts =
-{
+layouts = {
     awful.layout.suit.floating,
     awful.layout.suit.tile,
     awful.layout.suit.tile.left,
@@ -71,10 +78,13 @@ layouts =
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
-tags = {}
+tags = {
+  names = {"herp", "derp", "foo", "bar", "cats", "wow", "doge", "wat", "woo" },
+  layout = { layouts[1], layouts[2] }
+}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+    tags[s] = awful.tag(tags.names, s, layouts[2])
 end
 -- }}}
 
@@ -98,11 +108,65 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- }}}
 
 -- {{{ Wibox
+
+-- Network usage widget
+netwidget = widget({ type = "textbox" })
+vicious.register(netwidget, vicious.widgets.net, '<span color="#CC9393">${wlan0 down_kb}</span> <span color="#7F9F7F">${wlan0 up_kb}</span>', 3)
+
+separator = widget({ type = "textbox" })
+separator.text = " :: "
+
+memwidget = awful.widget.progressbar()
+memwidget:set_width(12)
+memwidget:set_height(50)
+memwidget:set_vertical(true)
+memwidget:set_background_color("#494B4F")
+memwidget:set_border_color(nil)
+memwidget:set_gradient_colors({ "#AECF96", "#88A175", "#FF5656" })
+vicious.register(memwidget, vicious.widgets.mem, "$1", 10)
+
+cpuwidget = awful.widget.graph()
+cpuwidget:set_width(50)
+cpuwidget:set_height(50)
+cpuwidget:set_background_color("#494B4F")
+cpuwidget:set_color("#FF5656")
+cpuwidget:set_gradient_colors({ "#FF5656", "#88A175", "#AECF96" })
+vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
+
+batterywidget = awful.widget.progressbar()
+batterywidget:set_vertical(true)
+batterywidget:set_width(12)
+batterywidget:set_height(50)
+batterywidget:set_background_color(beautiful.bg_normal)
+batterywidget:set_border_color(beautiful.fg_normal)
+batterywidget:set_gradient_colors({ "#FF0000", "#FFFF00", "#00FF00" })
+vicious.register(batterywidget, vicious.widgets.bat, "$2", 20, "BAT1")
+
+-- volumewidget = widget({ type = "textbox" })
+-- vicious.register(volumewidget, vicious.widgets.volume,
+--   function(widget, args)
+--       local label = { ["♫"] = "O", ["♩"] = "M" }
+--       return "Volume: " .. args[1] .. "% State: " .. label[args[2]]
+--   end,
+--   5, "IEC958")
+
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "right" })
 
 -- Create a systray
 mysystray = widget({ type = "systray" })
+
+-- Menubar
+menubar.cache_entries = true
+menubar.app_folders = { "/usr/share/applications/" }
+menubar.show_categories = false
+-- menubar.set_icon_theme("wat")
+menubar.g = {
+    height = 50,
+    -- width = 600,
+    -- x = 0,
+    -- y = 700
+}
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -110,44 +174,44 @@ mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
 mytaglist.buttons = awful.util.table.join(
-                    awful.button({ }, 1, awful.tag.viewonly),
-                    awful.button({ modkey }, 1, awful.client.movetotag),
-                    awful.button({ }, 3, awful.tag.viewtoggle),
-                    awful.button({ modkey }, 3, awful.client.toggletag),
-                    awful.button({ }, 4, awful.tag.viewnext),
-                    awful.button({ }, 5, awful.tag.viewprev)
-                    )
+    awful.button({ }, 1, awful.tag.viewonly),
+    awful.button({ modkey }, 1, awful.client.movetotag),
+    awful.button({ }, 3, awful.tag.viewtoggle),
+    awful.button({ modkey }, 3, awful.client.toggletag),
+    awful.button({ }, 4, awful.tag.viewnext),
+    awful.button({ }, 5, awful.tag.viewprev))
+
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
-                     awful.button({ }, 1, function (c)
-                                              if c == client.focus then
-                                                  c.minimized = true
-                                              else
-                                                  if not c:isvisible() then
-                                                      awful.tag.viewonly(c:tags()[1])
-                                                  end
-                                                  -- This will also un-minimize
-                                                  -- the client, if needed
-                                                  client.focus = c
-                                                  c:raise()
-                                              end
-                                          end),
-                     awful.button({ }, 3, function ()
-                                              if instance then
-                                                  instance:hide()
-                                                  instance = nil
-                                              else
-                                                  instance = awful.menu.clients({ width=250 })
-                                              end
-                                          end),
-                     awful.button({ }, 4, function ()
-                                              awful.client.focus.byidx(1)
-                                              if client.focus then client.focus:raise() end
-                                          end),
-                     awful.button({ }, 5, function ()
-                                              awful.client.focus.byidx(-1)
-                                              if client.focus then client.focus:raise() end
-                                          end))
+    awful.button({ }, 1, function (c)
+                             if c == client.focus then
+                                 c.minimized = true
+                             else
+                                 if not c:isvisible() then
+                                     awful.tag.viewonly(c:tags()[1])
+                                 end
+                                 -- This will also un-minimize
+                                 -- the client, if needed
+                                 client.focus = c
+                                 c:raise()
+                             end
+                         end),
+    awful.button({ }, 3, function ()
+                             if instance then
+                                 instance:hide()
+                                 instance = nil
+                             else
+                                 instance = awful.menu.clients({ width=250 })
+                             end
+                         end),
+    awful.button({ }, 4, function ()
+                             awful.client.focus.byidx(1)
+                             if client.focus then client.focus:raise() end
+                         end),
+    awful.button({ }, 5, function ()
+                             awful.client.focus.byidx(-1)
+                             if client.focus then client.focus:raise() end
+                         end))
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
@@ -169,7 +233,7 @@ for s = 1, screen.count() do
                                           end, mytasklist.buttons)
 
     -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top", screen = s })
+    mywibox[s] = awful.wibox({ position = "top", screen = s, height = 50 })
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
         {
@@ -179,8 +243,17 @@ for s = 1, screen.count() do
             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
+        -- volumewidget,
         mytextclock,
-        s == 1 and mysystray or nil,
+        batterywidget.widget,
+        separator,
+        memwidget.widget,
+        separator,
+        netwidget,
+        separator,
+        cpuwidget.widget,
+        -- try to put the systray on the external display
+        s == screen.count() and mysystray or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -252,7 +325,10 @@ globalkeys = awful.util.table.join(
                   mypromptbox[mouse.screen].widget,
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
-              end)
+              end),
+
+    -- Menubar
+    awful.key({ modkey }, "p", function () menubar.show() end)
 )
 
 clientkeys = awful.util.table.join(
@@ -375,3 +451,12 @@ end)
 client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
+
+-- local xresources_name = "awesome.started"
+-- local xresources = awful.util.pread("xrdb -query")
+-- if not xresources.match(xresources_name) then
+--   awesome.util.spawn("nm-applet")
+-- end
+-- awful.util.spawn_with_shell("xrdb -merge <<< " .. "'" .. xresources_name .. ": true'")
+
+-- TODO: figure out autostart http://awesome.naquadah.org/wiki/Autostart
