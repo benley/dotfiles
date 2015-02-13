@@ -40,8 +40,8 @@ end
 -- Themes define colours, icons, and wallpapers
 
 -- the superfluous join is to make gf work in vim
--- beautiful.init(awful.util.getdir("config") .. "/" .. "themes/zenburn/theme.lua")
-beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
+beautiful.init(awful.util.getdir("config") .. "/" .. "themes/zenburn/theme.lua")
+-- beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
 beautiful.border_width = "5"
 
 -- This is used later as the default terminal and editor to run.
@@ -109,6 +109,8 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 
 -- {{{ Wibox
 
+-- http://www.jasonmaur.com/awesome-wm-widgets-configuration/
+
 -- Network usage widget
 netwidget = widget({ type = "textbox" })
 vicious.register(netwidget, vicious.widgets.net, '<span color="#CC9393">${wlan0 down_kb}</span> <span color="#7F9F7F">${wlan0 up_kb}</span>', 3)
@@ -125,13 +127,21 @@ memwidget:set_border_color(nil)
 memwidget:set_gradient_colors({ "#AECF96", "#88A175", "#FF5656" })
 vicious.register(memwidget, vicious.widgets.mem, "$1", 10)
 
+-- https://github.com/awesomeWM/awesome/blob/3.4/lib/awful/widget/graph.lua.in
 cpuwidget = awful.widget.graph()
 cpuwidget:set_width(50)
 cpuwidget:set_height(50)
 cpuwidget:set_background_color("#494B4F")
 cpuwidget:set_color("#FF5656")
 cpuwidget:set_gradient_colors({ "#FF5656", "#88A175", "#AECF96" })
-vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
+cpuwidget:set_gradient_angle(0)
+cpuwidget_t = awful.tooltip({ objects = { cpuwidget.widget }, })
+
+vicious.register(cpuwidget, vicious.widgets.cpu,
+                 function (widget, args)
+                     cpuwidget_t:set_text("CPU Usage: " .. args[1] .. "%")
+                     return args[1]
+                 end)
 
 batterywidget = awful.widget.progressbar()
 batterywidget:set_vertical(true)
