@@ -95,8 +95,10 @@ autocmd FileType man
       \ setlocal nolist tw=0
 autocmd FileType scheme
       \ setlocal lisp
-autocmd FileType markdown
-      \ setlocal formatoptions+=a
+" It turns out that this is terrible because it doesn't account for code blocks
+" and intentional linebreaks:
+"autocmd FileType markdown
+"      \ setlocal formatoptions+=a
 autocmd FileType javascript
       \ setlocal shiftwidth=2
 autocmd FileType nix
@@ -400,5 +402,14 @@ let g:ycm_filetype_blacklist = {
       \ }
 
 let g:airline_powerline_fonts = 1
+
+if has("win32") || has ('win64')
+    let $VIMHOME = $HOME."/vimfiles/"
+else
+    let $VIMHOME = $HOME."/.vim/"
+endif
+
+" add templates in templates/ using filetype as file name
+au BufNewFile * :silent! exec ":0r ".$VIMHOME."templates/".&ft
 
 set secure
