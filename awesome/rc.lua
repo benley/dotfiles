@@ -131,7 +131,7 @@ memwidget:set_vertical(true)
 memwidget:set_background_color("#494B4F")
 memwidget:set_border_color(nil)
 memwidget:set_gradient_colors({ "#AECF96", "#88A175", "#FF5656" })
-vicious.register(memwidget, vicious.widgets.mem, "$1", 10)
+vicious.register(memwidget, vicious.widgets.mem, "$1", 11)
 
 -- https://github.com/awesomeWM/awesome/blob/3.4/lib/awful/widget/graph.lua.in
 cpuwidget = awful.widget.graph()
@@ -143,11 +143,14 @@ cpuwidget:set_gradient_colors({ "#FF5656", "#88A175", "#AECF96" })
 cpuwidget:set_gradient_angle(0)
 cpuwidget_t = awful.tooltip({ objects = { cpuwidget.widget }, })
 
-vicious.register(cpuwidget, vicious.widgets.cpu,
-                 function (widget, args)
-                     cpuwidget_t:set_text("CPU Usage: " .. args[1] .. "%")
-                     return args[1]
-                 end)
+vicious.register(
+  cpuwidget,
+  vicious.widgets.cpu,
+  function (widget, args)
+      cpuwidget_t:set_text("CPU Usage: " .. args[1] .. "%")
+      return args[1]
+  end,
+  3)
 
 batterywidget = awful.widget.progressbar()
 batterywidget:set_vertical(true)
@@ -165,7 +168,7 @@ vicious.register(
     battery_t:set_text(args[3] .. " remaining (" .. args[2] .. "%)")
     return args[2]
   end,
-  20,                   -- interval
+  21,                   -- interval
   "BAT1"                -- warg
   )
 
@@ -489,3 +492,4 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 -- awful.util.spawn_with_shell("xrdb -merge <<< " .. "'" .. xresources_name .. ": true'")
 
 -- TODO: figure out autostart http://awesome.naquadah.org/wiki/Autostart
+-- (or just use .Xsession, which is what I'm doing now)
