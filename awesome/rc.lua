@@ -97,11 +97,11 @@ myawesomemenu = {
    { "quit", awesome.quit }
 }
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "Debian", debian.menu.Debian_menu.Debian },
-                                    { "open terminal", terminal }
-                                  }
-                        })
+mymainmenu = awful.menu({ items = {
+  { "awesome", myawesomemenu, beautiful.awesome_icon },
+  { "Debian", debian.menu.Debian_menu.Debian },
+  { "open terminal", terminal }
+}})
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mymainmenu })
@@ -113,7 +113,13 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 
 -- Network usage widget
 netwidget = widget({ type = "textbox" })
-vicious.register(netwidget, vicious.widgets.net, '<span color="#CC9393">${wlan0 down_kb}</span> <span color="#7F9F7F">${wlan0 up_kb}</span>', 3)
+vicious.register(
+  netwidget,
+  vicious.widgets.net,
+  '<span color="#CC9393">${wlan0 down_kb}⬇</span> '
+   ..
+  '<span color="#7F9F7F">${wlan0 up_kb}⬆</span>',
+  3)
 
 separator = widget({ type = "textbox" })
 separator.text = " :: "
@@ -150,7 +156,18 @@ batterywidget:set_height(50)
 batterywidget:set_background_color(beautiful.bg_normal)
 batterywidget:set_border_color(beautiful.fg_normal)
 batterywidget:set_gradient_colors({ "#FF0000", "#FFFF00", "#00FF00" })
-vicious.register(batterywidget, vicious.widgets.bat, "$2", 20, "BAT1")
+battery_t = awful.tooltip({ objects = { batterywidget.widget } })
+
+vicious.register(
+  batterywidget,        -- widget
+  vicious.widgets.bat,  -- wtype
+  function(widget, args)
+    battery_t:set_text(args[3] .. " remaining (" .. args[2] .. "%)")
+    return args[2]
+  end,
+  20,                   -- interval
+  "BAT1"                -- warg
+  )
 
 -- volumewidget = widget({ type = "textbox" })
 -- vicious.register(volumewidget, vicious.widgets.volume,
@@ -253,17 +270,19 @@ for s = 1, screen.count() do
             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
+        separator,
+        batterywidget.widget,
         -- volumewidget,
         mytextclock,
-        batterywidget.widget,
-        separator,
+        -- try to put the systray on the external display
+        s == screen.count() and mysystray or nil,
+        -- the network widget varies in width, so let's put it *after* the
+        -- systray.
+        cpuwidget.widget,
         memwidget.widget,
         separator,
         netwidget,
         separator,
-        cpuwidget.widget,
-        -- try to put the systray on the external display
-        s == screen.count() and mysystray or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
