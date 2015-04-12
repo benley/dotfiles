@@ -7,6 +7,7 @@
 --recurse=yes
 --tag-relative=yes
 --exclude=.git
+--exclude=*.min.js
 
 --langdef=Clojure
 --langmap=Clojure:.clj
@@ -35,3 +36,5 @@
 --regex-scala=/^[ \t]*((abstract|final|sealed|implicit|lazy)[ \t]*)*val[ \t]+([a-zA-Z0-9_]+)/\3/l,constants/
 --regex-scala=/^[ \t]*((abstract|final|sealed|implicit|lazy)[ \t]*)*var[ \t]+([a-zA-Z0-9_]+)/\3/l,variables/
 --regex-scala=/^[ \t]*package[ \t]+([a-zA-Z0-9_.]+)/\1/p,packages/
+
+--langmap=Lisp:+.hy
