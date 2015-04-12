@@ -103,6 +103,8 @@ autocmd FileType javascript
       \ setlocal shiftwidth=2
 autocmd FileType nix
       \ setlocal smartindent autoindent
+autocmd FileType go
+      \ setlocal listchars=tab:\ \  tabstop=4 shiftwidth=4
 
 fun! PythonGFJump()
   " Attempts to make `gf` file jumping work for python imports.
