@@ -3,6 +3,9 @@ HashKnownHosts no
 Host zoiks.net *.zoiks.net *.xkcd.com nyan*.* *.local
 User benley
 
+Host ein.local nyanbox.local
+ForwardAgent yes
+
 # ControlPersist doesn't work with OpenSSH_4.5p1 from debian Squeeze (stable)
 # It *does* work with: Ubuntu 12.04, Ubuntu 12.10, MacOS 10.8, [...]
 
@@ -26,47 +29,19 @@ ControlMaster auto
 #ControlPersist yes
 ControlPath /tmp/.control_%r@%h:%p.%l
 
-Host nyanbox.z nb.z
-ForwardX11 yes
-ForwardX11Trusted yes
-Compression yes
-ForwardAgent yes
-ProxyCommand ssh -q sf.zoiks.net nc -q0 nb 22
-#HostName sf.zoiks.net
-#Port 2224
-#ControlMaster auto
-##ControlPersist yes
-#ControlPath /tmp/.control_%r@%h:%p.%l
-
 Host zoiks.net *.zoiks.net
 #PreferredAuthentications publickey,password
 ForwardAgent yes
 Compression yes
 
-# VMs
-Host vm-ubudev1.local vm1 vm-ubudev1
-HostName 192.168.56.2
-ForwardAgent yes
-Compression no
-ForwardX11 yes
-ForwardX11Trusted yes
-ControlPersist yes
-ControlMaster auto
-ControlPath /tmp/.ssh_%r@%h:%p
-
-Host jenkins
-Port 51225
-User "ben@cloudscaling.com"
-RequestTTY yes
-HostName lab21.hc.cloudscaling.com
-
-Host *.jenkins.cloudscaling.com
-Port 51225
-User ben@cloudscaling.com
-ProxyCommand ssh -l ben@cloudscaling.com -p 51225 lab21.hc.cloudscaling.com diagnose-tunnel -suffix .jenkins.cloudscaling.com %h
-UserKnownHostsFile ~/.ssh/jenkins_known_hosts
-HashKnownHosts no
-StrictHostKeyChecking no
+# Keeping this around in case it's useful again someday
+# Host *.jenkins.cloudscaling.com
+# Port 51225
+# User ben@cloudscaling.com
+# ProxyCommand ssh -l ben@cloudscaling.com -p 51225 lab21.hc.cloudscaling.com diagnose-tunnel -suffix .jenkins.cloudscaling.com %h
+# UserKnownHostsFile ~/.ssh/jenkins_known_hosts
+# HashKnownHosts no
+# StrictHostKeyChecking no
 
 Host *.folsomlabs.com
 ForwardAgent yes
