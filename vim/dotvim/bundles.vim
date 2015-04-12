@@ -73,7 +73,8 @@ VAMActivate nginx
 "Bundle 'fish.vim'
 VAMActivate vim-coffee-script
 " http://www.vim.org/scripts/script.php?script_id=790 :
-Bundle 'hdima/python-syntax'
+"Bundle 'hdima/python-syntax'
+" ^^^ seemed to be breaking pyrex/cython syntax?
 VAMActivate newlisp
 Bundle 'mustache/vim-mustache-handlebars'
 " This is the same as vim's markdown support, plus it covers *.md
@@ -83,6 +84,13 @@ VAMActivate vim-go
 VAMActivate vim-scala
 VAMActivate Puppet_Syntax_Highlighting
 VAMActivate github:kevints/vim-aurora-syntax
+"VAMActivate git:file:///home/benley/fl/vim-aurora-syntax
+VAMActivate github:kylef/apiblueprint.vim
+VAMActivate github:hylang/vim-hy
+
+" TODO: figure this out.
+"VAMActivate github:syngan/vim-vimlint
+"VAMActivate github:ynkdir/vim-vimlparser
 
 " provides :Vagrant
 VAMActivate vim-vagrant
