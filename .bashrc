@@ -45,7 +45,6 @@ dopath() {
 #  . /etc/bashrc
 #fi
 
-source "$HOME/bin/benlib.sh"
 alias getenv='source "$HOME"/.ssh/.getenv'
 
 # don't put duplicate lines in the history. See bash(1) for more options
