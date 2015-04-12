@@ -40,3 +40,5 @@
 	cmd = diffconflicts gvim \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
 	trustExitCode = true
 	keepBackup = false
+[rerere]
+	enabled = true
