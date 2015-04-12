@@ -244,32 +244,6 @@ let g:tagbar_type_markdown = {
 " (this benefits from Tlist_Process_File_Always=1)
 "set title titlestring=%<%f\ %([%{Tlist_Get_Tagname_By_Line()}]%)
 
-" From http://vim.wikia.com/wiki/Accessing_the_system_clipboard:
-" Some hackery to get clipboard support back when running with mouse support in
-" a non-X11 terminal (like iterm2).
-" enter visual selection, then:
-" :cz to copy to the x11 Clipboard
-" :cx to copy to x11 Primary Selection
-" :cv to copy to x11 Secondary Selection (wtf is this for, even?)
-" :pz to paste from x11 Clipboard
-" :px to paste from x11 Primary Selection
-" :pv to paste from x11 Secondary Selection
-" TODO(benley): I'm sure there is a way to do this without needing a : first
-command -range Cz :silent :<line1>,<line2>w !xsel -i -b
-command -range Cx :silent :<line1>,<line2>w !xsel -i -p
-command -range Cv :silent :<line1>,<line2>w !xsel -i -s
-cabbrev cz Cz
-cabbrev cx Cx
-cabbrev cv Cv
-
-command -range Pz :silent :r !xsel -o -b
-command -range Px :silent :r !xsel -o -p
-command -range Pv :silent :r !xsel -o -s
-
-cabbrev pz Pz
-cabbrev px Px
-cabbrev pv Pv
-
 " WinManager blahblah
 let g:winManagerWindowLayout = "BufExplorer,FileExplorer|TagList"
 
