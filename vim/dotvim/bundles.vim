@@ -38,7 +38,7 @@ VAMActivate Zenburn
 VAMActivate Solarized
 VAMActivate darktango
 VAMActivate gruvbox
-"Bundle 'chriskempson/base16-vim'
+VAMActivate github:chriskempson/base16-vim
 VAMActivate Lucius
 VAMActivate molokai
 VAMActivate monokai

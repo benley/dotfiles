@@ -71,6 +71,7 @@ autocmd FileType python
       \ | setlocal indentexpr=GetGooglePythonIndent(v:lnum)
       \ | call PythonGFJump()
       \ | setlocal shiftwidth=4
+      \ | setlocal formatprg=autopep8\ -
       "\ | setlocal omnifunc=pythoncomplete#Complete
 " Trim trailing whitespace on save: (I can't seem to make this work)
 " autocmd BufWritePre *.py normal m`:%s/\s\+$//e``
@@ -254,7 +255,7 @@ if has("gui")
   if has("macunix")
     set guifont=Meslo\ LG\ S\ for\ Powerline:h12,Menlo\ Regular\:h12
   else
-    set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 8,DejaVu\ Sans\ Mono\ 8
+    set guifont=Ubuntu\ Mono\ derivative\ Powerline\ 11,Ubuntu\ Mono\ 11
   endif
   "set bg=dark
 
@@ -326,9 +327,7 @@ let g:syntastic_aggregate_errors = 1
 "endif
 
 syntax on
-" The terminal is already set to the right bg/fg colors, so:
-let g:solarized_termtrans=1
-"set bg=dark
+set bg=dark
 colorscheme zenburn
 " Looks nice with zenburn:
 highlight ColorColumn ctermbg=238 guibg=#484848
@@ -347,6 +346,7 @@ let g:virtualenv_stl_format='[%n]'
 let g:clojure_align_multiline_strings = 1
 
 let g:NERDTreeIgnore=['\~$', '\.pyc$']
+
 if version >= 703
   " Show line numbers relative to cursor position
   set relativenumber
@@ -379,6 +379,9 @@ let g:ycm_filetype_blacklist = {
       \ }
 
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#left_sep = ' '
+" let g:airline#extensions#tabline#left_alt_sep = '┃'
 
 if has("win32") || has ('win64')
     let $VIMHOME = $HOME."/vimfiles/"
