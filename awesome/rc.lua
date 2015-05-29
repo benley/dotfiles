@@ -41,7 +41,6 @@ end
 
 -- the superfluous join is to make gf work in vim
 beautiful.init(awful.util.getdir("config") .. "/" .. "themes/zenburn/theme.lua")
--- beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
 beautiful.border_width = "5"
 
 -- This is used later as the default terminal and editor to run.
@@ -188,7 +187,10 @@ mysystray = widget({ type = "systray" })
 
 -- Menubar
 menubar.cache_entries = true
-menubar.app_folders = { "/usr/share/applications/" }
+menubar.app_folders = {
+  "/usr/share/applications/",
+  "~/.local/share/applications/"
+}
 menubar.show_categories = false
 -- menubar.set_icon_theme("wat")
 menubar.g = {
@@ -456,8 +458,12 @@ awful.rules.rules = {
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
 client.add_signal("manage", function (c, startup)
-    -- Add a titlebar
-    -- awful.titlebar.add(c, { modkey = modkey })
+    -- Add titlebar to floaters, but remove those from rule callback
+    if awful.client.floating.get(c)
+    or awful.layout.get(c.screen) == awful.layout.suit.floating then
+        if   c.titlebar then awful.titlebar.remove(c)
+        else awful.titlebar.add(c, {modkey = modkey}) end
+    end
 
     -- Enable sloppy focus
     c:add_signal("mouse::enter", function(c)
@@ -493,3 +499,30 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
 
 -- TODO: figure out autostart http://awesome.naquadah.org/wiki/Autostart
 -- (or just use .Xsession, which is what I'm doing now)
+
+-- {{{ Arrange signal handler
+for s = 1, screen.count() do screen[s]:add_signal("arrange", function ()
+  local clients = awful.client.visible(s)
+  local layout  = awful.layout.getname(awful.layout.get(s))
+
+  if #clients > 0 then
+    -- Fine grained borders and floaters control
+    for _, c in pairs(clients) do
+      if awful.client.floating.get(c) or layout == "floating" then
+        -- Floaters get borders and titlebars
+        c.border_width = beautiful.border_width
+        awful.titlebar.add(c, { modkey = modkey })
+
+        -- No borders with only one visible client
+        elseif #clients == 1 or layout == "max" then
+          c.border_width = 0
+          awful.titlebar.remove(c)
+        else
+          c.border_width = beautiful.border_width
+          awful.titlebar.remove(c)
+        end
+      end
+    end
+  end)
+end
+-- }}}
