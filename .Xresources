@@ -1,13 +1,24 @@
-!Xft.dpi: 275
+!Xft.dpi: 163.50
+!Xft.dpi: 192
 !Xft.antialias: true
 !Xft.rgba: rgb
 !Xft.hinting: true
 !Xft.hintstyle: hintfull
 
-XTerm.vt100.cursorColor: #ccccff
+XTerm.vt100.RenderFont: true
+XTerm.vt100.background: black
 XTerm.vt100.colorMode: true
+XTerm.vt100.cursorColor: #ccccff
+XTerm.vt100.faceName: Droid Sans Mono 13
+XTerm.vt100.faceSize: 10.0
 XTerm.vt100.font: fixed
+XTerm.vt100.foreground: white
+XTerm.vt100.geometry: 80x40
 XTerm.vt100.scrollBar: false
+
+!XTerm.vtMenu.background: green
+!XTerm.fontMenu.background: blue
+!XTerm.mainMenu.background: red
 
 !! This section is from davean:
 
@@ -27,21 +38,6 @@ XTerm.vt100.scrollBar: false
 ! URxvt.cursorBlink: 1
 ! URxvt.cursorUnderline: 1
 ! URxvt.colorUL: #4682B4
-
-
-
-
-!! XTerm.vt100.background: black
-!! XTerm.vt100.foreground: white
-XTerm.vt100.geometry: 80x40
-
-XTerm.vt100.RenderFont: true
-XTerm.vt100.faceName: Source Code Pro for Powerline
-XTerm.vt100.faceSize: 12.0
-
-!! XTerm.vtMenu.background: green
-!! XTerm.fontMenu.background: blue
-!! XTerm.mainMenu.background: red
 
 Aterm.termName: xterm
 Aterm.transparent: true
@@ -93,7 +89,6 @@ wterm.font: fixed
 wterm.scrollBar: false
 
 !! solarized xdefaults is the worst idea ever. STOP WANTING THAT.
-
 
 !! drop in Solarized colorscheme for Xresources/Xdefaults
 
