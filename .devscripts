@@ -2,10 +2,10 @@
 ##### debsign
 #
 # Maintainer name (only used to determine GPG keyid; -m option)
-DEBSIGN_MAINT='ben@folsomlabs.com'
+#DEBSIGN_MAINT='benley@gmail.com'
 #
 # GPG keyid to use (-k option)
-# DEBSIGN_KEYID=
+DEBSIGN_KEYID=21e1fa28
 
 ##### dscverify
 #

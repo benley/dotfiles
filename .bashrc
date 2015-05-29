@@ -150,7 +150,7 @@ export HISTSIZE=9999
 export HISTFILESIZE=9999
 
 # Debian dev stuff
-export DEBEMAIL='ben@folsomlabs.com'
+export DEBEMAIL='benley@gmail.com'
 export DEBFULLNAME='Benjamin Staffin'
 alias lintian="lintian --color=auto"
 
@@ -203,6 +203,10 @@ export GOPATH="$HOME/go"
 
 # I can pipe things to less when I want an interactive pager, thank you very much.
 export NIX_PAGER=
+
+if [[ -e "$HOME/.nix-profile/etc/ca-bundle.crt" ]]; then
+  export GIT_SSL_CAINFO=$HOME/.nix-profile/etc/ca-bundle.crt
+fi
 
 return 0
 
