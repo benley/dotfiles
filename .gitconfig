@@ -42,3 +42,6 @@
 	keepBackup = false
 [rerere]
 	enabled = true
+
+[s3]
+        asdf-secret = asdfljasdf
