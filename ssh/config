@@ -23,11 +23,11 @@ Host maya maya.zoiks.net
 ForwardX11 no
 ForwardX11Trusted no
 Hostname maya.zoiks.net
-#Port 2222
+Port 3223
 Compression yes
-ControlMaster auto
+#ControlMaster auto
 #ControlPersist yes
-ControlPath /tmp/.control_%r@%h:%p.%l
+#ControlPath /tmp/.control_%r@%h:%p.%l
 
 Host zoiks.net *.zoiks.net
 #PreferredAuthentications publickey,password
