@@ -10,7 +10,7 @@ OUT="$HOME/.ssh/.getenv"
 chmod 0600 "$OUT"
 
 set|grep -E "^(SSH_(CLIENT|AUTH_SOCK|CONNECTION)|DISPLAY)=" >> "$OUT"
-sed -i "s/^/export /" "$OUT"
+sed -i -e "s/^/export /" "$OUT"
 
 # If this file didn't exist, sshd would do thie xauth stuff by itself:
 if read proto cookie && [ -n "$DISPLAY" ]; then
