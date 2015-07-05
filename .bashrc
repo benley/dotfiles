@@ -5,9 +5,6 @@ OS=$(uname)
 PLATFORM=$(uname -sm | tr " " "-")
 export EDITOR=vim
 
-# In most places I'll keep the system's timezone. Makes reading logfiles easier.
-[[ "$HOSTNAME" == 'osric' ]] && export TZ='America/Los_Angeles'
-
 prefixpath() {
   [[ -d "$1"/ ]] && PATH="$1:$PATH" || return 1
 }
