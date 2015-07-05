@@ -1,4 +1,8 @@
-if [[ $- =~ i && -x $(which keychain) ]]; then
+if [[ $- =~ i
+   && $(type -t keychain) != ""
+   && $(type -t gpg-agent) != ""
+   ]];
+then
   eval $(keychain --agents gpg --quick --eval --nogui)
 fi
 
