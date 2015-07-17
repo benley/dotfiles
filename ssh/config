@@ -10,7 +10,7 @@ ForwardAgent yes
 # It *does* work with: Ubuntu 12.04, Ubuntu 12.10, MacOS 10.8, [...]
 
 Host aram.xkcd.com
-ForwardAgent yes
+ForwardAgent no
 Compression yes
 
 Host github.com
@@ -18,6 +18,10 @@ Compression yes
 ForwardAgent no
 ForwardX11 no
 ForwardX11Trusted no
+
+Host sf.zoiks.net
+Port 2222
+Compression yes
 
 Host maya maya.zoiks.net
 ForwardX11 no
