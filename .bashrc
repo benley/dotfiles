@@ -1,12 +1,17 @@
+#!bash
 # .bashrc
 umask 0022
 
 OS=$(uname)
-PLATFORM=$(uname -sm | tr " " "-")
+# PLATFORM=$(uname -sm | tr " " "-")
 export EDITOR=vim
 
 prefixpath() {
-  [[ -d "$1"/ ]] && PATH="$1:$PATH" || return 1
+  [[ -d "$1"/ ]] && PATH="$1${PATH:+:$PATH}"|| return 1
+}
+
+addpath() {
+  [[ -d "$1"/ ]] && PATH="${PATH:+$PATH:$1}" || return 1
 }
 
 dopath() {
@@ -14,23 +19,17 @@ dopath() {
   prefixpath "$HOME/go/bin"
   prefixpath "$HOME/.local/bin"  # Python user installs
   prefixpath "$HOME/Library/Haskell/bin"
-  prefixpath "$HOME/.cabal/bin"
-  prefixpath /usr/local/opt/ruby/bin
+  #prefixpath "$HOME/.cabal/bin"
+  #prefixpath /usr/local/opt/ruby/bin
   prefixpath "$HOME/bin"
-  local addpaths=(
-      $HOME/arcanist/arcanist/bin
-      $HOME/p/{depot_tools,android-ndk,android-sdk/{platform-,}tools}
-      $HOME/Dropbox/bin{,/$PLATFORM}
-      $HOME/.local/share/Steam/debian_bin
-      /{usr,opt}/local/sbin
-      $HOME/opt/node/bin
-      /usr/local/share/npm/bin
-      /usr/local/heroku/bin
-      $HOME/.gem/ruby/1.9.1/bin
-      )
-  for dir in "${addpaths[@]}"; do
-    [[ -d "$dir"/ ]] && PATH+=":${dir}"
-  done
+  # addpath $HOME/arcanist/arcanist/bin
+  # addpath $HOME/opt/node/bin
+  # addpath /usr/local/share/npm/bin
+  # addpath /usr/local/heroku/bin
+  # addpath $HOME/.gem/ruby/1.9.1/bin
+  # addpath $HOME/.local/share/Steam/debian_bin
+  # addpath $HOME/Dropbox/bin{,/$PLATFORM}
+  addpath /usr/local/sbin
 
   [[ -e /etc/arch-release && -e /usr/bin/ruby ]] && \
     PATH+="$(ruby -rubygems -e 'puts Gem.user_dir')/bin"
@@ -84,7 +83,7 @@ case "$OS" in
 esac
 
 if grep --version|grep -q GNU; then
-  export GREP_OPTIONS="--color"
+  alias grep='grep --color'
 fi
 
 
@@ -152,7 +151,7 @@ export DEBFULLNAME='Benjamin Staffin'
 alias lintian="lintian --color=auto"
 
 if [[ -d "$HOME/.bashrc.d" ]]; then
-  for file in $(find "$HOME/.bashrc.d" -type f -or -type l); do
+  for file in $HOME/.bashrc.d/*; do
     source "$file"
   done
 fi
@@ -165,30 +164,36 @@ gerrit() {
     alias ctags='/usr/local/bin/ctags'
 
 # set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
+if [[ -z "${debian_chroot:-}" && -r /etc/debian_chroot ]]; then
+  debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-GIT_PS1_SHOWDIRTYSTATE=true
-GIT_PS1_SHOWCOLORHINTS=1
-GIT_PS1_DESCRIBE_STYLE=branch
+export GIT_PS1_SHOWDIRTYSTATE=true
+export GIT_PS1_SHOWCOLORHINTS=1
+export GIT_PS1_DESCRIBE_STYLE=branch
 
-prompt1='┌─( \[\033[01;32m\]\u\[\033[00m\]@\h )─( \[\033[01;34m\]\w\[\033[00m\] )'
-prompt2='\n└─${debian_chroot:+(\[\033[01;35m\]$debian_chroot\[\033[00m\])-}\[\033[00m\]($?)─> \$ '
-prompt3='─( %s )'
+mypromptcmd() {
+  local venvprompt prompt1 prompt2 prompt3
+  venvprompt=""
+  if [[ "$VIRTUAL_ENV" =~ (\/([^/]+))+ ]]; then
+    export venvprompt="─\[\033[01;36m\]${BASH_REMATCH[-1]}\[\033[00m\]"
+  fi
 
-# Cloudscaling logo:
-#PS1='\[\033[1;30;47m\]cloud\[\033[0;31;47m\]scaling\[\033[;91m\] OCS 2.6.1\[\033[00m\]\n[\u@\h] \W \$ '
+  prompt1="┌─( \[\033[01;32m\]\u\[\033[00m\]@\h )─( \[\033[01;34m\]\w\[\033[00m\] )"
+  prompt2="\n└─${debian_chroot:+(\[\033[01;35m\]$debian_chroot\[\033[00m\])-}\[\033[00m\]($?)${venvprompt}─> \$ "
+  prompt3="─( %s )"
 
-case $TERM in
-  xterm*)
-    # Set the title bar to include the current directory.
-    prompt1="\[\033]0;\u@\h: \w\007\]${prompt1}"
-    ;;
-esac
+  case $TERM in
+    xterm*)
+      # Set the title bar to include the current directory.
+      prompt1="\[\033]0;\u@\h: \w\007\]${prompt1}"
+      ;;
+  esac
 
-PROMPT_COMMAND="__git_ps1 '${prompt1}' '${prompt2}' '${prompt3}'"
-unset prompt1 prompt2 prompt3
+  __git_ps1 "${prompt1}" "${prompt2}" "${prompt3}"
+}
+
+PROMPT_COMMAND="mypromptcmd"
 
 [[ "$COLORTERM" == 'gnome-terminal' ]] && export TERM='xterm-256color'
 [[ -e /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
@@ -206,9 +211,3 @@ if [[ -e "$HOME/.nix-profile/etc/ca-bundle.crt" ]]; then
 fi
 
 return 0
-
-# NOTE: gvm does some crap where it talks to the internet *every time you open
-# a shell*.  WTF.
-
-#THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
-# [[ -s "/home/benley/.gvm/bin/gvm-init.sh" ]] && source "/home/benley/.gvm/bin/gvm-init.sh"
