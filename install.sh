@@ -117,8 +117,8 @@ main() {
   mkdir -p "$HOME/.ssh"
   SymlinkIfDiffer "$rootdir/ssh/config" "$HOME/.ssh/config"
   SymlinkIfDiffer "$rootdir/ssh/rc" "$HOME/.ssh/rc"
-  SymlinkIfDiffer "$rootdir/vim/vimrc" "$HOME/.vimrc"
-  SymlinkIfDiffer "$rootdir/vim/dotvim" "$HOME/.vim"
+  SymlinkIfDiffer "$rootdir/.vimrc" "$HOME/.vimrc"
+  SymlinkIfDiffer "$rootdir/.vim" "$HOME/.vim"
   SymlinkIfDiffer "$rootdir/.git_template" "$HOME/.git_template"
   SymlinkIfDiffer "$rootdir/awesome" "$HOME/.config/awesome"
 
