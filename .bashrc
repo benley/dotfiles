@@ -206,8 +206,8 @@ export GOPATH="$HOME/go"
 # I can pipe things to less when I want an interactive pager, thank you very much.
 export NIX_PAGER=
 
-if [[ -e "$HOME/.nix-profile/etc/ca-bundle.crt" ]]; then
-  export GIT_SSL_CAINFO=$HOME/.nix-profile/etc/ca-bundle.crt
+if [[ -e "$HOME/.nix-profile/etc/ssl/certs/ca-bundle.crt" ]]; then
+  export GIT_SSL_CAINFO=$HOME/.nix-profile/etc/ssl/certs/ca-bundle.crt
 fi
 
 return 0
