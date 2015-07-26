@@ -87,6 +87,7 @@ VAMActivate github:kevints/vim-aurora-syntax
 "VAMActivate git:file:///home/benley/fl/vim-aurora-syntax
 VAMActivate github:kylef/apiblueprint.vim
 VAMActivate github:hylang/vim-hy
+VAMActivate github:pangloss/vim-javascript
 
 " TODO: figure this out.
 "VAMActivate github:syngan/vim-vimlint
@@ -111,6 +112,11 @@ VAMActivate fireplace
 VAMActivate indenthaskell
 " This is cute but really obnoxious:
 "Bundle 'frerich/unicode-haskell'
+VAMActivate ghcmod
+VAMActivate github:lukerandall/haskellmode-vim
+VAMActivate github:eagletmt/neco-ghc
+" Busted?
+"VAMActivate github:bitc/lushtags
 
 "Bundle 'insanum/votl'   " I should learn how to use this
 VAMActivate virtualenv
