@@ -1,0 +1,53 @@
+set backspace=indent,eol,start
+set expandtab
+set esckeys
+set ignorecase
+set incsearch
+set joinspaces
+set laststatus=2
+set list
+set listchars=tab:\|_   " Loudly highlight the damn tabs
+set mouse=a
+set ruler
+set scrolloff=2
+set smartcase
+set textwidth=79
+set wildignore=*.o,*~,*.pyc,*.pyo,*.class,*.hi,*.obj
+set wildmenu
+
+VAMActivate Zenburn
+colorscheme zenburn
+
+VAMActivate github:tmux-plugins/vim-tmux
+
+let g:syntastic_check_on_open = 1
+"let g:syntastic_error_symbol = 'â'
+"let g:syntastic_warning_symbol = 'â '
+let g:syntastic_ruby_checkers = ['rubocop', 'mri']
+let g:syntastic_aggregate_errors = 1
+"let g:syntastic_auto_loc_list = 1
+let g:syntastic_always_populate_loc_list = 1
+
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+
+let g:ycm_filetype_blacklist = {
+      \ 'notes': 1,
+      \ 'markdown': 1,
+      \ 'unite': 1,
+      \ 'tagbar': 1,
+      \ 'pandoc': 1,
+      \ 'qf': 1,
+      \ 'vimwiki': 1,
+      \ 'text': 1,
+      \ 'infolog': 1,
+      \ 'mail': 1,
+      \ 'yaml': 1,
+      \ 'clojure': 1
+      \ }
+
+
+map <silent> <Leader>e :Errors<CR>
+map <Leader>s :SyntasticToggleMode<CR>
+
+set secure

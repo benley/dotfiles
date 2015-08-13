@@ -121,6 +121,8 @@ main() {
   SymlinkIfDiffer "$rootdir/.vim" "$HOME/.vim"
   SymlinkIfDiffer "$rootdir/.git_template" "$HOME/.git_template"
   SymlinkIfDiffer "$rootdir/awesome" "$HOME/.config/awesome"
+  SymlinkIfDiffer "$rootdir/.i3" "$HOME/.i3"
+  SymlinkIfDiffer "$rootdir/.nixpkgs" "$HOME/.nixpkgs"
 
   # for virtualenvwrapper
   mkdir -p "$HOME/projects"
