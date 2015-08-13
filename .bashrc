@@ -106,11 +106,12 @@ loadcompletion() {
   done
 
   if ((_completion_on)); then
-    for cmpl in $HOME/.bash_completion.d/*; do
+    for cmpl in $HOME/.bash_completion.d/* \
+                $HOME/.nix-profile/etc/bash_completion.d/*; do
       source "$cmpl"
     done
 
-    if [[ $(type -t _npm_completion) != 'function' && -x $(which npm) ]]; then
+    if [[ $(type -t _npm_completion) != 'function' && $(type -t npm) != '' ]]; then
       npm completion > "$HOME/.bash_completion.d/npm_completion.sh"
       source "${HOME}/.bash_completion.d/npm_completion.sh"
     fi
@@ -156,10 +157,6 @@ if [[ -d "$HOME/.bashrc.d" ]]; then
   done
 fi
 
-gerrit() {
-  ssh ben@pd.cloudscaling.com -p 29418 -- gerrit "$@"
-}
-
 [[ "$OS" == "Darwin" && -e '/usr/local/bin/ctags' ]] && \
     alias ctags='/usr/local/bin/ctags'
 
@@ -172,7 +169,7 @@ export GIT_PS1_SHOWDIRTYSTATE=true
 export GIT_PS1_SHOWCOLORHINTS=1
 export GIT_PS1_DESCRIBE_STYLE=branch
 
-mypromptcmd() {
+myPromptCmd() {
   local venvprompt prompt1 prompt2 prompt3
   venvprompt=""
   if [[ "$VIRTUAL_ENV" =~ (\/([^/]+))+ ]]; then
@@ -193,15 +190,13 @@ mypromptcmd() {
   __git_ps1 "${prompt1}" "${prompt2}" "${prompt3}"
 }
 
-PROMPT_COMMAND="mypromptcmd"
+PROMPT_COMMAND="myPromptCmd"
 
 [[ "$COLORTERM" == 'gnome-terminal' ]] && export TERM='xterm-256color'
 [[ -e /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
 
 # for virtualenvwrapper
 export PROJECT_HOME="$HOME/projects"
-
-export GOPATH="$HOME/go"
 
 # I can pipe things to less when I want an interactive pager, thank you very much.
 export NIX_PAGER=
