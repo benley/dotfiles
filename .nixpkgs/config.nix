@@ -72,8 +72,9 @@
       name = "benleySystemTools";
       ignoreCollisions = true;
       paths = [
-        bash
-        (lib.lowPrio coreutils)  # cat chmod chown chroot cp dd df du env ls rm kill ...
+        bashInteractive
+        bashCompletion
+        (lib.lowPrio coreutils)  # lowPrio to resolve conflict with procps
         file
         dstat
         gnugrep
@@ -115,9 +116,12 @@
       ];
     };
 
-    benleyFonts = with pkgs; buildEnv {
-      name = "benleyFonts";
+    benleyDesktop = with pkgs; buildEnv {
+      name = "benleyDesktop";
       paths = [
+        i3
+        i3status
+        dmenu
         powerline-fonts
       ];
     };
