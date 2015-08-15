@@ -23,6 +23,7 @@
         benleyPythonDev
         benleySystemTools
         jq
+        myScripts
         myVim
         pwgen
         tmux
@@ -83,7 +84,7 @@
         iotop
         less
         lsof
-        man
+        man_db
         ncurses  # for terminfo
         openssh
         procps   # ps kill top free w watch uptime vmstat ...
@@ -165,6 +166,15 @@
           }
         ];
       };
+    };
+
+    myScripts = stdenv.mkDerivation {
+      name = "benley-scripts";
+      src = ./scripts;
+      installPhase = ''
+        mkdir -p $out/bin
+        cp -a $src/* $out/bin/
+      '';
     };
   };
 }

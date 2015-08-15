@@ -5,15 +5,6 @@
 set -o errexit
 
 OS=$(uname)
-case $OS in
-  "Darwin"|"Linux")
-    : # hokay
-    ;;
-  *)
-    echo "ERROR: unknown OS: \"${OS}\"; can't continue." 1>&2
-    exit 1
-    ;;
-esac
 
 die() {
   LogError "$@"
@@ -91,8 +82,7 @@ main() {
   readonly rootdir=$(cd "$(dirname "$0")"; pwd)
 
   set -o nounset
-  mkdir -p "$HOME/bin"
-  dotfiles=(bin/* .inputrc .bash_logout .bash_profile .bashrc .dircolors
+  dotfiles=(.inputrc .bash_logout .bash_profile .bashrc .dircolors
             .pythonrc.py .screenrc .tmux.conf .quiltrc .Xresources .irbrc
             .gitconfig .ctags .devscripts .xmobarrc .pbuilderrc .xsettingsd)
   for file in "${dotfiles[@]}"; do
@@ -127,5 +117,15 @@ main() {
   # for virtualenvwrapper
   mkdir -p "$HOME/projects"
 }
+
+
+case $OS in
+  "Darwin"|"Linux")
+    : # hokay
+    ;;
+  *)
+    die "ERROR: unknown OS: \"${OS}\"; can't continue."
+    ;;
+esac
 
 main "$@"

@@ -50,4 +50,5 @@ let g:ycm_filetype_blacklist = {
 map <silent> <Leader>e :Errors<CR>
 map <Leader>s :SyntasticToggleMode<CR>
 
+set guifont=Source\ Code\ Pro\ for\ Powerline\ 10
 set secure

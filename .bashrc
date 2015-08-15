@@ -137,8 +137,8 @@ export LESS_TERMCAP_so=$'\E[1;30;43m'     # begin standout-mode - info box
 export LESS_TERMCAP_ue=$'\E[0m'           # end underline
 export LESS_TERMCAP_us=$'\E[4;32m'        # begin underline
 
-# Have less use the extended status prompt, and display ANSI colors.
-export LESS="-M -R"
+# less: extended status prompt, display ANSI colors, case-insensitive search.
+export LESS="-M -R -i"
 
 export PYTHONSTARTUP="${HOME}/.pythonrc.py"
 
