@@ -84,11 +84,12 @@
         iotop
         less
         lsof
-        man_db
+        #man_db
         ncurses  # for terminfo
         openssh
         procps   # ps kill top free w watch uptime vmstat ...
         pv
+        rsync
         socat
         sysstat
         tree
@@ -104,6 +105,8 @@
         pythonPackages.autopep8
         pythonPackages.flake8
         pythonPackages.pep8
+        pythonPackages.virtualenv
+        pythonPackages.virtualenvwrapper
       ];
     };
 
