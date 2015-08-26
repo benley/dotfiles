@@ -84,7 +84,8 @@ main() {
   set -o nounset
   dotfiles=(.inputrc .bash_logout .bash_profile .bashrc .dircolors
             .pythonrc.py .screenrc .tmux.conf .quiltrc .Xresources .irbrc
-            .gitconfig .ctags .devscripts .xmobarrc .pbuilderrc .xsettingsd)
+            .gitconfig .ctags .devscripts .xmobarrc .pbuilderrc .xsettingsd
+            .i3status.conf)
   for file in "${dotfiles[@]}"; do
     SymlinkIfDiffer "$rootdir/$file" "$HOME/$file"
   done
