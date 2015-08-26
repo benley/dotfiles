@@ -245,7 +245,10 @@ if has("gui")
   "set guioptions=aegimrLtT
   " e : gui tabs
   " T : toolbar
-  set guioptions=agimrLt
+  " m : menu
+  set guioptions=agirLt
+
+  let g:haskell_conceal_wide = 1
 endif
 
 let g:syntastic_check_on_open = 1
