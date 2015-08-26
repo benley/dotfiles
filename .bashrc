@@ -90,6 +90,7 @@ fi
 loadcompletion() {
   local spot cmpl _completion_on=0
   local completion_dirs=(
+    "$HOME/.nix-profile/share/bash-completion"
     /opt/local/etc
     /opt/local/share/bash-completion
     "${brew_prefix}/etc"
@@ -151,6 +152,12 @@ export DEBEMAIL='benley@gmail.com'
 export DEBFULLNAME='Benjamin Staffin'
 alias lintian="lintian --color=auto"
 
+if [[ -d "$HOME/.nix-profile/etc/profile.d" ]]; then
+  for file in $HOME/.nix-profile/etc/profile.d/*; do
+    source "$file"
+  done
+fi
+
 if [[ -d "$HOME/.bashrc.d" ]]; then
   for file in $HOME/.bashrc.d/*; do
     source "$file"
@@ -193,7 +200,9 @@ myPromptCmd() {
 PROMPT_COMMAND="myPromptCmd"
 
 [[ "$COLORTERM" == 'gnome-terminal' ]] && export TERM='xterm-256color'
-[[ -e /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
+
+# Handled via nix
+#[[ -e /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
 
 # for virtualenvwrapper
 export PROJECT_HOME="$HOME/projects"
