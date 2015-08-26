@@ -36,6 +36,7 @@
       paths = [
         awscli
         #cli53
+        curl
         bind    # there isn't a separate package for "dig" yet
         httpie
         mosh
@@ -44,6 +45,7 @@
         #packer
         tcpdump
         telnet
+        wget
       ];
     };
 
@@ -101,7 +103,7 @@
       name = "benleyPythonDev";
       paths = [
         pylint
-        python
+        pythonFull
         pythonPackages.autopep8
         pythonPackages.flake8
         pythonPackages.pep8
@@ -127,6 +129,14 @@
         i3status
         dmenu
         powerline-fonts
+        #gnome3.gnome_terminal
+        #(writeTextFile {
+        #  name = "benleyEnv";
+        #  destination = "/etc/profile.d/benleyEnv";
+        #  text = ''
+        #    export TERMINAL=gnome-terminal
+        #  '';
+        #})
       ];
     };
 
@@ -159,6 +169,7 @@
               "fugitive"
               "rainbow_parentheses"
               "taglist"
+              "vim2hs"
               "vim-addon-nix"
               "vim-airline"
               "vim-coffee-script"

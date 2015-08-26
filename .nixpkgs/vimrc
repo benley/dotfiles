@@ -51,4 +51,6 @@ map <silent> <Leader>e :Errors<CR>
 map <Leader>s :SyntasticToggleMode<CR>
 
 set guifont=Source\ Code\ Pro\ for\ Powerline\ 10
+
+source ~/.vimrc
 set secure
