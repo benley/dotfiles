@@ -83,6 +83,7 @@ VAMActivate vim-addon-nix
 VAMActivate vim-coffee-script
 VAMActivate vim-go
 VAMActivate vim-scala
+VAMActivate github:solarnz/thrift.vim
 """
 
 """ Clojure
