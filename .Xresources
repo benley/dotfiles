@@ -1,3 +1,5 @@
+XCursor.size: 48
+
 !Xft.dpi: 163.50
 !Xft.dpi: 192
 !Xft.antialias: true
@@ -9,8 +11,8 @@ XTerm.vt100.RenderFont: true
 XTerm.vt100.background: black
 XTerm.vt100.colorMode: true
 XTerm.vt100.cursorColor: #ccccff
-XTerm.vt100.faceName: Droid Sans Mono 13
-XTerm.vt100.faceSize: 10.0
+XTerm.vt100.faceName: Ubuntu Mono derivative Powerline
+XTerm.vt100.faceSize: 9.0
 XTerm.vt100.font: fixed
 XTerm.vt100.foreground: white
 XTerm.vt100.geometry: 80x40
