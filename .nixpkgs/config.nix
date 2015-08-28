@@ -88,7 +88,7 @@
         lsof
         #man_db
         ncurses  # for terminfo
-        openssh
+        #openssh # system ssh is fine
         procps   # ps kill top free w watch uptime vmstat ...
         pv
         rsync
@@ -125,9 +125,11 @@
     benleyDesktop = with pkgs; buildEnv {
       name = "benleyDesktop";
       paths = [
+        dmenu
+        gnupg
         i3
         i3status
-        dmenu
+        keychain
         powerline-fonts
         #gnome3.gnome_terminal
         #(writeTextFile {
