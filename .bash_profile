@@ -1,3 +1,4 @@
+#!bash
 if [[ $- =~ i
    && $(type -t keychain) != ""
    && $(type -t gpg-agent) != ""

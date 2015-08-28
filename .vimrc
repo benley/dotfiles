@@ -1,4 +1,4 @@
-source ~/.vim/bundles.vim
+"source ~/.vim/bundles.vim
 
 set backspace=indent,eol,start
 set expandtab
@@ -248,7 +248,7 @@ if has("gui")
   " m : menu
   set guioptions=agirLt
 
-  let g:haskell_conceal_wide = 1
+  "let g:haskell_conceal_wide = 1
 endif
 
 let g:syntastic_check_on_open = 1
