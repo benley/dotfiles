@@ -184,7 +184,9 @@ myPromptCmd() {
   fi
 
   prompt1="┌─( \[\033[01;32m\]\u\[\033[00m\]@\h )─( \[\033[01;34m\]\w\[\033[00m\] )"
-  prompt2="\n└─${debian_chroot:+(\[\033[01;35m\]$debian_chroot\[\033[00m\])-}\[\033[00m\]($?)${venvprompt}─> \$ "
+  prompt2="\n└─${debian_chroot:+(\[\033[01;35m\]$debian_chroot\[\033[00m\])-}"
+  prompt2+='\[\033[00m\]($?)'
+  prompt2+="${venvprompt}─> \\$ "
   prompt3="─( %s )"
 
   case $TERM in
