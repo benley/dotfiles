@@ -16,9 +16,10 @@
       name = "benleyAll";
       paths = [
         bc
+        benleyDesktop
         benleyDevTools
         #benleyGuiStuff
-        #benleyHaskellDev
+        benleyHaskellDev
         benleyNetTools
         benleyPythonDev
         benleySystemTools
@@ -52,6 +53,7 @@
     benleyDevTools = with pkgs; buildEnv {
       name = "benleyDevTools";
       paths = [
+        cabal2nix
         ctags
         diffutils
         gitFull
@@ -131,6 +133,7 @@
         i3status
         keychain
         powerline-fonts
+        redshift
         #gnome3.gnome_terminal
         #(writeTextFile {
         #  name = "benleyEnv";
@@ -142,17 +145,14 @@
       ];
     };
 
-    benleyHaskellDev = pkgs.buildEnv {
-      name = "benleyHaskellDev";
-      paths = with haskellPackages; [
-        ghc
-        hdevtools
-        hlint
-        hoogle
-        # Whythehell does this not work with ghc 7.10.whatever?
-        haskell.packages.ghc784.ghc-mod
-      ];
-    };
+    benleyHaskellDev = haskellPackages.ghcWithPackages (x: with x; [
+      aeson
+      text
+      ghc-mod
+      hdevtools
+      hlint
+      hoogle
+    ]);
 
     myChromium = chromiumBeta.override { enableNaCl = true; };
 
@@ -169,6 +169,8 @@
               "Tagbar"
               "The_NERD_tree"
               "fugitive"
+              "ghcmod"
+              "neco-ghc"
               "rainbow_parentheses"
               "taglist"
               "vim2hs"
@@ -176,7 +178,9 @@
               "vim-airline"
               "vim-coffee-script"
               "vim-gitgutter"
+              #"vim-hdevtools"
               "vimproc"
+              "vimshell-vim"
               "youcompleteme"
             ];
           }
