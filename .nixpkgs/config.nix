@@ -81,11 +81,11 @@
         bashCompletion
         (lib.lowPrio coreutils)  # lowPrio to resolve conflict with procps
         file
-        dstat
+        dstat  # linux only
         gnugrep
         htop
-        iftop
-        iotop
+        iftop  # linux only
+        iotop  # linux only
         less
         lsof
         #man_db
@@ -145,7 +145,23 @@
       ];
     };
 
-    benleyHaskellDev = haskellPackages.ghcWithPackages (x: with x; [
+    benleyHaskellDev = pkgs.buildEnv {
+      name = "benleyHaskellDev";
+      paths = with pkgs; [
+        myGhc
+        (writeTextFile {
+          name = "ghc-shellhook";
+          executable = true;
+          destination = "/etc/profile.d/nix-ghc.sh";
+          text = ''
+            # nixpkgs does some hilarious tricks to make haskell libraries work
+            eval "$(egrep ^export "${myGhc}/bin/ghc")"
+          '';
+        })
+      ];
+    };
+
+    myGhc = haskellPackages.ghcWithPackages (x: with x; [
       aeson
       text
       ghc-mod
