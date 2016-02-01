@@ -43,6 +43,8 @@ VAMActivate vim-gitgutter
 VAMActivate vim-vagrant            " provides :Vagrant
 VAMActivate wildfire               " Smart selection of the nearest text object
 VAMActivate YouCompleteMe
+VAMActivate github:jeetsukumaran/vim-buffergator
+VAMActivate github:godlygeek/tabular
 """
 
 " TODO: figure this out.
@@ -73,17 +75,24 @@ VAMActivate github:kevints/vim-aurora-syntax
 VAMActivate github:kylef/apiblueprint.vim
 VAMActivate github:mustache/vim-mustache-handlebars
 VAMActivate github:pangloss/vim-javascript
-VAMActivate github:pantsbuild/vim-pants
+"VAMActivate github:pantsbuild/vim-pants
+"VAMActivate github:davidzchen/vim-bazel
+VAMActivate github:google/vim-ft-bzl
 VAMActivate github:tpope/vim-markdown  " Basically just adds *.md detection
 VAMActivate haproxy
 VAMActivate newlisp
 VAMActivate nginx
-VAMActivate Puppet_Syntax_Highlighting
+"VAMActivate Puppet_Syntax_Highlighting
+VAMActivate github:rodjek/vim-puppet
 VAMActivate vim-addon-nix
 VAMActivate vim-coffee-script
 VAMActivate vim-go
 VAMActivate vim-scala
 VAMActivate github:solarnz/thrift.vim
+VAMActivate github:rust-lang/rust.vim
+VAMActivate github:cespare/vim-toml
+VAMActivate github:google/vim-jsonnet
+VAMActivate github:Glench/Vim-Jinja2-Syntax
 """
 
 """ Clojure
@@ -100,8 +109,9 @@ VAMActivate projectionist
 VAMActivate ghcmod
 "VAMActivate github:bitc/lushtags  " broken and/or deprecated?
 VAMActivate github:eagletmt/neco-ghc
-VAMActivate github:lukerandall/haskellmode-vim
-VAMActivate indenthaskell
+"VAMActivate github:lukerandall/haskellmode-vim
+VAMActivate github:dag/vim2hs
+"VAMActivate indenthaskell
 """
 
 """ Python

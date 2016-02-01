@@ -3,7 +3,7 @@
 " Put this in your ~/.vim/syntax directory
 " Language:     Mongoogle configuration files
 " Maintainer:   sundell@google.com
-" URL:		http://www.corp.google.com/~sundell/mongoogle.vim
+" URL:          http://www.corp.google.com/~sundell/mongoogle.vim
 " Last Change:  2005 Aug 24
 
 " For version 5.x: Clear all syntax items
@@ -15,7 +15,7 @@ elseif exists("b:current_syntax")
 endif
 
 " Last match is taken!
-syn match   mgBlock	"^\(\(Mon\|Alert\)\(Template\|\)Name\|MasterConf\)"
+syn match   mgBlock     "^\(\(Mon\|Alert\)\(Template\|\)Name\|MasterConf\)"
 syn match   mgComment   "^\s*#.*$"
 
 syn keyword mgKeyword  agent_type alarm_path applyto
@@ -101,10 +101,10 @@ syn keyword mgDisableIfValue contained any_bad all_bad
 " For version 5.8 and later: only when an item doesn't have highlighting yet.
 if version >= 508 || !exists("did_mongoogle_syntax_inits")
     if version < 508
-	let did_mongoogle_syntax_inits = 1
-	command -nargs=+ HiLink hi link <args>
+        let did_mongoogle_syntax_inits = 1
+        command -nargs=+ HiLink hi link <args>
     else
-	command -nargs=+ HiLink hi def link <args>
+        command -nargs=+ HiLink hi def link <args>
     endif
 
     HiLink mgComment    Comment

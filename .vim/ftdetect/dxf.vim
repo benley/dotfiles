@@ -1,1 +1,1 @@
-au BufRead,BufNewFile *.dxf set filetype=dxf
+au BufRead,BufNewFile *.dxf setfiletype dxf

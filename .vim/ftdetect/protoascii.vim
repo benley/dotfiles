@@ -1,1 +1,1 @@
-autocmd BufNewFile,BufRead *.pb setf protoascii
+autocmd BufNewFile,BufRead *.pb setfiletype protoascii

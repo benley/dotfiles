@@ -1,6 +1,6 @@
 " Irssi Log syntax file
-" Language:	Irssi log
-" Maintainer:	Will Gray <graywh@gmail.com>
+" Language:     Irssi log
+" Maintainer:   Will Gray <graywh@gmail.com>
 " GetLatestVimScripts: 2553 1 :AutoInstall: irssilog.vim
 "
 " Based on work by TODO
@@ -15,19 +15,19 @@ setlocal iskeyword+=45,91-96,123-125
 
 syntax spell notoplevel
 
-syntax region  irssiLogMsg	start='^---' end='$'
+syntax region  irssiLogMsg      start='^---' end='$'
 
-syntax match   irssiTimestamp	'^\d\{2}:\d\{2}\(:\d\{2}\)\?' nextgroup=@irssiItems skipwhite
+syntax match   irssiTimestamp   '^\d\{2}:\d\{2}\(:\d\{2}\)\?' nextgroup=@irssiItems skipwhite
 
-syntax region  irssiNickRegion	matchgroup=irssiDelimiter start='<' end='>' contained contains=@irssiNicks
-syntax match   irssiNick	'[ @~&+]\=\<\k*\>' contained
+syntax region  irssiNickRegion  matchgroup=irssiDelimiter start='<' end='>' contained contains=@irssiNicks
+syntax match   irssiNick        '[ @~&+]\=\<\k*\>' contained
 
-syntax match   irssiAction	'\* \k* ' contained
-syntax region  irssiMsg		start='-!-' end='$' contained
-syntax region  irssiNotice	start='\*\{3}' end=':' contained
+syntax match   irssiAction      '\* \k* ' contained
+syntax region  irssiMsg         start='-!-' end='$' contained
+syntax region  irssiNotice      start='\*\{3}' end=':' contained
 
-syntax cluster irssiItems	contains=irssiNickRegion,irssiAction,irssiMsg,irssiNotice
-syntax cluster irssiNicks	contains=irssiNick
+syntax cluster irssiItems       contains=irssiNickRegion,irssiAction,irssiMsg,irssiNotice
+syntax cluster irssiNicks       contains=irssiNick
 
 if version >= 508 || !exists("did_irssilog_syntax_inits")
   if version < 508
