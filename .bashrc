@@ -45,9 +45,9 @@ alias getenv='source "$HOME"/.ssh/.getenv'
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # don't overwrite GNU Midnight Commander's setting of `ignorespace'.
-#export HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
+# HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 # ... or force ignoredups and ignorespace
-export HISTCONTROL=ignoreboth
+HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -65,7 +65,7 @@ shopt -s globstar
 #[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # Fancy timestamps in .bash_history woooooo
-export HISTTIMEFORMAT='%Y-%m-%d %T '
+HISTTIMEFORMAT='%Y-%m-%d %T '
 
 case "$OS" in
   "Linux")
@@ -73,6 +73,7 @@ case "$OS" in
     eval "$(dircolors ~/.dircolors)"
     ;;
   "Darwin")
+    alias ls='ls -F'
     brew_prefix=$(brew --prefix 2>/dev/null)
     # Colors I picked out long ago or something?
     #export LSCOLORS="DeGxxxxxCx"
@@ -82,10 +83,7 @@ case "$OS" in
     ;;
 esac
 
-if grep --version|grep -q GNU; then
-  alias grep='grep --color'
-fi
-
+alias grep='grep --color'
 
 loadcompletion() {
   local spot cmpl _completion_on=0
@@ -109,7 +107,7 @@ loadcompletion() {
   if ((_completion_on)); then
     for cmpl in $HOME/.bash_completion.d/* \
                 $HOME/.nix-profile/etc/bash_completion.d/*; do
-      source "$cmpl"
+      [[ -e "$cmpl" ]] && source "$cmpl"
     done
 
     if [[ $(type -t _npm_completion) != 'function' && $(type -t npm) != '' ]]; then
@@ -144,8 +142,8 @@ export LESS="-M -R -i"
 export PYTHONSTARTUP="${HOME}/.pythonrc.py"
 
 # MOAR HISTORY
-export HISTSIZE=9999
-export HISTFILESIZE=9999
+HISTSIZE=9999
+HISTFILESIZE=9999
 
 # Debian dev stuff
 export DEBEMAIL='benley@gmail.com'
