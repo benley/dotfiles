@@ -24,7 +24,7 @@
     # https://wiki.archlinux.org/index.php/Apple_Keyboard
     "hid_apple.fnmode=1"
     "hid_apple.iso_layout=0"
-    "hid_apple.swap_opt_cmd=1"
+    "hid_apple.swap_opt_cmd=0"
   ];
 
   networking = {
@@ -59,7 +59,6 @@
     xlibs.xbacklight
     xlibs.xdpyinfo
     xlsfonts
-    #xorg.xf86inputlibinput
   ];
 
   fonts = {
@@ -140,6 +139,7 @@
   services.xserver = {
     enable = true;
     layout = "us";
+    # Gnome is a dick and overrides these, so just set them in gnome:
     #xkbModel = "applealu_ansi";
     #xkbOptions = "ctrl:nocaps";
     xkbVariant = "mac";
@@ -151,44 +151,12 @@
     displayManager.gdm.enable = true;
     desktopManager.gnome3.enable = true;
 
-    #modules = [ pkgs.xorg.xf86inputlibinput ];
-
-    multitouch = {
+    libinput = {
       enable = true;
-      ignorePalm = true;
-      invertScroll = true;
+      naturalScrolling = true;
+      tapping = true;
+      tappingDragLock = true;
     };
-
-    # synaptics = {
-    #   enable = true;
-    #   buttonsMap = [ 1 3 2 ];
-    #   fingersMap = [ 1 3 2 ];
-    #   palmDetect = true;
-    #   tapButtons = false;
-    #   twoFingerScroll = true;
-    #   horizontalScroll = true;
-    #   vertEdgeScroll = false;
-    #   minSpeed = "0.05";
-    #   maxSpeed = "0.25";
-    #   accelFactor = "0.05";
-    # };
-
-    # inputClassSections = [
-    #   ''
-    #   Identifier "libinputConfiguration"
-    #   MatchIsTouchpad "on"
-    #   Driver "libinput"
-    #   Option "Tapping" "1"
-    #   Option "TappingDragLock" "1"
-    #   Option "NaturalScrolling" "true"
-    #   ''
-
-    #   ''
-    #   Identifier "Fuck off evdev"
-    #   MatchIsPointer "on"
-    #   Driver "libinput"
-    #   ''
-    # ];
   };
 
   services.redshift = {
