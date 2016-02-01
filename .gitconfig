@@ -2,7 +2,7 @@
 	name = Benjamin Staffin
 	email = benley@gmail.com
 [core]
-	excludesfile = /Users/benley/.gitignore_global
+	excludesfile = ~/.gitignore_global
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
@@ -28,7 +28,7 @@
 [gui]
 	warndetachedcommit = true
 [init]
-	templatedir = /home/benley/.git_template
+	templatedir = ~/.git_template
 [push]
 	default = nothing
 [merge "dpkg-mergechangelogs"]
@@ -45,3 +45,5 @@
 
 [s3]
         asdf-secret = asdfljasdf
+[http]
+	cookiefile = ~/.gitcookies
