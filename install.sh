@@ -105,6 +105,9 @@ main() {
     SymlinkIfDiffer "$file" "$HOME/.xmonad/$(basename "$file")"
   done
 
+  mkdir -p "$HOME/.ghc"
+  SymlinkIfDiffer "$rootdir/.ghc/ghci.conf" "$HOME/.ghc/ghci.conf"
+
   mkdir -p "$HOME/.ssh"
   SymlinkIfDiffer "$rootdir/ssh/config" "$HOME/.ssh/config"
   SymlinkIfDiffer "$rootdir/ssh/rc" "$HOME/.ssh/rc"
