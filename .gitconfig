@@ -1,14 +1,9 @@
 [user]
 	name = Benjamin Staffin
-	email = benley@gmail.com
+	useconfigonly = true
 [core]
-	excludesfile = ~/.gitignore_global
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+	excludesfile = $HOME/.gitignore_global
+	hooksPath = $HOME/.githooks
 [gitreview]
 	username = ben
 [color]
@@ -28,7 +23,7 @@
 [gui]
 	warndetachedcommit = true
 [init]
-	templatedir = ~/.git_template
+	templatedir = $HOME/.git_template
 [push]
 	default = nothing
 [merge "dpkg-mergechangelogs"]
@@ -42,8 +37,9 @@
 	keepBackup = false
 [rerere]
 	enabled = true
-
-[s3]
-        asdf-secret = asdfljasdf
 [http]
-	cookiefile = ~/.gitcookies
+	cookiefile = $HOME/.gitcookies
+[filter "lfs"]
+	smudge = git-lfs smudge %f
+	required = true
+	clean = git-lfs clean %f
