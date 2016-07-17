@@ -2,8 +2,8 @@
 	name = Benjamin Staffin
 	useconfigonly = true
 [core]
-	excludesfile = $HOME/.gitignore_global
-	hooksPath = $HOME/.githooks
+	excludesfile = ~/.gitignore_global
+	hooksPath = ~/.githooks
 [gitreview]
 	username = ben
 [color]
@@ -23,7 +23,7 @@
 [gui]
 	warndetachedcommit = true
 [init]
-	templatedir = $HOME/.git_template
+	templatedir = ~/.git_template
 [push]
 	default = nothing
 [merge "dpkg-mergechangelogs"]
@@ -38,7 +38,7 @@
 [rerere]
 	enabled = true
 [http]
-	cookiefile = $HOME/.gitcookies
+	cookiefile = ~/.gitcookies
 [filter "lfs"]
 	smudge = git-lfs smudge %f
 	required = true
