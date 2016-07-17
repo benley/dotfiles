@@ -44,15 +44,18 @@
         mtr
         nmap
         #packer
-        tcpdump
-        telnet
         wget
-      ];
+      ] ++ (if !pkgs.stdenv.isDarwin then [
+        bind    # (for dig) - and dig is included with osx
+        tcpdump # broken on darwin
+        telnet  # broken on darwin
+      ] else []);
     };
 
     benleyDevTools = with pkgs; buildEnv {
       name = "benleyDevTools";
       paths = [
+        bundler
         cabal2nix
         ctags
         diffutils
@@ -68,6 +71,7 @@
         nodePackages.jshint
         nodePackages.npm2nix
         #rbtools
+        ruby
         #silver-searcher
         tig
       ];
@@ -161,14 +165,22 @@
       ];
     };
 
-    myGhc = haskellPackages.ghcWithPackages (x: with x; [
-      aeson
-      text
-      ghc-mod
-      hdevtools
-      hlint
-      hoogle
-    ]);
+    myGhc = haskellPackages.ghcWithHoogle
+      (haskellPackages: with haskellPackages; [
+        # libs
+        aeson
+        cryptohash
+        file-embed
+        parsec
+        split
+        text
+        turtle
+        # tools
+        cabal-install
+        ghc-mod
+        hdevtools
+        hlint
+      ]);
 
     myChromium = chromiumBeta.override { enableNaCl = true; };
 
@@ -212,5 +224,14 @@
         cp -a $src/* $out/bin/
       '';
     };
+
+    # Enable kerberos in the default openssh package so it gets included with
+    # things like git
+    openssh = openssh.override {
+      withKerberos = true;
+      withGssapiPatches = true;
+    };
+
+  # end packageOverrides
   };
 }
