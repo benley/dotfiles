@@ -98,6 +98,12 @@
   programs.bash.enableCompletion = true;
 
   nix = {
+    nixPath = [
+      "/nix/var/nix/profiles/per-user/root/channels/nixos"
+      #"nixos-config=/etc/nixos/configuration.nix"
+      "nixos-config=/home/benley/p/dotfiles/machines/wharrgarbl/configuration.nix"
+      "/nix/var/nix/profiles/per-user/root/channels"
+    ];
     buildCores = 0;
     daemonIONiceLevel = 7;
     daemonNiceLevel = 10;
