@@ -47,8 +47,12 @@ Compression yes
 # HashKnownHosts no
 # StrictHostKeyChecking no
 
-Host *.folsomlabs.com
-ForwardAgent yes
+Host *.fitbit.com !source.fitbit.com
+GSSAPIAuthentication yes
+GSSAPIDelegateCredentials yes
+#GSSAPIKeyExchange yes
+GSSAPITrustDns yes
+StrictHostKeyChecking no
 
 Host *.*
 ForwardAgent no
@@ -57,4 +61,7 @@ ForwardX11 no
 ForwardX11Trusted no
 
 Host *
-User ben
+User bstaffin
+GSSAPIAuthentication no
+GSSAPIDelegateCredentials no
+GSSAPIKeyExchange no
