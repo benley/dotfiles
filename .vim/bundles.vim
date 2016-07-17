@@ -43,6 +43,7 @@ VAMActivate vim-gitgutter
 VAMActivate vim-vagrant            " provides :Vagrant
 VAMActivate wildfire               " Smart selection of the nearest text object
 VAMActivate YouCompleteMe
+VAMActivate github:rdnetto/YCM-Generator
 VAMActivate github:jeetsukumaran/vim-buffergator
 VAMActivate github:godlygeek/tabular
 """
@@ -83,7 +84,8 @@ VAMActivate haproxy
 VAMActivate newlisp
 VAMActivate nginx
 "VAMActivate Puppet_Syntax_Highlighting
-VAMActivate github:rodjek/vim-puppet
+"VAMActivate github:rodjek/vim-puppet
+VAMActivate github:voxpupuli/vim-puppet
 VAMActivate vim-addon-nix
 VAMActivate vim-coffee-script
 VAMActivate vim-go
@@ -93,6 +95,9 @@ VAMActivate github:rust-lang/rust.vim
 VAMActivate github:cespare/vim-toml
 VAMActivate github:google/vim-jsonnet
 VAMActivate github:Glench/Vim-Jinja2-Syntax
+VAMActivate github:rix0rrr/vim-gcl
+VAMActivate github:bracki/vim-prometheus
+VAMActivate github:jubalfh/vim-ldapschema
 """
 
 """ Clojure
@@ -121,5 +126,8 @@ VAMActivate pythoncomplete
 "VAMActivate python_ifold  " Interferes with things other than Python. Grr.
 VAMActivate virtualenv
 """
+
+" For mouse clicks
+VAMActivate utl
 
 filetype plugin indent on

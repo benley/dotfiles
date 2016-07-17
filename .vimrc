@@ -125,8 +125,8 @@ augroup myfiletypestuff
         \ setlocal lisp
   " It turns out that this is terrible because it doesn't account for code blocks
   " and intentional linebreaks:
-  "autocmd FileType markdown
-  "      \ setlocal formatoptions+=a
+  autocmd FileType markdown
+        \ setlocal formatoptions=cqln linebreak wrap tw=0
   autocmd FileType javascript
         \ setlocal shiftwidth=2
   autocmd FileType nix
@@ -141,7 +141,7 @@ augroup myfiletypestuff
         \     formatprg=autopep8\ -
         \     omnifunc=pythoncomplete#Complete
   autocmd FileType haskell
-        \ setlocal shiftwidth=2
+        \ setlocal shiftwidth=2 tw=0
   autocmd FileType bzl
         \ setlocal shiftwidth=2
 augroup end
@@ -151,7 +151,7 @@ let s:maxoff = 50 " maximum number of lines to look backwards.
 fun! BenCode()
   "I hate this right now for some reason
   "setlocal colorcolumn=+1,+2 foldcolumn=5 foldmethod=indent number foldnestmax=4
-  match OverLength /\%>80v.\+/
+  "match OverLength /\%>80v.\+/
   "setlocal shiftwidth=2 smartindent autoindent expandtab
   setlocal shiftwidth=4 expandtab
 endfun
@@ -175,7 +175,6 @@ augroup end
 let g:ConqueTerm_Color=0
 
 " Bundle 'Tagbar'
-nnoremap <silent> <F9> :TagbarToggle<CR>
 set title titlestring=%<%f\ %(%{tagbar#currenttag('[%s]','','s')}%)
 if has("unix")
   let s:uname = system("uname")
@@ -223,26 +222,16 @@ let g:tagbar_type_markdown = {
 " WinManager blahblah
 let g:winManagerWindowLayout = "BufExplorer,FileExplorer|TagList"
 
-if has("gui")
-  " I don't know why this doesn't work when quoted.
-  "set guifont=Inconsolata:h16
-  "set guifont=Monofur\ 13
-  if has("macunix")
-    set guifont=Meslo\ LG\ S\ for\ Powerline:h12,Menlo\ Regular\:h12
-  else
-    set guifont=Ubuntu\ Mono\ derivative\ Powerline\ 11,Ubuntu\ Mono\ 11
-  endif
-  "set bg=dark
+let g:haskell_conceal = 0
+let g:haskell_conceal_wide = 0
 
-  " mac and unix defaults:
-  "set guioptions=aegimrLtT
-  " e : gui tabs
-  " T : toolbar
-  " m : menu
-  set guioptions=agirLte
+" Default shell syntax variant when the shebang line isn't explicit:
+let g:is_bash = 1
 
-  "let g:haskell_conceal_wide = 1
-endif
+syntax on
+colorscheme zenburn
+" Looks nice with zenburn:
+highlight ColorColumn ctermbg=238 guibg=#484848
 
 let g:syntastic_check_on_open = 1
 let g:syntastic_error_symbol = '✗'
@@ -252,20 +241,14 @@ let g:syntastic_aggregate_errors = 1
 let g:syntastic_auto_loc_list = 2
 let g:syntastic_always_populate_loc_list = 1
 
-syntax on
-set bg=dark
-" Use the slightly-less-dark background color:
-"let g:molokai_original = 1
-"colorscheme molokai
-colorscheme zenburn
-" Looks nice with zenburn:
-highlight ColorColumn ctermbg=238 guibg=#484848
-
 let g:virtualenv_stl_format='[%n]'
 "set statusline=%<%f\ %h%m%r%{VirtualEnvStatusline()}%=%-14.(%l,%c%V%)\ %P
 
-let g:NERDTreeIgnore=['\~$', '\.pyc$']
+let g:NERDTreeIgnore=['\~$', '\.pyc$', 'bazel-\w\+$[[dir]]']
 let g:NERDTreeHijackNetrw=1
+
+" Please don't resize my windows and move everything around stupidly
+let g:buffergator_autoexpand_on_split = 0
 
 if version >= 703
   " Show line numbers relative to cursor position
@@ -320,8 +303,9 @@ augroup mytemplatestuff
   autocmd! BufNewFile * :silent! exec ":0r ".$VIMHOME."templates/".&ft
 augroup end
 
-map <silent> <Leader>e :Errors<CR>
-map <Leader>s :SyntasticToggleMode<CR>
+nnoremap <silent> <Leader>e :Errors<CR>
+nnoremap <Leader>s :SyntasticToggleMode<CR>
+nnoremap <silent> <Leader>r :TagbarToggle<CR>
 
 let pyindent_nested_paren = 4
 let pyindent_open_paren = 4
