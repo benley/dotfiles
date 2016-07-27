@@ -2,11 +2,23 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
-set $mod Mod1+Ctrl
+# Mod1 -> alt, Mod4 -> windows key
+set $mod Mod4+Ctrl
 
-# font for window titles. ISO 10646 = Unicode
-#font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
 font pango:Ubuntu Mono 11
+
+# This font is widely installed, provides lots of unicode glyphs, right-to-left
+# text rendering and scalability on retina/hidpi displays (thanks to pango).
+#font pango:DejaVu Sans Mono 8
+
+# Before i3 v4.8, we used to recommend this one as the default:
+# font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+# The font above is very space-efficient, that is, it looks good, sharp and
+# clear in small sizes. However, its unicode glyph coverage is limited, the old
+# X core fonts rendering does not support right-to-left and this being a bitmap
+# font, it doesn’t scale on retina/hidpi displays.
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -15,10 +27,15 @@ floating_modifier $mod
 bindsym $mod+Return exec i3-sensible-terminal
 
 # kill focused window
-bindsym $mod+Shift+Q kill
+bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec dmenu_run -fn "Ubuntu Mono-10:normal"
+#bindsym $mod+d exec /nix/store/7s7w1cks44zndbzk43sn835zw2ck7j7z-dmenu-4.6/bin/dmenu_run
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
 bindsym $mod+j focus down
@@ -33,10 +50,10 @@ bindsym $mod+h focus left
 #bindsym $mod+Right focus right
 
 # move focused window
+bindsym $mod+Shift+H move left
 bindsym $mod+Shift+J move down
 bindsym $mod+Shift+K move up
 bindsym $mod+Shift+L move right
-bindsym $mod+Shift+H move left
 
 # alternatively, you can use the cursor keys:
 #bindsym $mod+Shift+Left move left
@@ -44,19 +61,21 @@ bindsym $mod+Shift+H move left
 #bindsym $mod+Shift+Up move up
 #bindsym $mod+Shift+Right move right
 
-# split top/bottom (i3 calls this "vertical" for some reason)
-bindsym $mod+shift+quotedbl split v
-
 # vsplit (i3 calls this "horizontal", but I remember it the other way)
 bindsym $mod+v split h
 
-# enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen
+# split top/bottom (i3 calls this "vertical" for some reason)
+bindsym $mod+shift+quotedbl split v
+#bindsym $mod+h split v
 
-# change container layout (stacked, tabbed, default)
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
-bindsym $mod+e layout default
+bindsym $mod+e layout toggle split
+#bindsym $mod+e layout default
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -68,7 +87,7 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 
 # focus the child container
-#bindcode $mod+d focus child
+#bindsym $mod+d focus child
 
 # switch to workspace
 bindsym $mod+1 workspace 1
@@ -83,60 +102,75 @@ bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
 
 # move focused container to workspace
-bindsym $mod+Shift+exclam move workspace 1
-bindsym $mod+Shift+at move workspace 2
-bindsym $mod+Shift+numbersign move workspace 3
-bindsym $mod+Shift+dollar move workspace 4
-bindsym $mod+Shift+percent move workspace 5
-bindsym $mod+Shift+asciicircum move workspace 6
-bindsym $mod+Shift+ampersand move workspace 7
-bindsym $mod+Shift+asterisk move workspace 8
-bindsym $mod+Shift+parenleft move workspace 9
-bindsym $mod+Shift+parenright move workspace 10
+bindsym $mod+Shift+exclam      move container to workspace 1
+bindsym $mod+Shift+at          move container to workspace 2
+bindsym $mod+Shift+numbersign  move container to workspace 3
+bindsym $mod+Shift+dollar      move container to workspace 4
+bindsym $mod+Shift+percent     move container to workspace 5
+bindsym $mod+Shift+asciicircum move container to workspace 6
+bindsym $mod+Shift+ampersand   move container to workspace 7
+bindsym $mod+Shift+asterisk    move container to workspace 8
+bindsym $mod+Shift+parenleft   move container to workspace 9
+bindsym $mod+Shift+parenright  move container to workspace 10
 
 # reload the configuration file
 bindsym $mod+Shift+C reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+R restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+E exit
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
 
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym semicolon resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # OLD BINDINGS:
         # They resize the border in the direction you pressed, e.g.
         # when pressing left, the window is resized so that it has
         # more space on its left
+        #bindsym j       resize shrink down 10 px or 10 ppt
+        #bindsym Shift+J resize grow   down 10 px or 10 ppt
 
-bindsym j       resize shrink down 10 px or 10 ppt
-bindsym Shift+J resize grow   down 10 px or 10 ppt
+        #bindsym k       resize shrink up 10 px or 10 ppt
+        #bindsym Shift+K resize grow   up 10 px or 10 ppt
 
-bindsym k       resize shrink up 10 px or 10 ppt
-bindsym Shift+K resize grow   up 10 px or 10 ppt
+        #bindsym l       resize shrink right 10 px or 10 ppt
+        #bindsym Shift+L resize grow   right 10 px or 10 ppt
 
-bindsym l       resize shrink right 10 px or 10 ppt
-bindsym Shift+L resize grow   right 10 px or 10 ppt
-
-bindsym h       resize shrink left 10 px or 10 ppt
-bindsym Shift+H resize grow   left 10 px or 10 ppt
+        #bindsym h       resize shrink left 10 px or 10 ppt
+        #bindsym Shift+H resize grow   left 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
-#bindsym Left resize shrink left 10 px or 10 ppt
-#bindsym Shift+Left resize grow   left 10 px or 10 ppt
-#
-#bindsym Down resize shrink down 10 px or 10 ppt
-#bindsym Shift+Down resize grow   down 10 px or 10 ppt
-#
-#bindsym Up resize shrink up 10 px or 10 ppt
-#bindsym Shift+Up resize grow   up 10 px or 10 ppt
-#
-#bindsym Right resize shrink right 10 px or 10 ppt
-#bindsym Shift+Right resize grow   right 10 px or 10 ppt
+        #bindsym Left resize shrink left 10 px or 10 ppt
+        #bindsym Shift+Left resize grow   left 10 px or 10 ppt
+        #
+        #bindsym Down resize shrink down 10 px or 10 ppt
+        #bindsym Shift+Down resize grow   down 10 px or 10 ppt
+        #
+        #bindsym Up resize shrink up 10 px or 10 ppt
+        #bindsym Shift+Up resize grow   up 10 px or 10 ppt
+        #
+        #bindsym Right resize shrink right 10 px or 10 ppt
+        #bindsym Shift+Right resize grow   right 10 px or 10 ppt
 
         # back to normal: Enter or Escape
-bindsym Return mode "default"
-bindsym Escape mode "default"
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
 }
 
 bindsym $mod+r mode "resize"
@@ -144,6 +178,7 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
+        #status_command /nix/store/mm8csf1zbhwwjx6kpqg7lpika15qhmql-i3status-2.10/bin/i3status
         status_command i3status
         tray_output primary
         font pango:Ubuntu Mono 9
