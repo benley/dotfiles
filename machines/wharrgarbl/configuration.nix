@@ -1,7 +1,13 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix  ];
+  imports = [
+    ./hardware-configuration.nix
+    ../imports/fonts.nix
+    ../imports/package-overrides.nix
+    ../imports/redshift.nix
+    ../imports/virtualbox.nix
+  ];
 
   boot.loader = {
     gummiboot.enable = true;
@@ -42,7 +48,7 @@
     defaultLocale = "en_US.UTF-8";
   };
 
-  time.timeZone = "America/Los_Angeles";
+  time.timeZone = "America/New_York";
 
   environment.systemPackages = with pkgs; [
     acpi
@@ -60,40 +66,6 @@
     xlibs.xdpyinfo
     xlsfonts
   ];
-
-  fonts = {
-    fonts = with pkgs; [
-      corefonts
-      anonymousPro
-      aurulent-sans
-      bakoma_ttf
-      cantarell_fonts
-      crimson
-      dejavu_fonts
-      dina-font
-      dosemu_fonts
-      fantasque-sans-mono
-      fira
-      fira-code
-      fira-mono
-      freefont_ttf
-      hasklig
-      inconsolata
-      liberation_ttf
-      meslo-lg
-      powerline-fonts
-      proggyfonts
-      source-code-pro
-      source-sans-pro
-      source-serif-pro
-      terminus_font
-      tewi-font
-      ttf_bitstream_vera
-      ubuntu_font_family
-      unifont
-      vistafonts
-    ];
-  };
 
   programs.bash.enableCompletion = true;
 
@@ -119,19 +91,6 @@
       "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
     ];
   };
-
-  nixpkgs.config = {
-    allowUnfree = true;
-    virtualbox.enableExtensionPack = true;
-    chromium = {
-      gnomeSupport = true;
-      enablePepperFlash = true;
-      enablePepperPDF = true;
-      enableWideVine = true;
-    };
-  };
-
-  virtualisation.virtualbox.host.enable = true;
 
   virtualisation.docker = {
     enable = true;
@@ -163,14 +122,6 @@
       tapping = true;
       tappingDragLock = true;
     };
-  };
-
-  services.redshift = {
-    enable = true;
-    latitude = "37.77493";
-    longitude = "-122.41942";
-    temperature.day = 6500;
-    temperature.night = 3500;
   };
 
   services.avahi = {
