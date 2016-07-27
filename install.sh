@@ -116,7 +116,7 @@ main() {
   SymlinkIfDiffer "$rootdir/.git_template" "$HOME/.git_template"
   SymlinkIfDiffer "$rootdir/.githooks" "$HOME/.githooks"
   SymlinkIfDiffer "$rootdir/.config/awesome" "$HOME/.config/awesome"
-  SymlinkIfDiffer "$rootdir/.i3" "$HOME/.i3"
+  SymlinkIfDiffer "$rootdir/.config/i3" "$HOME/.config/i3"
   SymlinkIfDiffer "$rootdir/.nixpkgs" "$HOME/.nixpkgs"
 
   # for virtualenvwrapper
