@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 repo_dir=$(git rev-parse --show-toplevel)
 
