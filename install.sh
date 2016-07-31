@@ -113,7 +113,6 @@ main() {
   SymlinkIfDiffer "$rootdir/ssh/rc" "$HOME/.ssh/rc"
   SymlinkIfDiffer "$rootdir/.vimrc" "$HOME/.vimrc"
   SymlinkIfDiffer "$rootdir/.vim" "$HOME/.vim"
-  SymlinkIfDiffer "$rootdir/.git_template" "$HOME/.git_template"
   SymlinkIfDiffer "$rootdir/.githooks" "$HOME/.githooks"
   SymlinkIfDiffer "$rootdir/.config/awesome" "$HOME/.config/awesome"
   SymlinkIfDiffer "$rootdir/.config/i3" "$HOME/.config/i3"
