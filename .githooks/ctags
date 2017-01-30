@@ -3,5 +3,5 @@ set -e
 trap "rm -f .git/tags.$$" EXIT
 ctags=ctags
 [[ -e /usr/local/bin/ctags ]] && ctags=/usr/local/bin/ctags
-$ctags -R -f ".git/tags.$$" --exclude=".git" --tag-relative
+$ctags -R -f ".git/tags.$$" --exclude=".git" --exclude="bazel-*" --tag-relative
 mv ".git/tags.$$" .git/tags

@@ -1,6 +1,7 @@
 [user]
 	name = Benjamin Staffin
 	useconfigonly = true
+	email = bstaffin@fitbit.com
 [core]
 	excludesfile = ~/.gitignore_global
 	hooksPath = ~/.githooks
@@ -38,7 +39,7 @@
 [rerere]
 	enabled = true
 [http]
-	cookiefile = ~/.gitcookies
+	cookiefile = /Users/bstaffin/.gitcookies
 [filter "lfs"]
 	smudge = git-lfs smudge %f
 	required = true

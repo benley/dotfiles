@@ -2,9 +2,9 @@
 (require 'package)
 
 (setq package-archives
-      '(("gnu" . "http://elpa.gnu.org/packages/")
+      '(("gnu"   . "http://elpa.gnu.org/packages/")
         ("melpa" . "http://melpa.org/packages/")
-        ("org" . "http://orgmode.org/elpa/")))
+        ("org"   . "http://orgmode.org/elpa/")))
 (package-initialize)
 
 (when (not package-archive-contents)
@@ -30,7 +30,13 @@
     ;;tagedit
     web-mode
     anti-zenburn-theme
+    yaml-mode
     zenburn-theme
+    solarized-theme
+    flycheck
+    flycheck-color-mode-line
+    flycheck-pos-tip
+    powerline
     ;;(if (eq system-type 'darwin) exec-path-from-shell)
     ))
 
@@ -40,6 +46,17 @@
 
 ;(require 'evil)
 ;(evil-mode 1)
+
+(require 'powerline)
+(powerline-default-theme)
+
+(with-eval-after-load 'flycheck
+  (flycheck-pos-tip-mode))
+
+(require 'flycheck-color-mode-line)
+(flycheck-color-mode-line-mode)
+
+(global-flycheck-mode 1)
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (load-theme 'zenburn t)
@@ -74,6 +91,9 @@
 ;; do not want
 (setq-default indent-tabs-mode nil)
 
+;; shut the FUCK UP
+(setq visible-bell 1)
+
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
@@ -95,7 +115,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("68d36308fc6e7395f7e6355f92c1dd9029c7a672cbecf8048e2933a053cf27e6" "6a925fdf3a7bf2f3901d8fbc4ef64f9b4b4be2c6bed2b0d49d154db0bec91b33" "19352d62ea0395879be564fc36bc0b4780d9768a964d26dfae8aad218062858d" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "0c311fb22e6197daba9123f43da98f273d2bfaeeaeb653007ad1ee77f0003037" default)))
+    ("cdbd0a803de328a4986659d799659939d13ec01da1f482d838b68038c1bb35e8" "5cd0afd0ca01648e1fff95a7a7f8abec925bd654915153fb39ee8e72a8b56a1f" "68d36308fc6e7395f7e6355f92c1dd9029c7a672cbecf8048e2933a053cf27e6" "6a925fdf3a7bf2f3901d8fbc4ef64f9b4b4be2c6bed2b0d49d154db0bec91b33" "19352d62ea0395879be564fc36bc0b4780d9768a964d26dfae8aad218062858d" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "0c311fb22e6197daba9123f43da98f273d2bfaeeaeb653007ad1ee77f0003037" default)))
  '(mac-option-modifier (quote (:ordinary meta :function alt :mouse alt)))
  '(mac-right-option-modifier nil))
 (custom-set-faces
@@ -104,3 +124,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(mouse ((t (:background "white")))))
+
+(provide 'init)
+;;; init.el ends here

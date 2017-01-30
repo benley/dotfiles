@@ -1,2 +1,3 @@
 #!/bin/sh
-.git/hooks/ctags >/dev/null 2>&1 &
+here=$(cd "$(dirname "$0")" && pwd)
+"$here"/ctags >/dev/null 2>&1 &

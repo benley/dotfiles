@@ -1,7 +1,8 @@
-CCACHEDIR=/var/cache/pbuilder/ccache
-COMPONENTS="main universe"
+#CCACHEDIR=/var/cache/pbuilder/ccache
+#COMPONENTS="main universe"
 HOOKDIR="${HOME}/.config/pbuilder/hooks"
-MIRRORSITE=http://mirrors.kernel.org/ubuntu/
+#MIRRORSITE=http://mirrors.kernel.org/ubuntu/
 #OTHERMIRROR="deb http://blahblah foo main|deb http://blahblah bar main"
 #PDEBUILD_PBUILDER=cowbuilder
-export DEB_BUILD_OPTIONS="parallel=4 nocheck"
+#export DEB_BUILD_OPTIONS="parallel=4 nocheck"
+export DEB_BUILD_OPTIONS="parallel=4"

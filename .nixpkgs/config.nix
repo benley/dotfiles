@@ -12,20 +12,28 @@
   chromium.enableWideVine = true;
 
   packageOverrides = origPkgs: with origPkgs; {
+    myGlogDev = with pkgs; python.buildEnv.override {
+      extraLibs = [ glog ];
+    };
+
+    glog = callPackage /Users/bstaffin/p/glog { };
+
     benleyAll = with pkgs; buildEnv {
       name = "benleyAll";
       paths = [
+        bashInteractive
+        bashCompletion
         bc
-        benleyDesktop
+        #benleyDesktop
         benleyDevTools
         #benleyGuiStuff
         benleyHaskellDev
         benleyNetTools
-        benleyPythonDev
-        benleySystemTools
+        #benleyPythonDev
+        #benleySystemTools
         jq
         myScripts
-        myVim
+        #myVim
         pwgen
         tmux
         unzip
@@ -38,7 +46,6 @@
         awscli
         #cli53
         curl
-        bind    # there isn't a separate package for "dig" yet
         httpie
         mosh
         mtr
@@ -56,20 +63,20 @@
       name = "benleyDevTools";
       paths = [
         bundler
-        cabal2nix
+        #cabal2nix
         ctags
         diffutils
         gitFull
         gitAndTools.hub
         haskellPackages.ShellCheck
-        honcho
+        #honcho
         html-tidy
         nix-repl
         nix-prefetch-scripts
-        nixpkgs-lint
-        nodePackages.js-yaml
-        nodePackages.jshint
-        nodePackages.npm2nix
+        #nixpkgs-lint
+        #nodePackages.js-yaml
+        #nodePackages.jshint
+        #nodePackages.npm2nix
         #rbtools
         ruby
         #silver-searcher
@@ -153,6 +160,7 @@
       name = "benleyHaskellDev";
       paths = with pkgs; [
         myGhc
+        haskellPackages.hindent
         (writeTextFile {
           name = "ghc-shellhook";
           executable = true;
@@ -172,6 +180,7 @@
         cryptohash
         file-embed
         parsec
+        megaparsec
         split
         text
         turtle

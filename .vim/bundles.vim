@@ -98,6 +98,7 @@ VAMActivate github:Glench/Vim-Jinja2-Syntax
 VAMActivate github:rix0rrr/vim-gcl
 VAMActivate github:bracki/vim-prometheus
 VAMActivate github:jubalfh/vim-ldapschema
+VAMActivate github:robbles/logstash.vim
 """
 
 """ Clojure

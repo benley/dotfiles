@@ -17,8 +17,8 @@ addpath() {
 dopath() {
   prefixpath /usr/local/bin
   prefixpath "$HOME/go/bin"
-  prefixpath "$HOME/.local/bin"  # Python user installs
-  prefixpath "$HOME/Library/Haskell/bin"
+  #prefixpath "$HOME/.local/bin"  # Python user installs
+  #prefixpath "$HOME/Library/Haskell/bin"
   #prefixpath "$HOME/.cabal/bin"
   #prefixpath /usr/local/opt/ruby/bin
   prefixpath "$HOME/bin"
@@ -106,6 +106,7 @@ loadcompletion() {
 
   if ((_completion_on)); then
     for cmpl in $HOME/.bash_completion.d/* \
+                /usr/local/etc/bash_completion.d/* \
                 $HOME/.nix-profile/etc/bash_completion.d/*; do
       [[ -e "$cmpl" ]] && source "$cmpl"
     done
@@ -175,15 +176,38 @@ export GIT_PS1_SHOWCOLORHINTS=1
 export GIT_PS1_DESCRIBE_STYLE=branch
 
 myPromptCmd() {
-  local venvprompt prompt1 prompt2 prompt3
+  declare -A colors
+  colors=(
+    [normal]='\[\033[0m\]'
+    [black]='\[\033[0;30m\]'
+    [red]='\[\033[0;31m\]'
+    [green]='\[\033[0;32m\]'
+    [yellow]='\[\033[0;33m\]'
+    [blue]='\[\033[0;34m\]'
+    [magenta]='\[\033[0;35m\]'
+    [cyan]='\[\033[0;36m\]'
+    [white]='\[\033[0;37m\]'
+    [brightblack]='\[\033[0;38;5;8m\]'  # wat
+    [brightred]='\[\033[0;38;5;9m\]'
+    [brightgreen]='\[\033[0;38;5;10m\]'
+    [brightyellow]='\[\033[0;38;5;11m\]'
+    [brightblue]='\[\033[0;38;5;12m\]'
+    [brightmagenta]='\[\033[0;38;5;13m\]'
+    [brightcyan]='\[\033[0;38;5;14m\]'
+    [brightwhite]='\[\033[0;38;5;15m\]'
+  )
+
+  local venvprompt venvname prompt1 prompt2 prompt3
   venvprompt=""
   if [[ "$VIRTUAL_ENV" =~ (\/([^/]+))+ ]]; then
-    export venvprompt="─\[\033[01;36m\]${BASH_REMATCH[-1]}\[\033[00m\]"
+    venvname=${BASH_REMATCH[-1]}
+    venvprompt="─${colors[brightcyan]}${venvname}${colors[normal]}"
   fi
 
-  prompt1="┌─( \[\033[01;32m\]\u\[\033[00m\]@\h )─( \[\033[01;34m\]\w\[\033[00m\] )"
-  prompt2="\n└─${debian_chroot:+(\[\033[01;35m\]$debian_chroot\[\033[00m\])-}"
-  prompt2+='\[\033[00m\]($?)'
+  prompt1="┌─( ${colors[brightgreen]}\u${colors[normal]}@\h "
+  prompt1+=")─( ${colors[brightblue]}\w${colors[normal]} )"
+  prompt2="\n└${debian_chroot:+─(${colors[brightmagenta]}${debian_chroot}${colors[normal]})}"
+  prompt2+="─(\$?)"
   prompt2+="${venvprompt}─> \\$ "
   prompt3="─( %s )"
 
@@ -214,4 +238,4 @@ if [[ -e "$HOME/.nix-profile/etc/ssl/certs/ca-bundle.crt" ]]; then
   export GIT_SSL_CAINFO=$HOME/.nix-profile/etc/ssl/certs/ca-bundle.crt
 fi
 
-return 0
+: # always end with $?=0

@@ -1,10 +1,19 @@
 HashKnownHosts no
 
+Host puppr.local
+User bstaffin
+ForwardAgent yes
+PasswordAuthentication no
+
 Host zoiks.net *.zoiks.net *.xkcd.com nyan*.* *.local
 User benley
 
 Host ein.local nyanbox.local
 ForwardAgent yes
+
+Host ein.remote
+ProxyCommand ssh -q -p 2222 -l benley sf.zoiks.net nc -q0 ein.local 22
+User benley
 
 # ControlPersist doesn't work with OpenSSH_4.5p1 from debian Squeeze (stable)
 # It *does* work with: Ubuntu 12.04, Ubuntu 12.10, MacOS 10.8, [...]

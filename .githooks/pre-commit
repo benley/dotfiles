@@ -1,9 +1,9 @@
 #!/bin/bash
 
-repo_dir=$(git rev-parse --show-toplevel)
+#repo_dir=$(git rev-parse --show-toplevel)
 
-if [[ $repo_dir =~ ^${HOME}/fb/ ]]; then
-  git config user.email bstaffin@fitbit.com
-else
-  git config user.email benley@gmail.com
-fi
+#if [[ $repo_dir =~ ^${HOME}/fb/ ]]; then
+#  git config user.email bstaffin@fitbit.com
+#else
+#  git config user.email benley@gmail.com
+#fi
