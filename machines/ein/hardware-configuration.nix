@@ -9,8 +9,17 @@
     ];
 
   boot.initrd.availableKernelModules = [ "ahci" "usbhid" ];
+  boot.initrd.kernelModules = [
+    "nvidia"
+    "nvidia_modeset"
+    "nvidia_uvm"
+    "nvidia_drm"
+  ];
   boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelParams = [ "nvidia-drm.modeset=1" ];
   boot.extraModulePackages = [ ];
+
+  boot.zfs.extraPools = [ "pool0" ];
 
   fileSystems."/" =
     { device = "rpool/root/nixos";
@@ -23,13 +32,32 @@
     };
 
   fileSystems."/home" =
-    { #device = "rpool/home";
-      device = "pool0/home";
+    { device = "pool0/home";
       fsType = "zfs";
     };
 
   fileSystems."/home/benley" =
     { device = "pool0/home/benley";
+      fsType = "zfs";
+    };
+
+  fileSystems."/home/nix" =
+    { device = "pool0/home/nix";
+      fsType = "zfs";
+    };
+
+  fileSystems."/pool0" =
+    { device = "pool0";
+      fsType = "zfs";
+    };
+
+  fileSystems."/pool0/vm" =
+    { device = "pool0/vm";
+      fsType = "zfs";
+    };
+
+  fileSystems."/pool0/steamlibrary" =
+    { device = "pool0/steamlibrary";
       fsType = "zfs";
     };
 

@@ -20,8 +20,11 @@
     inconsolata
     liberation_ttf
     meslo-lg
+    noto-fonts
+    noto-fonts-emoji
     powerline-fonts
     proggyfonts
+    roboto
     source-code-pro
     source-sans-pro
     source-serif-pro
