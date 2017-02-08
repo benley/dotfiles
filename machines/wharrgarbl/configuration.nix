@@ -3,6 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ../imports/nix.nix
     ../imports/fonts.nix
     ../imports/package-overrides.nix
     ../imports/redshift.nix
@@ -68,29 +69,6 @@
   ];
 
   programs.bash.enableCompletion = true;
-
-  nix = {
-    nixPath = [
-      "/nix/var/nix/profiles/per-user/root/channels/nixos"
-      #"nixos-config=/etc/nixos/configuration.nix"
-      "nixos-config=/home/benley/p/dotfiles/machines/wharrgarbl/configuration.nix"
-      "/nix/var/nix/profiles/per-user/root/channels"
-    ];
-    buildCores = 0;
-    daemonIONiceLevel = 7;
-    daemonNiceLevel = 10;
-    useChroot = true;
-    extraOptions = ''
-      auto-optimise-store = true
-    '';
-    trustedBinaryCaches = [
-      https://cache.nixos.org
-      https://hydra.nixos.org
-    ];
-    binaryCachePublicKeys = [
-      "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
-    ];
-  };
 
   virtualisation.docker = {
     enable = true;
