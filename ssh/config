@@ -19,23 +19,9 @@ ForwardAgent no
 ForwardX11 no
 ForwardX11Trusted no
 
-Host sf.zoiks.net
-Port 2222
-Compression yes
-
-Host maya maya.zoiks.net
-ForwardX11 no
-ForwardX11Trusted no
-Hostname maya.zoiks.net
-Port 3223
-Compression yes
-#ControlMaster auto
-#ControlPersist yes
-#ControlPath /tmp/.control_%r@%h:%p.%l
-
 Host zoiks.net *.zoiks.net
 #PreferredAuthentications publickey,password
-ForwardAgent yes
+#ForwardAgent yes
 Compression yes
 
 # Keeping this around in case it's useful again someday
@@ -47,13 +33,6 @@ Compression yes
 # HashKnownHosts no
 # StrictHostKeyChecking no
 
-Host *.fitbit.com !source.fitbit.com
-GSSAPIAuthentication yes
-GSSAPIDelegateCredentials yes
-#GSSAPIKeyExchange yes
-GSSAPITrustDns yes
-StrictHostKeyChecking no
-
 Host *.*
 ForwardAgent no
 Compression yes
@@ -61,7 +40,4 @@ ForwardX11 no
 ForwardX11Trusted no
 
 Host *
-User bstaffin
-GSSAPIAuthentication no
-GSSAPIDelegateCredentials no
-GSSAPIKeyExchange no
+User benley

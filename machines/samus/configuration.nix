@@ -13,6 +13,11 @@
   # Samus audio support is supposed to just work in linux >= 4.9
   boot.kernelPackages = pkgs.linuxPackages_4_9;
 
+  # Make the cryptsetup password prompt readable
+  boot.earlyVconsoleSetup = true;
+
+  boot.plymouth.enable = true;
+
   boot.initrd.kernelModules = [
     "intel_agp"
     "i915"
@@ -52,7 +57,9 @@
   nixpkgs.config.allowUnfree = true;
 
   i18n = {
-    consoleFont = "sun12x22";
+    #consoleFont = "sun12x22";
+    consoleFont = "ter-132b";
+    consolePackages = [ pkgs.terminus_font ];
     consoleKeyMap = "us";
     defaultLocale = "en_US.UTF-8";
   };

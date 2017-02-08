@@ -38,11 +38,12 @@ VAMActivate Tagbar
 VAMActivate taglist
 VAMActivate The_NERD_tree
 VAMActivate vimux
-VAMActivate vim-airline
+VAMActivate github:vim-airline/vim-airline
+VAMActivate github:vim-airline/vim-airline-themes
 VAMActivate vim-gitgutter
 VAMActivate vim-vagrant            " provides :Vagrant
 VAMActivate wildfire               " Smart selection of the nearest text object
-VAMActivate YouCompleteMe
+"VAMActivate YouCompleteMe " handled via nix
 VAMActivate github:rdnetto/YCM-Generator
 VAMActivate github:jeetsukumaran/vim-buffergator
 VAMActivate github:godlygeek/tabular

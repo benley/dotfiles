@@ -61,6 +61,7 @@ set   nowritebackup
 set nonumber
 
 " Attempts to make `gf` file jumping work for python imports.
+if has("python")
 python << EOF
 import os
 import sys
@@ -69,6 +70,7 @@ for p in sys.path:
   if os.path.isdir(p):
     vim.command(r"set path+=%s" % p.replace(" ", r"\ "))
 EOF
+endif
 
 " From http://google-styleguide.googlecode.com/svn/trunk/google_python_style.vim
 " See also http://google-styleguide.googlecode.com/svn/trunk/pyguide.html
@@ -234,8 +236,8 @@ colorscheme zenburn
 highlight ColorColumn ctermbg=238 guibg=#484848
 
 let g:syntastic_check_on_open = 1
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '⚠'
+"let g:syntastic_error_symbol = '✗'
+"let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_ruby_checkers = ['rubocop', 'mri']
 let g:syntastic_aggregate_errors = 1
 let g:syntastic_auto_loc_list = 2

@@ -9,6 +9,13 @@
   };
 
   environment.systemPackages = with pkgs; [
+    bc
+    file
+    git
+    htop
+    httpie
+    tig
+    tmux
     vimHugeX
   ];
 }

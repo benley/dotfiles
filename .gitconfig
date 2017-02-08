@@ -1,6 +1,7 @@
 [user]
 	name = Benjamin Staffin
 	useconfigonly = true
+	email = benley@gmail.com
 [core]
 	excludesfile = ~/.gitignore_global
 	hooksPath = ~/.githooks

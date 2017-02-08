@@ -11,18 +11,20 @@
   chromium.enablePepperPDF = true;
   chromium.enableWideVine = true;
 
+  vim.gui = "gtk3";
+
   packageOverrides = origPkgs: with origPkgs; {
     benleyAll = with pkgs; buildEnv {
       name = "benleyAll";
       paths = [
         bc
         benleyDesktop
-        benleyDevTools
+        #benleyDevTools
         #benleyGuiStuff
-        benleyHaskellDev
-        benleyNetTools
-        benleyPythonDev
-        benleySystemTools
+        #benleyHaskellDev
+        #benleyNetTools
+        #benleyPythonDev
+        #benleySystemTools
         jq
         myScripts
         myVim
@@ -44,6 +46,9 @@
         mtr
         nmap
         #packer
+        tcpdump
+        telnet
+        wakelan
         wget
       ] ++ (if !pkgs.stdenv.isDarwin then [
         bind    # (for dig) - and dig is included with osx
@@ -55,7 +60,7 @@
     benleyDevTools = with pkgs; buildEnv {
       name = "benleyDevTools";
       paths = [
-        bundler
+        #bundler
         cabal2nix
         ctags
         diffutils
@@ -69,9 +74,9 @@
         nixpkgs-lint
         nodePackages.js-yaml
         nodePackages.jshint
-        nodePackages.npm2nix
+        #nodePackages.npm2nix
         #rbtools
-        ruby
+        #ruby
         #silver-searcher
         tig
       ];
@@ -108,7 +113,7 @@
     benleyPythonDev = with pkgs; buildEnv {
       name = "benleyPythonDev";
       paths = [
-        pylint
+        pythonPackages.pylint
         pythonFull
         pythonPackages.autopep8
         pythonPackages.flake8
@@ -171,10 +176,12 @@
         aeson
         cryptohash
         file-embed
+        megaparsec
         parsec
         split
         text
         turtle
+        unique
         # tools
         cabal-install
         ghc-mod
@@ -204,7 +211,9 @@
               "vim2hs"
               "vim-addon-nix"
               "vim-airline"
+              "vim-airline-themes"
               "vim-coffee-script"
+              "vim-eunuch"
               "vim-gitgutter"
               #"vim-hdevtools"
               "vimproc"
@@ -227,10 +236,10 @@
 
     # Enable kerberos in the default openssh package so it gets included with
     # things like git
-    openssh = openssh.override {
-      withKerberos = true;
-      withGssapiPatches = true;
-    };
+    #openssh = openssh.override {
+    #  withKerberos = true;
+    #  withGssapiPatches = true;
+    #};
 
   # end packageOverrides
   };

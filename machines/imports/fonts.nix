@@ -16,13 +16,22 @@
     fira-code
     fira-mono
     freefont_ttf
+    font-droid
+    google-fonts
+    hack-font
     hasklig
     inconsolata
+    iosevka
     liberation_ttf
     meslo-lg
+    mononoki
+    montserrat
+    nerdfonts
     noto-fonts
     noto-fonts-emoji
+    oxygenfonts
     powerline-fonts
+    profont
     proggyfonts
     roboto
     source-code-pro

@@ -1,8 +1,15 @@
 ##### DPI STUFF
-Xft/DPI 196608
+
+#Xft/DPI 196608
 #Gdk/UnscaledDPI 196608
+#Gdk/WindowScalingFactor 1
+
 #Xft/DPI 167424
 #Gdk/UnscaledDPI 167424
+#Gdk/WindowScalingFactor 1
+
+Xft/DPI 98304
+Gdk/UnscaledDPI 98304
 Gdk/WindowScalingFactor 2
 
 Xft/Antialias 1
