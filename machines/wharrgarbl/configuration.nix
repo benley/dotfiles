@@ -4,6 +4,7 @@
   imports = [
     ./hardware-configuration.nix
     ../imports/nix.nix
+    ../imports/defaults.nix
     ../imports/fonts.nix
     ../imports/package-overrides.nix
     ../imports/redshift.nix
@@ -62,13 +63,10 @@
     sysstat
     tmux
     usbutils
-    vimHugeX
     xlibs.xbacklight
     xlibs.xdpyinfo
     xlsfonts
   ];
-
-  programs.bash.enableCompletion = true;
 
   virtualisation.docker = {
     enable = true;

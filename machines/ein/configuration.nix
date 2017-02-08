@@ -39,15 +39,13 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ../imports/nix.nix
+    ../imports/defaults.nix
     ../imports/fonts.nix
-    # ../imports/i3.nix
-    # ../imports/gnome.nix
     ../imports/kde.nix
+    ../imports/nix.nix
     ../imports/package-overrides.nix
     #../imports/redshift.nix  # using the kde applet
     ../imports/virtualbox.nix
-    #../imports/gpu-passthrough.nix
   ];
 
   boot.loader = {
@@ -121,7 +119,6 @@ in
     unzip
     usbutils
     vlc
-    vimHugeX
     wget
     xorg.xdpyinfo
     xorg.xev
@@ -166,8 +163,6 @@ in
 
   # What does this actually do?
   powerManagement.enable = true;
-
-  programs.bash.enableCompletion = true;
 
   services.avahi = {
     enable = true;

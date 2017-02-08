@@ -3,7 +3,11 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ../imports/defaults.nix
+    ../imports/fonts.nix
+    ../imports/kde.nix
     ../imports/nix.nix
+    ../imports/package-overrides.nix
   ];
 
   # Samus audio support is supposed to just work in linux >= 4.9
@@ -58,23 +62,25 @@
   environment.systemPackages = with pkgs; [
     google-chrome
     wget
-    vimHugeX
 
     vdpauinfo
     libva
   ];
 
-  programs.bash.enableCompletion = true;
-
   # services.openssh.enable = true;
   services.printing.enable = true;
+
+  services.avahi = {
+    enable = true;
+    ipv4 = true;
+    ipv6 = true;
+    nssmdns = true;
+  };
 
   services.xserver = {
     enable = true;
     # useGlamor = true;
-    desktopManager.kde5.enable = true;
-    displayManager.sddm.enable = true;
-    wacom.enable = true;
+    wacom.enable = true; # does this do anything on samus?
     # layout = "us";
     # xkbOptions = "eurosign:e";
     synaptics = {

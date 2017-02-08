@@ -1,8 +1,10 @@
 { config, pkgs, ... }:
 
 {
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.kde5.enable = true;
+  services.xserver = {
+    displayManager.sddm.enable = true;
+    desktopManager.kde5.enable = true;
+  };
 
   environment.systemPackages = with pkgs; [
     gnome3.cheese          # KDE seems to lack a webcam app?
