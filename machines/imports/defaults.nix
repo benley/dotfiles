@@ -1,6 +1,22 @@
 { config, pkgs, ... }:
 
+# Stuff I want to config/install on every machine, regardless of type.
 {
+  nixpkgs.config = {
+    allowUnfree = true;
+
+    # These have no effect on google-chrome (I think), just chromium
+    chromium = {
+      gnomeSupport = true;
+      enablePepperFlash = true;
+      enablePepperPDF = true;
+      enableWideVine = true;
+    };
+
+    # vim.gui = "gtk3";  # gtk3 gets really weird if you're not running gnome
+  };
+
+
   programs.bash.enableCompletion = true;
   programs.tmux.keyMode = "vi";
 
@@ -26,5 +42,6 @@
     tig
     tmux
     vimHugeX
+    wget
   ];
 }

@@ -3,12 +3,14 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../imports/nix.nix
     ../imports/defaults.nix
     ../imports/fonts.nix
+    ../imports/nix.nix
     ../imports/package-overrides.nix
     ../imports/redshift.nix
+    ../imports/users.nix
     ../imports/virtualbox.nix
+    ../imports/wacom.nix
   ];
 
   boot.loader = {
@@ -54,14 +56,8 @@
 
   environment.systemPackages = with pkgs; [
     acpi
-    dstat
-    file
     glxinfo
-    htop
-    iotop
     pciutils
-    sysstat
-    tmux
     usbutils
     xlibs.xbacklight
     xlibs.xdpyinfo
@@ -105,12 +101,6 @@
     ipv4 = true;
     ipv6 = true;
     nssmdns = true;
-  };
-
-  users.extraUsers.benley = {
-    isNormalUser = true;
-    uid = 1000;
-    extraGroups = [ "wheel" "vboxusers" ];
   };
 
   # The NixOS release to be compatible with for stateful data such as databases.

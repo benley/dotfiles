@@ -8,6 +8,8 @@
     ../imports/kde.nix
     ../imports/nix.nix
     ../imports/package-overrides.nix
+    ../imports/users.nix
+    ../imports/wacom.nix
   ];
 
   # Samus audio support is supposed to just work in linux >= 4.9
@@ -23,11 +25,13 @@
     "i915"
   ];
 
+  # Set builtin audio as the primary sound card, and HDMI audio as secondary.
   boot.extraModprobeConfig = ''
     options snd_soc_sst_bdw_rt5677_mach index=0
     options snd-hda-intel index=1
   '';
-  #  options snd slots=snd_soc_sst_bdw_rt5677_mach,snd-hda-intel
+  # This probably accomplishes the same thing as the above:
+  # options snd slots=snd_soc_sst_bdw_rt5677_mach,snd-hda-intel
 
   boot.initrd.luks = {
     mitigateDMAAttacks = true;
@@ -54,10 +58,7 @@
   networking.networkmanager.enable = true;
   networking.hostId = "8425e439";
 
-  nixpkgs.config.allowUnfree = true;
-
   i18n = {
-    #consoleFont = "sun12x22";
     consoleFont = "ter-132b";
     consolePackages = [ pkgs.terminus_font ];
     consoleKeyMap = "us";
@@ -68,14 +69,17 @@
 
   environment.systemPackages = with pkgs; [
     google-chrome
+    minecraft
     steam
-    wget
 
+    glxinfo
     vdpauinfo
-    libva
+    libva  # Just for the vainfo command
+    xorg.xdpyinfo
   ];
 
-  # services.openssh.enable = true;
+  services.openssh.enable = false;
+
   services.printing.enable = true;
 
   services.avahi = {
@@ -92,26 +96,25 @@
     # layout = "us";
     # xkbOptions = "eurosign:e";
 
-    #synaptics = {
-    #  enable = true;
-    #  buttonsMap = [ 1 3 2 ];
-    #  fingersMap = [ 1 3 2 ];
-    #  palmDetect = true;
-    #  tapButtons = true;
-    #  twoFingerScroll = true;
-    #  vertEdgeScroll = false;
-    #  horizontalScroll = true;
-    #};
+    # KDE exposes more configuration for synaptics, but libinput has *way*
+    # better defaults.j
+    libinput.enable = true;
 
-    libinput = {
-      enable = true;
-    };
+    # If you want to use synaptics instead, start here.
+    # synaptics = {
+    #   enable = true;
+    #   buttonsMap = [ 1 3 2 ];
+    #   fingersMap = [ 1 3 2 ];
+    #   palmDetect = true;
+    #   tapButtons = true;
+    #   twoFingerScroll = true;
+    #   vertEdgeScroll = false;
+    #   horizontalScroll = true;
+    # };
 
     # Physical DPI of samus screen is ~239,
     # but telling KDE that makes everything quite huge
-    # monitorSection = ''
-    #   DisplaySize 272 181
-    # '';
+    # monitorSection = "DisplaySize 272 181";
 
     # So instead let's try an even multiple of 96dpi:
     dpi = 192;
@@ -133,21 +136,18 @@
   };
 
   environment.variables = {
+    # There is no dedicated i965 vpdau driver, so this tells libvpdau to use
+    # libva as its backend.
     VDPAU_DRIVER = "va_gl";
   };
 
   hardware.pulseaudio.enable = true;
   hardware.pulseaudio.support32Bit = true;
   hardware.bluetooth.enable = true;
+
+  # I'm not sure if these next two are necessary:
   hardware.enableAllFirmware = true;
   hardware.cpu.intel.updateMicrocode = true;
-
-  users.extraUsers.benley = {
-    isNormalUser = true;
-    uid = 1000;
-    description = "Benjamin Staffin";
-    extraGroups = [ "wheel" "vboxusers" ];
-  };
 
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "16.09";

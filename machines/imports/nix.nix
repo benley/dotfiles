@@ -1,12 +1,18 @@
 { config, pkgs, ... }:
 
+let
+  nixpkgs_github_repo = "benley/nixpkgs";
+  nixpkgs_branch = "nixos-benley";
+in
+
 {
   nix = {
     nixPath = [
-      "nixpkgs=https://github.com/benley/nixpkgs/archive/nixos-benley.tar.gz"
+      # Instead of using a nixos channel, I follow a specific nixpkgs branch on github.
+      "nixpkgs=https://github.com/${nixpkgs_github_repo}/archive/${nixpkgs_branch}.tar.gz"
+
+      # I like to keep my dotfiles repo in my homedir for easy editing
       "nixos-config=/home/benley/p/dotfiles/machines/${config.networking.hostName}/configuration.nix"
-      #"/nix/var/nix/profiles/per-user/root/channels/nixos"
-      #"/nix/var/nix/profiles/per-user/root/channels"
     ];
     buildCores = 0;
     daemonIONiceLevel = 7;

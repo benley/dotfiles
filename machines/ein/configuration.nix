@@ -44,8 +44,9 @@ in
     ../imports/kde.nix
     ../imports/nix.nix
     ../imports/package-overrides.nix
-    #../imports/redshift.nix  # using the kde applet
+    ../imports/users.nix
     ../imports/virtualbox.nix
+    ../imports/wacom.nix
   ];
 
   boot.loader = {
@@ -140,20 +141,6 @@ in
     # layout = "us";
     # xkbOptions = "eurosign:e";
 
-    wacom.enable = true;
-    inputClassSections = [
-      # http://linuxwacom.sourceforge.net/wiki/index.php/Consumer_Tablet_ExpressKey_Mapping_Issue
-      ''
-        Identifier "Wacom Bamboo 16FG 4x5 Pad pad GNOME compatibility"
-        MatchDriver "wacom"
-        MatchProduct "Wacom Bamboo 16FG 4x5 Pad pad"
-
-        Option "Button1" "1"
-        Option "Button5" "2"
-        Option "Button4" "3"
-        Option "Button3" "4"
-      ''
-    ];
   };
 
   hardware.opengl.driSupport32Bit = true;
@@ -172,12 +159,6 @@ in
     publish.enable = true;
     publish.workstation = true;
     publish.userServices = true;
-  };
-
-  users.extraUsers.benley = {
-    isNormalUser = true;
-    uid = 1000;
-    extraGroups = [ "wheel" "vboxusers" ];
   };
 
   systemd.mounts = [
