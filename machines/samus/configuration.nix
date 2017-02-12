@@ -121,6 +121,11 @@
 
     # Believe it or not, "intel" is deprecated nowadays
     videoDrivers = [ "modesetting" ];
+
+    # FDE means I type my password immediately after grub, so enabling sddm
+    # autologin is a sane thing to do.
+    displayManager.sddm.autoLogin.enable = true;
+    displayManager.sddm.autoLogin.user = "benley";
   };
 
   hardware.opengl = {
