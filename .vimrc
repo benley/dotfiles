@@ -330,4 +330,6 @@ let pyindent_open_paren = 4
 "
 " noremap <buffer> <silent> , :s<cr>
 
+let g:jsonnet_fmt_on_save = 0
+
 set secure

@@ -7,4 +7,8 @@ then
   eval $(keychain --agents gpg --quick --eval --nogui)
 fi
 
-source "$HOME"/.bashrc
+source ~/.bashrc
+
+((RANDOM % 100 < 10)) && [[ $(type -t doge != "") ]] && doge
+
+: # always end with $?=0

@@ -17,17 +17,19 @@
     benleyAll = with pkgs; buildEnv {
       name = "benleyAll";
       paths = [
+        bashInteractive
+        bashCompletion
         bc
         benleyDesktop
-        #benleyDevTools
+        benleyDevTools
         #benleyGuiStuff
-        #benleyHaskellDev
-        #benleyNetTools
+        benleyHaskellDev
+        benleyNetTools
         #benleyPythonDev
         #benleySystemTools
         jq
         myScripts
-        myVim
+        #myVim
         pwgen
         tmux
         unzip
@@ -40,7 +42,6 @@
         awscli
         #cli53
         curl
-        bind    # there isn't a separate package for "dig" yet
         httpie
         mosh
         mtr
@@ -60,14 +61,12 @@
     benleyDevTools = with pkgs; buildEnv {
       name = "benleyDevTools";
       paths = [
-        #bundler
-        cabal2nix
+        bundler
         ctags
         diffutils
         gitFull
         gitAndTools.hub
         haskellPackages.ShellCheck
-        honcho
         html-tidy
         nix-repl
         nix-prefetch-scripts
@@ -158,6 +157,7 @@
       name = "benleyHaskellDev";
       paths = with pkgs; [
         myGhc
+        haskellPackages.hindent
         (writeTextFile {
           name = "ghc-shellhook";
           executable = true;
@@ -178,6 +178,7 @@
         file-embed
         megaparsec
         parsec
+        megaparsec
         split
         text
         turtle
