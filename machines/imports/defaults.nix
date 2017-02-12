@@ -41,6 +41,7 @@
     sysstat
     tig
     tmux
+    usbutils
     vimHugeX
     wget
   ];
