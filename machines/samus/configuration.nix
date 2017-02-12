@@ -68,6 +68,7 @@
 
   environment.systemPackages = with pkgs; [
     google-chrome
+    steam
     wget
 
     vdpauinfo
@@ -90,15 +91,20 @@
     wacom.enable = true; # does this do anything on samus?
     # layout = "us";
     # xkbOptions = "eurosign:e";
-    synaptics = {
+
+    #synaptics = {
+    #  enable = true;
+    #  buttonsMap = [ 1 3 2 ];
+    #  fingersMap = [ 1 3 2 ];
+    #  palmDetect = true;
+    #  tapButtons = true;
+    #  twoFingerScroll = true;
+    #  vertEdgeScroll = false;
+    #  horizontalScroll = true;
+    #};
+
+    libinput = {
       enable = true;
-      buttonsMap = [ 1 3 2 ];
-      fingersMap = [ 1 3 2 ];
-      palmDetect = true;
-      tapButtons = true;
-      twoFingerScroll = true;
-      vertEdgeScroll = false;
-      horizontalScroll = true;
     };
 
     # Physical DPI of samus screen is ~239,
@@ -131,6 +137,7 @@
   };
 
   hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.support32Bit = true;
   hardware.bluetooth.enable = true;
   hardware.enableAllFirmware = true;
   hardware.cpu.intel.updateMicrocode = true;

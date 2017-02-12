@@ -10,10 +10,19 @@
 
   environment.systemPackages = with pkgs; [
     bc
+    cabal-install
+    dstat
     file
     git
     htop
     httpie
+    nix-prefetch-scripts
+    nix-repl
+    iftop
+    iotop
+    python27Full
+    stack
+    sysstat
     tig
     tmux
     vimHugeX
