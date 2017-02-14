@@ -11,8 +11,6 @@
   chromium.enablePepperPDF = true;
   chromium.enableWideVine = true;
 
-  vim.gui = "gtk3";
-
   packageOverrides = origPkgs: with origPkgs; {
     benleyAll = with pkgs; buildEnv {
       name = "benleyAll";
@@ -20,7 +18,7 @@
         bashInteractive
         bashCompletion
         bc
-        benleyDesktop
+        #benleyDesktop
         benleyDevTools
         #benleyGuiStuff
         benleyHaskellDev
@@ -69,6 +67,7 @@
         haskellPackages.ShellCheck
         html-tidy
         nix-repl
+        nix-serve
         nix-prefetch-scripts
         nixpkgs-lint
         nodePackages.js-yaml
