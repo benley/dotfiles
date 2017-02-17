@@ -68,8 +68,11 @@
   time.timeZone = "America/New_York";
 
   environment.systemPackages = with pkgs; [
+    dropbox
     google-chrome
+    insync
     minecraft
+    slack
     steam
 
     glxinfo
@@ -97,7 +100,7 @@
     # xkbOptions = "eurosign:e";
 
     # KDE exposes more configuration for synaptics, but libinput has *way*
-    # better defaults.j
+    # better defaults.
     libinput.enable = true;
 
     # If you want to use synaptics instead, start here.

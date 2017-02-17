@@ -13,6 +13,8 @@ in
 
       # I like to keep my dotfiles repo in my homedir for easy editing
       "nixos-config=/home/benley/p/dotfiles/machines/${config.networking.hostName}/configuration.nix"
+
+      "dotfiles=/home/benley/p/dotfiles"
     ];
     buildCores = 0;
     daemonIONiceLevel = 7;

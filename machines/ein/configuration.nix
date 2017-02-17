@@ -94,33 +94,15 @@ in
   time.timeZone = "America/New_York";
 
   environment.systemPackages = with pkgs; [
-    acpi
-    bc
-    ctags
     dpkg
     dropbox
-    dstat
-    file
     firefox
-    git
     glxinfo
     google-chrome
-    htop
-    iftop
     insync
-    iotop
-    lsof
-    nix-repl
-    pciutils
     slack
     steam
-    sysstat
-    tig
-    tmux
-    unzip
-    usbutils
     vlc
-    wget
     xorg.xdpyinfo
     xorg.xev
     xlsfonts

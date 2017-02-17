@@ -1,5 +1,10 @@
 { config, pkgs, ... }:
 
+let
+  dotfiles = import ../.. {};
+  readFile = builtins.readFile;
+in
+
 # Stuff I want to config/install on every machine, regardless of type.
 {
   nixpkgs.config = {
@@ -18,29 +23,42 @@
 
 
   programs.bash.enableCompletion = true;
-  programs.tmux.keyMode = "vi";
+
+  programs.tmux = {
+    enable = true;
+    terminal = "screen-256color";
+    keyMode = "vi";
+    extraTmuxConf = builtins.readFile ../../.tmux.conf;
+  };
+
+  programs.ssh.extraConfig = readFile ../../ssh/config;
 
   environment.variables = {
     EDITOR = "vim";
   };
 
   environment.systemPackages = with pkgs; [
+    dotfiles.nix-home
+    acpi
     bc
     cabal-install
+    ctags
     dstat
     file
     git
     htop
     httpie
-    nix-prefetch-scripts
-    nix-repl
     iftop
     iotop
+    lsof
+    nix-prefetch-scripts
+    nix-repl
+    pciutils
     python27Full
     stack
     sysstat
     tig
-    tmux
+    unzip
     usbutils
     vimHugeX
     wget
