@@ -96,8 +96,8 @@
     enable = true;
     # useGlamor = true;
     wacom.enable = true; # does this do anything on samus?
-    # layout = "us";
-    # xkbOptions = "eurosign:e";
+    layout = "us";
+    xkbModel = "chromebook";
 
     # KDE exposes more configuration for synaptics, but libinput has *way*
     # better defaults.
