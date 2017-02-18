@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
+  dontStrip = true;     # it's just scripts
+  dontPatchELF = true;  # it's just scripts
+
   installPhase = ''
     # install binary
     mkdir -p $out/bin
