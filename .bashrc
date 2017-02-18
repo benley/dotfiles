@@ -223,8 +223,6 @@ myPromptCmd() {
 
 PROMPT_COMMAND="myPromptCmd"
 
-[[ "$COLORTERM" == 'gnome-terminal' ]] && export TERM='xterm-256color'
-
 # Handled via nix
 #[[ -e /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
 
