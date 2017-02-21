@@ -27,7 +27,6 @@
         #benleySystemTools
         jq
         myScripts
-        #myVim
         pwgen
         tmux
         unzip
@@ -190,40 +189,6 @@
       ]);
 
     myChromium = chromiumBeta.override { enableNaCl = true; };
-
-    myVim = vim_configurable.customize {
-      name = "vim";
-      vimrcConfig = {
-        customRC = builtins.readFile ./vimrc;
-        vam.knownPlugins = pkgs.vimPlugins;
-        vam.pluginDictionaries = [
-          { names = [
-              "Solarized"
-              "Supertab"
-              "Syntastic"
-              "Tagbar"
-              "The_NERD_tree"
-              "fugitive"
-              "ghcmod"
-              "neco-ghc"
-              "rainbow_parentheses"
-              "taglist"
-              "vim2hs"
-              "vim-addon-nix"
-              "vim-airline"
-              "vim-airline-themes"
-              "vim-coffee-script"
-              "vim-eunuch"
-              "vim-gitgutter"
-              #"vim-hdevtools"
-              "vimproc"
-              "vimshell-vim"
-              "youcompleteme"
-            ];
-          }
-        ];
-      };
-    };
 
     myScripts = stdenv.mkDerivation {
       name = "benley-scripts";

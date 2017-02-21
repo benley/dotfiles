@@ -28,10 +28,12 @@ in
     enable = true;
     terminal = "screen-256color";
     keyMode = "vi";
-    extraTmuxConf = builtins.readFile ../../.tmux.conf;
+    # this can go in my homedir
+    #extraTmuxConf = builtins.readFile ../../cfg/.tmux.conf;
   };
 
-  programs.ssh.extraConfig = readFile ../../ssh/config;
+  # this can go in my homedir
+  #programs.ssh.extraConfig = readFile ../../cfg/.ssh/config;
 
   environment.variables = {
     EDITOR = "vim";
@@ -39,28 +41,58 @@ in
 
   environment.systemPackages = with pkgs; [
     dotfiles.nix-home
+    dotfiles.myVim
     acpi
     bc
+    bind  # when 17.03 comes out switch to dnsutils
     cabal-install
     ctags
     dstat
+    exercism
     file
     git
+    haskellPackages.ghc
+    haskellPackages.ghc-mod
+    haskellPackages.hdevtools
+    haskellPackages.hindent
+    haskellPackages.hlint
+    haskellPackages.ShellCheck
+    html-tidy
     htop
     httpie
     iftop
     iotop
+    jq
+    jsonnet
     lsof
+    mosh
+    mtr
     nix-prefetch-scripts
     nix-repl
+    nmap
+    nodePackages.js-yaml
+    nodePackages.jshint
     pciutils
+    pv
+    pwgen
     python27Full
+    pythonPackages.autopep8
+    pythonPackages.flake8
+    pythonPackages.pep8
+    pythonPackages.pylint
+    pythonPackages.virtualenv
+    pythonPackages.virtualenvwrapper
+    socat
     stack
     sysstat
+    tcpdump
+    telnet
     tig
+    tree
     unzip
     usbutils
-    vimHugeX
+    #vimHugeX
+    wakelan
     wget
   ];
 }
