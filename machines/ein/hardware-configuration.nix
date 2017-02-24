@@ -16,7 +16,10 @@
     "nvidia_drm"
   ];
   boot.kernelModules = [ "kvm-intel" ];
-  boot.kernelParams = [ "nvidia-drm.modeset=1" ];
+  boot.extraModprobeConfig = ''
+    options nvidia-drm modeset=1
+    options noveau modeset=0
+  '';
   boot.extraModulePackages = [ ];
 
   boot.zfs.extraPools = [ "pool0" ];

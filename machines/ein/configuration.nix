@@ -49,6 +49,14 @@ in
     ../imports/wacom.nix
   ];
 
+  boot.kernelPackages = pkgs.linuxPackages_4_8;
+
+  boot.kernelParams = [
+    "nvidia-drm.modeset=1"
+    "noveau.modeset=0"
+    "rd.driver.blacklist=noveau"
+  ];
+
   boot.loader = {
     systemd-boot.enable = false;
 
@@ -58,6 +66,7 @@ in
       device = "/dev/sda";
       enable = true;
       efiSupport = true;
+      gfxmodeEfi = "1024x768x32";
       zfsSupport = true;
       splashImage = null;
       extraEntries = ''
@@ -109,6 +118,8 @@ in
     xsettingsd  # So I can use dump_xsettings
   ];
 
+  services.crashplan.enable = true;
+
   services.openssh.enable = true;
 
   services.printing.enable = true;
@@ -142,6 +153,8 @@ in
     publish.workstation = true;
     publish.userServices = true;
   };
+
+  # services.kmscon.enable = true;
 
   systemd.mounts = [
     { where = "/var/lib/docker";
