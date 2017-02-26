@@ -17,7 +17,7 @@
     fira-mono
     freefont_ttf
     font-droid
-    google-fonts
+    #google-fonts  # Like 1800 fonts. Whoa.
     hack-font
     hasklig
     inconsolata
@@ -26,7 +26,7 @@
     meslo-lg
     mononoki
     montserrat
-    nerdfonts
+    # nerdfonts  # This is like 6,000 fonts and 3+ gigabytes, seriously
     noto-fonts
     noto-fonts-emoji
     oxygenfonts
