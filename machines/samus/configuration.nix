@@ -98,6 +98,7 @@
     wacom.enable = true; # does this do anything on samus?
     layout = "us";
     xkbModel = "chromebook";
+    xkbOptions = "";  # drop the default "terminate:ctrl_alt_bksp"
 
     # KDE exposes more configuration for synaptics, but libinput has *way*
     # better defaults.

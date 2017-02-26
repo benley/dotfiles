@@ -21,6 +21,8 @@ in
     # vim.gui = "gtk3";  # gtk3 gets really weird if you're not running gnome
   };
 
+  services.xserver.enableCtrlAltBackspace = false;
+
   programs.bash.enableCompletion = true;
 
   programs.tmux = {
