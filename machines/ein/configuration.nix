@@ -120,6 +120,12 @@ in
 
   services.crashplan.enable = true;
 
+  services.nix-serve = {
+    enable = true;
+    port = 5150;
+    secretKeyFile = "/etc/nix/signing-key.sec";
+  };
+
   services.openssh.enable = true;
 
   services.printing.enable = true;
