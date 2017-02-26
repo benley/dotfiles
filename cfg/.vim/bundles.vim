@@ -101,6 +101,7 @@ VAMActivate github:rix0rrr/vim-gcl
 VAMActivate github:bracki/vim-prometheus
 VAMActivate github:jubalfh/vim-ldapschema
 VAMActivate github:robbles/logstash.vim
+VAMActivate github:keith/swift.vim
 """
 
 """ Clojure
