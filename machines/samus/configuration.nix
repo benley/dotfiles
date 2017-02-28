@@ -94,7 +94,7 @@
 
   services.xserver = {
     enable = true;
-    # useGlamor = true;
+    useGlamor = true;
     wacom.enable = true; # does this do anything on samus?
     layout = "us";
     xkbModel = "chromebook";
