@@ -1,8 +1,8 @@
 { config, pkgs, ... }:
 
 let
-  nixpkgs_github_repo = "benley/nixpkgs";
-  nixpkgs_branch = "nixos-benley";
+  nixpkgs_github_repo = "nixos/nixpkgs-channels";
+  nixpkgs_branch = "nixos-17.03";
 in
 
 {
