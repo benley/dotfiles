@@ -7,6 +7,14 @@ in
 
 # Stuff I want to config/install on every machine, regardless of type.
 {
+
+  imports = [
+    ./nix.nix
+    ./package-overrides.nix
+    ./users.nix
+    ./yubikey.nix
+  ];
+
   nixpkgs.config = {
     allowUnfree = true;
 
@@ -45,9 +53,9 @@ in
     dotfiles.myVim
     acpi
     bc
-    bind  # when 17.03 comes out switch to dnsutils
     cabal-install
     ctags
+    dnsutils
     dstat
     exercism
     file
@@ -92,7 +100,6 @@ in
     tree
     unzip
     usbutils
-    #vimHugeX
     wakelan
     wget
   ];

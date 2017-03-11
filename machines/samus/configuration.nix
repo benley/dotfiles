@@ -6,9 +6,6 @@
     ../imports/defaults.nix
     ../imports/fonts.nix
     ../imports/kde.nix
-    ../imports/nix.nix
-    ../imports/package-overrides.nix
-    ../imports/users.nix
     ../imports/wacom.nix
   ];
 
@@ -84,8 +81,6 @@
   services.openssh.enable = false;
 
   services.printing.enable = true;
-
-  services.udev.packages = [ pkgs.libu2f-host ];
 
   services.avahi = {
     enable = true;

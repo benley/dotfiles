@@ -77,9 +77,6 @@ in
     ../imports/defaults.nix
     ../imports/fonts.nix
     ../imports/kde.nix
-    ../imports/nix.nix
-    ../imports/package-overrides.nix
-    ../imports/users.nix
     ../imports/virtualbox.nix
     ../imports/wacom.nix
   ];
