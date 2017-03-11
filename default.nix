@@ -57,4 +57,6 @@ rec {
     };
   };
 
+  steamcontroller-udev-rules = callPackage ./pkgs/steamcontroller-udev-rules { };
+
 }

@@ -103,4 +103,8 @@ in
     wakelan
     wget
   ];
+
+  services.udev.packages = [
+    dotfiles.steamcontroller-udev-rules
+  ];
 }
