@@ -85,6 +85,8 @@
 
   services.printing.enable = true;
 
+  services.udev.packages = [ pkgs.libu2f-host ];
+
   services.avahi = {
     enable = true;
     ipv4 = true;
