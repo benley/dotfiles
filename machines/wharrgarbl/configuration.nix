@@ -4,11 +4,8 @@
   imports = [
     ./hardware-configuration.nix
     ../imports/defaults.nix
-    ../imports/fonts.nix
-    ../imports/nix.nix
-    ../imports/package-overrides.nix
+    ../imports/graphical.nix
     ../imports/redshift.nix
-    ../imports/users.nix
     ../imports/virtualbox.nix
     ../imports/wacom.nix
   ];
@@ -55,13 +52,7 @@
   time.timeZone = "America/New_York";
 
   environment.systemPackages = with pkgs; [
-    acpi
-    glxinfo
-    pciutils
-    usbutils
     xlibs.xbacklight
-    xlibs.xdpyinfo
-    xlsfonts
   ];
 
   virtualisation.docker = {

@@ -102,6 +102,7 @@ in
     usbutils
     wakelan
     wget
+    zip
   ];
 
   services.udev.packages = [

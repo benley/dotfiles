@@ -4,7 +4,7 @@
   imports = [
     ./hardware-configuration.nix
     ../imports/defaults.nix
-    ../imports/fonts.nix
+    ../imports/graphical.nix
     ../imports/kde.nix
     ../imports/wacom.nix
   ];
@@ -65,17 +65,10 @@
   time.timeZone = "America/New_York";
 
   environment.systemPackages = with pkgs; [
-    dropbox
-    google-chrome
-    insync
     minecraft
-    slack
-    steam
 
-    glxinfo
     vdpauinfo
     libva  # Just for the vainfo command
-    xorg.xdpyinfo
   ];
 
   services.openssh.enable = false;

@@ -42,7 +42,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ../imports/defaults.nix
-    ../imports/fonts.nix
+    ../imports/graphical.nix
     ../imports/kde.nix
     ../imports/virtualbox.nix
     ../imports/wacom.nix
@@ -103,18 +103,6 @@ in
 
   environment.systemPackages = with pkgs; [
     dpkg
-    dropbox
-    firefox
-    glxinfo
-    google-chrome
-    insync
-    slack
-    steam
-    vlc
-    xorg.xdpyinfo
-    xorg.xev
-    xlsfonts
-    xsettingsd  # So I can use dump_xsettings
   ];
 
   services.crashplan.enable = true;
@@ -128,8 +116,6 @@ in
   services.openssh.enable = true;
 
   services.printing.enable = true;
-
-  services.udev.packages = [ dotfiles.steamcontroller-udev-rules ];
 
   services.xserver = {
     enable = true;
