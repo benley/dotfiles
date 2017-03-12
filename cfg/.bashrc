@@ -3,7 +3,6 @@
 umask 0022
 
 OS=$(uname)
-# PLATFORM=$(uname -sm | tr " " "-")
 export EDITOR=vim
 
 prefixpath() {
@@ -14,34 +13,14 @@ addpath() {
   [[ -d "$1"/ ]] && PATH="${PATH:+$PATH:$1}" || return 1
 }
 
-dopath() {
-  prefixpath /usr/local/bin
-  prefixpath "$HOME/go/bin"
-  #prefixpath "$HOME/.local/bin"  # Python user installs
-  #prefixpath "$HOME/Library/Haskell/bin"
-  #prefixpath "$HOME/.cabal/bin"
-  #prefixpath /usr/local/opt/ruby/bin
-  prefixpath "$HOME/bin"
-  # addpath $HOME/arcanist/arcanist/bin
-  # addpath $HOME/opt/node/bin
-  # addpath /usr/local/share/npm/bin
-  # addpath /usr/local/heroku/bin
-  # addpath $HOME/.gem/ruby/1.9.1/bin
-  # addpath $HOME/.local/share/Steam/debian_bin
-  # addpath $HOME/Dropbox/bin{,/$PLATFORM}
-  addpath /usr/local/sbin
-
-  [[ -e /etc/arch-release && -e /usr/bin/ruby ]] && \
-    PATH+="$(ruby -rubygems -e 'puts Gem.user_dir')/bin"
-}; dopath
+prefixpath "$HOME/bin"
+addpath /usr/local/sbin
 
 # This is unnecessary: see bash manpage's INVOCATION section.
 # Bash will source /etc/bash.bashrc by itself.
 #if [[ -f /etc/bashrc ]]; then
 #  . /etc/bashrc
 #fi
-
-alias getenv='source "$HOME"/.ssh/.getenv'
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # don't overwrite GNU Midnight Commander's setting of `ignorespace'.
@@ -61,7 +40,7 @@ shopt -s checkwinsize
 # Enable extended ** glob expansion
 shopt -s globstar
 
-# make less more friendly for non-text input files, see lesspipe(1)
+# make less friendlier for non-text input files, see lesspipe(1)
 #[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # Fancy timestamps in .bash_history woooooo
@@ -82,8 +61,6 @@ case "$OS" in
     export CLICOLOR=1
     ;;
 esac
-
-alias grep='grep --color'
 
 loadcompletion() {
   local spot cmpl _completion_on=0

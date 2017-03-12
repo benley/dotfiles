@@ -1,3 +1,6 @@
+alias getenv='source "$HOME"/.ssh/.getenv'
+alias grep='grep --color'
+
 ssh-keyrm() {
   if [[ $# -eq 1 ]]; then
     ssh-keygen -f "$HOME/.ssh/known_hosts" -R "$1"
