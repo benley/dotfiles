@@ -37,7 +37,8 @@ rec {
           "rust-vim"
           "tabular"
           "taglist"
-          "vim-addon-nix"
+          # "vim-addon-nix"  # The MarcWeber version
+          "vim-nix"  # The LnL7 one
           "vim-airline"
           "vim-airline-themes"
           "vim-buffergator"

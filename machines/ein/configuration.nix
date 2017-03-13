@@ -48,13 +48,25 @@ in
     ../imports/wacom.nix
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_4_8;
+  boot.kernelPackages = pkgs.linuxPackages_4_9;
 
-  boot.kernelParams = [
-    "nvidia-drm.modeset=1"
-    "noveau.modeset=0"
-    "rd.driver.blacklist=noveau"
-  ];
+  #boot.initrd.kernelModules = [
+  #  "nvidia"
+  #  "nvidia_modeset"
+  #  "nvidia_uvm"
+  #  "nvidia_drm"
+  #];
+
+  #boot.extraModprobeConfig = ''
+  #  options nvidia-drm modeset=1
+  #  options noveau modeset=0
+  #'';
+
+  #boot.kernelParams = [
+  #  "nvidia-drm.modeset=1"
+  #  "noveau.modeset=0"
+  #  "rd.driver.blacklist=noveau"
+  #];
 
   boot.loader = {
     systemd-boot.enable = false;
@@ -162,7 +174,6 @@ in
   virtualisation.docker = {
     enable = true;
     storageDriver = "zfs";
-    socketActivation = false;
   };
 
   # The NixOS release to be compatible with for stateful data such as databases.

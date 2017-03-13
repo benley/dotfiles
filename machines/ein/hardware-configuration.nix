@@ -9,17 +9,8 @@
     ];
 
   boot.initrd.availableKernelModules = [ "ahci" "usbhid" ];
-  boot.initrd.kernelModules = [
-    "nvidia"
-    "nvidia_modeset"
-    "nvidia_uvm"
-    "nvidia_drm"
-  ];
+  boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModprobeConfig = ''
-    options nvidia-drm modeset=1
-    options noveau modeset=0
-  '';
   boot.extraModulePackages = [ ];
 
   boot.zfs.extraPools = [ "pool0" ];

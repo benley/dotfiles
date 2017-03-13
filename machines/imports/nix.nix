@@ -8,7 +8,7 @@ in
 {
   nix = {
     nixPath = [
-      # Instead of using a nixos channel, I follow a specific nixpkgs branch on github.
+      # Instead of using a nixos channel, I follow a branch on github.
       "nixpkgs=https://github.com/${nixpkgs_github_repo}/archive/${nixpkgs_branch}.tar.gz"
 
       # I like to keep my dotfiles repo in my homedir for easy editing

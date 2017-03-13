@@ -88,7 +88,7 @@ VAMActivate nginx
 "VAMActivate Puppet_Syntax_Highlighting
 "VAMActivate github:rodjek/vim-puppet
 VAMActivate github:voxpupuli/vim-puppet
-"VAMActivate vim-addon-nix  "nix
+"VAMActivate github:LnL7/vim-nix  "nix
 "VAMActivate vim-coffee-script  "nix
 "VAMActivate vim-go  "nix
 VAMActivate vim-scala
