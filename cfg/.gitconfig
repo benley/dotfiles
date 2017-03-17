@@ -2,9 +2,14 @@
 	name = Benjamin Staffin
 	useconfigonly = true
 	email = benley@gmail.com
+	signingKey = FDBA38EE781A69D439A870A5A490C0134E09AF4A
+[commit]
+	gpgSign = true
 [core]
 	excludesfile = ~/.gitignore_global
 	hooksPath = ~/.githooks
+[gpg]
+	program = gpg2
 [gitreview]
 	username = ben
 [color]

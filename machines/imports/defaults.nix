@@ -60,6 +60,7 @@ in
     exercism
     file
     git
+    gnupg
     haskellPackages.ghc
     haskellPackages.ghc-mod
     haskellPackages.hdevtools
