@@ -16,7 +16,6 @@ rec {
   myVim = pkgs.vim_configurable.customize {
     name = "vim";
     vimrcConfig = {
-      #customRC = builtins.readFile ./vimrc;
       customRC = ''
         source ~/.vimrc
         set secure
