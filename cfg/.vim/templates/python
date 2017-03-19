@@ -1,11 +1,7 @@
 #!/usr/bin/env python
-"""One-line summary"""
-
 
 def main():
-    """Main"""
     pass
-
 
 if __name__ == '__main__':
     main()

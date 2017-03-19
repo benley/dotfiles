@@ -5,16 +5,7 @@ umask 0022
 OS=$(uname)
 export EDITOR=vim
 
-prefixpath() {
-  [[ -d "$1"/ ]] && PATH="$1${PATH:+:$PATH}"|| return 1
-}
-
-addpath() {
-  [[ -d "$1"/ ]] && PATH="${PATH:+$PATH:$1}" || return 1
-}
-
-prefixpath "$HOME/bin"
-addpath /usr/local/sbin
+PATH="$HOME/bin:$PATH"
 
 # This is unnecessary: see bash manpage's INVOCATION section.
 # Bash will source /etc/bash.bashrc by itself.
@@ -24,9 +15,9 @@ addpath /usr/local/sbin
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # don't overwrite GNU Midnight Commander's setting of `ignorespace'.
-# HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
+HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 # ... or force ignoredups and ignorespace
-HISTCONTROL=ignoreboth
+#HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -71,7 +62,7 @@ loadcompletion() {
     "${brew_prefix}/etc"
     "${brew_prefix}/share/bash-completion"
     /etc
-    )
+  )
 
   for spot in "${completion_dirs[@]}"; do
     if [[ -e ${spot}/bash_completion ]]; then
