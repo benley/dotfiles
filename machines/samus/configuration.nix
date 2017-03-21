@@ -58,8 +58,8 @@
   i18n = {
     consoleFont = "ter-132b";
     consolePackages = [ pkgs.terminus_font ];
-    consoleKeyMap = "us";
     defaultLocale = "en_US.UTF-8";
+    consoleUseXkbConfig = true;
   };
 
   time.timeZone = "America/New_York";
