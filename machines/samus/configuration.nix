@@ -149,7 +149,22 @@
   hardware.cpu.intel.updateMicrocode = true;
 
   # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion = "16.09";
+  system.stateVersion = "17.03";
 
   zramSwap.enable = true;
+
+  systemd.mounts = [
+    { where = "/var/lib/docker";
+      what = "rpool/docker";
+      type = "zfs";
+      requiredBy = [ "docker.service" ];
+      before = ["docker.service"];
+      after = ["zfs-import-pool0.service"];
+    }
+  ];
+
+  virtualisation.docker = {
+    enable = true;
+    storageDriver = "zfs";
+  };
 }
