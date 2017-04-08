@@ -7,6 +7,7 @@
     ../imports/graphical.nix
     ../imports/kde.nix
     ../imports/wacom.nix
+    ../imports/trackpoint.nix
   ];
 
   boot.loader.systemd-boot.enable = false;
