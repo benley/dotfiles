@@ -19,5 +19,6 @@
     xsel
     xsettingsd  # So I can use dump_xsettings
     vlc
+    vscode
   ];
 }
