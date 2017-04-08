@@ -10,7 +10,6 @@
     ../imports/trackpoint.nix
   ];
 
-  boot.loader.systemd-boot.enable = false;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
@@ -91,4 +90,5 @@
 
   system.stateVersion = "17.03";
 
+  zramSwap.enable = true;
 }
