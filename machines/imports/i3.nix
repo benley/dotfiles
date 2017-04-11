@@ -2,7 +2,7 @@
 
 {
   services.xserver.windowManager.i3.enable = true;
-  services.xserver.windowManager.i3.configFile = ../../.config/i3/config;
+  services.xserver.windowManager.i3.configFile = ../../cfg/.config/i3/config;
 
   services.compton.enable = true;
 

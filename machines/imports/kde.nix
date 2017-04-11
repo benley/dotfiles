@@ -17,4 +17,11 @@
     redshift-plasma-applet
     redshift
   ];
+
+  services.dbus.packages = with pkgs; [ gnome3.dconf ];
+
+  environment.variables = {
+    # make gtk3 apps shut the hell up about the gnome accessibility bus
+    NO_AT_BRIDGE = "1";
+  };
 }

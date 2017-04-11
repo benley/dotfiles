@@ -10,10 +10,8 @@
     ../imports/wacom.nix
   ];
 
-  boot.loader = {
-    gummiboot.enable = true;
-    efi.canTouchEfiVariables = true;
-  };
+  boot.loader.gummiboot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   boot.supportedFilesystems = [ "zfs" ];
 
@@ -40,16 +38,9 @@
     hostName = "wharrgarbl";
     firewall.enable = true;
     firewall.allowPing = true;
-    networkmanager.enable = true;
   };
 
-  i18n = {
-    consoleFont = "sun12x22";
-    consoleKeyMap = "us";
-    defaultLocale = "en_US.UTF-8";
-  };
-
-  time.timeZone = "America/New_York";
+  i18n.consoleFont = "sun12x22";
 
   environment.systemPackages = with pkgs; [
     xlibs.xbacklight
@@ -61,20 +52,11 @@
     socketActivation = false;
   };
 
-  # services.openssh.enable = true;
-  # services.printing.enable = true;
-
   services.xserver = {
-    enable = true;
-    layout = "us";
-    # Gnome is a dick and overrides these, so just set them in gnome:
-    #xkbModel = "applealu_ansi";
-    #xkbOptions = "ctrl:nocaps";
+    xkbModel = "applealu_ansi";
+    xkbOptions = "ctrl:nocaps";
     xkbVariant = "mac";
     vaapiDrivers = [ pkgs.vaapiIntel ];
-
-    # Populate /etc/X11 since you're going to look there anyway
-    exportConfiguration = true;
 
     displayManager.gdm.enable = true;
     desktopManager.gnome3.enable = true;
@@ -87,14 +69,6 @@
     };
   };
 
-  services.avahi = {
-    enable = true;
-    ipv4 = true;
-    ipv6 = true;
-    nssmdns = true;
-  };
-
   # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion = "16.03";
-
+  system.stateVersion = "17.03";
 }

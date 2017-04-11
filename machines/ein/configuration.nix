@@ -50,72 +50,30 @@ in
 
   boot.kernelPackages = pkgs.linuxPackages_4_9;
 
-  #boot.initrd.kernelModules = [
-  #  "nvidia"
-  #  "nvidia_modeset"
-  #  "nvidia_uvm"
-  #  "nvidia_drm"
-  #];
-
-  #boot.extraModprobeConfig = ''
-  #  options nvidia-drm modeset=1
-  #  options noveau modeset=0
-  #'';
-
-  #boot.kernelParams = [
-  #  "nvidia-drm.modeset=1"
-  #  "noveau.modeset=0"
-  #  "rd.driver.blacklist=noveau"
-  #];
-
-  boot.loader = {
-    systemd-boot.enable = false;
-
-    timeout = 60;
-
-    grub = {
-      device = "/dev/sda";
-      enable = true;
-      efiSupport = true;
-      gfxmodeEfi = "1024x768x32";
-      zfsSupport = true;
-      splashImage = null;
-      extraEntries = ''
-        menuentry "Windows" {
-          search --fs-uuid --set=root --hint-bios=hd1,gpt2 --hint-efi=hd1,gpt2 --hint-baremetal=ahci1,gpt2 3285-F79B
-          chainloader /EFI/Microsoft/Boot/bootmgfw.efi
-        }
-      '';
-    };
-
-    efi = {
-      efiSysMountPoint = "/boot/efi";
-      canTouchEfiVariables = true;
-    };
+  boot.loader.grub = {
+    device = "/dev/sda";
+    enable = true;
+    efiSupport = true;
+    gfxmodeEfi = "1024x768x32";
+    zfsSupport = true;
+    splashImage = null;
+    extraEntries = ''
+      menuentry "Windows" {
+        search --fs-uuid --set=root --hint-bios=hd1,gpt2 --hint-efi=hd1,gpt2 --hint-baremetal=ahci1,gpt2 3285-F79B
+        chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+      }
+    '';
   };
+
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot.loader.efi.canTouchEfiVariables = true;
 
   boot.supportedFilesystems = [ "zfs" ];
 
   networking.hostName = "ein";
   networking.hostId = "40ec1be4";
 
-  networking.firewall = {
-    enable = false;
-    allowPing = true;
-    allowedTCPPorts = [ 22 ];
-  };
-
-  # i18n = {
-  #   consoleFont = "Lat2-Terminus16";
-  #   consoleKeyMap = "us";
-  #   defaultLocale = "en_US.UTF-8";
-  # };
-
-  time.timeZone = "America/New_York";
-
-  environment.systemPackages = with pkgs; [
-    dpkg
-  ];
+  networking.firewall.enable = false;
 
   services.crashplan.enable = true;
 
@@ -129,54 +87,27 @@ in
 
   services.printing.enable = true;
 
-  services.xserver = {
-    enable = true;
-    videoDrivers = [ "nvidia" ];
-
-    #displayManager.slim.enable = true;
-    #displayManager.slim.theme = slimThemeVuizvui;
-
-    # layout = "us";
-    # xkbOptions = "eurosign:e";
-
-  };
-
-  hardware.opengl.driSupport32Bit = true;
-
-  hardware.pulseaudio.enable = true;
-  hardware.pulseaudio.support32Bit = true;
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   # What does this actually do?
   powerManagement.enable = true;
 
-  services.avahi = {
-    enable = true;
-    ipv4 = true;
-    ipv6 = true;
-    nssmdns = true;
-    publish.enable = true;
-    publish.workstation = true;
-    publish.userServices = true;
-  };
+  services.avahi.publish.enable = true;
+  services.avahi.publish.workstation = true;
+  services.avahi.publish.userServices = true;
 
-  # services.kmscon.enable = true;
+  systemd.mounts = [{
+    where = "/var/lib/docker";
+    what = "pool0/docker";
+    type = "zfs";
+    requiredBy = [ "docker.service" ];
+    before = ["docker.service"];
+    after = ["zfs-import-pool0.service"];
+  }];
 
-  systemd.mounts = [
-    { where = "/var/lib/docker";
-      what = "pool0/docker";
-      type = "zfs";
-      requiredBy = [ "docker.service" ];
-      before = ["docker.service"];
-      after = ["zfs-import-pool0.service"];
-    }
-  ];
-
-  virtualisation.docker = {
-    enable = true;
-    storageDriver = "zfs";
-  };
+  virtualisation.docker.enable = true;
+  virtualisation.docker.storageDriver = "zfs";
 
   # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion = "16.09";
-
+  system.stateVersion = "17.03";
 }

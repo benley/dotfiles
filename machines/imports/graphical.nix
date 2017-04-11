@@ -21,4 +21,15 @@
     vlc
     vscode
   ];
+
+  services.xserver.enable = true;
+
+  networking.networkmanager.enable = true;
+
+  hardware.opengl.enable = true;
+  hardware.opengl.driSupport = true;
+  hardware.opengl.driSupport32Bit = true;
+
+  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.support32Bit = true;
 }

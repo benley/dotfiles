@@ -15,21 +15,15 @@ in
     ./yubikey.nix
   ];
 
-  nixpkgs.config = {
-    allowUnfree = true;
+  nixpkgs.config.allowUnfree = true;
 
-    # These have no effect on google-chrome (I think), just chromium
-    chromium = {
-      gnomeSupport = true;
-      enablePepperFlash = true;
-      enablePepperPDF = true;
-      enableWideVine = true;
-    };
-
-    # vim.gui = "gtk3";  # gtk3 gets really weird if you're not running gnome
+  # These have no effect on google-chrome (I think), just chromium
+  nixpkgs.config.chromium = {
+    gnomeSupport = true;
+    enablePepperFlash = true;
+    enablePepperPDF = true;
+    enableWideVine = true;
   };
-
-  services.xserver.enableCtrlAltBackspace = false;
 
   programs.bash.enableCompletion = true;
 
@@ -109,4 +103,21 @@ in
   services.udev.packages = [
     dotfiles.steamcontroller-udev-rules
   ];
+
+  i18n.defaultLocale = "en_US.UTF-8";
+  i18n.consoleUseXkbConfig = true;
+
+  # Populate /etc/X11 since you're going to look there anyway
+  services.xserver.exportConfiguration = true;
+  services.xserver.enableCtrlAltBackspace = false;
+  services.xserver.layout = "us";
+
+  services.avahi = {
+    enable = true;
+    ipv4 = true;
+    ipv6 = true;
+    nssmdns = true;
+  };
+
+  time.timeZone = "America/New_York";
 }

@@ -32,9 +32,11 @@
 
   boot.initrd.luks = {
     mitigateDMAAttacks = true;
-    devices = [
-      { device = "/dev/disk/by-uuid/d2de07e6-a0fe-4cd0-a1e5-9e1921763d00"; name = "crypted"; allowDiscards = true; }
-    ];
+    devices = [{
+      device = "/dev/disk/by-uuid/d2de07e6-a0fe-4cd0-a1e5-9e1921763d00";
+      name = "crypted";
+      allowDiscards = true;
+    }];
   };
 
   boot.loader.grub = {
@@ -46,23 +48,15 @@
 
   boot.supportedFilesystems = [ "zfs" ];
 
-  networking.firewall = {
-    enable = true;
-    allowPing = true;
-  };
+  networking.firewall.enable = true;
+  networking.firewall.allowPing = true;
 
   networking.hostName = "samus";
   networking.networkmanager.enable = true;
   networking.hostId = "8425e439";
 
-  i18n = {
-    consoleFont = "ter-132b";
-    consolePackages = [ pkgs.terminus_font ];
-    defaultLocale = "en_US.UTF-8";
-    consoleUseXkbConfig = true;
-  };
-
-  time.timeZone = "America/New_York";
+  i18n.consoleFont = "ter-132b";
+  i18n.consolePackages = [ pkgs.terminus_font ];
 
   environment.systemPackages = with pkgs; [
     minecraft
@@ -75,18 +69,9 @@
 
   services.printing.enable = true;
 
-  services.avahi = {
-    enable = true;
-    ipv4 = true;
-    ipv6 = true;
-    nssmdns = true;
-  };
-
   services.xserver = {
-    enable = true;
     useGlamor = true;
     wacom.enable = true; # does this do anything on samus?
-    layout = "us";
     xkbModel = "chromebook";
     xkbOptions = "";  # drop the default "terminate:ctrl_alt_bksp"
 
@@ -115,11 +100,6 @@
 
     # Believe it or not, "intel" is deprecated nowadays
     videoDrivers = [ "modesetting" ];
-
-    # FDE means I type my password immediately after grub, so enabling sddm
-    # autologin is a sane thing to do.
-    # displayManager.sddm.autoLogin.enable = true;
-    # displayManager.sddm.autoLogin.user = "benley";
   };
 
   hardware.opengl = {
@@ -128,9 +108,6 @@
     extraPackages32 = with pkgs.pkgsi686Linux;
         [ vaapiIntel libvdpau libvdpau-va-gl vaapiVdpau ];
 
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
     s3tcSupport = true;
   };
 
@@ -140,8 +117,6 @@
     VDPAU_DRIVER = "va_gl";
   };
 
-  hardware.pulseaudio.enable = true;
-  hardware.pulseaudio.support32Bit = true;
   hardware.bluetooth.enable = true;
 
   # I'm not sure if these next two are necessary:
@@ -153,18 +128,16 @@
 
   zramSwap.enable = true;
 
-  systemd.mounts = [
-    { where = "/var/lib/docker";
-      what = "rpool/docker";
-      type = "zfs";
-      requiredBy = [ "docker.service" ];
-      before = ["docker.service"];
-      after = ["zfs-import-pool0.service"];
-    }
-  ];
+  # FIXME: does this belong here?
+  systemd.mounts = [{
+    where = "/var/lib/docker";
+    what = "rpool/docker";
+    type = "zfs";
+    requiredBy = [ "docker.service" ];
+    before = ["docker.service"];
+    after = ["zfs-import-pool0.service"];
+  }];
 
-  virtualisation.docker = {
-    enable = true;
-    storageDriver = "zfs";
-  };
+  virtualisation.docker.enable = true;
+  virtualisation.docker.storageDriver = "zfs";
 }
