@@ -2,6 +2,7 @@
 
 {
   environment.systemPackages = with pkgs; [
+    yubikey-personalization
     yubikey-personalization-gui
     yubikey-neo-manager
     yubioath-desktop

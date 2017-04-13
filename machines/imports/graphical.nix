@@ -10,7 +10,9 @@
     firefox
     google-chrome
     glxinfo
+    inkscape
     insync
+    skype
     slack
     steam
     xlibs.xdpyinfo

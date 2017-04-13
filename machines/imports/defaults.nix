@@ -46,10 +46,12 @@ in
     dotfiles.nix-home
     dotfiles.myVim
     acpi
+    binutils # strings, strip, ar, as, ...
     bc
     cabal-install
     ctags
     dnsutils
+    dropbox-cli
     dstat
     exercism
     file
@@ -68,7 +70,9 @@ in
     iotop
     jq
     jsonnet
+    lastpass-cli
     lsof
+    gnumake
     mosh
     mtr
     nix-prefetch-scripts

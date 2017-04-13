@@ -11,6 +11,7 @@
     gnome3.cheese     # KDE seems to lack a webcam app?
     gwenview          # photo viewer
     ark               # archive thinger
+    kgpg
     krita             # gimp-alike
     okular            # PDF viewer
     spectacle         # screenshot
