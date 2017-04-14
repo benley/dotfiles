@@ -25,6 +25,9 @@ in
     enableWideVine = true;
   };
 
+  # http://nicknovitski.com/vim-nix-syntax wtf
+  nixpkgs.config.vim.ftNix = false;
+
   programs.bash.enableCompletion = true;
 
   programs.tmux = {
