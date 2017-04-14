@@ -13,6 +13,7 @@
     ark               # archive thinger
     kgpg
     krita             # gimp-alike
+    latte-dock
     okular            # PDF viewer
     spectacle         # screenshot
     redshift-plasma-applet
