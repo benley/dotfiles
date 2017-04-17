@@ -13,4 +13,6 @@
     libu2f-host
     yubikey-personalization
   ];
+
+  services.pcscd.enable = true;
 }
