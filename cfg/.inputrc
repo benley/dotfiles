@@ -11,6 +11,9 @@ set bell-style visible
 set menu-complete-display-prefix on
 set skip-completed-text on
 
+# Immediately add / after tab-completed directories that are symlinks
+#set mark-symlinked-directories on
+
 # Holy cow awesome
 set blink-matching-paren on
 
@@ -41,12 +44,11 @@ $if Bash
 # in sequences and macros)
 #"\C-x\\": "\\"
 
-# Add a binding to refresh the line, which is unbound
+# Add a binding to refresh the line (normally not bound to a key)
 "\C-xr": redraw-current-line
 
-# I can't figure out how to make this work:
-# Edit variable on current line.
-#"\M-\C-v": "\C-a\C-k$\C-y\M-\C-e\C-a\C-y="
+# Edit variable on current line (e.g. type PS1, hit ctrl-meta-v)
+"\C-\M-v": "\C-a\C-k$\C-y\C-\M-e\C-a\C-y="
 
 # tab does normal completion, and ctrl-meta-j/k do menu completion.
 "\C-\M-j": menu-complete
