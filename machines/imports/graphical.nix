@@ -15,6 +15,7 @@
     skype
     slack
     steam
+    transmission_gtk
     xlibs.xdpyinfo
     xlibs.xev
     xlsfonts

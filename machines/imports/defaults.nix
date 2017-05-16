@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   dotfiles = import ../.. {};
@@ -49,6 +49,8 @@ in
     dotfiles.nix-home
     dotfiles.myVim
     acpi
+    awscli
+    bazel
     binutils # strings, strip, ar, as, ...
     bc
     cabal-install
@@ -58,8 +60,12 @@ in
     dstat
     exercism
     file
+    gdb
     git
     gnupg
+    go
+    google-cloud-sdk
+    gotags
     haskellPackages.ghc
     haskellPackages.ghc-mod
     haskellPackages.hdevtools
@@ -73,16 +79,20 @@ in
     iotop
     jq
     jsonnet
+    kubernetes-helm
     lastpass-cli
     lsof
     gnumake
     mosh
     mtr
+    nethogs
     nix-prefetch-scripts
     nix-repl
     nmap
     nodePackages.js-yaml
     nodePackages.jshint
+    openssl
+    oraclejdk
     pciutils
     pv
     pwgen
@@ -104,6 +114,7 @@ in
     usbutils
     wakelan
     wget
+    whois
     zip
   ];
 
@@ -126,5 +137,5 @@ in
     nssmdns = true;
   };
 
-  time.timeZone = "America/New_York";
+  time.timeZone = lib.mkDefault "America/New_York";
 }
