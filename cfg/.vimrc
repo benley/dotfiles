@@ -252,6 +252,13 @@ let g:NERDTreeHijackNetrw=1
 " Please don't resize my windows and move everything around stupidly
 let g:buffergator_autoexpand_on_split = 0
 
+" Horizontal split, buffer list on top 10 lines
+let g:buffergator_viewport_split_policy = "T"
+let g:buffergator_hsplit_size = 10
+
+" Show relative paths in the second column
+let g:buffergator_show_full_directory_path = 0
+
 if version >= 703
   " Show line numbers relative to cursor position
   set relativenumber
