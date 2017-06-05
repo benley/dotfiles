@@ -53,13 +53,14 @@
     }];
   };
 
-  networking.hostId = "8425e349";
-  networking.hostName = "alnitak";
 
   i18n.consoleFont = "ter-132b";
   i18n.consolePackages = [ pkgs.terminus_font ];
 
-  services.printing.enable = true;
+  networking.hostId = "8425e349";
+  networking.hostName = "alnitak";
+
+  services.crashplan.enable = true;
 
   services.xserver = {
     useGlamor = true;
