@@ -9,6 +9,7 @@
     ../imports/graphical.nix
     ../imports/kde.nix
     ../imports/wacom.nix
+    ../imports/workstuff.nix
     ../imports/virtualbox.nix
   ];
 

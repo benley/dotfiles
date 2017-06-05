@@ -8,9 +8,10 @@
     ../imports/defaults.nix
     ../imports/graphical.nix
     ../imports/kde.nix
-    ../imports/wacom.nix
     ../imports/trackpoint.nix
     ../imports/virtualbox.nix
+    ../imports/wacom.nix
+    ../imports/workstuff.nix
   ];
 
   boot.loader.efi = {
@@ -76,8 +77,6 @@
 
   zramSwap.enable = true;
   zramSwap.memoryPercent = 200;
-
-  networking.networkmanager.useDnsmasq = true;
 
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "zfs";

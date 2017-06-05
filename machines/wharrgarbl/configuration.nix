@@ -1,3 +1,4 @@
+# WHARRGARBL (Macbook Pro 13", Mid 2015)
 { config, pkgs, ... }:
 
 {
