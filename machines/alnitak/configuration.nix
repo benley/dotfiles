@@ -53,6 +53,15 @@
     }];
   };
 
+  # From https://wiki.archlinux.org/index.php/razer#Webcam
+  # > Setting the uvcvideo option "quirks=128" appears to let the webcam work
+  # > at 720p30, thus enabling Google Hangouts support. cheese works after
+  # > changing resolution to 720p and relaunching. Multiplying the quirk by a
+  # > power of 2+ further improves video quality to a point. "quirks=512" seems
+  # > to work best for one user.
+  boot.extraModprobeConfig = ''
+    options uvcvideo quirks=512
+  '';
 
   i18n.consoleFont = "ter-132b";
   i18n.consolePackages = [ pkgs.terminus_font ];
