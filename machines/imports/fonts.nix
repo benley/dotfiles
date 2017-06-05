@@ -32,7 +32,7 @@
     oxygenfonts
     powerline-fonts
     profont
-    proggyfonts
+    # proggyfonts  # bitmapped, too small on modern screens
     roboto
     source-code-pro
     source-sans-pro

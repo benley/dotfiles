@@ -85,8 +85,6 @@ in
 
   services.openssh.enable = true;
 
-  services.printing.enable = true;
-
   services.xserver.videoDrivers = [ "nvidia" ];
 
   # What does this actually do?
