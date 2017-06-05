@@ -1,3 +1,4 @@
+alias docker='sudo docker'
 alias getenv='source "$HOME"/.ssh/.getenv'
 alias grep='grep --color'
 alias wat='type -a'

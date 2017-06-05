@@ -35,4 +35,7 @@
 
   hardware.pulseaudio.enable = true;
   hardware.pulseaudio.support32Bit = true;
+
+  # Pulseaudio with bluetooth support enabled:
+  hardware.pulseaudio.package = pkgs.pulseaudioFull;
 }

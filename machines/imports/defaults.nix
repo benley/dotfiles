@@ -79,6 +79,8 @@ in
     iotop
     jq
     jsonnet
+    dotfiles.kubernetes-client
+    kops
     kubernetes-helm
     lastpass-cli
     lsof

@@ -73,4 +73,10 @@
   system.stateVersion = "17.03";
 
   zramSwap.enable = true;
+  zramSwap.memoryPercent = 200;
+
+  networking.networkmanager.useDnsmasq = true;
+
+  virtualisation.docker.enable = true;
+  virtualisation.docker.storageDriver = "zfs";
 }
