@@ -8,22 +8,27 @@
   environment.systemPackages = with pkgs; [
     dropbox
     firefox
-    google-chrome
     glxinfo
+    google-chrome
     inkscape
     insync
+    minecraft
     skype
     slack
     steam
     transmission_gtk
+    vlc
+    vscode
     xlibs.xdpyinfo
     xlibs.xev
     xlsfonts
     xsel
-    xsettingsd  # So I can use dump_xsettings
-    vlc
-    vscode
+    # xsettingsd  # for dump_xsettings
+    # vdpauinfo
+    # libva       # for the vainfo command
   ];
+
+  services.printing.enable = true;
 
   services.xserver.enable = true;
 

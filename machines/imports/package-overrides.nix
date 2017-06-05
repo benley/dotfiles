@@ -12,5 +12,7 @@
     #   withGssapiPatches = true;
     # };
 
+    # remove this once docker >= 17.05 becomes the normal docker version
+    docker = origPkgs.docker_17_05;
   };
 }

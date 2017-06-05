@@ -1,3 +1,5 @@
+#### SAMUS ####
+
 { config, pkgs, ... }:
 
 {
@@ -9,11 +11,17 @@
     ../imports/wacom.nix
   ];
 
-  # Samus audio support is supposed to just work in linux >= 4.9
-  boot.kernelPackages = pkgs.linuxPackages_4_9;
-
   # Make the cryptsetup password prompt readable
   boot.earlyVconsoleSetup = true;
+
+  boot.loader.grub = {
+    enable = true;
+    version = 2;
+    device = "/dev/sda";
+    zfsSupport = true;
+  };
+
+  boot.supportedFilesystems = [ "zfs" ];
 
   boot.plymouth.enable = true;
 
@@ -33,41 +41,19 @@
   boot.initrd.luks = {
     mitigateDMAAttacks = true;
     devices = [{
-      device = "/dev/disk/by-uuid/d2de07e6-a0fe-4cd0-a1e5-9e1921763d00";
       name = "crypted";
+      device = "/dev/disk/by-uuid/d2de07e6-a0fe-4cd0-a1e5-9e1921763d00";
       allowDiscards = true;
     }];
   };
 
-  boot.loader.grub = {
-    enable = true;
-    version = 2;
-    device = "/dev/sda";
-    zfsSupport = true;
-  };
-
-  boot.supportedFilesystems = [ "zfs" ];
-
+  networking.hostId = "8425e439";
+  networking.hostName = "samus";
   networking.firewall.enable = true;
   networking.firewall.allowPing = true;
 
-  networking.hostName = "samus";
-  networking.networkmanager.enable = true;
-  networking.hostId = "8425e439";
-
   i18n.consoleFont = "ter-132b";
   i18n.consolePackages = [ pkgs.terminus_font ];
-
-  environment.systemPackages = with pkgs; [
-    minecraft
-
-    vdpauinfo
-    libva  # Just for the vainfo command
-  ];
-
-  services.openssh.enable = false;
-
-  services.printing.enable = true;
 
   services.xserver = {
     useGlamor = true;

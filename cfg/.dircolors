@@ -155,10 +155,13 @@ CHR  37;44
 #############################################################################
 ### By file attributes
 
-# Orphaned symlinks (italicized white on red)
-ORPHAN  03;37;41
+# Orphaned symlinks (italicized brightred)
+ORPHAN  03;31 #;41
 # ... and the missing paths that they point at
-MISSING 03;37;41
+MISSING 03;31 #;41
+
+# note: ORPHAN also ends up getting used for bash-completion items that are not
+# files, such as commandline options
 
 # files with execute permission
 EXEC 01;31  # Unix

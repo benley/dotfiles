@@ -94,7 +94,7 @@ in
     nodePackages.js-yaml
     nodePackages.jshint
     openssl
-    oraclejdk
+    #oraclejdk
     pciutils
     pv
     pwgen

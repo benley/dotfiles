@@ -1,4 +1,4 @@
-#### TOTORO ####
+#### ALNITAK - Razer Blade Stealth (late 2016) ####
 
 { config, pkgs, ... }:
 
@@ -9,9 +9,15 @@
     ../imports/graphical.nix
     ../imports/kde.nix
     ../imports/wacom.nix
-    ../imports/trackpoint.nix
     ../imports/virtualbox.nix
   ];
+
+  boot.kernelPackages = pkgs.linuxPackages_4_11;
+  # zfs 0.6.5.9 doesn't work with linux 4.11 but 0.7.0rc4 does
+  boot.zfs.enableUnstable = true;
+
+  # Make the cryptsetup password prompt readable
+  boot.earlyVconsoleSetup = true;
 
   boot.loader.efi = {
     canTouchEfiVariables = true;
@@ -21,8 +27,18 @@
   boot.loader.grub = {
     enable = true;
     enableCryptodisk = true;
-    devices = [ "/dev/sda" ];
+    devices = [ "/dev/nvme0n1" ];
     efiSupport = true;
+    zfsSupport = true;
+    version = 2;
+    gfxmodeEfi = "3840x2160";
+
+    #font = "${pkgs.font-droid}/share/fonts/droid/DroidSansMono.ttf";
+    font = ./PragmataPro_Mono_R_0821.ttf;
+    fontSize = 48;
+    splashImage = null;
+
+    useOSProber = true;
   };
 
   boot.supportedFilesystems = [ "zfs" ];
@@ -31,22 +47,25 @@
     mitigateDMAAttacks = true;
     devices = [{
       name = "crypted";
-      device = "/dev/disk/by-uuid/9a2723c0-9b4e-47cc-897a-70edd09904dd";
+      device = "/dev/nvme0n1p7";
       allowDiscards = true;
     }];
   };
 
   networking.hostId = "8425e349";
-  networking.hostName = "totoro";
+  networking.hostName = "alnitak";
 
-  i18n.consoleFont = "Lat2-Terminus16";
+  i18n.consoleFont = "ter-132b";
+  i18n.consolePackages = [ pkgs.terminus_font ];
+
+  services.printing.enable = true;
 
   services.xserver = {
     useGlamor = true;
     libinput.enable = true;
     videoDrivers = [ "modesetting" ];
 
-    dpi = 120;  # Actual dpi is something like 157 but that looks way too huge
+    dpi = 240;  # Physical dpi is ~352 but as usual that makes the UI too big
 
     xkbOptions = "ctrl:nocaps,compose:ralt";
   };
@@ -69,16 +88,13 @@
   hardware.bluetooth.enable = true;
 
   # I'm not sure if these next two are necessary:
-  hardware.enableAllFirmware = true;
-  hardware.cpu.intel.updateMicrocode = true;
+  # hardware.enableAllFirmware = true;
+  # hardware.cpu.intel.updateMicrocode = true;
 
   system.stateVersion = "17.03";
 
-  zramSwap.enable = true;
-  zramSwap.memoryPercent = 200;
-
-  networking.networkmanager.useDnsmasq = true;
-
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "zfs";
+
+  zramSwap.enable = true;
 }
