@@ -6,14 +6,13 @@
   ];
 
   environment.systemPackages = with pkgs; [
-    dropbox
+    dropbox-cli
     firefox
     glxinfo
     google-chrome
     inkscape
     insync
     minecraft
-    skype
     slack
     steam
     transmission_gtk
