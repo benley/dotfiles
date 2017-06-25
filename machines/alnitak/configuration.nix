@@ -70,6 +70,8 @@
   networking.hostName = "alnitak";
 
   services.crashplan.enable = true;
+  services.openssh.enable = true;
+  services.openssh.passwordAuthentication = false;
 
   services.xserver = {
     useGlamor = true;
