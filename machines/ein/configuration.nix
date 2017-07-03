@@ -25,6 +25,7 @@
         chainloader /EFI/Microsoft/Boot/bootmgfw.efi
       }
     '';
+    useOSProber = true;
   };
 
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
@@ -76,4 +77,8 @@
 
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "17.03";
+
+  services.synergy.server.enable = true;
+  services.synergy.server.enableCrypto = true;
+  services.synergy.server.configFile = ./synergy.conf;
 }

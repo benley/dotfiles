@@ -67,7 +67,7 @@ in
     google-cloud-sdk
     gotags
     haskellPackages.ghc
-    haskellPackages.ghc-mod
+    # haskellPackages.ghc-mod  # broken?
     haskellPackages.hdevtools
     haskellPackages.hindent
     haskellPackages.hlint
@@ -138,6 +138,8 @@ in
     ipv6 = true;
     nssmdns = true;
   };
+
+  services.irqbalance.enable = true;
 
   time.timeZone = lib.mkDefault "America/New_York";
 }
