@@ -32,6 +32,10 @@
   services.xserver.enable = true;
 
   networking.networkmanager.enable = true;
+  networking.networkmanager.unmanaged = [
+    "interface-name:docker*"
+    "interface-name:veth*"
+  ];
 
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;

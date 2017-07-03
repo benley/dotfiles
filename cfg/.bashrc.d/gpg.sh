@@ -3,7 +3,7 @@
 GPG_TTY=$(tty)
 export GPG_TTY
 
-if [[ -z $SSH_CLIENT || -z $SSH_AUTH_SOCK ]]; then
+if [[ -z $SSH_CLIENT ]]; then
   unset SSH_AGENT_PID
 
   if [[ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]]; then

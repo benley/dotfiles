@@ -69,6 +69,7 @@
   networking.hostId = "8425e349";
   networking.hostName = "alnitak";
 
+  services.avahi.publish.enable = true;
   services.crashplan.enable = true;
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
