@@ -50,7 +50,7 @@ in
     dotfiles.myVim
     acpi
     awscli
-    bazel
+    # bazel  # bazel on nixos isn't worth it :-(
     binutils # strings, strip, ar, as, ...
     bc
     cabal-install
