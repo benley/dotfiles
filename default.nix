@@ -59,6 +59,8 @@ rec {
     };
   };
 
+  vimPackages = import ./vim/vimPackages.nix pkgs;
+
   slim-themes = callPackage ./pkgs/slim-themes { };
 
   steamcontroller-udev-rules = callPackage ./pkgs/steamcontroller-udev-rules { };
