@@ -231,9 +231,14 @@ let g:haskell_conceal_wide = 0
 let g:is_bash = 1
 
 syntax on
-colorscheme zenburn
+
+" This works with Konsole, not sure about other terminals:
+set termguicolors
+colorscheme base16-materia
+
+"colorscheme zenburn
 " Looks nice with zenburn:
-highlight ColorColumn ctermbg=238 guibg=#484848
+"highlight ColorColumn ctermbg=238 guibg=#484848
 
 let g:syntastic_check_on_open = 1
 "let g:syntastic_error_symbol = '✗'
