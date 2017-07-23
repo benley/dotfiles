@@ -1,19 +1,19 @@
 { pkgs, lib, ... }:
 
 let
-  customization = {
+  custom_vim = pkgs.vim_configurable.customize {
     name = "vim";
-    vimrcConfig = (import ./vim/customization.nix { inherit pkgs; });
+    vimrcConfig = (import ./customization.nix { inherit pkgs; });
   };
 
-  custom_vim = pkgs.vim_configurable.customize customization;
-
+in {
   vim = lib.overrideDerivation custom_vim (o: {
-    # ...
+    ftNixSupport = false;
   });
 
-in [
-  vim
-  pkgs.python
-  pkgs.ctags
-]
+  neovim = pkgs.neovim.override {
+    vimAlias = false;
+
+    configure = (import ./customization.nix { inherit pkgs; });
+  };
+}

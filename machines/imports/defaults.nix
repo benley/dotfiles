@@ -47,7 +47,7 @@ in
 
   environment.systemPackages = with pkgs; [
     dotfiles.nix-home
-    dotfiles.myVim
+    dotfiles.vim
     acpi
     awscli
     # bazel  # bazel on nixos isn't worth it :-(
