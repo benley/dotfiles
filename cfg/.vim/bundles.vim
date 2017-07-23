@@ -104,7 +104,10 @@ VAMActivate github:skreuzer/vim-prometheus
 VAMActivate github:jubalfh/vim-ldapschema
 VAMActivate github:robbles/logstash.vim
 VAMActivate github:keith/swift.vim
+VAMActivate github:chikamichi/mediawiki.vim
 """
+
+VAMActivate github:aquach/vim-mediawiki-editor
 
 """ Clojure
 VAMActivate dispatch
