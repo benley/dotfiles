@@ -74,6 +74,7 @@ VAMActivate oceanlight
 "VAMActivate fish
 VAMActivate github:ekalinin/Dockerfile.vim
 VAMActivate github:hylang/vim-hy
+VAMActivate github:manicmaniac/coconut.vim
 VAMActivate github:kevints/vim-aurora-syntax
 VAMActivate github:kylef/apiblueprint.vim
 VAMActivate github:mustache/vim-mustache-handlebars
