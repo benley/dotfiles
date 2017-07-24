@@ -1,30 +1,32 @@
 source ~/.vim/bundles.vim
 
+" This needs to be after plugins are loaded, otherwise your user stuff may be
+" overridden by the defaults from plugins:
+filetype plugin indent on
+
 set backspace=indent,eol,start
 set expandtab
 set noerrorbells
+set visualbell t_vb=  " TODO: does t_vb do anything anymore?
 if exists('&esckeys')
-  " not in neovim
-  set esckeys
+  set esckeys  " (not in neovim)
 endif
-set incsearch
-" This will highlight all matches from the previous search.
-" set hlsearch
 set ignorecase
 set smartcase
-set joinspaces
 set autowrite
 " Ignore compiled files when completing paths:
 set wildignore=*.o,*~,*.pyc,*.pyo,*.class,*.hi,*.obj
-set wildmenu
-"set nobackup
 set hidden
-set magic
-set laststatus=2 " Keep the status bar even when there's only one window.
-set listchars=tab:⇥\   " Loudly highlight the damn tabs
-set fillchars=vert:┃,fold:-,diff:╳
-" Show invisible characters (e.g. tabs)
-set list
+set laststatus=2  " Show the status bar even when there's only one window.
+set listchars+=nbsp:╳     " non-breaking spaces (0xA0, U+202F)
+set listchars+=extends:›  " at the right edge when text extends offscreen
+set listchars+=precedes:‹ " at the left edge when scrolled right
+set listchars+=tab:›_
+set fillchars+=vert:┃
+set fillchars+=fold:-
+set fillchars+=diff:╳
+set showbreak=↳           " at the start of continued wrapped lines
+set list                  " Display all the stuff defined in listchars above
 set scrolloff=2
 " This screws things up when you use >> and <<:
 "set shiftround
@@ -37,31 +39,19 @@ if has("mouse")
   set mouse=a
 endif
 
-"  set   autowrite
-"  set   nobackup
-"  set   hidden
-"  set   highlight=8r,db,es,hs,mb,Mr,nu,rs,sr,tb,vr,ws
-"  set   modelines=1    default is 5
-set   ruler
-"set   shiftwidth=4
-set   showcmd
-set   showmatch
-set   showmode
-set   nostartofline
-"set   tabstop=8
-set   textwidth=79
-set   visualbell t_vb=
-"       much more precise without these.  only practical in a few situations, so
-"       leave it here for easy editing
-set   whichwrap=b,s,h,l,<,>,[,]
-"set  nowrapscan
-set   nowritebackup
+set showmatch
+set nostartofline
+set textwidth=79
 
-" autocmd!
+" Make it so various navigation keys will wrap across line breaks like every
+" other editor in the universe:
+set whichwrap=b,s,h,l,<,>,[,]
 
-"map   K  gq
+" Don't wrap searches around the end of a file:
+"set nowrapscan
 
-set nonumber
+" Make a backup before overwriting a file (see :help wb)
+"set nowritebackup
 
 " Attempts to make `gf` file jumping work for python imports.
 if has("python")
@@ -115,11 +105,9 @@ augroup myfiletypestuff
   autocmd FileType conf
         \ setlocal foldcolumn=0 modeline modelines=5
   autocmd FileType vim
-        \ call BenCode()
-        \ | setlocal shiftwidth=2
+        \ setlocal shiftwidth=2
   autocmd FileType ruby
-        \ call BenCode()
-        \ | setlocal shiftwidth=2
+        \ setlocal shiftwidth=2
   autocmd FileType gitcommit
         \ setlocal textwidth=71
   autocmd FileType make
@@ -139,8 +127,7 @@ augroup myfiletypestuff
   autocmd FileType go
         \ setlocal listchars=tab:\ \  tabstop=4 shiftwidth=4
   autocmd FileType python
-        \ call BenCode()
-        \ | setlocal tags+=$HOME/.vim/tags/python27.tags
+        \ setlocal tags+=$HOME/.vim/tags/python27.tags
         \     indentexpr=GetGooglePythonIndent(v:lnum)
         \     shiftwidth=4
         \     formatprg=autopep8\ -
@@ -152,17 +139,6 @@ augroup myfiletypestuff
 augroup end
 
 let s:maxoff = 50 " maximum number of lines to look backwards.
-
-fun! BenCode()
-  "I hate this right now for some reason
-  "setlocal colorcolumn=+1,+2 foldcolumn=5 foldmethod=indent number foldnestmax=4
-  "match OverLength /\%>80v.\+/
-  "setlocal shiftwidth=2 smartindent autoindent expandtab
-  setlocal shiftwidth=4 expandtab
-endfun
-
-"highlight RedundantSpaces ctermbg=red guibg=red
-"match RedundantSpaces /\s\+$\| \+\ze\t/
 
 augroup colorstuff
   autocmd!
@@ -224,16 +200,13 @@ let g:tagbar_type_markdown = {
 " (this benefits from Tlist_Process_File_Always=1)
 "set title titlestring=%<%f\ %([%{Tlist_Get_Tagname_By_Line()}]%)
 
-" WinManager blahblah
-let g:winManagerWindowLayout = "BufExplorer,FileExplorer|TagList"
-
 let g:haskell_conceal = 0
 let g:haskell_conceal_wide = 0
 
 " Default shell syntax variant when the shebang line isn't explicit:
 let g:is_bash = 1
 
-syntax on
+" syntax on
 
 " This works with Konsole, not sure about other terminals:
 set termguicolors
@@ -251,11 +224,11 @@ let g:syntastic_aggregate_errors = 1
 let g:syntastic_auto_loc_list = 2
 let g:syntastic_always_populate_loc_list = 1
 
-let g:virtualenv_stl_format='[%n]'
+let g:virtualenv_stl_format='[%n]'  " TODO: Does this do anything with airline installed?
 "set statusline=%<%f\ %h%m%r%{VirtualEnvStatusline()}%=%-14.(%l,%c%V%)\ %P
 
 let g:NERDTreeIgnore=['\~$', '\.pyc$', 'bazel-\w\+$[[dir]]']
-let g:NERDTreeHijackNetrw=1
+let g:NERDTreeHijackNetrw=1  " TODO: what does this actually accomplish?
 
 " Please don't resize my windows and move everything around stupidly
 let g:buffergator_autoexpand_on_split = 0
@@ -267,23 +240,18 @@ let g:buffergator_hsplit_size = 10
 " Show relative paths in the second column
 let g:buffergator_show_full_directory_path = 0
 
-if version >= 703
-  " Show line numbers relative to cursor position
-  set relativenumber
-  augroup relnum703
-    autocmd! BufReadPost * set relativenumber
-  augroup end
+" Show line numbers relative to cursor position
+set relativenumber
+augroup relnum703
+  autocmd! BufReadPost * set relativenumber
+augroup end
 
-  " Color current line number in obnoxious magenta
-  "highlight CursorLineNr ctermfg=130 guifg=#ff5fd7
+" Color current line number in obnoxious magenta
+"highlight CursorLineNr ctermfg=130 guifg=#ff5fd7
 
-  " Subtly show column 80
-  set colorcolumn=+1
-  "highlight ColorColumn ctermbg=238 guibg=#121212
-endif
-
-" http://vim.wikia.com/wiki/View_man_pages_in_Vim
-runtime ftplugin/man.vim
+" Subtly show column 80
+set colorcolumn=+1
+"highlight ColorColumn ctermbg=238 guibg=#121212
 
 if has("mac")
   let g:ycm_path_to_python_interpreter = '/usr/bin/python'
@@ -323,6 +291,8 @@ augroup end
 nnoremap <silent> <Leader>e :Errors<CR>
 nnoremap <Leader>s :SyntasticToggleMode<CR>
 nnoremap <silent> <Leader>r :TagbarToggle<CR>
+nnoremap <silent> <Leader>n :NERDTreeToggle<CR>
+nnoremap <silent> <Leader>b :BuffergatorToggle<CR>
 
 let pyindent_nested_paren = 4
 let pyindent_open_paren = 4

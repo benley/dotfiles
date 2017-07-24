@@ -47,7 +47,6 @@ in
 
   environment.systemPackages = with pkgs; [
     dotfiles.nix-home
-    dotfiles.neovim
     acpi
     awscli
     # bazel  # bazel on nixos isn't worth it :-(
@@ -87,6 +86,7 @@ in
     gnumake
     mosh
     mtr
+    neovim
     nethogs
     nix-prefetch-scripts
     nix-repl

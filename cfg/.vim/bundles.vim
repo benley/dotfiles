@@ -42,10 +42,10 @@ VAMActivate vimux
 "VAMActivate github:vim-airline/vim-airline  "nix
 "VAMActivate github:vim-airline/vim-airline-themes  "nix
 "VAMActivate vim-gitgutter  "nix
-VAMActivate vim-vagrant  " provides :Vagrant
+"VAMActivate vim-vagrant  " provides :Vagrant
 VAMActivate wildfire  " Smart selection of the nearest text object
 "VAMActivate YouCompleteMe "nix
-VAMActivate github:rdnetto/YCM-Generator
+"VAMActivate github:rdnetto/YCM-Generator  " Disabled until I use YCM again
 "VAMActivate github:jeetsukumaran/vim-buffergator  "nix
 "VAMActivate github:godlygeek/tabular  "nix
 """
@@ -59,7 +59,7 @@ VAMActivate Ambient_Color_Scheme
 VAMActivate clarity
 VAMActivate Cthulhian
 VAMActivate darktango
-VAMActivate github:chriskempson/base16-vim
+"VAMActivate github:chriskempson/base16-vim  "nix
 VAMActivate gruvbox
 VAMActivate Lucius
 "VAMActivate molokai  "nix
@@ -72,7 +72,7 @@ VAMActivate oceanlight
 
 """ Misc syntax highlighting:
 "VAMActivate fish
-VAMActivate github:ekalinin/Dockerfile.vim
+"VAMActivate github:ekalinin/Dockerfile.vim  "nix
 VAMActivate github:hylang/vim-hy
 VAMActivate github:manicmaniac/coconut.vim
 VAMActivate github:kevints/vim-aurora-syntax
@@ -130,13 +130,11 @@ VAMActivate projectionist
 
 """ Python
 "VAMActivate github:hdima/python-syntax  " seems to break pyrex/cython syntax?
-VAMActivate pythoncomplete
+"VAMActivate pythoncomplete  " this comes with vim now
 "VAMActivate pydoc
 "VAMActivate python_ifold  " Interferes with things other than Python. Grr.
-VAMActivate virtualenv
+"VAMActivate virtualenv  "nix
 """
 
 " For mouse clicks
-VAMActivate utl
-
-filetype plugin indent on
+"VAMActivate utl
