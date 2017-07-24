@@ -3,7 +3,10 @@ source ~/.vim/bundles.vim
 set backspace=indent,eol,start
 set expandtab
 set noerrorbells
-set esckeys
+if exists('&esckeys')
+  " not in neovim
+  set esckeys
+endif
 set incsearch
 " This will highlight all matches from the previous search.
 " set hlsearch

@@ -12,7 +12,7 @@ in {
   });
 
   neovim = pkgs.neovim.override {
-    vimAlias = false;
+    vimAlias = true;
 
     configure = (import ./customization.nix { inherit pkgs; });
   };

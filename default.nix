@@ -2,6 +2,8 @@
 
 with { inherit (nixpkgs) pkgs lib; };
 
+let vimPackages = import ./vim/vimPackages.nix pkgs; in
+
 rec {
   inherit (pkgs) callPackage;
 
@@ -15,51 +17,9 @@ rec {
 
   homedir = import ./homedir.nix { inherit lib mkHome; };
 
-  myVim = pkgs.vim_configurable.customize {
-    name = "vim";
-    vimrcConfig = {
-      customRC = ''
-        source ~/.vimrc
-        set secure
-      '';
-      vam.knownPlugins = pkgs.vimPlugins;
-      vam.pluginDictionaries = [{
-        names = [
-          "Solarized"
-          "Supertab"
-          "Syntastic"
-          "Tagbar"
-          "The_NERD_tree"
-          "fugitive"
-          "ghcmod"
-          "molokai"
-          "neco-ghc"
-          "rainbow_parentheses"
-          "rust-vim"
-          "tabular"
-          "taglist"
-          # "vim-addon-nix"  # The MarcWeber version
-          "vim-nix"  # The LnL7 one
-          "vim-airline"
-          "vim-airline-themes"
-          "vim-buffergator"
-          "vim-coffee-script"
-          "vim-eunuch"
-          "vim-gitgutter"
-          "vim-go"
-          "vim-jsonnet"
-          "vim2hs"
-          "vimproc"
-          "vimshell-vim"
-          "youcompleteme"
-          # "vim-hdevtools"
-          "zenburn"
-        ];
-      }];
-    };
-  };
+  vim = vimPackages.vim;
 
-  vimPackages = import ./vim/vimPackages.nix pkgs;
+  neovim = vimPackages.neovim;
 
   slim-themes = callPackage ./pkgs/slim-themes { };
 
