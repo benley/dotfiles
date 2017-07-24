@@ -13,9 +13,14 @@
     ../imports/virtualbox.nix
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_4_11;
+  boot.kernelParams = [
+    # https://patchwork.kernel.org/patch/9285379/
+    "button.lid_init_state=open"
+  ];
+
+  # boot.kernelPackages = pkgs.linuxPackages_4_11;
   # zfs 0.6.5.9 doesn't work with linux 4.11 but 0.7.0rc4 does
-  boot.zfs.enableUnstable = true;
+  # boot.zfs.enableUnstable = true;
 
   # Make the cryptsetup password prompt readable
   boot.earlyVconsoleSetup = true;
@@ -60,7 +65,7 @@
   # > power of 2+ further improves video quality to a point. "quirks=512" seems
   # > to work best for one user.
   boot.extraModprobeConfig = ''
-    options uvcvideo quirks=512
+    options uvcvideo quirks=128
   '';
 
   i18n.consoleFont = "ter-132b";

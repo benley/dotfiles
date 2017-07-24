@@ -76,6 +76,7 @@ in
     httpie
     iftop
     iotop
+    iw
     jq
     jsonnet
     dotfiles.kubernetes-client

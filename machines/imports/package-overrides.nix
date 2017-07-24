@@ -15,6 +15,6 @@ let dotfiles = import ../../ {}; in
     # };
 
     # remove this once docker >= 17.05 becomes the normal docker version
-    docker = pkgs.docker_17_05;
+    #docker = pkgs.docker_17_05;
   };
 }

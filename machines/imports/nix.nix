@@ -3,7 +3,7 @@
 {
   nix = {
     nixPath = [
-      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs"
+      #"nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs"
       "nixos-config=/home/benley/p/dotfiles/machines/${config.networking.hostName}/configuration.nix"
       "dotfiles=/home/benley/p/dotfiles"
       "/nix/var/nix/profiles/per-user/root/channels"
