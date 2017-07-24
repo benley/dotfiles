@@ -9,7 +9,9 @@ in {
     knownPlugins = pkgs.vimPlugins // plugins;
 
     pluginDictionaries = [
-      { name = "youcompleteme"; }
+      # YCM triggers a bug in neovim:
+      # https://github.com/neovim/neovim/issues/6166
+      # { name = "youcompleteme"; }
       { name = "vim-trailing-whitespace"; }
       { name = "Solarized"; }
       { name = "Supertab"; }
@@ -37,7 +39,6 @@ in {
       { name = "vim2hs"; }
       { name = "vimproc"; }
       { name = "vimshell-vim"; }
-      { name = "youcompleteme"; }
       # { name = "vim-hdevtools"; }
       { name = "zenburn"; }
     ];
