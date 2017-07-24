@@ -87,6 +87,11 @@
     dpi = 240;  # Physical dpi is ~352 but as usual that makes the UI too big
 
     xkbOptions = "ctrl:nocaps,compose:ralt";
+
+    windowManager.xmonad = {
+      enable = true;
+      enableContribAndExtras = true;
+    };
   };
 
   hardware.opengl = {
