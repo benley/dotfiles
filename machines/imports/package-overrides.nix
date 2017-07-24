@@ -1,9 +1,7 @@
 { config, pkgs, ... }:
 
-let dotfiles = import ../../ {}; in
-
 {
-  nixpkgs.config.packageOverrides = pkgs: (import <dotfiles> {}) // {
+  nixpkgs.config.packageOverrides = pkgs: {
 
     # This would enable kerberos in the default openssh package so it gets
     # included with things like git. Unfortunately, that causes nix to rebuild

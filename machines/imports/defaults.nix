@@ -87,7 +87,7 @@ in
     gnumake
     mosh
     mtr
-    neovim
+    dotfiles.neovim
     nethogs
     nix-prefetch-scripts
     nix-repl

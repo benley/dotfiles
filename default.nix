@@ -25,5 +25,5 @@ rec {
 
   steamcontroller-udev-rules = callPackage ./pkgs/steamcontroller-udev-rules { };
 
-  yaml2json = callPackage ./pkgs/yaml2json { };
+  # yaml2json = callPackage ./pkgs/yaml2json { };
 }
