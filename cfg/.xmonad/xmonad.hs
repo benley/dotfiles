@@ -2,34 +2,20 @@ import XMonad
 import XMonad.Actions.Commands
 import XMonad.Actions.GridSelect
 import XMonad.Config.Desktop (desktopConfig, desktopLayoutModifiers)
--- import XMonad.Config.Gnome
--- import XMonad.Config.Kde
--- import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
--- import XMonad.Hooks.FadeInactive
--- import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers (doFullFloat, doCenterFloat, isFullscreen, isDialog)
--- import XMonad.Hooks.UrgencyHook
--- import XMonad.Layout.Accordion
--- import XMonad.Layout.Circle
--- import XMonad.Layout.Grid
+import XMonad.Hooks.Place (placeHook, simpleSmart)
 import XMonad.Layout.DecorationMadness
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders (noBorders, smartBorders)
 import XMonad.Layout.MouseResizableTile
--- import XMonad.Layout.ResizableTile
 import XMonad.Layout.SimpleDecoration
 import XMonad.Layout.Roledex
 import XMonad.Layout.Tabbed (tabbed)
 import XMonad.Layout.ThreeColumns (ThreeCol (ThreeColMid))
--- import XMonad.Prompt
--- import XMonad.Prompt.Man
 import XMonad.Util.EZConfig (additionalKeys)
--- import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.SpawnOnce (spawnOnce)
 import XMonad.Util.Themes (theme, donaldTheme)
--- import System.Exit
--- import System.IO
 
 import Data.Monoid (mconcat)
 import qualified XMonad.StackSet as W
@@ -47,14 +33,17 @@ myManageHook = composeAll
   , className =? "steam"          --> doIgnore  -- big picture mode?
   , className =? "Steam"          --> doFloat
   , className =? "plasmashell"    --> doFloat
+  , className =? "pinentry"       --> doCenterFloat
+  , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> doCenterFloat
+  , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> doF W.swapMaster
+  , placeHook simpleSmart
   ] where unfloat :: ManageHook
           unfloat = ask >>= doF . W.sink
 
 myLayoutHook = smartBorders $ desktopLayoutModifiers $
     myResizable
-     ||| simpleDeco shrinkText defaultTheme Roledex
+     ||| Mirror myResizable
      ||| fullscreenFull Full
-     ||| floatSimpleDwmStyle
 
     where myResizable = mouseResizableTile { masterFrac = 0.5
                                            , fracIncrement = 1/100
@@ -69,11 +58,12 @@ myLayoutHook = smartBorders $ desktopLayoutModifiers $
  floatSimpleDwmStyle
  ThreeColMid 1 (3/100) (2/3)
  tabbed shrinkText (theme donaldTheme)
+ simpleDeco shrinkText defaultTheme Roledex
 -}
 
 -- Which key to use as the default modMask
 -- mod1Mask: alt, mod4Mask: win
--- modm = mod1Mask
+defaultModMask = mod1Mask
 
 kde5Config = desktopConfig
     { terminal = "konsole"
@@ -81,26 +71,23 @@ kde5Config = desktopConfig
     }
 
 kde5Keys XConfig {modMask = modm} = Data.Map.fromList
-    [ ((modm, xK_p), spawn "krunner")
+    [ ((modm, xK_space), spawn "krunner")
     , ((modm .|. shiftMask, xK_q),
        spawn ("dbus-send --print-reply --dest=org.kde.ksmserver /KSMServer "
               ++ "org.kde.KSMServerInterface.logout int32:1 int32:0 int32:1"))
     ]
 
 myKeyBindings =
-    [ ((mod1Mask .|. controlMask, xK_y), commands >>= runCommand)
-    , ((mod1Mask .|. shiftMask, xK_p),
-       spawn "dmenu_run -i -p 'Launch:' -l 5 -fn 'Noto Sans:size=15'")
-    , ((mod1Mask, xK_a), sendMessage ShrinkSlave)
-    , ((mod1Mask, xK_z), sendMessage ExpandSlave)
-    , ((mod1Mask, xK_g), goToSelected defaultGSConfig)
-    --, ((mod1Mask, xK_F1), manPrompt defaultXPConfig)
+    [ ((defaultModMask .|. controlMask, xK_y), defaultCommands >>= runCommand)
+    , ((defaultModMask .|. shiftMask, xK_space), spawn "dmenu_run -i -p 'Launch:' -l 5 -fn 'Noto Sans:size=15'")
+    , ((defaultModMask, xK_a),                 sendMessage ShrinkSlave)
+    , ((defaultModMask, xK_z),                 sendMessage ExpandSlave)
+    , ((defaultModMask, xK_g),                 goToSelected defaultGSConfig)
+    , ((defaultModMask,  xK_p),                sendMessage NextLayout)
     ]
-    where commands = defaultCommands
-          -- ^ List of commands to use with dmenu when you press ctrl-mod1-y
 
 main =
-    xmonad (kde5Config { modMask = mod1Mask
+    xmonad (kde5Config { modMask = defaultModMask
                        , manageHook = manageHook kde5Config <+> myManageHook
                        , layoutHook = myLayoutHook
                        , borderWidth = 3
