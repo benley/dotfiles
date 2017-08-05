@@ -18,10 +18,11 @@ set autowrite
 set wildignore=*.o,*~,*.pyc,*.pyo,*.class,*.hi,*.obj
 set hidden
 set laststatus=2  " Show the status bar even when there's only one window.
-set listchars+=nbsp:╳     " non-breaking spaces (0xA0, U+202F)
+set listchars+=nbsp:␣     " non-breaking spaces (0xA0, U+202F)
 set listchars+=extends:›  " at the right edge when text extends offscreen
 set listchars+=precedes:‹ " at the left edge when scrolled right
 set listchars+=tab:›_
+set listchars+=trail:·
 set fillchars+=vert:┃
 set fillchars+=fold:-
 set fillchars+=diff:╳
@@ -42,6 +43,8 @@ endif
 set showmatch
 set nostartofline
 set textwidth=79
+
+set shiftwidth=2  " 2-space indents by default
 
 " Make it so various navigation keys will wrap across line breaks like every
 " other editor in the universe:
@@ -125,7 +128,7 @@ augroup myfiletypestuff
   autocmd FileType nix
         \ setlocal smartindent autoindent
   autocmd FileType go
-        \ setlocal listchars=tab:\ \  tabstop=4 shiftwidth=4
+        \ setlocal tabstop=4 shiftwidth=4
   autocmd FileType python
         \ setlocal tags+=$HOME/.vim/tags/python27.tags
         \     indentexpr=GetGooglePythonIndent(v:lnum)
@@ -229,6 +232,7 @@ let g:virtualenv_stl_format='[%n]'  " TODO: Does this do anything with airline i
 
 let g:NERDTreeIgnore=['\~$', '\.pyc$', 'bazel-\w\+$[[dir]]']
 let g:NERDTreeHijackNetrw=1  " TODO: what does this actually accomplish?
+let g:NERDTreeQuitOnOpen=1
 
 " Please don't resize my windows and move everything around stupidly
 let g:buffergator_autoexpand_on_split = 0
