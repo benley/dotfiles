@@ -1,5 +1,5 @@
 import XMonad
-import XMonad.Actions.Commands
+import XMonad.Actions.Commands (defaultCommands, runCommand)
 import XMonad.Actions.GridSelect
 import XMonad.Config.Desktop (desktopConfig, desktopLayoutModifiers)
 import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
@@ -13,7 +13,6 @@ import XMonad.Layout.SimpleDecoration
 import XMonad.Layout.Roledex
 import XMonad.Layout.Tabbed (tabbed)
 import XMonad.Layout.ThreeColumns (ThreeCol (ThreeColMid))
-import XMonad.Util.EZConfig (additionalKeys)
 import XMonad.Util.SpawnOnce (spawnOnce)
 import XMonad.Util.Themes (theme, donaldTheme)
 
@@ -70,20 +69,21 @@ kde5Config = desktopConfig
     , keys = kde5Keys <+> keys desktopConfig
     }
 
-kde5Keys XConfig {modMask = modm} = Data.Map.fromList
-    [ ((modm, xK_space), spawn "krunner")
+kde5Keys conf@(XConfig {XMonad.modMask = modm}) = Data.Map.fromList
+    [ ((modm,               xK_space), spawn "krunner")
     , ((modm .|. shiftMask, xK_q),
        spawn ("dbus-send --print-reply --dest=org.kde.ksmserver /KSMServer "
               ++ "org.kde.KSMServerInterface.logout int32:1 int32:0 int32:1"))
+    , ((modm,               xK_p), sendMessage NextLayout)
+    , ((modm .|. shiftMask, xK_p), setLayout (XMonad.layoutHook conf))
     ]
 
-myKeyBindings =
-    [ ((defaultModMask .|. controlMask, xK_y), defaultCommands >>= runCommand)
-    , ((defaultModMask .|. shiftMask, xK_space), spawn "dmenu_run -i -p 'Launch:' -l 5 -fn 'Noto Sans:size=15'")
-    , ((defaultModMask, xK_a),                 sendMessage ShrinkSlave)
-    , ((defaultModMask, xK_z),                 sendMessage ExpandSlave)
-    , ((defaultModMask, xK_g),                 goToSelected defaultGSConfig)
-    , ((defaultModMask,  xK_p),                sendMessage NextLayout)
+myKeyBindings XConfig {XMonad.modMask = modm} = Data.Map.fromList
+    [ ((modm .|. controlMask, xK_y), defaultCommands >>= runCommand)
+    , ((modm .|. shiftMask, xK_space), spawn "dmenu_run -i -p 'Launch:' -l 5 -fn 'Noto Sans:size=15'")
+    , ((modm, xK_a), sendMessage ShrinkSlave)
+    , ((modm, xK_z), sendMessage ExpandSlave)
+    , ((modm, xK_g), goToSelected defaultGSConfig)
     ]
 
 main =
@@ -96,7 +96,8 @@ main =
                            , handleEventHook kde5Config
                            ]
                        , startupHook = spawnOnce "xcompmgr" <+> startupHook kde5Config
-                       } `additionalKeys` myKeyBindings)
+                       , keys = keys kde5Config <+> myKeyBindings
+                       })
 {-
   --If not using the fancy gnome session with its own status bar, uncomment:
   --do xmproc <- spawnPipe "/usr/bin/xmobar /home/benley/.xmobarrc"
