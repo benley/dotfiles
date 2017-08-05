@@ -66,7 +66,7 @@ in
     google-cloud-sdk
     gotags
     haskellPackages.ghc
-    # haskellPackages.ghc-mod  # broken?
+    haskellPackages.ghc-mod
     haskellPackages.hdevtools
     haskellPackages.hindent
     haskellPackages.hlint
