@@ -24,15 +24,17 @@ myManageHook = composeAll
   [ fullscreenManageHook
   , isFullscreen --> doFullFloat
   , isDialog     --> doCenterFloat
-  , resource  =? "FEZ.bin.x86"    --> doFloat
-  , resource  =? "FEZ.bin.x86_64" --> doFloat
-  , resource  =? "tinyandbig"     --> doIgnore
+  -- , resource  =? "FEZ.bin.x86"    --> doFloat
+  -- , resource  =? "FEZ.bin.x86_64" --> doFloat
+  -- , resource  =? "tinyandbig"     --> doIgnore
   , className =? "Gimp"           --> doFloat
-  , className =? "hl2_linux"      --> doFullFloat
-  , className =? "steam"          --> doIgnore  -- big picture mode?
-  , className =? "Steam"          --> doFloat
+  -- , className =? "hl2_linux"      --> doFullFloat
+  -- , className =? "steam"          --> doIgnore  -- big picture mode?
+  -- , className =? "Steam"          --> doFloat
+  , resource =? "Steam"           --> doFloat
   , className =? "plasmashell"    --> doFloat
   , className =? "pinentry"       --> doCenterFloat
+  , className =? "krunner"        --> doCenterFloat
   , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> doCenterFloat
   , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> doF W.swapMaster
   , placeHook simpleSmart
@@ -69,7 +71,7 @@ kde5Config = desktopConfig
     , keys = kde5Keys <+> keys desktopConfig
     }
 
-kde5Keys conf@(XConfig {XMonad.modMask = modm}) = Data.Map.fromList
+kde5Keys conf@XConfig {XMonad.modMask = modm} = Data.Map.fromList
     [ ((modm,               xK_space), spawn "krunner")
     , ((modm .|. shiftMask, xK_q),
        spawn ("dbus-send --print-reply --dest=org.kde.ksmserver /KSMServer "
@@ -98,40 +100,3 @@ main =
                        , startupHook = spawnOnce "xcompmgr" <+> startupHook kde5Config
                        , keys = keys kde5Config <+> myKeyBindings
                        })
-{-
-  --If not using the fancy gnome session with its own status bar, uncomment:
-  --do xmproc <- spawnPipe "/usr/bin/xmobar /home/benley/.xmobarrc"
-  xmonad $ withUrgencyHookC
-             dzenUrgencyHook { args = ["-bg", "darkgreen",
-                                       "-fg", "white",
-                                       "-xs", "1",
-                                       "-fn", "Noto Sans:size=20"] }
-             urgencyConfig { suppressWhen = Focused, remindWhen = Every 60 }
-         $ withUrgencyHookC
-             BorderUrgencyHook { urgencyBorderColor = "#00ff00" }
-             urgencyConfig { suppressWhen = XMonad.Hooks.UrgencyHook.Never }
-         $ gnomeConfig
-             { terminal = "xterm"
-             , borderWidth = 3
-             , focusedBorderColor = "#ff0000"
-             , normalBorderColor = "#dddddd"
-             , manageHook = myManageHook
-             , handleEventHook = mconcat
-                 [ XMonad.Hooks.EwmhDesktops.fullscreenEventHook
-                 , handleEventHook gnomeConfig
-                 ]
-             , layoutHook = myLayoutHook
-             --logHook = do
-             --  dynamicLogWithPP xmobarPP
-             --    { ppOutput = hPutStrLn xmproc
-             --    , ppTitle = xmobarColor "green" ""
-             --      -- add . shorten 70 above to limit title length in xmobar
-             --    }
-             , logHook = logHook gnomeConfig <+> fadeInactiveLogHook 0.9
-             , startupHook = do
-                 startupHook gnomeConfig
-                 spawnOnce "xcompmgr -fF"
-             , modMask = modm
-             } `additionalKeys` myKeyBindings
-
--}
