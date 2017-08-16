@@ -19,12 +19,6 @@
     gfxmodeEfi = "1024x768x32";
     zfsSupport = true;
     splashImage = null;
-    extraEntries = ''
-      menuentry "Windows" {
-        search --fs-uuid --set=root --hint-bios=hd1,gpt2 --hint-efi=hd1,gpt2 --hint-baremetal=ahci1,gpt2 3285-F79B
-        chainloader /EFI/Microsoft/Boot/bootmgfw.efi
-      }
-    '';
     useOSProber = true;
   };
 
