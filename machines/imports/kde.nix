@@ -5,9 +5,16 @@
     enable = true;
     displayManager.sddm.enable = true;
     desktopManager.plasma5.enable = true;
+    windowManager.xmonad.enable = true;
+    windowManager.xmonad.enableContribAndExtras = true;
   };
 
   environment.systemPackages = with pkgs; [
+    dmenu             # For xmonad
+    dzen2             # For xmonad
+    haskellPackages.xmobar # For xmonad (not sure if I actually use this)
+    xcompmgr          # For xmonad
+
     gnome3.cheese     # KDE seems to lack a webcam app?
     gwenview          # photo viewer
     ark               # archive thinger
