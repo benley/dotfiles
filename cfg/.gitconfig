@@ -9,7 +9,7 @@
 	excludesfile = ~/.gitignore_global
 	hooksPath = ~/.githooks
 [gpg]
-	program = gpg2
+	program = gpg
 [gitreview]
 	username = ben
 [color]

@@ -11,5 +11,5 @@ if [[ -z $SSH_CLIENT ]]; then
     export SSH_AUTH_SOCK
   fi
 
-  gpg2 --card-status >/dev/null 2>&1 ||true
+  gpg --card-status >/dev/null 2>&1 ||true
 fi
