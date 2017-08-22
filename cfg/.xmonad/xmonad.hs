@@ -24,16 +24,13 @@ myManageHook = composeAll
   [ fullscreenManageHook
   , isFullscreen --> doFullFloat
   , isDialog     --> doCenterFloat
-  -- , resource  =? "FEZ.bin.x86"    --> doFloat
-  -- , resource  =? "FEZ.bin.x86_64" --> doFloat
-  -- , resource  =? "tinyandbig"     --> doIgnore
   , className =? "Gimp"           --> doFloat
-  -- , className =? "hl2_linux"      --> doFullFloat
   -- , className =? "steam"          --> doIgnore  -- big picture mode?
   -- , className =? "Steam"          --> doFloat
-  , resource =? "Steam"           --> doFloat
+  , resource  =? "Steam"          --> doFloat
   , className =? "plasmashell"    --> doFloat
-  , className =? "pinentry"       --> doCenterFloat
+  , className =? "pinentry"       --> doCenterFloat  -- matches for pinentry-qt
+  , resource  =? "pinentry"       --> doCenterFloat  -- matches for pinentry-gtk (wtf?)
   , className =? "krunner"        --> doCenterFloat
   , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> doCenterFloat
   , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> doF W.swapMaster
@@ -97,6 +94,6 @@ main =
                            [ XMonad.Hooks.EwmhDesktops.fullscreenEventHook
                            , handleEventHook kde5Config
                            ]
-                       , startupHook = spawnOnce "xcompmgr" <+> startupHook kde5Config
-                       , keys = keys kde5Config <+> myKeyBindings
+                       , startupHook = startupHook kde5Config <+> spawnOnce "xcompmgr"
+                       , keys = myKeyBindings <+> keys kde5Config
                        })
