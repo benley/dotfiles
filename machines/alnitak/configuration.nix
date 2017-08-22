@@ -18,7 +18,7 @@
     "button.lid_init_state=open"
   ];
 
-  # boot.kernelPackages = pkgs.linuxPackages_4_11;
+  boot.kernelPackages = pkgs.linuxPackages_4_12;
   # zfs 0.6.5.9 doesn't work with linux 4.11 but 0.7.0rc4 does
   # boot.zfs.enableUnstable = true;
 
