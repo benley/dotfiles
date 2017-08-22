@@ -1,5 +1,6 @@
 import XMonad
 import XMonad.Actions.Commands (defaultCommands, runCommand)
+import XMonad.Actions.CopyWindow (copyWindow)
 import XMonad.Actions.GridSelect
 import XMonad.Config.Desktop (desktopConfig, desktopLayoutModifiers)
 import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
@@ -20,23 +21,30 @@ import Data.Monoid (mconcat)
 import qualified XMonad.StackSet as W
 import qualified Data.Map
 
+-- XMonad.Actions.CopyWindow.copyToAll as a ManageHook
+-- derived from https://mail.haskell.org/pipermail/xmonad/2009-September/008643.html
+doCopyToAll :: ManageHook
+doCopyToAll = ask >>= doF . \w ws -> foldr (copyWindow w) ws (workspaces myConfig)
+
+-- (currently unused, but...)
+unfloat :: ManageHook
+unfloat = ask >>= doF . W.sink
+
 myManageHook = composeAll
   [ fullscreenManageHook
   , isFullscreen --> doFullFloat
   , isDialog     --> doCenterFloat
   , className =? "Gimp"           --> doFloat
-  -- , className =? "steam"          --> doIgnore  -- big picture mode?
-  -- , className =? "Steam"          --> doFloat
   , resource  =? "Steam"          --> doFloat
   , className =? "plasmashell"    --> doFloat
   , className =? "pinentry"       --> doCenterFloat  -- matches for pinentry-qt
   , resource  =? "pinentry"       --> doCenterFloat  -- matches for pinentry-gtk (wtf?)
   , className =? "krunner"        --> doCenterFloat
-  , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> doCenterFloat
-  , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> doF W.swapMaster
+  , title     =? "Slack Call Minipanel" --> (doFloat <+> doCopyToAll)
+  -- I honestly don't know what the swapMaster part accomplishes here
+  , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> (doCenterFloat <+> doF W.swapMaster)
   , placeHook simpleSmart
-  ] where unfloat :: ManageHook
-          unfloat = ask >>= doF . W.sink
+  ]
 
 myLayoutHook = smartBorders $ desktopLayoutModifiers $
     myResizable
@@ -85,15 +93,16 @@ myKeyBindings XConfig {XMonad.modMask = modm} = Data.Map.fromList
     , ((modm, xK_g), goToSelected defaultGSConfig)
     ]
 
-main =
-    xmonad (kde5Config { modMask = defaultModMask
-                       , manageHook = manageHook kde5Config <+> myManageHook
-                       , layoutHook = myLayoutHook
-                       , borderWidth = 3
-                       , handleEventHook = mconcat
-                           [ XMonad.Hooks.EwmhDesktops.fullscreenEventHook
-                           , handleEventHook kde5Config
-                           ]
-                       , startupHook = startupHook kde5Config <+> spawnOnce "xcompmgr"
-                       , keys = myKeyBindings <+> keys kde5Config
-                       })
+myConfig = kde5Config { modMask = defaultModMask
+                      , manageHook = manageHook kde5Config <+> myManageHook
+                      , layoutHook = myLayoutHook
+                      , borderWidth = 3
+                      , handleEventHook = mconcat
+                          [ XMonad.Hooks.EwmhDesktops.fullscreenEventHook
+                          , handleEventHook kde5Config
+                          ]
+                      , startupHook = startupHook kde5Config <+> spawnOnce "xcompmgr"
+                      , keys = myKeyBindings <+> keys kde5Config
+                      }
+
+main = xmonad myConfig
