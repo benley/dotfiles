@@ -3,6 +3,7 @@ import XMonad.Actions.Commands (defaultCommands, runCommand)
 import XMonad.Actions.CopyWindow (copyWindow)
 import XMonad.Actions.GridSelect
 import XMonad.Config.Desktop (desktopConfig, desktopLayoutModifiers)
+import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
 import XMonad.Hooks.ManageHelpers (doFullFloat, doCenterFloat, isFullscreen, isDialog)
 import XMonad.Hooks.Place (placeHook, simpleSmart)
@@ -14,6 +15,7 @@ import XMonad.Layout.SimpleDecoration
 import XMonad.Layout.Roledex
 import XMonad.Layout.Tabbed (tabbed)
 import XMonad.Layout.ThreeColumns (ThreeCol (ThreeColMid))
+import XMonad.Util.Run (spawnPipe, hPutStrLn)
 import XMonad.Util.SpawnOnce (spawnOnce)
 import XMonad.Util.Themes (theme, donaldTheme)
 
@@ -87,22 +89,32 @@ kde5Keys conf@XConfig {XMonad.modMask = modm} = Data.Map.fromList
 
 myKeyBindings XConfig {XMonad.modMask = modm} = Data.Map.fromList
     [ ((modm .|. controlMask, xK_y), defaultCommands >>= runCommand)
-    , ((modm .|. shiftMask, xK_space), spawn "dmenu_run -i -p 'Launch:' -l 5 -fn 'Noto Sans:size=15'")
+    , ((modm .|. shiftMask, xK_p), spawn "dmenu_run -i -p 'Launch:' -l 5 -fn 'Noto Sans:size=15'")
     , ((modm, xK_a), sendMessage ShrinkSlave)
     , ((modm, xK_z), sendMessage ExpandSlave)
     , ((modm, xK_g), goToSelected defaultGSConfig)
+    , ((modm .|. controlMask, xK_l), spawn "xscreensaver-command -lock")
     ]
 
-myConfig = kde5Config { modMask = defaultModMask
-                      , manageHook = manageHook kde5Config <+> myManageHook
-                      , layoutHook = myLayoutHook
-                      , borderWidth = 3
-                      , handleEventHook = mconcat
-                          [ XMonad.Hooks.EwmhDesktops.fullscreenEventHook
-                          , handleEventHook kde5Config
-                          ]
-                      , startupHook = startupHook kde5Config <+> spawnOnce "xcompmgr"
-                      , keys = myKeyBindings <+> keys kde5Config
-                      }
+myConfig xmobarPipe =
+    desktopConfig
+    { modMask = defaultModMask
+    , manageHook = manageHook kde5Config <+> myManageHook
+    , layoutHook = myLayoutHook
+    , borderWidth = 3
+    , handleEventHook = mconcat
+        [ XMonad.Hooks.EwmhDesktops.fullscreenEventHook
+        , handleEventHook kde5Config
+        ]
+    , startupHook = startupHook kde5Config <+> spawnOnce "xcompmgr"
+    , keys = myKeyBindings <+> keys desktopConfig -- <+> keys kde5Config
+    , logHook = dynamicLogWithPP (xmobarPP
+                  { ppOutput = hPutStrLn xmobarPipe
+                  , ppTitle = xmobarColor "green" ""
+                  })
+    , terminal = "konsole"
+    }
 
-main = xmonad myConfig
+main = do
+    xmobarPipe <- spawnPipe "xmobar"
+    xmonad (myConfig xmobarPipe)

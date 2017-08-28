@@ -1,15 +1,39 @@
 -- vi:ft=haskell
-Config { font = "xft:Ubuntu Condensed-12:Italic"
+Config { font = "xft:Operator Mono-12:style=Book"
        , bgColor = "black"
        , fgColor = "grey"
-       , position = TopW L 90
-       , commands = [ Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
-                    , Run Memory ["-t","Mem: <usedratio>%"] 10
-                    , Run Swap [] 10
-                    , Run Date "%a %b %_d %l:%M" "date" 10
+       -- , position = TopW L 90
+       , commands = [ Run MultiCpu
+                          [ "--template", "Cpu: <total0>%|<total1>%"
+                          , "--Low", "40"
+                          , "--High", "85"
+                          , "--low", "darkgreen"
+                          , "--normal", "darkorange"
+                          , "--high", "darkred"
+                          ] 20
+                    , Run Memory ["-t","Mem: <usedratio>%"] 20
+                    , Run Swap [] 20
+                    , Run Date "%a %b %_d %l:%M" "date" 20
                     , Run StdinReader
+                    , Run Battery
+                          ["--template", "Batt: <acstatus>"
+                          , "--Low", "10"
+                          , "--High", "80"
+                          , "--"
+                          , "-o", "<left>% (<timeleft>)"
+                          , "-O", "<fc=#dAA520>Charging</fc>"
+                          , "-i", "<fc=#006000>Charged</fc>"
+                          ] 50
+                    , Run CoreTemp
+                          [ "--template" , "Temp: <core0>°C|<core1>°C"
+                          , "--Low"      , "70"        -- units: °C
+                          , "--High"     , "80"        -- units: °C
+                          , "--low"      , "darkgreen"
+                          , "--normal"   , "darkorange"
+                          , "--high"     , "darkred"
+                          ] 50
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %battery%   %cpu%   %memory%   %swap%    <fc=#ee9a00>%date%</fc>"
+       , template = "%StdinReader% }{ %coretemp% %battery%   %multicpu%   %memory%   %swap%    <fc=#ee9a00>%date%</fc>"
        }
