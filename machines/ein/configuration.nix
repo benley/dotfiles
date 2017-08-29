@@ -10,10 +10,10 @@
     ../imports/wacom.nix
   ];
 
-  #boot.kernelPackages = pkgs.linuxPackages_4_9;
+  boot.kernelPackages = pkgs.linuxPackages_4_12;
 
   boot.loader.grub = {
-    device = "/dev/sda";
+    device = "/dev/sdb";
     enable = true;
     efiSupport = true;
     gfxmodeEfi = "1024x768x32";
@@ -48,10 +48,12 @@
     gutenprint = true;
   };
 
-  services.xserver.videoDrivers = [ "nvidia" ];
-
-  # What does this actually do?
-  powerManagement.enable = true;
+  services.xserver = {
+    videoDrivers = [ "nvidia" ];
+    screenSection = ''
+      Option "metamodes" "nvidia-auto-select +0+0 {ForceCompositionPipeline=On}"
+    '';
+  };
 
   services.avahi.publish.enable = true;
   services.avahi.publish.workstation = true;
