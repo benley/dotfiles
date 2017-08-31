@@ -106,6 +106,8 @@
     # There is no dedicated i965 vpdau driver, so this tells libvpdau to use
     # libva as its backend.
     VDPAU_DRIVER = "va_gl";
+    XCURSOR_SIZE = "64";
+    XCURSOR_THEME = "breeze_cursors";
   };
 
   hardware.bluetooth.enable = true;
