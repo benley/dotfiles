@@ -1,39 +1,65 @@
 -- vi:ft=haskell
-Config { font = "xft:Operator Mono-12:style=Book"
-       , bgColor = "black"
-       , fgColor = "grey"
-       -- , position = TopW L 90
+Config {
+         font = "xft:Operator Mono:style=Book,Symbola,FontAwesome"
+       , additionalFonts = [ "xft:Operator Mono:style=Book Italic"
+                           ]
+       , bgColor = "#263238"
+       , fgColor = "#CDD3DE"
+       , position = Top
+       , border = BottomB
+       , borderColor = "#37474F"
+       , borderWidth = 3
        , commands = [ Run MultiCpu
-                          [ "--template", "Cpu: <total0>%|<total1>%"
+                          [ "--template", "\x1F4BB <autovbar>"
                           , "--Low", "40"
                           , "--High", "85"
-                          , "--low", "darkgreen"
-                          , "--normal", "darkorange"
-                          , "--high", "darkred"
+                          , "--low", "#8bd649"
+                          , "--normal", "#ea9560"
+                          , "--high", "#EC5F67"
+                          , "--ppad", "3"
                           ] 20
                     , Run Memory ["-t","Mem: <usedratio>%"] 20
                     , Run Swap [] 20
                     , Run Date "%a %b %_d %l:%M" "date" 20
                     , Run StdinReader
                     , Run Battery
-                          ["--template", "Batt: <acstatus>"
+                          [ "--template", "\xf240<acstatus><left>"
+                          , "--suffix", "True"
+                          , "--High", "90"
+                          , "--high", "#8bd649"
                           , "--Low", "10"
-                          , "--High", "80"
+                          , "--low", "#EC5F67"
+                          , "--ppad", "3"
                           , "--"
-                          , "-o", "<left>% (<timeleft>)"
-                          , "-O", "<fc=#dAA520>Charging</fc>"
-                          , "-i", "<fc=#006000>Charged</fc>"
+                          , "-f", "AC0/online"
+                          , "-o", "" -- "off"                -- Unplugged
+                          , "-O", "<fc=#ea9560>\x26a1</fc>"  -- Charging
+                          , "-i", "<fc=#8bd649>\x26a1</fc>"  -- Not charging
                           ] 50
                     , Run CoreTemp
-                          [ "--template" , "Temp: <core0>°C|<core1>°C"
+                          [ "--template" , "\xf2c7 <core0>°C <core1>°C"
                           , "--Low"      , "70"        -- units: °C
                           , "--High"     , "80"        -- units: °C
-                          , "--low"      , "darkgreen"
-                          , "--normal"   , "darkorange"
-                          , "--high"     , "darkred"
+                          , "--low"      , "#8bd649"
+                          , "--normal"   , "ea9560"
+                          , "--high"     , "#EC5F67"
                           ] 50
+                    , Run Wireless "wlp1s0"
+                          [ "--template", "<qualitybar><fn=1><essid></fn>"
+                          , "--bback", "\x2003"
+                          , "--bwidth", "5"
+                          , "--bfore", "\x2581\x2583\x2585\x2587\x2589"
+                          , "--Low", "20"
+                          , "--low", "#EC5F67"
+                          , "--normal", "#D5DBE5"
+                          , "--High", "80"
+                          --, "--high", "#8bd649"
+                          , "--high", "#D5DBE5"
+                          ] 50
+                    , Run XMonadLog
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %coretemp% %battery%   %multicpu%   %memory%   %swap%    <fc=#ee9a00>%date%</fc>"
+       , template = "%XMonadLog%}{| %coretemp% | %battery% | %multicpu% | %memory% | %swap% | %wlp1s0wi% | <fc=#ea9560>%date%</fc>"
+                 -- "<action=konsole><icon=/tmp/xterm.xpm/></action>"
        }

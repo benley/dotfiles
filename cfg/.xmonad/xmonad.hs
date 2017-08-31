@@ -96,7 +96,7 @@ myKeyBindings XConfig {XMonad.modMask = modm} = Data.Map.fromList
     , ((modm .|. controlMask, xK_l), spawn "xscreensaver-command -lock")
     ]
 
-myConfig xmobarPipe =
+myConfig =
     desktopConfig
     { modMask = defaultModMask
     , manageHook = manageHook kde5Config <+> myManageHook
@@ -108,13 +108,11 @@ myConfig xmobarPipe =
         ]
     , startupHook = startupHook kde5Config <+> spawnOnce "xcompmgr"
     , keys = myKeyBindings <+> keys desktopConfig -- <+> keys kde5Config
-    , logHook = dynamicLogWithPP (xmobarPP
-                  { ppOutput = hPutStrLn xmobarPipe
-                  , ppTitle = xmobarColor "green" ""
-                  })
+    , logHook = dynamicLogString myPP >>= xmonadPropLog
     , terminal = "konsole"
     }
+    where myPP = xmobarPP { ppTitle = xmobarColor "#89DDFF" "#263238"
+                          , ppCurrent = xmobarColor "#263238" "#89DDFF" . wrap "[" "]"
+                          }
 
-main = do
-    xmobarPipe <- spawnPipe "xmobar"
-    xmonad (myConfig xmobarPipe)
+main = spawn "xmobar" >> xmonad myConfig
