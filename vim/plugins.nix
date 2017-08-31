@@ -32,6 +32,16 @@ let buildVimPlugin = pkgs.vimUtils.buildVimPluginFrom2Nix; in {
     };
   };
 
+  "vim-terraform" = buildVimPlugin {
+    name = "vim-terraform";
+    src = fetchFromGitHub {
+      owner = "hashivim";
+      repo = "vim-terraform";
+      rev = "6cece1f81a2cf3c724f8b6edbc464050308fe5b9";
+      sha256 = "1kfdzs5q3jnqgp11vp8addky1940nr6nqvzv806zm7rjw21vmx25";
+    };
+  };
+
   "vim-virtualenv" = buildVimPlugin {
     name = "vim-virtualenv";
     src = fetchFromGitHub {

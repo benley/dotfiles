@@ -37,6 +37,7 @@ in {
       { name = "vim-go"; }
       { name = "vim-jsonnet"; }
       { name = "vim-nix"; }  # The LnL7 one
+      { name = "vim-terraform"; }
       { name = "vim-trailing-whitespace"; }
       { name = "vim-virtualenv"; }
       { name = "vim2hs"; }
