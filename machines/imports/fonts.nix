@@ -16,6 +16,7 @@
     fira-code
     fira-mono
     freefont_ttf
+    font-awesome-ttf
     font-droid
     #google-fonts  # Like 1800 fonts. Whoa.
     hack-font
@@ -37,6 +38,7 @@
     source-code-pro
     source-sans-pro
     source-serif-pro
+    symbola
     terminus_font
     tewi-font
     ttf_bitstream_vera
