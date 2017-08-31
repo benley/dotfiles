@@ -8,6 +8,7 @@
     ../imports/defaults.nix
     ../imports/graphical.nix
     ../imports/kde.nix
+    ../imports/redshift.nix
     ../imports/wacom.nix
     ../imports/workstuff.nix
     ../imports/virtualbox.nix
