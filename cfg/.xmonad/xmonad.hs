@@ -23,6 +23,8 @@ import Data.Monoid (mconcat)
 import qualified XMonad.StackSet as W
 import qualified Data.Map
 
+import System.Taffybar.Hooks.PagerHints (pagerHints)
+
 -- XMonad.Actions.CopyWindow.copyToAll as a ManageHook
 -- derived from https://mail.haskell.org/pipermail/xmonad/2009-September/008643.html
 doCopyToAll :: ManageHook
@@ -97,7 +99,7 @@ myKeyBindings XConfig {XMonad.modMask = modm} = Data.Map.fromList
     ]
 
 myConfig =
-    desktopConfig
+    pagerHints $ desktopConfig
     { modMask = defaultModMask
     , manageHook = manageHook kde5Config <+> myManageHook
     , layoutHook = myLayoutHook
@@ -108,11 +110,13 @@ myConfig =
         ]
     , startupHook = startupHook kde5Config <+> spawnOnce "xcompmgr"
     , keys = myKeyBindings <+> keys desktopConfig -- <+> keys kde5Config
-    , logHook = dynamicLogString myPP >>= xmonadPropLog
+    --, logHook = dynamicLogString myPP >>= xmonadPropLog
     , terminal = "konsole"
     }
-    where myPP = xmobarPP { ppTitle = xmobarColor "#89DDFF" "#263238"
-                          , ppCurrent = xmobarColor "#263238" "#89DDFF" . wrap "[" "]"
-                          }
+    -- where myPP = xmobarPP { ppTitle = xmobarColor "#89DDFF" "#263238"
+    --                       , ppCurrent = xmobarColor "#263238" "#89DDFF" . wrap "[" "]"
+    --                       }
 
-main = spawn "xmobar" >> xmonad myConfig
+main = -- do
+    -- spawn "xmobar"
+    xmonad myConfig

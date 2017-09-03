@@ -7,12 +7,16 @@
     desktopManager.plasma5.enable = true;
     windowManager.xmonad.enable = true;
     windowManager.xmonad.enableContribAndExtras = true;
+    windowManager.xmonad.extraPackages = haskellPackages: [
+      haskellPackages.taffybar
+    ];
   };
 
   environment.systemPackages = with pkgs; [
     dmenu             # For xmonad
     dzen2             # For xmonad
-    haskellPackages.xmobar # For xmonad (not sure if I actually use this)
+    haskellPackages.xmobar # For xmonad
+    haskellPackages.taffybar
     xcompmgr          # For xmonad
 
     gnome3.cheese     # KDE seems to lack a webcam app?

@@ -21,7 +21,6 @@ Config {
                     , Run Memory ["-t","Mem: <usedratio>%"] 20
                     , Run Swap [] 20
                     , Run Date "%a %b %_d %l:%M" "date" 20
-                    , Run StdinReader
                     , Run Battery
                           [ "--template", "\xf240<acstatus><left>"
                           , "--suffix", "True"
