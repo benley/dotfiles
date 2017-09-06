@@ -14,18 +14,26 @@
 
   environment.systemPackages = with pkgs; [
     dmenu             # For xmonad
-    dzen2             # For xmonad
-    haskellPackages.xmobar # For xmonad
+    dunst             # notifications daemon
+    #dzen2            # status bar
+    #haskellPackages.xmobar # status bar
     haskellPackages.taffybar
-    xcompmgr          # For xmonad
+    libnotify         # includes notify-send
+    networkmanager_dmenu
+    networkmanagerapplet
+    xcompmgr
+    xorg.xbacklight
+    xscreensaver
 
     gnome3.cheese     # KDE seems to lack a webcam app?
     gwenview          # photo viewer
     ark               # archive thinger
+    kate
     kgpg
     krita             # gimp-alike
     #latte-dock       # broken?
-    okular            # PDF viewer
+    #okular           # PDF viewer
+    qt5.qttools       # includes qdbusviewer
     spectacle         # screenshot
     redshift-plasma-applet
     redshift

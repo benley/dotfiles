@@ -1,6 +1,6 @@
 #### ALNITAK - Razer Blade Stealth (late 2016) ####
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -20,8 +20,6 @@
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_4_12;
-  # zfs 0.6.5.9 doesn't work with linux 4.11 but 0.7.0rc4 does
-  # boot.zfs.enableUnstable = true;
 
   # Make the cryptsetup password prompt readable
   boot.earlyVconsoleSetup = true;

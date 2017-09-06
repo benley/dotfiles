@@ -49,7 +49,7 @@ in
     dotfiles.nix-home
     acpi
     awscli
-    # bazel  # bazel on nixos isn't worth it :-(
+    bazel
     binutils # strings, strip, ar, as, ...
     bc
     cabal-install
@@ -57,6 +57,7 @@ in
     dnsutils
     dropbox-cli
     dstat
+    ethtool
     exercism
     file
     gdb
