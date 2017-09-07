@@ -13,6 +13,7 @@ import XMonad.Hooks.ManageHelpers (doCenterFloat, isDialog, isInProperty)
 import XMonad.Hooks.Place (placeHook, simpleSmart)
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.ThreeColumns as ThreeColumns
 import qualified XMonad.StackSet as W
 import XMonad.Util.EZConfig (mkKeymap, removeKeysP)
 
@@ -43,9 +44,8 @@ myManageHook = composeAll
   ]
 
 myLayoutHook =
-    smartBorders $
-    -- desktopLayoutModifiers $
-    layoutHook desktopConfig
+    smartBorders
+    (ThreeColumns.ThreeColMid 1 (3/100) (1/2) ||| layoutHook desktopConfig)
 
 ---- I have no idea why, but mouseResizeableTile was causing notification
 ---- windows to disappear behind regular windows :-(
