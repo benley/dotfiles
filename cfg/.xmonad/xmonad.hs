@@ -1,29 +1,20 @@
+import qualified Data.Map
+import Data.Monoid (mconcat)
+
+import System.Taffybar.Hooks.PagerHints (pagerHints)
+
 import XMonad
 import XMonad.Actions.Commands (defaultCommands, runCommand)
 import XMonad.Actions.CopyWindow (copyWindow)
 import XMonad.Actions.GridSelect
 import XMonad.Config.Desktop (desktopConfig, desktopLayoutModifiers)
-import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
-import XMonad.Hooks.ManageHelpers (doFullFloat, doCenterFloat, isFullscreen, isDialog)
+import XMonad.Hooks.ManageHelpers (doCenterFloat, isDialog, isInProperty)
 import XMonad.Hooks.Place (placeHook, simpleSmart)
-import XMonad.Layout.DecorationMadness
 import XMonad.Layout.Fullscreen
-import XMonad.Layout.NoBorders (noBorders, smartBorders)
-import XMonad.Layout.MouseResizableTile
-import XMonad.Layout.SimpleDecoration
-import XMonad.Layout.Roledex
-import XMonad.Layout.Tabbed (tabbed)
-import XMonad.Layout.ThreeColumns (ThreeCol (ThreeColMid))
-import XMonad.Util.Run (spawnPipe, hPutStrLn)
-import XMonad.Util.SpawnOnce (spawnOnce)
-import XMonad.Util.Themes (theme, donaldTheme)
-
-import Data.Monoid (mconcat)
+import XMonad.Layout.NoBorders (smartBorders)
 import qualified XMonad.StackSet as W
-import qualified Data.Map
-
-import System.Taffybar.Hooks.PagerHints (pagerHints)
+import XMonad.Util.EZConfig (mkKeymap, removeKeysP)
 
 -- XMonad.Actions.CopyWindow.copyToAll as a ManageHook
 -- derived from https://mail.haskell.org/pipermail/xmonad/2009-September/008643.html
@@ -36,7 +27,6 @@ unfloat = ask >>= doF . W.sink
 
 myManageHook = composeAll
   [ fullscreenManageHook
-  , isFullscreen --> doFullFloat
   , isDialog     --> doCenterFloat
   , className =? "Gimp"           --> doFloat
   , resource  =? "Steam"          --> doFloat
@@ -47,76 +37,61 @@ myManageHook = composeAll
   , title     =? "Slack Call Minipanel" --> (doFloat <+> doCopyToAll)
   -- I honestly don't know what the swapMaster part accomplishes here
   , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> (doCenterFloat <+> doF W.swapMaster)
+  -- Don't manage splash windows (e.g. the ones krita and gimp show at startup)
+  , isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_SPLASH" --> doIgnore
   , placeHook simpleSmart
   ]
 
-myLayoutHook = smartBorders $ desktopLayoutModifiers $
-    myResizable
-     ||| Mirror myResizable
-     ||| fullscreenFull Full
+myLayoutHook =
+    smartBorders $
+    -- desktopLayoutModifiers $
+    layoutHook desktopConfig
 
-    where myResizable = mouseResizableTile { masterFrac = 0.5
-                                           , fracIncrement = 1/100
-                                           , draggerType = FixedDragger 5 15
-                                           }
-
-{- More layouts:
- Grid
- ResizableTall 0 (3/100) (1/2) []
- Mirror (ResizableTall 0 (3/100) (1/2) [])
- Accordion
- floatSimpleDwmStyle
- ThreeColMid 1 (3/100) (2/3)
- tabbed shrinkText (theme donaldTheme)
- simpleDeco shrinkText defaultTheme Roledex
--}
+---- I have no idea why, but mouseResizeableTile was causing notification
+---- windows to disappear behind regular windows :-(
+-- myLayoutHook =
+--     smartborders $ desktopLayoutModifiers $
+--     myResizable
+--      ||| Mirror myResizable
+--      ||| fullscreenFull Full
+--     where myResizable = mouseResizableTile { masterFrac = 0.5
+--                                            , fracIncrement = 1/100
+--                                            , draggerType = FixedDragger 5 15
+--                                            }
 
 -- Which key to use as the default modMask
 -- mod1Mask: alt, mod4Mask: win
 defaultModMask = mod1Mask
 
-kde5Config = desktopConfig
-    { terminal = "konsole"
-    , keys = kde5Keys <+> keys desktopConfig
-    }
-
-kde5Keys conf@XConfig {XMonad.modMask = modm} = Data.Map.fromList
-    [ ((modm,               xK_space), spawn "krunner")
-    , ((modm .|. shiftMask, xK_q),
-       spawn ("dbus-send --print-reply --dest=org.kde.ksmserver /KSMServer "
-              ++ "org.kde.KSMServerInterface.logout int32:1 int32:0 int32:1"))
-    , ((modm,               xK_p), sendMessage NextLayout)
-    , ((modm .|. shiftMask, xK_p), setLayout (XMonad.layoutHook conf))
-    ]
-
-myKeyBindings XConfig {XMonad.modMask = modm} = Data.Map.fromList
-    [ ((modm .|. controlMask, xK_y), defaultCommands >>= runCommand)
-    , ((modm .|. shiftMask, xK_p), spawn "dmenu_run -i -p 'Launch:' -l 5 -fn 'Noto Sans:size=15'")
-    , ((modm, xK_a), sendMessage ShrinkSlave)
-    , ((modm, xK_z), sendMessage ExpandSlave)
-    , ((modm, xK_g), goToSelected defaultGSConfig)
-    , ((modm .|. controlMask, xK_l), spawn "xscreensaver-command -lock")
+myKeyBindings =
+  flip mkKeymap
+    [ ("<XF86AudioLowerVolume>", spawn "amixer set Master 5%- unmute")
+    , ("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+ unmute")
+    , ("<XF86AudioMute>", spawn "amixer set Master toggle")
+    , ("<XF86MonBrightnessUp>", spawn "xbacklight +5")
+    , ("<XF86MonBrightnessDown>", spawn "xbacklight -5")
+    , ("M-g", goToSelected defaultGSConfig)
+    , ("C-M-l", spawn "xscreensaver-command -lock")
+    , ("C-M-y", defaultCommands >>= runCommand)
+    , ("S-M-p", spawn "dmenu_run -i -p 'Launch:' -l 5 -fn 'Noto Sans: size=12'")
+    --, ("m_a", sendMessage ShrinkSlave)
+    --, ("m_z", sendMessage ExpandSlave)
     ]
 
 myConfig =
-    pagerHints $ desktopConfig
+  desktopConfig
     { modMask = defaultModMask
-    , manageHook = manageHook kde5Config <+> myManageHook
+    , manageHook = myManageHook <+> manageHook desktopConfig
     , layoutHook = myLayoutHook
-    , borderWidth = 3
+    , borderWidth = 5
     , handleEventHook = mconcat
         [ XMonad.Hooks.EwmhDesktops.fullscreenEventHook
-        , handleEventHook kde5Config
+        , handleEventHook desktopConfig
         ]
-    , startupHook = startupHook kde5Config <+> spawnOnce "xcompmgr"
-    , keys = myKeyBindings <+> keys desktopConfig -- <+> keys kde5Config
-    --, logHook = dynamicLogString myPP >>= xmonadPropLog
+    , keys = myKeyBindings <+> keys desktopConfig
     , terminal = "konsole"
-    }
-    -- where myPP = xmobarPP { ppTitle = xmobarColor "#89DDFF" "#263238"
-    --                       , ppCurrent = xmobarColor "#263238" "#89DDFF" . wrap "[" "]"
-    --                       }
+    , normalBorderColor = "#263238"
+    , focusedBorderColor = "#ea9560"
+    } `removeKeysP` ["M-b"]
 
-main = -- do
-    -- spawn "xmobar"
-    xmonad myConfig
+main = xmonad $ pagerHints myConfig
