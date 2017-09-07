@@ -1,4 +1,4 @@
-{ lib, mkHome, ... }:
+{ pkgs, lib, mkHome, ... }:
 
 let
   # Given a baseDir containing various dotfiles, produce a mapping of
@@ -15,5 +15,6 @@ mkHome {
   files = genOverlay ./cfg //
     {
       ".config/awesome/debian".link = "/etc/xdg/awesome/debian";
+      ".config/dunst/dunstrc".content = pkgs.callPackage ./dunstrc.nix {};
     };
 }

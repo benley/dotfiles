@@ -13,9 +13,7 @@ rec {
 
   nixhomeLib = callPackage (import "${nix-home}/nix/lib/nixhome") {};
 
-  mkHome = nixhomeLib.mkHome;
-
-  homedir = import ./homedir.nix { inherit lib mkHome; };
+  homedir = callPackage ./homedir.nix { mkHome = nixhomeLib.mkHome; };
 
   vim = vimPackages.vim;
 
