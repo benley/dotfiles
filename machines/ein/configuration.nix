@@ -11,6 +11,11 @@
   ];
 
   boot.kernelPackages = pkgs.linuxPackages_4_12;
+  boot.kernelParams = [
+    "zswap.enabled=1"
+    "zswap.compressor=lz4"
+    "zswap.max_pool_percent=25"
+  ];
 
   boot.loader.grub = {
     device = "/dev/sdb";
