@@ -84,11 +84,14 @@
   services.xserver = {
     useGlamor = true;
     libinput.enable = true;
-    videoDrivers = [ "modesetting" ];
+    videoDrivers = [ "intel" ];
 
     dpi = 240;  # Physical dpi is ~352 but as usual that makes the UI too big
 
-    xkbOptions = "ctrl:nocaps,compose:ralt";
+    xkbOptions = lib.concatStringsSep "," [
+      "ctrl:nocaps"
+      #"altwin:swap_alt_win"
+    ];
   };
 
   hardware.opengl = {
