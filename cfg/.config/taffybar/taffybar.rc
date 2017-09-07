@@ -1,43 +1,54 @@
 
 style "taffybar-default" {
-  color["black"] = "#263238"
-  color["white"] = "#cdd3de"
-  color["green"] = "#8bd649"
-  color["red"]   = "#ec5f67"
-  color["blue"]  = "#89ddff"
+  color["base00"] = "#263238"
+  color["base01"] = "#2c393f"
+  color["base02"] = "#37474f"
+  color["base03"] = "#707880"
+  color["base04"] = "#c9ccd3"
+  color["base05"] = "#cdd3de"
+  color["base06"] = "#d5dbe5"
+  color["base07"] = "#ffffff"
+  color["base08"] = "#ec5f67"
+  color["base09"] = "#ea9560"
+  color["base0a"] = "#ffcc00"
+  color["base0b"] = "#8bd649"
+  color["base0c"] = "#80cbc4"
+  color["base0d"] = "#89ddff"
+  color["base0e"] = "#82aaff"
+  color["base0f"] = "#ec5f67"
 
-  bg[NORMAL]   = @black
-  fg[NORMAL]   = @white
-  text[NORMAL] = @white
-  fg[PRELIGHT] = @green
-  bg[PRELIGHT] = @black
+  bg[NORMAL]   = @base01
+  fg[NORMAL]   = @base05
+  text[NORMAL] = @base05
+  fg[PRELIGHT] = @base0b
+  bg[PRELIGHT] = @base01
 
   font_name = "Anonymous Pro Bold 12"
 }
 
 style "taffybar-active-window" = "taffybar-default" {
-  fg[NORMAL] = @blue
+  fg[NORMAL] = @base0d
 }
 
 style "taffybar-notification-button" = "taffybar-default" {
-  text[NORMAL] = @red
-  fg[NORMAL]   = @red
+  text[NORMAL] = @base08
+  fg[NORMAL]   = @base08
 }
 
 style "taffybar-workspace-border-active" = "taffybar-default" {
-  bg[NORMAL] = @white
+  bg[NORMAL] = @base05
 }
 style "taffybar-workspace-border-visible" = "taffybar-default" {
-  bg[NORMAL] = @white
+  bg[NORMAL] = @base05
 }
 style "taffybar-workspace-border-empty" = "taffybar-default" {
-  bg[NORMAL] = @white
+  bg[NORMAL] = @base05
 }
 style "taffybar-workspace-border-hidden" = "taffybar-default" {
-  bg[NORMAL] = @white
+  bg[NORMAL] = @base05
 }
 style "taffybar-workspace-border-urgent" = "taffybar-default" {
-  bg[NORMAL] = @white
+  bg[NORMAL] = @base05
 }
 
 widget "Taffybar*" style "taffybar-default"
