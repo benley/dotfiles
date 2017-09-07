@@ -113,14 +113,23 @@
 
   hardware.bluetooth.enable = true;
 
-  # I'm not sure if these next two are necessary:
-  # hardware.enableAllFirmware = true;
-  # hardware.cpu.intel.updateMicrocode = true;
-
   system.stateVersion = "17.03";
 
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "zfs";
 
   zramSwap.enable = true;
+
+  systemd.user.services.xscreensaver = {
+    description = "XScreensaver daemon";
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+    serviceConfig = {
+      ExecStart = ''
+        ${pkgs.xscreensaver}/bin/xscreensaver -no-splash
+      '';
+      RestartSec = 3;
+      Restart = "always";
+    };
+  };
 }
