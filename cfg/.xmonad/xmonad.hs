@@ -9,7 +9,7 @@ import XMonad.Actions.CopyWindow (copyWindow)
 import XMonad.Actions.GridSelect
 import XMonad.Config.Desktop (desktopConfig, desktopLayoutModifiers)
 import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
-import XMonad.Hooks.ManageHelpers (doCenterFloat, isDialog, isInProperty)
+import XMonad.Hooks.ManageHelpers (doCenterFloat, isDialog, isInProperty, doFullFloat)
 import XMonad.Hooks.Place (placeHook, simpleSmart)
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders (smartBorders)
@@ -35,6 +35,7 @@ myManageHook = composeAll
   , className =? "pinentry"       --> doCenterFloat  -- matches for pinentry-qt
   , resource  =? "pinentry"       --> doCenterFloat  -- matches for pinentry-gtk (wtf?)
   , className =? "krunner"        --> doCenterFloat
+  , resource  =? "A Story About My Uncle" --> doFullFloat
   , title     =? "Slack Call Minipanel" --> (doFloat <+> doCopyToAll)
   -- I honestly don't know what the swapMaster part accomplishes here
   , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> (doCenterFloat <+> doF W.swapMaster)
@@ -44,7 +45,7 @@ myManageHook = composeAll
   ]
 
 myLayoutHook =
-    smartBorders
+    smartBorders $ desktopLayoutModifiers
     (ThreeColumns.ThreeColMid 1 (3/100) (1/2) ||| layoutHook desktopConfig)
 
 ---- I have no idea why, but mouseResizeableTile was causing notification
