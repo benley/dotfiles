@@ -74,10 +74,11 @@ myKeyBindings =
     , ("M-g", goToSelected defaultGSConfig)
     , ("C-M-l", spawn "xscreensaver-command -lock")
     , ("C-M-y", defaultCommands >>= runCommand)
-    , ("S-M-p", spawn "dmenu_run -i -p 'Launch:' -l 5 -fn 'Noto Sans: size=12'")
+    , ("S-M-p", spawn ("dmenu_run -p 'cmdline:' " ++ dmenu_args))
+    , ("M-p", spawn ("j4-dmenu-desktop --dmenu=\"dmenu -p 'app:' " ++ dmenu_args ++ "\""))
     --, ("m_a", sendMessage ShrinkSlave)
     --, ("m_z", sendMessage ExpandSlave)
-    ]
+    ] where dmenu_args = "-i -l 5 -fn 'Noto Sans: size=12'"
 
 myConfig =
   desktopConfig

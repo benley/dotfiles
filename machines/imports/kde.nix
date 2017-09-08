@@ -18,6 +18,7 @@
     #dzen2            # status bar
     #haskellPackages.xmobar # status bar
     haskellPackages.taffybar
+    j4-dmenu-desktop   # dmenu .desktop app launcher
     libnotify         # includes notify-send
     networkmanager_dmenu
     networkmanagerapplet
