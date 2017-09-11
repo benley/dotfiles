@@ -1,3 +1,5 @@
+insync start
+dropbox start
 xcompmgr &
 taffybar &
 nm-applet &
