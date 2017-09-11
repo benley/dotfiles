@@ -1,5 +1,7 @@
+import Control.Monad (when)
 import qualified Data.Map
 import Data.Monoid (mconcat)
+import System.Exit (exitSuccess)
 
 import System.Taffybar.Hooks.PagerHints (pagerHints)
 
@@ -11,11 +13,13 @@ import XMonad.Config.Desktop (desktopConfig, desktopLayoutModifiers)
 import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
 import XMonad.Hooks.ManageHelpers (doCenterFloat, isDialog, isInProperty, doFullFloat)
 import XMonad.Hooks.Place (placeHook, simpleSmart)
-import XMonad.Layout.Fullscreen
+import XMonad.Layout.Fullscreen (fullscreenFull, fullscreenManageHook)
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.ThreeColumns as ThreeColumns
 import qualified XMonad.StackSet as W
+import qualified XMonad.Util.Cursor as C
 import XMonad.Util.EZConfig (mkKeymap, removeKeysP)
+import qualified XMonad.Util.Dmenu as Dmenu
 
 -- XMonad.Actions.CopyWindow.copyToAll as a ManageHook
 -- derived from https://mail.haskell.org/pipermail/xmonad/2009-September/008643.html
@@ -35,7 +39,6 @@ myManageHook = composeAll
   , className =? "pinentry"       --> doCenterFloat  -- matches for pinentry-qt
   , resource  =? "pinentry"       --> doCenterFloat  -- matches for pinentry-gtk (wtf?)
   , className =? "krunner"        --> doCenterFloat
-  , resource  =? "A Story About My Uncle" --> doFullFloat
   , title     =? "Slack Call Minipanel" --> (doFloat <+> doCopyToAll)
   -- I honestly don't know what the swapMaster part accomplishes here
   , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> (doCenterFloat <+> doF W.swapMaster)
@@ -45,7 +48,7 @@ myManageHook = composeAll
   ]
 
 myLayoutHook =
-    smartBorders $ desktopLayoutModifiers
+    smartBorders $ desktopLayoutModifiers $
     (ThreeColumns.ThreeColMid 1 (3/100) (1/2) ||| layoutHook desktopConfig)
 
 ---- I have no idea why, but mouseResizeableTile was causing notification
@@ -73,12 +76,28 @@ myKeyBindings =
     , ("<XF86MonBrightnessDown>", spawn "xbacklight -5")
     , ("M-g", goToSelected defaultGSConfig)
     , ("C-M-l", spawn "xscreensaver-command -lock")
-    , ("C-M-y", defaultCommands >>= runCommand)
+    , ("C-M-y", commands >>= runCommand)
     , ("S-M-p", spawn ("dmenu_run -p 'cmdline:' " ++ dmenu_args))
     , ("M-p", spawn ("j4-dmenu-desktop --dmenu=\"dmenu -p 'app:' " ++ dmenu_args ++ "\""))
     --, ("m_a", sendMessage ShrinkSlave)
     --, ("m_z", sendMessage ExpandSlave)
+    , ("M-S-q", quitWithWarning)
     ] where dmenu_args = "-i -l 5 -fn 'Noto Sans: size=12'"
+            commands :: X [(String, X ())]
+            commands = do
+              dc <- defaultCommands
+              return (dc ++ [("nm-menu", spawn "networkmanager_dmenu")])
+
+quitWithWarning :: X ()
+quitWithWarning = do
+    s <- Dmenu.menuArgs "dmenu" [ "-p", "Quit?", "-nb", "red", "-nf", "black",
+                                  "-sf", "white", "-sb", "black",
+                                  "-i", "-l", "5"]
+                                ["Nope", "Yes, quit!"]
+    when (s == "Yes, quit!") (io exitSuccess)
+
+myStartupHook =
+    C.setDefaultCursor C.xC_left_ptr
 
 myConfig =
   desktopConfig
@@ -90,6 +109,7 @@ myConfig =
         [ XMonad.Hooks.EwmhDesktops.fullscreenEventHook
         , handleEventHook desktopConfig
         ]
+    , startupHook = myStartupHook <+> startupHook desktopConfig
     , keys = myKeyBindings <+> keys desktopConfig
     , terminal = "konsole"
     , normalBorderColor = "#263238"
