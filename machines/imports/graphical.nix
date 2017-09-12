@@ -47,4 +47,9 @@
 
   # Pulseaudio with bluetooth support enabled:
   hardware.pulseaudio.package = pkgs.pulseaudioFull;
+
+  environment.variables = {
+    XCURSOR_SIZE = "64";
+    XCURSOR_THEME = "breeze_cursors";
+  };
 }

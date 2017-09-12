@@ -83,4 +83,14 @@
   services.synergy.server.enable = true;
   services.synergy.server.enableCrypto = true;
   services.synergy.server.configFile = ./synergy.conf;
+
+  hardware.opengl = {
+     extraPackages = with pkgs; [ vaapiVdpau ];
+     extraPackages32 = with pkgs.pkgsi686Linux; [ vaapiVdpau ];
+  };
+
+  environment.variables = {
+    VDPAU_DRIVER = "nvidia";
+    LIBVA_DRIVER_NAME = "vdpau";
+  };
 }
