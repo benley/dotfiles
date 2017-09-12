@@ -15,13 +15,14 @@
   environment.systemPackages = with pkgs; [
     dmenu             # For xmonad
     dunst             # notifications daemon
-    #dzen2            # status bar
-    #haskellPackages.xmobar # status bar
+    #dzen2
+    #haskellPackages.xmobar
     haskellPackages.taffybar
-    j4-dmenu-desktop   # dmenu .desktop app launcher
+    j4-dmenu-desktop  # dmenu .desktop app launcher
     libnotify         # includes notify-send
     networkmanager_dmenu
     networkmanagerapplet
+    qt5ct             # Set QT themes without running Plasma
     xcompmgr
     xorg.xbacklight
     xscreensaver
@@ -47,6 +48,9 @@
     NO_AT_BRIDGE = "1";
 
     # https://github.com/NixOS/nixpkgs/issues/27050#issuecomment-315324541
-    QT_PLUGIN_PATH = [ "${pkgs.plasma-desktop}/lib/qt-5.9/plugins/kcms" ];
+    # QT_PLUGIN_PATH = [ "${pkgs.plasma-desktop}/lib/qt-5.9/plugins/kcms" ];
+
+    # Make QT theming work at all
+    QT_QPA_PLATFORMTHEME = "qt5ct";
   };
 }
