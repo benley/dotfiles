@@ -75,7 +75,7 @@ myKeyBindings =
     , ("<XF86MonBrightnessUp>", spawn "xbacklight +5")
     , ("<XF86MonBrightnessDown>", spawn "xbacklight -5")
     , ("M-g", goToSelected defaultGSConfig)
-    , ("C-M-l", spawn "xscreensaver-command -lock")
+    , ("C-M-l", spawn "xset s activate")
     , ("C-M-y", commands >>= runCommand)
     , ("S-M-p", spawn ("dmenu_run -p 'cmdline:' " ++ dmenu_args))
     , ("M-p", spawn ("j4-dmenu-desktop --dmenu=\"dmenu -p 'app:' " ++ dmenu_args ++ "\""))

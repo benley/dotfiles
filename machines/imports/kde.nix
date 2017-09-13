@@ -10,6 +10,39 @@
     windowManager.xmonad.extraPackages = haskellPackages: [
       haskellPackages.taffybar
     ];
+
+  };
+
+  systemd.user.services.xautolock = {
+    description = "xautolock";
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+    serviceConfig = {
+      ExecStart = ''
+        ${pkgs.xautolock}/bin/xautolock \
+          -time 10 \
+          -locker '${pkgs.i3lock}/bin/i3lock -n -e -f -c "#263238" -i $HOME/.background-image' \
+          -notify 15 \
+          -notifier "${pkgs.libnotify}/bin/notify-send -u critical -t 14000 -- 'Locking screen in 15 seconds'" \
+          -detectsleep
+      '';
+      RestartSec = 3;
+      Restart = "always";
+    };
+  };
+
+  systemd.user.services.xss-lock = {
+    description = "Trigger xautolock on suspend";
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+    serviceConfig = {
+      ExecStart = ''
+        ${pkgs.xss-lock}/bin/xss-lock \
+          -- ${pkgs.xautolock}/bin/xautolock -locknow
+      '';
+      RestartSec = 3;
+      Restart = "always";
+    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -23,9 +56,9 @@
     networkmanager_dmenu
     networkmanagerapplet
     qt5ct             # Set QT themes without running Plasma
+    xautolock         # so I can xautolock -locknow
     xcompmgr
     xorg.xbacklight
-    xscreensaver
 
     gnome3.cheese     # KDE seems to lack a webcam app?
     gwenview          # photo viewer

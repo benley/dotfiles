@@ -119,17 +119,4 @@
   virtualisation.docker.storageDriver = "zfs";
 
   zramSwap.enable = true;
-
-  systemd.user.services.xscreensaver = {
-    description = "XScreensaver daemon";
-    wantedBy = [ "graphical-session.target" ];
-    partOf = [ "graphical-session.target" ];
-    serviceConfig = {
-      ExecStart = ''
-        ${pkgs.xscreensaver}/bin/xscreensaver -no-splash
-      '';
-      RestartSec = 3;
-      Restart = "always";
-    };
-  };
 }
