@@ -20,6 +20,7 @@ import qualified XMonad.StackSet as W
 import qualified XMonad.Util.Cursor as C
 import XMonad.Util.EZConfig (mkKeymap, removeKeysP)
 import qualified XMonad.Util.Dmenu as Dmenu
+import XMonad.Hooks.DynamicProperty (dynamicPropertyChange)
 
 -- XMonad.Actions.CopyWindow.copyToAll as a ManageHook
 -- derived from https://mail.haskell.org/pipermail/xmonad/2009-September/008643.html
@@ -40,11 +41,17 @@ myManageHook = composeAll
   , resource  =? "pinentry"       --> doCenterFloat  -- matches for pinentry-gtk (wtf?)
   , className =? "krunner"        --> doCenterFloat
   , title     =? "Slack Call Minipanel" --> (doFloat <+> doCopyToAll)
+  , title     =? "Steam Keyboard" --> doIgnore
   -- I honestly don't know what the swapMaster part accomplishes here
   , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> (doCenterFloat <+> doF W.swapMaster)
   -- Don't manage splash windows (e.g. the ones krita and gimp show at startup)
   , isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_SPLASH" --> doIgnore
   , placeHook simpleSmart
+  ]
+
+myDynHook = composeAll
+  [ title =? "Google Hangouts - benley@gmail.com" --> doF (W.shift "9")
+  , title =? "Signal" <&&> className =? "Google-chrome" --> doF (W.shift "9")
   ]
 
 myLayoutHook =
@@ -108,6 +115,7 @@ myConfig =
     , handleEventHook = mconcat
         [ XMonad.Hooks.EwmhDesktops.fullscreenEventHook
         , handleEventHook desktopConfig
+        , dynamicPropertyChange "WM_NAME" myDynHook
         ]
     , startupHook = myStartupHook <+> startupHook desktopConfig
     , keys = myKeyBindings <+> keys desktopConfig
