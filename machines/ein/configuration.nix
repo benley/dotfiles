@@ -11,7 +11,7 @@
     ../imports/wacom.nix
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_4_12;
+  boot.kernelPackages = pkgs.linuxPackages_4_13;
   boot.kernelParams = [
     "zswap.enabled=1"
     "zswap.compressor=lz4"
@@ -38,7 +38,7 @@
 
   networking.firewall.enable = false;
 
-  services.crashplan.enable = true;
+  #services.crashplan.enable = true;
 
   services.nix-serve = {
     enable = true;
@@ -56,9 +56,16 @@
 
   services.xserver = {
     videoDrivers = [ "nvidia" ];
+    # ForceCompositionPipeline supposedly reduces screen tearing
     screenSection = ''
       Option "metamodes" "nvidia-auto-select +0+0 {ForceCompositionPipeline=On}"
     '';
+    # This is supposed to help with DDC but it doesn't seem to work:
+    #deviceSection = ''
+    #  Option "RegistryDwords" "RMUseSwI2c=0x01; RMI2cSpeed=100"
+    #'';
+
+    xkbOptions = "altwin:swap_alt_win";
   };
 
   services.avahi.publish.enable = true;

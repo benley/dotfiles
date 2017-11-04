@@ -31,7 +31,7 @@
     };
 
   fileSystems."/home/benley" =
-    { device = "pool0/home/benley";
+    { device = "rpool/home/benley";
       fsType = "zfs";
     };
 

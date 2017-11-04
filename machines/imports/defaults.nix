@@ -15,6 +15,18 @@ in
     ./yubikey.nix
   ];
 
+  boot.zfs.forceImportAll = false;
+  boot.zfs.forceImportRoot = false;
+  services.zfs.autoSnapshot = {
+    enable = true;
+    flags = "-k -p --utc";
+    frequent = 4;  # 15-minutely snapshots
+    daily = 7;
+    hourly = 24;
+    weekly = 4;
+    monthly = 12;
+  };
+
   nixpkgs.config.allowUnfree = true;
 
   # These have no effect on google-chrome (I think), just chromium
@@ -81,6 +93,8 @@ in
     jq
     jsonnet
     dotfiles.kubernetes-client
+    keybase
+    keybase-gui
     kops
     kubernetes-helm
     lastpass-cli
@@ -144,4 +158,7 @@ in
   services.irqbalance.enable = true;
 
   time.timeZone = lib.mkDefault "America/New_York";
+
+  services.keybase.enable = true;
+  services.kbfs.enable = true;
 }
