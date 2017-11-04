@@ -1,7 +1,6 @@
+taffybar &
 insync start
 dropbox start
 xcompmgr &
-taffybar &
 nm-applet &
-xsetroot -cursor_name left_ptr
 setxkbmap

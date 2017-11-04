@@ -19,6 +19,8 @@ rec {
 
   neovim = vimPackages.neovim;
 
+  sddm-theme-breeze-custom = callPackage ./pkgs/sddm-theme-breeze-custom { };
+
   slim-themes = callPackage ./pkgs/slim-themes { };
 
   steamcontroller-udev-rules = callPackage ./pkgs/steamcontroller-udev-rules { };

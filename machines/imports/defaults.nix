@@ -111,6 +111,7 @@ in
     nodePackages.jshint
     openssl
     #oraclejdk
+    pandoc
     pciutils
     pv
     pwgen

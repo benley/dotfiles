@@ -331,4 +331,7 @@ let g:jsonnet_fmt_on_save = 0
 "     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 " endif
 
+" guicursor + konsole == ugh
+set guicursor=
+
 set secure

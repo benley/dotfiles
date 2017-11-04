@@ -49,9 +49,11 @@ myManageHook = composeAll
   , placeHook simpleSmart
   ]
 
+-- Dynamic property change hook: catches Chrome apps, whose titles are not set until
+-- after the window is created
 myDynHook = composeAll
-  [ title =? "Google Hangouts - benley@gmail.com" --> doF (W.shift "9")
-  , title =? "Signal" <&&> className =? "Google-chrome" --> doF (W.shift "9")
+  [ title =? "Google Hangouts - benley@gmail.com" --> doF (W.shift "7")
+  , title =? "Signal" <&&> className =? "Google-chrome" --> doF (W.shift "7")
   ]
 
 myLayoutHook =
@@ -79,15 +81,14 @@ myKeyBindings =
     [ ("<XF86AudioLowerVolume>", spawn "amixer set Master 5%- unmute")
     , ("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+ unmute")
     , ("<XF86AudioMute>", spawn "amixer set Master toggle")
-    , ("<XF86MonBrightnessUp>", spawn "xbacklight +5")
-    , ("<XF86MonBrightnessDown>", spawn "xbacklight -5")
+    , ("<XF86MonBrightnessUp>", spawn "light -A 5")
+    , ("<XF86MonBrightnessDown>", spawn "light -U 5")
     , ("M-g", goToSelected defaultGSConfig)
     , ("C-M-l", spawn "xset s activate")
     , ("C-M-y", commands >>= runCommand)
     , ("S-M-p", spawn ("dmenu_run -p 'cmdline:' " ++ dmenu_args))
+    , ("S-M-n", spawn "networkmanager_dmenu")
     , ("M-p", spawn ("j4-dmenu-desktop --dmenu=\"dmenu -p 'app:' " ++ dmenu_args ++ "\""))
-    --, ("m_a", sendMessage ShrinkSlave)
-    --, ("m_z", sendMessage ExpandSlave)
     , ("M-S-q", quitWithWarning)
     ] where dmenu_args = "-i -l 5 -fn 'Noto Sans: size=12'"
             commands :: X [(String, X ())]

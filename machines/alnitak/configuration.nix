@@ -19,7 +19,7 @@
     "button.lid_init_state=open"
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_4_12;
+  boot.kernelPackages = pkgs.linuxPackages_4_13;
 
   # Make the cryptsetup password prompt readable
   boot.earlyVconsoleSetup = true;
@@ -77,13 +77,14 @@
   services.avahi.publish.workstation = true;
   services.avahi.publish.userServices = true;
 
-  services.crashplan.enable = true;
+  # services.crashplan.enable = true;
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
 
   services.xserver = {
-    useGlamor = true;
     libinput.enable = true;
+    libinput.naturalScrolling = true;
+
     videoDrivers = [ "intel" ];
 
     dpi = 240;  # Physical dpi is ~352 but as usual that makes the UI too big
@@ -107,11 +108,10 @@
     # There is no dedicated i965 vpdau driver, so this tells libvpdau to use
     # libva as its backend.
     VDPAU_DRIVER = "va_gl";
-    XCURSOR_SIZE = "64";
-    XCURSOR_THEME = "breeze_cursors";
   };
 
   hardware.bluetooth.enable = true;
+  hardware.cpu.intel.updateMicrocode = true;
 
   system.stateVersion = "17.03";
 

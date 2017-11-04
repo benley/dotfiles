@@ -1,9 +1,12 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
+
+let dotfiles = import ../.. {}; in
 
 {
   services.xserver = {
     enable = true;
     displayManager.sddm.enable = true;
+    displayManager.sddm.theme = lib.mkForce "breeze-custom";
     desktopManager.plasma5.enable = true;
     windowManager.xmonad.enable = true;
     windowManager.xmonad.enableContribAndExtras = true;
@@ -12,6 +15,8 @@
     ];
 
   };
+
+  programs.light.enable = true;  # backlight control helper
 
   systemd.user.services.xautolock = {
     description = "xautolock";
@@ -32,7 +37,7 @@
   };
 
   systemd.user.services.xss-lock = {
-    description = "Trigger xautolock on suspend";
+    description = "xss-lock";
     wantedBy = [ "graphical-session.target" ];
     partOf = [ "graphical-session.target" ];
     serviceConfig = {
@@ -46,6 +51,8 @@
   };
 
   environment.systemPackages = with pkgs; [
+    dotfiles.sddm-theme-breeze-custom
+
     dmenu             # For xmonad
     dunst             # notifications daemon
     #dzen2
