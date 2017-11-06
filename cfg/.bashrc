@@ -139,11 +139,8 @@ if [[ -z "${debian_chroot:-}" && -r /etc/debian_chroot ]]; then
   debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-export GIT_PS1_SHOWDIRTYSTATE=true
-export GIT_PS1_SHOWCOLORHINTS=1
-export GIT_PS1_DESCRIBE_STYLE=branch
 
-myPromptCmd() {
+__prompt_command() {
   declare -A colors
   colors=(
     [normal]='\[\033[0m\]'
@@ -172,12 +169,19 @@ myPromptCmd() {
     venvprompt="─${colors[brightcyan]}${venvname}${colors[normal]}"
   fi
 
-  prompt1="┌─( ${colors[brightgreen]}\u${colors[normal]}@\h "
-  prompt1+=")─( ${colors[brightblue]}\w${colors[normal]} )"
-  prompt2="\n└${debian_chroot:+─(${colors[brightmagenta]}${debian_chroot}${colors[normal]})}"
-  prompt2+="─(\$?)"
-  prompt2+="${venvprompt}─> \\$ "
-  prompt3="─( %s )"
+  # first line:  right-aligned HH:MM:SS, then put the cursor back at column 0
+  before="$(printf "%$((COLUMNS - 8))s")\t\r"
+  # ... then left-aligned half of the first line
+  before+="┌─( ${colors[brightgreen]}\u${colors[normal]}@\h "
+  before+=")─( ${colors[brightblue]}\w${colors[normal]} )"
+
+  # the part that __git__ps1 formats into:
+  git_status_fmt="─( %s )"
+
+  # second line:
+  after="\n└${debian_chroot:+─(${colors[brightmagenta]}${debian_chroot}${colors[normal]})}"
+  after+="─(\$?)"
+  after+="${venvprompt}─> \\$ "
 
   case $TERM in
     xterm*)
@@ -186,10 +190,14 @@ myPromptCmd() {
       ;;
   esac
 
-  __git_ps1 "${prompt1}" "${prompt2}" "${prompt3}"
+  GIT_PS1_SHOWDIRTYSTATE=true
+  GIT_PS1_SHOWCOLORHINTS=1
+  GIT_PS1_DESCRIBE_STYLE=branch
+
+  __git_ps1 "$before" "$after" "$git_status_fmt"
 }
 
-PROMPT_COMMAND="myPromptCmd"
+PROMPT_COMMAND="__prompt_command"
 
 # Handled via nix
 #[[ -e /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
