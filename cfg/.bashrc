@@ -141,6 +141,8 @@ fi
 
 
 __prompt_command() {
+  e=$?
+
   declare -A colors
   colors=(
     [normal]='\[\033[0m\]'
@@ -169,6 +171,14 @@ __prompt_command() {
     venvprompt="─${colors[brightcyan]}${venvname}${colors[normal]}"
   fi
 
+  before=""
+  case $TERM in
+    xterm*)
+      # Set the title bar to include the current directory.
+      before+="\[\033]0;\u@\h: \w\007\]${before}"
+      ;;
+  esac
+
   # first line:  right-aligned HH:MM:SS, then put the cursor back at column 0
   before="$(printf "%$((COLUMNS - 8))s")\t\r"
   # ... then left-aligned half of the first line
@@ -178,17 +188,24 @@ __prompt_command() {
   # the part that __git__ps1 formats into:
   git_status_fmt="─( %s )"
 
-  # second line:
-  after="\n└${debian_chroot:+─(${colors[brightmagenta]}${debian_chroot}${colors[normal]})}"
-  after+="─(\$?)"
-  after+="${venvprompt}─> \\$ "
+  # End of the first line: show my current kubernetes context
+  if kube_context=$(kubectl config current-context 2>/dev/null); then
+    after="─(${colors[blue]}☸️${colors[normal]} ${kube_context})"
+  else
+    after="─(${colors[red]} ☸️ ${colors[normal]})"
+  fi
 
-  case $TERM in
-    xterm*)
-      # Set the title bar to include the current directory.
-      prompt1="\[\033]0;\u@\h: \w\007\]${prompt1}"
-      ;;
+  # start of second line: If I'm in a debian chroot, highlight that
+  after+="\n└${debian_chroot:+─(${colors[brightmagenta]}${debian_chroot}${colors[normal]})}"
+
+  # Numeric exit status of the last command, or a smiling cat if it's 0
+  case $e in
+    #0) after+="─😸" ;;
+    0) after+="($e)" ;;
+    *) after+="${colors[red]}($e)${colors[normal]}" ;;
   esac
+  # Current virtualenv name (if any), then the final $
+  after+="${venvprompt}─> \\$ "
 
   GIT_PS1_SHOWDIRTYSTATE=true
   GIT_PS1_SHOWCOLORHINTS=1
