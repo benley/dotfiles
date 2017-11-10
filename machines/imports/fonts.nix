@@ -29,7 +29,7 @@
     montserrat
     # nerdfonts  # This is like 6,000 fonts and 3+ gigabytes, seriously
     noto-fonts
-    #noto-fonts-emoji  # Build broken?
+    noto-fonts-emoji  # Build broken?
     oxygenfonts
     powerline-fonts
     profont

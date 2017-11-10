@@ -87,10 +87,10 @@ myKeyBindings =
     , ("C-M-l", spawn "xset s activate")
     , ("C-M-y", commands >>= runCommand)
     , ("S-M-p", spawn ("dmenu_run -p 'cmdline:' " ++ dmenu_args))
-    , ("S-M-n", spawn "networkmanager_dmenu")
+    , ("S-M-n", spawn "networkmanager_dmenu -i -fn PragmataPro")
     , ("M-p", spawn ("j4-dmenu-desktop --dmenu=\"dmenu -p 'app:' " ++ dmenu_args ++ "\""))
     , ("M-S-q", quitWithWarning)
-    ] where dmenu_args = "-i -l 5 -fn 'Noto Sans: size=12'"
+    ] where dmenu_args = "-i -l 10 -fn 'PragmataPro'"
             commands :: X [(String, X ())]
             commands = do
               dc <- defaultCommands
