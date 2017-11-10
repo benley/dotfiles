@@ -1,18 +1,17 @@
 { config, pkgs, ... }:
 
 {
-  nixpkgs.config.packageOverrides = pkgs: {
+  nixpkgs.config.packageOverrides = super: let self = super.pkgs; in rec {
 
-    # This would enable kerberos in the default openssh package so it gets
-    # included with things like git. Unfortunately, that causes nix to rebuild
-    # a ton of stuff, which takes *forever*.
-    #
-    # openssh = pkgs.openssh.override {
-    #   withKerberos = true;
-    #   withGssapiPatches = true;
-    # };
+    haskellPackages = super.haskellPackages.override {
+      overrides = self: super: {
+        taffybar-plugins = self.callPackage ../../pkgs/taffybar-plugins {};
+      };
+    };
 
-    # remove this once docker >= 17.05 becomes the normal docker version
-    #docker = pkgs.docker_17_05;
+    taffybar = super.taffybar.override (_: {
+      packages = _: [haskellPackages.taffybar-plugins];
+    });
+
   };
 }

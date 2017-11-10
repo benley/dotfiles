@@ -23,7 +23,7 @@ style "taffybar-default" {
   fg[PRELIGHT] = @base0b
   bg[PRELIGHT] = @base01
 
-  font_name = "Anonymous Pro Bold 12"
+  font_name = "Operator Mono weight=350 12"
 }
 
 style "taffybar-active-window" = "taffybar-default" {

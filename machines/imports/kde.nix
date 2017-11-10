@@ -57,7 +57,7 @@ let dotfiles = import ../.. {}; in
     dunst             # notifications daemon
     #dzen2
     #haskellPackages.xmobar
-    haskellPackages.taffybar
+    taffybar
     j4-dmenu-desktop  # dmenu .desktop app launcher
     libnotify         # includes notify-send
     networkmanager_dmenu
