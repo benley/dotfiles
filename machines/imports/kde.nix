@@ -17,6 +17,7 @@ let dotfiles = import ../.. {}; in
   };
 
   programs.light.enable = true;  # backlight control helper
+  programs.qt5ct.enable = true;  # Qt theme/font/icon config for non-kde envs
 
   systemd.user.services.xautolock = {
     description = "xautolock";
@@ -62,7 +63,6 @@ let dotfiles = import ../.. {}; in
     libnotify         # includes notify-send
     networkmanager_dmenu
     networkmanagerapplet
-    qt5ct             # Set QT themes without running Plasma
     xautolock         # so I can xautolock -locknow
     xcompmgr
     xorg.xbacklight
@@ -89,8 +89,5 @@ let dotfiles = import ../.. {}; in
 
     # https://github.com/NixOS/nixpkgs/issues/27050#issuecomment-315324541
     # QT_PLUGIN_PATH = [ "${pkgs.plasma-desktop}/lib/qt-5.9/plugins/kcms" ];
-
-    # Make QT theming work at all
-    QT_QPA_PLATFORMTHEME = "qt5ct";
   };
 }

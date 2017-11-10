@@ -46,4 +46,6 @@
     unifont
     vistafonts
   ];
+
+  fonts.fontconfig.localConf = builtins.readFile ./fonts.conf;
 }
