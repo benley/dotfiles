@@ -25,7 +25,7 @@ import Data.Maybe (fromMaybe)
 import Safe (headMay)
 import System.Process (readProcess)
 
-import Local.Emoji (lookupUnicode)
+import Local.Emoji (lookupUnicode, emoji)
 
 memCallback = do
   mi <- parseMeminfo
@@ -77,7 +77,9 @@ batString = do
              $ []
     batInfo <- readProcess "upower" ["-i", fromMaybe "" batList] []
 
-    let batPercent = filter (/= ' ')
+    let batPercent = read
+                   . takeWhile (/= '%')
+                   . filter (/= ' ')
                    . dropWhile (not . isNumber)
                    . fromMaybe ""
                    . headMay
@@ -95,29 +97,28 @@ batString = do
                  $ batInfo
         isCharging | "DISCHARGING" `isInfixOf` batState = False
                    | "CHARGING" `isInfixOf` batState = True
-                   -- what does state "UNKNOWN"mean?
+                   -- what does state "UNKNOWN" mean?
                    | otherwise = False
 
     return $ batteryIcon batPercent isCharging
 
-batteryIcon :: String -> Bool -> String
-batteryIcon percent isCharging
-    | bat > 90 =
-        chargeSym ++ fontAwesome "battery-full" ++ show bat ++ "%"
-    | bat > 60 =
-        chargeSym ++ fontAwesome "battery-three-quarters" ++ show bat ++ "%"
-    | bat > 40 =
-        chargeSym ++ fontAwesome "battery-half" ++ show bat ++ "%"
-    | bat > 10 =
-        chargeSym ++ fontAwesome "battery-quarter" ++ show bat ++ "%"
-    | bat > 6  =
+batteryIcon :: Int -> Bool -> String
+batteryIcon batP isCharging
+    | batP > 90 =
+        chargeSym ++ fontAwesome "battery-full" ++ show batP ++ "%"
+    | batP > 60 =
+        chargeSym ++ fontAwesome "battery-three-quarters" ++ show batP ++ "%"
+    | batP > 40 =
+        chargeSym ++ fontAwesome "battery-half" ++ show batP ++ "%"
+    | batP > 10 =
+        chargeSym ++ fontAwesome "battery-quarter" ++ show batP ++ "%"
+    | batP > 6  =
         colorIfDischarging "#ec5f67" ""
-            $ chargeSym ++ fontAwesome "battery-empty" ++ show bat ++ "%"
+            $ chargeSym ++ fontAwesome "battery-empty" ++ show batP ++ "%"
     | otherwise =
         colorIfDischarging "#000000" "#ec5f67"
-            $ chargeSym ++ fontAwesome "battery-empty" ++ show bat ++ "%"
+            $ chargeSym ++ fontAwesome "battery-empty" ++ show batP ++ "%"
   where
-    bat = read . reverse . takeWhile (/= ' ') . drop 1 . dropWhile (/= '%') . reverse $ percent
     colorIfDischarging fg bg = if isCharging then id else colorize fg bg
     chargeSym = if isCharging then fontAwesome "bolt" else ""
 
@@ -126,7 +127,7 @@ main = defaultTaffybar defaultTaffybarConfig
     { startWidgets = [ taffyPagerNew pagerConfig
                      --, notifyAreaNew defaultNotificationConfig
                      ]
-    , endWidgets = [ textClockNew Nothing "<span fgcolor='#ea9560'>%a %b %_d %H:%M</span>" 1
+    , endWidgets = [ textClockNew Nothing (colorize "#ea9560" "" "%a %b %_d %H:%M") 1
                    , systrayNew
                    --, weatherNew (defaultWeatherConfig "BHBM3") 10
                    --, separator
@@ -138,7 +139,7 @@ main = defaultTaffybar defaultTaffybarConfig
                    , separator
                    , labelW (return $ fontAwesome "microchip")
                    , pollingGraphNew memCfg 1 memCallback
-                   , labelW (return "\x1f4bb")
+                   , labelW (return $ emoji "computer")
                    , cpuMonitorNew cpuCfg 1 "cpu3"
                    , cpuMonitorNew cpuCfg 1 "cpu2"
                    , cpuMonitorNew cpuCfg 1 "cpu1"
