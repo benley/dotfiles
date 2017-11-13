@@ -1,11 +1,13 @@
 { config, pkgs, ... }:
 
 {
-  nixpkgs.config.packageOverrides = super: let self = super.pkgs; in rec {
+  nixpkgs.config.packageOverrides = super: rec {
 
     haskellPackages = super.haskellPackages.override {
       overrides = self: super: {
         taffybar-plugins = self.callPackage ../../pkgs/taffybar-plugins {};
+
+        taffybar = self.callPackage ../../pkgs/taffybar {};
       };
     };
 

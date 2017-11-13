@@ -1,0 +1,12 @@
+name:       Glass
+id:         glass
+unicode:    f000
+created:    1.0
+filter:
+  - martini
+  - drink
+  - bar
+  - alcohol
+  - liquor
+categories:
+  - Web Application Icons

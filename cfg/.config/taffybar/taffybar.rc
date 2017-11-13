@@ -17,11 +17,11 @@ style "taffybar-default" {
   color["base0e"] = "#82aaff"
   color["base0f"] = "#ec5f67"
 
-  bg[NORMAL]   = @base01
   fg[NORMAL]   = @base05
+  bg[NORMAL]   = @base01
   text[NORMAL] = @base05
-  fg[PRELIGHT] = @base0b
-  bg[PRELIGHT] = @base01
+  fg[PRELIGHT] = @base01
+  bg[PRELIGHT] = @base05
 
   font_name = "Operator Mono weight=350 12"
 }
@@ -50,8 +50,15 @@ style "taffybar-workspace-border-hidden" = "taffybar-default" {
 style "taffybar-workspace-border-urgent" = "taffybar-default" {
   bg[NORMAL] = @base05
 }
+style "taffybar-windowswitcher-menu" = "taffybar-default" {
+  bg[NORMAL] = @base01
+  fg[NORMAL] = @base01
+  fg[PRELIGHT] = @base05
+  bg[PRELIGHT] = @base01
+}
 
 widget "Taffybar*" style "taffybar-default"
+widget "Taffybar*WindowSwitcher*" style "taffybar-windowswitcher-menu"
 widget "Taffybar*WindowSwitcher*label" style "taffybar-active-window"
 widget "*NotificationCloseButton" style "taffybar-notification-button"
 

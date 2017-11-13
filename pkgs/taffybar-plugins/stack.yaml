@@ -77,6 +77,8 @@ nix:
     pkgconfig,
     wirelesstools
     xorg.libX11,
+    xorg.libXext,
+    xorg.libXinerama,
     xorg.libXrandr,
     zlib,
   ]

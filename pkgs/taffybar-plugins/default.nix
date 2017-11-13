@@ -1,15 +1,14 @@
-{ mkDerivation, base, gtk, stdenv, taffybar, wirelesstools }:
-
+{ mkDerivation, base, bytestring, file-embed, gtk, stdenv, taffybar
+, wirelesstools, yaml
+}:
 mkDerivation {
   pname = "taffybar-plugins";
   version = "0.1.0.0";
   src = ./.;
-  isLibrary = true;
-  isExecutable = true;
-  libraryHaskellDepends = [ base gtk taffybar ];
+  libraryHaskellDepends = [
+    base bytestring file-embed gtk taffybar yaml
+  ];
   librarySystemDepends = [ wirelesstools ];
-  executableHaskellDepends = [ base gtk taffybar ];
-  testHaskellDepends = [ base ];
-  homepage = https://github.com/benley/dotfiles;
+  homepage = "https://github.com/benley/dotfiles";
   license = stdenv.lib.licenses.bsd3;
 }

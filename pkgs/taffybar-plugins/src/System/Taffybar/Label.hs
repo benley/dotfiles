@@ -1,10 +1,15 @@
-module System.Taffybar.Label (labelW) where
+module System.Taffybar.Label where
 
 import System.Taffybar.Widgets.PollingLabel (pollingLabelNew)
-import Graphics.UI.Gtk (Widget, widgetShowAll)
+import qualified Graphics.UI.Gtk as Gtk
 
-labelW :: IO String -> IO Widget
-labelW printer = do
-  w <- pollingLabelNew "---" 1 printer
-  widgetShowAll w
-  return w
+labelW :: IO String -> IO Gtk.Widget
+labelW = pollTextW 60
+
+pollTextW :: Double -- ^ Poll interval in seconds
+          -> IO String -- ^ Text
+          -> IO Gtk.Widget
+pollTextW interval text = do
+    l <- pollingLabelNew "" interval text
+    Gtk.widgetShowAll l
+    return l
