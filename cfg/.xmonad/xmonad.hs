@@ -46,6 +46,8 @@ myManageHook = composeAll
   , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> (doCenterFloat <+> doF W.swapMaster)
   -- Don't manage splash windows (e.g. the ones krita and gimp show at startup)
   , isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_SPLASH" --> doIgnore
+  -- Don't manage notification overlays
+  , isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_NOTIFICATION" --> doIgnore
   , placeHook simpleSmart
   ]
 
