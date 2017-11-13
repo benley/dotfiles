@@ -4,7 +4,6 @@ import System.Taffybar.Battery
 import System.Taffybar.CPUMonitor
 import System.Taffybar.FreedesktopNotifications
 import System.Taffybar.MPRIS
-import System.Taffybar.Label
 import System.Taffybar.NetMonitor
 --import System.Taffybar.Menu.MenuWidget
 import System.Taffybar.SimpleClock
@@ -14,7 +13,6 @@ import System.Taffybar.TaffyPager
 import System.Taffybar.Weather
 import System.Taffybar.Widgets.PollingBar
 import System.Taffybar.Widgets.PollingGraph
-import System.Taffybar.WirelessMonitor
 
 import System.Information.Memory
 import System.Information.CPU
@@ -26,6 +24,8 @@ import Safe (headMay)
 import System.Process (readProcess)
 
 import Local.Emoji (lookupUnicode, emoji)
+import Local.Taffybar.Label
+import Local.Taffybar.WirelessMonitor
 
 memCallback = do
   mi <- parseMeminfo

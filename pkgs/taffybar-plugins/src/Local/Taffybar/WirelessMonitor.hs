@@ -1,8 +1,9 @@
-module System.Taffybar.WirelessMonitor where
+module Local.Taffybar.WirelessMonitor where
 
 import qualified Graphics.UI.Gtk as Gtk
-import qualified System.Information.IWlib as IW
 import System.Taffybar.Widgets.PollingLabel
+
+import qualified Local.Network.IWlib as IW
 
 wirelessMonitorNew :: Double -- ^ Polling interval (in seconds, e.g. 1.5)
                    -> String -- ^ Name of the interface to monitor

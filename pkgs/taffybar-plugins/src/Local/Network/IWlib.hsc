@@ -15,7 +15,7 @@
 {-# LANGUAGE CPP, ForeignFunctionInterface, EmptyDataDecls #-}
 
 
-module System.Information.IWlib (WirelessInfo(..), getWirelessInfo) where
+module Local.Network.IWlib (WirelessInfo(..), getWirelessInfo) where
 
 import Foreign
 import Foreign.C.Types

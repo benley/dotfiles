@@ -15,17 +15,16 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     System.Taffybar.WirelessMonitor
-                       System.Information.IWlib
-                       System.Taffybar.Label
-                       Local.Emoji
+  exposed-modules:     Local.Emoji
+                       Local.Network.IWlib
+                       Local.Taffybar.Label
+                       Local.Taffybar.WirelessMonitor
   build-depends:       base >= 4.7 && < 5
                      , taffybar >= 0.4.6
                      , gtk >= 0.12.1 && < 0.15
                      , yaml
                      , file-embed >= 0.0.9.1
                      , bytestring
-                     -- && < 0.0.10
   default-language:    Haskell2010
   extra-libraries: iw
   cpp-options: -DIWLIB
