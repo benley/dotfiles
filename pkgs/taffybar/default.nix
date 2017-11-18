@@ -1,5 +1,5 @@
 { mkDerivation, base, cairo, ConfigFile, containers, dbus
-, directory, dyre, either, enclosed-exceptions, fetchgit, filepath
+, directory, dyre, either, enclosed-exceptions, fetchFromGitHub, filepath
 , gtk, gtk-traymanager, gtk2, HStringTemplate, HTTP, mtl, multimap
 , network, network-uri, old-locale, parsec, process, rate-limit
 , safe, split, stdenv, stm, text, time, time-locale-compat
@@ -9,11 +9,12 @@
 
 mkDerivation {
   pname = "taffybar";
-  version = "0.4.6-git-2017-10-26";
-  src = fetchgit {
-    url = "https://github.com/travitch/taffybar.git";
-    sha256 = "0r9hip4kf3bvgjqiffqxrkr8klldhpbhibj8kmmc38a8f271b08h";
-    rev = "2647bc9071fb926d460e447ba1c333c06736b7d7";
+  version = "0.4.6-git-pr242";
+  src = fetchFromGitHub {
+    owner = "benley";
+    repo = "taffybar";
+    rev = "ebe8f864dd1e4310e95993ac5f4f0c1c0c5a01a2";
+    sha256 = "0nj8lb953abkyqvfr8zw3h9fs2x6zwzn0wirfv16yx4012y1k3xv";
   };
   isLibrary = true;
   isExecutable = true;

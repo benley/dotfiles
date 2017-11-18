@@ -53,8 +53,8 @@ style "taffybar-workspace-border-urgent" = "taffybar-default" {
 style "taffybar-windowswitcher-menu" = "taffybar-default" {
   bg[NORMAL] = @base01
   fg[NORMAL] = @base01
-  fg[PRELIGHT] = @base05
-  bg[PRELIGHT] = @base01
+  fg[PRELIGHT] = @base01
+  bg[PRELIGHT] = @base0d
 }
 
 widget "Taffybar*" style "taffybar-default"

@@ -5,7 +5,7 @@ import System.Taffybar.CPUMonitor
 import System.Taffybar.FreedesktopNotifications
 import System.Taffybar.MPRIS
 import System.Taffybar.NetMonitor
---import System.Taffybar.Menu.MenuWidget
+import System.Taffybar.Menu.MenuWidget
 import System.Taffybar.SimpleClock
 import System.Taffybar.Systray
 import System.Taffybar.Pager
@@ -124,7 +124,8 @@ batteryIcon batP isCharging
 
 
 main = defaultTaffybar defaultTaffybarConfig
-    { startWidgets = [ taffyPagerNew pagerConfig
+    { startWidgets = [ menuWidgetNew Nothing
+                     , taffyPagerNew pagerConfig
                      --, notifyAreaNew defaultNotificationConfig
                      ]
     , endWidgets = [ textClockNew Nothing (colorize "#ea9560" "" "%a %b %_d %H:%M") 1
@@ -147,7 +148,6 @@ main = defaultTaffybar defaultTaffybarConfig
                    , separator
                    , netMonitorNew 1 "wlp1s0"
                    --, mprisNew defaultMPRISConfig
-                   --, menuWidgetNew Nothing
                    ]
     , barHeight = 50
     }
