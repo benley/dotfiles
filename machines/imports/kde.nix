@@ -63,6 +63,7 @@ let dotfiles = import ../.. {}; in
     libnotify         # includes notify-send
     networkmanager_dmenu
     networkmanagerapplet
+    pasystray
     xautolock         # so I can xautolock -locknow
     xcompmgr
     xorg.xbacklight
