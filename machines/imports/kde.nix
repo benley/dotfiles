@@ -13,8 +13,9 @@ let dotfiles = import ../.. {}; in
     windowManager.xmonad.extraPackages = haskellPackages: [
       haskellPackages.taffybar
     ];
-
   };
+
+  services.compton.enable = true;  # X11 compositor
 
   programs.light.enable = true;  # backlight control helper
   programs.qt5ct.enable = true;  # Qt theme/font/icon config for non-kde envs
@@ -65,7 +66,6 @@ let dotfiles = import ../.. {}; in
     networkmanagerapplet
     pasystray
     xautolock         # so I can xautolock -locknow
-    xcompmgr
     xorg.xbacklight
 
     gnome3.cheese     # KDE seems to lack a webcam app?

@@ -3,7 +3,6 @@ kwalletd5 &
 taffybar &
 insync start
 dropbox start
-xcompmgr &
 nm-applet &
 pasystray &
 setxkbmap
