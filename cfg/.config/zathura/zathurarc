@@ -2,3 +2,51 @@
 #set recolor-keephue true
 set recolor-lightcolor "#263238"
 set recolor-darkcolor "#cdd3de"
+
+set completion-bg "#263238"
+set completion-fg "#CDD3DE"
+#set completion-group-bg "#000000"
+#set completion-group-fg "#dedede"
+set completion-highlight-bg "#89DDFF"
+set completion-highlight-fg "#263238"
+
+set default-fg "#cdd3de"
+set default-bg "#263238"
+
+set inputbar-bg "#263238"
+set inputbar-fg "#89ddff"
+
+set statusbar-bg "#37474F"
+set statusbar-fg "#cdd3de"
+
+set notification-bg "#37474f"
+set notification-fg "#8bd649"
+
+set notification-error-bg "#37474f"
+set notification-error-fg "#ec5f67"
+
+#set notification-warning-bg "#ffffff"
+#set notification-warning-fg "#fff712"
+
+#set tabbar-fg "#ffffff"
+#set tabbar-bg "#000000"
+#set tabbar-focus-fg "#9fbc00"
+#set tabbar-focus-bg "#000000"
+
+#set highlight-color "#8bd649"
+#set highlight-active-color "#8bd649"
+
+set index-bg "#263238"
+set index-fg "#cdd3de"
+
+set index-active-bg "#89ddff"
+set index-active-fg "#263238"
+
+set font "PragmataPro 12"
+
+set selection-clipboard "clipboard"
+set statusbar-home-tilde true
+set statusbar-basename false
+
+set window-title-basename true
+set smooth-scroll true
