@@ -16,6 +16,7 @@
     slack
     steam
     transmission_gtk
+    vivaldi
     vlc
     vscode
     xlibs.xdpyinfo
