@@ -11,24 +11,9 @@ import qualified Data.Yaml as Y
 import Data.Maybe (isNothing, fromJust)
 import Data.Yaml (FromJSON(..), (.:), (.:?))
 
-emoji "computer"                  = "\x1f4bb"
-emoji "electric_plug"             = "\x1f50c"
-emoji "fa-battery"                = "\xf240"
-emoji "fa-battery-0"              = "\xf244"
-emoji "fa-battery-1"              = "\xf243"
-emoji "fa-battery-2"              = "\xf242"
-emoji "fa-battery-3"              = "\xf241"
-emoji "fa-battery-4"              = "\xf240"
-emoji "fa-battery-empty"          = "\xf244"
-emoji "fa-battery-full"           = "\xf240"
-emoji "fa-battery-half"           = "\xf242"
-emoji "fa-battery-quarter"        = "\xf243"
-emoji "fa-battery-three-quarters" = "\xf241"
-emoji "fa-bolt"                   = "\xf0e7"
-emoji "fa-flash"                  = "\xf0e7"
-emoji "fa-laptop"                 = "\xf109"
-emoji "fa-microchip"              = "\xf2db"
+-- https://artyom.me/aeson#fromjson-instances-for-other-types
 
+-- TODO: fetch icons.yml from the internet or something
 embeddedData :: Char8.ByteString
 embeddedData = $(embedFile "icons.yml")
 
@@ -66,3 +51,8 @@ data IconInfo =
              , aliases :: Maybe [String]
              }
     deriving (Show, Eq, Generic, FromJSON)
+
+-- individual non-FontAwesome symbols
+-- TODO: this doesn't really belong here
+emoji "computer"                  = "\x1f4bb"
+emoji "electric_plug"             = "\x1f50c"
