@@ -1,3 +1,7 @@
+# Based on stuff from:
+#  https://beyermatthias.de/blog/2015/11/25/how-to-setup-neovim-on-nixos/
+#  http://nerditya.com/code/guide-to-neovim/
+
 { pkgs, lib, ... }:
 
 let
