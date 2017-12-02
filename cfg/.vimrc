@@ -228,6 +228,8 @@ let g:syntastic_auto_loc_list = 2
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_jsonnet_checkers = ['jsonnet']
 
+let g:syntastic_haskell_hdevtools_args = "--socket=.git/.hdevtools.sock"
+
 let g:virtualenv_stl_format='[%n]'  " TODO: Does this do anything with airline installed?
 "set statusline=%<%f\ %h%m%r%{VirtualEnvStatusline()}%=%-14.(%l,%c%V%)\ %P
 
