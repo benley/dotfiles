@@ -17,4 +17,8 @@ stdenv.mkDerivation {
     cp -rL sddm-theme $out/share/sddm/themes/breeze-custom
     rm -rf $out/share/sddm/themes/breeze-custom/dummydata
   '';
+
+  propagatedBuildInputs = [
+    plasma-workspace
+  ];
 }

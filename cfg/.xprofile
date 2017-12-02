@@ -1,8 +1,7 @@
-dunst &
 kwalletd5 &
 taffybar &
-insync start
-dropbox start
+insync start &
+dropbox start &
 nm-applet &
-pasystray &
+pasystray -a &
 setxkbmap
