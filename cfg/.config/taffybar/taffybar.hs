@@ -13,6 +13,7 @@ import System.Taffybar.TaffyPager
 import System.Taffybar.Weather
 import System.Taffybar.Widgets.PollingBar
 import System.Taffybar.Widgets.PollingGraph
+import System.Taffybar.WorkspaceHUD
 
 import System.Information.Memory
 import System.Information.CPU
@@ -123,10 +124,14 @@ batteryIcon batP isCharging
     chargeSym = if isCharging then fontAwesome "bolt" else ""
 
 
+myHudConfig = defaultWorkspaceHUDConfig
+            { windowIconSize = 35 }
+
 main = defaultTaffybar defaultTaffybarConfig
     { startWidgets = [ menuWidgetNew Nothing
-                     , taffyPagerNew pagerConfig
-                     --, notifyAreaNew defaultNotificationConfig
+                     --, taffyPagerNew pagerConfig
+                     --, taffyPagerHUDNew pagerConfig myHudConfig
+                     , taffyPagerHUDLegacy pagerConfig
                      ]
     , endWidgets = [ textClockNew Nothing (colorize "#ea9560" "" "%a %b %_d %H:%M") 1
                    , systrayNew
