@@ -118,5 +118,5 @@
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "zfs";
 
-  zramSwap.enable = true;
+  #zramSwap.enable = true;
 }
