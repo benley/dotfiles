@@ -13,6 +13,7 @@
     inkscape
     insync
     minecraft
+    signal-desktop
     slack
     steam
     transmission_gtk
