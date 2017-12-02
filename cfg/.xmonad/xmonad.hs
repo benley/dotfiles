@@ -78,21 +78,23 @@ myLayoutHook =
 -- mod1Mask: alt, mod4Mask: win
 defaultModMask = mod1Mask
 
+defaultFont = "PragmataPro"
+
 myKeyBindings =
   flip mkKeymap
-    [ ("<XF86AudioLowerVolume>", spawn "amixer set Master 5%- unmute")
-    , ("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+ unmute")
-    , ("<XF86AudioMute>", spawn "amixer set Master toggle")
+    [ ("<XF86AudioLowerVolume>", spawn "amixer --quiet set Master 5%- unmute")
+    , ("<XF86AudioRaiseVolume>", spawn "amixer --quiet set Master 5%+ unmute")
+    , ("<XF86AudioMute>", spawn "amixer --quiet set Master toggle")
     , ("<XF86MonBrightnessUp>", spawn "light -A 5")
     , ("<XF86MonBrightnessDown>", spawn "light -U 5")
     , ("M-g", goToSelected defaultGSConfig)
     , ("C-M-l", spawn "xset s activate")
     , ("C-M-y", commands >>= runCommand)
     , ("S-M-p", spawn ("dmenu_run -p 'cmdline:' " ++ dmenu_args))
-    , ("S-M-n", spawn "networkmanager_dmenu -i -fn PragmataPro")
+    , ("S-M-n", spawn ("networkmanager_dmenu -i -fn " ++ defaultFont))
     , ("M-p", spawn ("j4-dmenu-desktop --dmenu=\"dmenu -p 'app:' " ++ dmenu_args ++ "\""))
     , ("M-S-q", quitWithWarning)
-    ] where dmenu_args = "-i -l 10 -fn 'PragmataPro'"
+    ] where dmenu_args = "-i -l 10 -fn " ++ defaultFont
             commands :: X [(String, X ())]
             commands = do
               dc <- defaultCommands
@@ -102,7 +104,7 @@ quitWithWarning :: X ()
 quitWithWarning = do
     s <- Dmenu.menuArgs "dmenu" [ "-p", "Quit?", "-nb", "red", "-nf", "black",
                                   "-sf", "white", "-sb", "black",
-                                  "-i", "-l", "5"]
+                                  "-i", "-l", "5", "-fn", defaultFont]
                                 ["Nope", "Yes, quit!"]
     when (s == "Yes, quit!") (io exitSuccess)
 
