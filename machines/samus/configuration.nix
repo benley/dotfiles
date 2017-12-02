@@ -1,4 +1,4 @@
-#### SAMUS ####
+#### SAMUS (Chromebook Pixel 2 LS) ####
 
 { config, pkgs, ... }:
 
@@ -7,7 +7,6 @@
     ./hardware-configuration.nix
     ../imports/defaults.nix
     ../imports/graphical.nix
-    ../imports/kde.nix
     ../imports/wacom.nix
   ];
 

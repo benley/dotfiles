@@ -7,7 +7,6 @@
     ./hardware-configuration.nix
     ../imports/defaults.nix
     ../imports/graphical.nix
-    ../imports/kde.nix
     ../imports/trackpoint.nix
     ../imports/virtualbox.nix
     ../imports/wacom.nix
