@@ -125,6 +125,8 @@ let dotfiles = import ../.. {}; in
   services.upower.enable = true;
 
   services.dbus.packages = with pkgs; [ gnome3.dconf dunst ];
+  services.dbus.socketActivated = true;
+
   systemd.packages = with pkgs; [ dunst ];
 
   systemd.user.services.xautolock = {
