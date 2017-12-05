@@ -78,8 +78,7 @@ batString = do
              $ []
     batInfo <- readProcess "upower" ["-i", fromMaybe "" batList] []
 
-    let batPercent = read
-                   . takeWhile (/= '%')
+    let batPercent = takeWhile (/= '%')
                    . filter (/= ' ')
                    . dropWhile (not . isNumber)
                    . fromMaybe ""
@@ -101,7 +100,9 @@ batString = do
                    -- what does state "UNKNOWN" mean?
                    | otherwise = False
 
-    return $ batteryIcon batPercent isCharging
+    return $ if null batPercent
+               then "" {- no battery -}
+               else batteryIcon (read batPercent) isCharging
 
 batteryIcon :: Int -> Bool -> String
 batteryIcon batP isCharging
