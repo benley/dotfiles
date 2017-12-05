@@ -11,17 +11,19 @@
   (package-refresh-contents))
 
 (defvar my-packages
-  '(
+  '(base16-theme
     clojure-mode
     clojure-mode-extra-font-locking
     cider
     company
-    evil
+    company-emoji
+    emojify
+    ;;evil
     haskell-mode
     ido-ubiquitous
     magit
     nix-mode
-    noctilux-theme
+    ;;noctilux-theme
     paredit
     ;;projectile
     puppet-mode
@@ -29,10 +31,10 @@
     ;;smex
     ;;tagedit
     web-mode
-    anti-zenburn-theme
+    ;;anti-zenburn-theme
     yaml-mode
-    zenburn-theme
-    solarized-theme
+    ;;zenburn-theme
+    ;;solarized-theme
     flycheck
     flycheck-color-mode-line
     flycheck-pos-tip
@@ -46,6 +48,22 @@
 
 ;(require 'evil)
 ;(evil-mode 1)
+
+(require 'company-emoji)
+(add-to-list 'company-backends 'company-emoji)
+(setq company-emoji-insert-unicode nil)
+
+(defun --set-emoji-font (frame)
+  "Adjust the font settings of FRAME so Emacs can display emoji properly."
+  (if (eq system-type 'darwin)
+      ;; For NS/Cocoa
+      (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") frame 'prepend)
+    ;; For Linux
+    (set-fontset-font t 'symbol (font-spec :family "Noto Emoji") frame 'prepend)))
+
+(--set-emoji-font nil)
+
+(add-hook 'after-make-frame-functions '--set-emoji-font)
 
 (require 'powerline)
 (powerline-default-theme)
@@ -111,30 +129,18 @@
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil)
 
+(custom-set-faces
+ '(default ((t (:family "PragmataPro" :weight medium)))))
+
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(column-number-mode t)
  '(custom-safe-themes
    (quote
     ("d9dab332207600e49400d798ed05f38372ec32132b3f7d2ba697e59088021555" "cdbd0a803de328a4986659d799659939d13ec01da1f482d838b68038c1bb35e8" "5cd0afd0ca01648e1fff95a7a7f8abec925bd654915153fb39ee8e72a8b56a1f" "68d36308fc6e7395f7e6355f92c1dd9029c7a672cbecf8048e2933a053cf27e6" "6a925fdf3a7bf2f3901d8fbc4ef64f9b4b4be2c6bed2b0d49d154db0bec91b33" "19352d62ea0395879be564fc36bc0b4780d9768a964d26dfae8aad218062858d" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "0c311fb22e6197daba9123f43da98f273d2bfaeeaeb653007ad1ee77f0003037" default)))
  '(mac-option-modifier (quote (:ordinary meta :function alt :mouse alt)))
  '(mac-right-option-modifier nil)
- '(package-selected-packages
-   (quote
-    (base16-theme powerline flycheck-pos-tip flycheck-color-mode-line flycheck solarized-theme zenburn-theme yaml-mode anti-zenburn-theme web-mode rainbow-delimiters puppet-mode paredit noctilux-theme nix-mode magit ido-ubiquitous haskell-mode evil company cider clojure-mode-extra-font-locking clojure-mode)))
- '(show-paren-mode t)
- '(show-trailing-whitespace t)
- '(tool-bar-mode nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "Operator Mono" :foundry "H&Co" :slant normal :weight normal :height 111 :width normal))))
- '(mouse ((t (:background "white")))))
+ '(org-agenda-files (quote ("~/Dropbox/org/stuff.org")))
+ '(show-trailing-whitespace t))
 
 (provide 'init)
 ;;; init.el ends here
