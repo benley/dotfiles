@@ -1,0 +1,67 @@
+@define-color bg-color #2c393f;
+@define-color bg-tone #89ddff;
+@define-color active-window-color #374140;
+@define-color urgent-window-color #D9CB9E;
+@define-color font-color #cdd3de;
+
+.Contents {
+    border-radius: 10px;
+    padding: 3px;
+}
+
+.Active .Contents, .Visible .Contents {
+    background-color: @bg-tone;
+}
+
+.Active .WorkspaceLabel {
+    color: @bg-color;
+}
+
+.InnerPad {
+    padding: 4px;
+}
+
+.WorkspaceLabel {
+    padding-right: 3px;
+    padding-left: 2px;
+}
+
+.IconContainer {
+    transition: background-color .5s;
+    border-radius: 5px;
+}
+
+.IconContainer.Active {
+    transition: background-color .5s;
+    background-color: @active-window-color;
+}
+
+.IconContainer.Urgent {
+    transition: background-color .5s;
+    background-color: @urgent-window-color;
+}
+
+.IconContainer.Minimized .IconImage {
+    transition: opacity .5s;
+    opacity: .3;
+}
+
+.IconImage {
+    transition: opacity .5s;
+    padding: 2px;
+    opacity: 1;
+}
+
+#WindowSwitcher {
+    background-color: @bg-color;
+}
+
+.Taffybar {
+    background-color: @bg-color;
+    border-radius: 5px;
+}
+
+.Taffybar * {
+    font-family: "Operator Mono", monospace;
+    color: @font-color;
+}

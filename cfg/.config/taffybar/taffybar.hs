@@ -44,8 +44,8 @@ cpuCfg =
 
 pagerConfig =
     defaultPagerConfig
-    { activeWorkspace = colorize "#263238" "#89DDFF" . wrap " " " " . escape
-    , widgetSep = " | " }
+    { -- activeWorkspace = colorize "#263238" "#89DDFF" . wrap " " " " . escape,
+      widgetSep = " | " }
 
 separator = labelW (return "|")
 
@@ -126,13 +126,13 @@ batteryIcon batP isCharging
 
 
 myHudConfig = defaultWorkspaceHUDConfig
-            { windowIconSize = 35 }
+               { windowIconSize = 35 }
 
 main = defaultTaffybar defaultTaffybarConfig
     { startWidgets = [ menuWidgetNew Nothing
                      --, taffyPagerNew pagerConfig
-                     --, taffyPagerHUDNew pagerConfig myHudConfig
-                     , taffyPagerHUDLegacy pagerConfig
+                     , taffyPagerHUDNew pagerConfig myHudConfig
+                     --, taffyPagerHUDLegacy pagerConfig
                      ]
     , endWidgets = [ textClockNew Nothing (colorize "#ea9560" "" "%a %b %_d %H:%M") 1
                    , systrayNew

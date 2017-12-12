@@ -21,7 +21,7 @@ library
                        Local.Taffybar.WirelessMonitor
   build-depends:       base >= 4.7 && < 5
                      , taffybar >= 0.4.6
-                     , gtk >= 0.12.1 && < 0.15
+                     , gtk3 >= 0.12.1 && < 0.15
                      , yaml
                      , file-embed >= 0.0.9.1
                      , bytestring
