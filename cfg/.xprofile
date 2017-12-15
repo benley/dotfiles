@@ -1,5 +1,4 @@
 kwalletd5 &
-GTK_THEME="Breeze-Dark" taffybar &
 insync start &
 dropbox start &
 nm-applet &

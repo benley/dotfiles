@@ -11,7 +11,7 @@ import System.Taffybar.Systray
 import System.Taffybar.Pager
 import System.Taffybar.TaffyPager
 import System.Taffybar.Weather
-import System.Taffybar.Widgets.PollingBar
+--import System.Taffybar.Widgets.PollingBar
 import System.Taffybar.Widgets.PollingGraph
 import System.Taffybar.WorkspaceHUD
 
@@ -155,5 +155,7 @@ main = defaultTaffybar defaultTaffybarConfig
                    , netMonitorNew 1 "wlp1s0"
                    --, mprisNew defaultMPRISConfig
                    ]
-    , barHeight = 50
+    --, barHeight = 50
+    , barPadding = 19
+    , barPosition = Bottom
     }

@@ -77,11 +77,14 @@ let dotfiles = import ../.. {}; in
     XCURSOR_THEME = "breeze_cursors";
 
     # make gtk3 apps shut the hell up about the gnome accessibility bus
-    NO_AT_BRIDGE = "1";
+    # https://github.com/NixOS/nixpkgs/issues/16327
+    #NO_AT_BRIDGE = "1";
 
     # Enable GTK applications to load SVG icons
     GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
   };
+
+  services.gnome3.at-spi2-core.enable = true;
 
   networking.networkmanager.enable = true;
   networking.networkmanager.unmanaged = [
@@ -158,6 +161,19 @@ let dotfiles = import ../.. {}; in
       '';
       RestartSec = 3;
       Restart = "always";
+    };
+  };
+
+  systemd.user.services.taffybar = {
+    description = "taffybar";
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.taffybar}/bin/taffybar";
+      RestartSec = 3;
+      Restart = "always";
+      MemoryLimit = "512M";
+      Environment = "GTK_THEME=Breeze-Dark:dark";
     };
   };
 
