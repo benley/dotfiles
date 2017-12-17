@@ -3,9 +3,6 @@
 umask 0022
 
 OS=$(uname)
-export EDITOR=vim
-
-PATH="$HOME/bin:$PATH"
 
 # This is unnecessary: see bash manpage's INVOCATION section.
 # Bash will source /etc/bash.bashrc by itself.
