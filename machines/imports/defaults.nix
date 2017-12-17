@@ -40,6 +40,10 @@ in
   # http://nicknovitski.com/vim-nix-syntax wtf
   nixpkgs.config.vim.ftNix = false;
 
+  nixpkgs.config.permittedInsecurePackages = [
+    "linux-4.13.16"
+  ];
+
   programs.bash.enableCompletion = true;
 
   programs.tmux = {

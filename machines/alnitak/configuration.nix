@@ -20,6 +20,8 @@
 
   boot.kernelPackages = pkgs.linuxPackages_4_13;
 
+  hardware.openrazer.enable = true;
+
   # Make the cryptsetup password prompt readable
   boot.earlyVconsoleSetup = true;
 
@@ -123,5 +125,4 @@
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "zfs";
 
-  #zramSwap.enable = true;
 }

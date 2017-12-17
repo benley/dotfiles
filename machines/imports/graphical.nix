@@ -18,7 +18,7 @@ let dotfiles = import ../.. {}; in
     inkscape
     insync
     minecraft
-    signal-desktop
+    signal-desktop-beta
     slack
     steam
     transmission_gtk

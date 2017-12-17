@@ -1,3 +1,6 @@
+
+# https://github.com/GNOME/gtk/blob/gtk-3-22/gdk/x11/gdksettings.c
+
 ##### DPI STUFF
 
 # 192dpi seems to look right on Chromebook Pixel (which is physically 239dpi)
