@@ -58,6 +58,8 @@
 (use-package flycheck-color-mode-line
   :config (flycheck-color-mode-line-mode))
 
+(use-package gitignore-mode)
+
 (use-package go-mode)
 
 (use-package haskell-mode)
@@ -89,6 +91,9 @@
 
 (use-package nyan-mode
  :config (nyan-mode 1))
+
+(use-package org-bullets
+  :config (add-hook 'org-mode-hook 'org-bullets-mode))
 
 (use-package paredit)
 
@@ -193,6 +198,12 @@
   (interactive)
   (save-some-buffers)
   (kill-emacs))
+
+;; keybindings for org mode
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)

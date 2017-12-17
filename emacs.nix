@@ -16,6 +16,7 @@ emojify
 flycheck
 flycheck-pos-tip
 flycheck-color-mode-line
+gitignore-mode
 go-mode
 haskell-mode
 ido-completing-read-plus
@@ -25,6 +26,7 @@ markdown-mode
 material-theme
 nix-mode
 nyan-mode
+org-bullets
 paredit
 protobuf-mode
 rainbow-delimiters
