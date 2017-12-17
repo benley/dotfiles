@@ -4,15 +4,20 @@
 
 (require 'package)
 
-(setq package-archives
-      '(("gnu"   . "http://elpa.gnu.org/packages/")
-        ("melpa" . "http://melpa.org/packages/")
-        ("org"   . "http://orgmode.org/elpa/")))
+;;; nix takes care of package installation for me now
+;; (setq package-archives
+;;       '(("gnu"   . "http://elpa.gnu.org/packages/")
+;;         ("melpa" . "http://melpa.org/packages/")
+;;         ("org"   . "http://orgmode.org/elpa/")))
+(setq package-archives nil)
+(setq package-enable-at-startup nil)
 (package-initialize)
 
-(unless (require 'use-package nil t)
-  (package-refresh-contents)
-  (package-install 'use-package))
+;; (unless (require 'use-package nil t)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
+
+(require 'use-package)
 
 (setq use-package-always-ensure t)
 
@@ -66,7 +71,8 @@
 
   :config
   ;; show ido autocomplete options pretty much everywhere, like when you hit M-x
-  (ido-ubiquitous-mode 1))
+  ;; (ido-ubiquitous-mode 1)
+  )
 
 (use-package jsonnet-mode)
 
@@ -88,6 +94,8 @@
 
 ;; (use-package powerline
 ;;   :config (powerline-default-theme))
+
+(use-package protobuf-mode)
 
 (use-package spaceline-all-the-icons
   :after spaceline
@@ -145,7 +153,7 @@
 (add-hook 'after-make-frame-functions '--set-emoji-font)
 
 (tool-bar-mode 0)                       ;; disable toolbar
-(global-linum-mode 1)                   ;; show line numbers
+;; (global-linum-mode 1)                   ;; show line numbers
 (global-hl-line-mode 1)                 ;; highlight current line
 (column-number-mode 1)                  ;; show column position in modeline
 (show-paren-mode 1)                     ;; highlight matching parens

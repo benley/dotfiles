@@ -7,6 +7,8 @@ let vimPackages = import ./vim/vimPackages.nix pkgs; in
 rec {
   inherit (pkgs) callPackage;
 
+  emacs = callPackage ./emacs.nix { };
+
   kubernetes-client = callPackage ./pkgs/kubernetes-client { };
 
   nix-home = callPackage ./pkgs/nix-home { };

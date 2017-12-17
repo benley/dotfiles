@@ -53,9 +53,7 @@ in
   # this can go in my homedir
   #programs.ssh.extraConfig = readFile ../../cfg/.ssh/config;
 
-  environment.variables = {
-    EDITOR = "vim";
-  };
+  services.emacs.defaultEditor = true;
 
   environment.systemPackages = with pkgs; [
     dotfiles.nix-home
