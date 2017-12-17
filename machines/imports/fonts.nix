@@ -11,6 +11,7 @@
     dejavu_fonts
     dina-font
     dosemu_fonts
+    emacs-all-the-icons-fonts
     fantasque-sans-mono
     fira
     fira-code
