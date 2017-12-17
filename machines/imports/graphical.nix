@@ -168,12 +168,13 @@ let dotfiles = import ../.. {}; in
     description = "taffybar";
     wantedBy = [ "graphical-session.target" ];
     partOf = [ "graphical-session.target" ];
+    environment.GTK_THEME = "Breeze-Dark:dark";
+    path = config.environment.profiles;
     serviceConfig = {
       ExecStart = "${pkgs.taffybar}/bin/taffybar";
       RestartSec = 3;
       Restart = "always";
       MemoryLimit = "512M";
-      Environment = "GTK_THEME=Breeze-Dark:dark";
     };
   };
 

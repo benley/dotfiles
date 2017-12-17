@@ -109,10 +109,10 @@
     VDPAU_DRIVER = "va_gl";
 
     # gtk3 is too dumb to notice the 240dpi display, so let's force it to scale
-    GDK_SCALE = "2";
+    # GDK_SCALE = "2";
 
     # ... but freetype sure as heck notices, so now we compensate for that
-    GDK_DPI_SCALE = "0.5";
+    # GDK_DPI_SCALE = "0.5";
   };
 
   hardware.bluetooth.enable = true;

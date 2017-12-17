@@ -63,5 +63,6 @@
 
 .Taffybar * {
     font-family: "Operator Mono", monospace;
+    font-size: 35px;
     color: @font-color;
 }

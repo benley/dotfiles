@@ -155,7 +155,6 @@ main = defaultTaffybar defaultTaffybarConfig
                    , netMonitorNew 1 "wlp1s0"
                    --, mprisNew defaultMPRISConfig
                    ]
-    --, barHeight = 50
-    , barPadding = 19
-    , barPosition = Bottom
+    , barHeight = 61
+    , barPadding = 0
     }

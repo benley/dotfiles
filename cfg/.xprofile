@@ -1,3 +1,4 @@
+systemctl --user import-environment XDG_DATA_DIRS XDG_CONFIG_DIRS GDK_PIXBUF_MODULE_FILE
 kwalletd5 &
 insync start &
 dropbox start &
