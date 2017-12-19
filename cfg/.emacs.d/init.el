@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
+
 (require 'package)
 
 ;;; nix takes care of package installation for me now
@@ -23,11 +26,11 @@
 
 (setq user-mail-address "benley@gmail.com")
 
-;;(use-package base16-theme
-;;  :config (load-theme 'base16-materia t))
+(use-package base16-theme
+ :config (load-theme 'base16-materia t))
 
-(use-package material-theme
- :config (load-theme 'material t))
+;; (use-package material-theme
+;;  :config (load-theme 'material t))
 
 ;;(use-package clojure-mode)
 ;;(use-package clojure-mode-extra-font-locking)
@@ -37,16 +40,13 @@
   ;; Use company-mode in all buffers (more completion)
   :config (add-hook 'after-init-hook #'global-company-mode))
 
-(use-package company-emoji
-  :config (add-to-list 'company-backends 'company-emoji)
-          (setq company-emoji-insert-unicode nil))
+;; (use-package company-emoji
+;;   :config (add-to-list 'company-backends 'company-emoji)
+;;           (setq company-emoji-insert-unicode nil))
 
 (use-package diminish)
 
-(use-package emojify)
-
-;;(use-package evil
-;;  :config (evil-mode 1))
+;; (use-package emojify)
 
 (use-package flycheck
   :diminish flycheck-mode
@@ -102,30 +102,44 @@
 
 (use-package protobuf-mode)
 
-(use-package spaceline-all-the-icons
-  :after spaceline
-  :config (spaceline-all-the-icons-theme))
+;; (use-package spaceline-all-the-icons
+;;   :after spaceline
+;;   :config (spaceline-all-the-icons-theme))
 
-(use-package spaceline
-  ;; :init
-  ;; (setq powerline-default-separator 'wave)
-  ;; (setq powerline-gui-use-vcs-glyph t)
-  ;; :config
-  ;; (require 'spaceline-config)
-  ;; (spaceline-compile)
-  ;; (spaceline-spacemacs-theme)
-  )
+;; (use-package spaceline
+;;   ;; :init
+;;   ;; (setq powerline-default-separator 'wave)
+;;   ;; (setq powerline-gui-use-vcs-glyph t)
+;;   ;; :config
+;;   ;; (require 'spaceline-config)
+;;   ;; (spaceline-compile)
+;;   ;; (spaceline-spacemacs-theme)
+;;   )
 
 (use-package rainbow-delimiters
-  :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  :config
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t))))
+
+(use-package smart-mode-line
+  :init
+  (setq sml/theme 'respectful)
+  :config
+  (sml/setup)
+  )
 
 (use-package smex
   ;; Put frequently-used commands at the front of ido completion list
   :config
   (smex-initialize)
-  (global-set-key (kbd "M-x") 'smex)
-  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-  (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command))
+  :bind
+  ("M-x" . smex)
+  ("M-X" . smex-major-mode-commands)
+  ("C-c C-c M-x" . execute-extended-command))
+
+(use-package treemacs
+  :bind
+  ("C-c t" . treemacs-select-window))
 
 (use-package web-mode
   :init
@@ -145,17 +159,17 @@
 
 (use-package yaml-mode)
 
-(defun --set-emoji-font (frame)
-  "Adjust the font settings of FRAME so Emacs can display emoji properly."
-  (if (eq system-type 'darwin)
-      ;; For NS/Cocoa
-      (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") frame 'prepend)
-    ;; For Linux
-    (set-fontset-font t 'symbol (font-spec :family "Noto Emoji") frame 'prepend)))
+;; (defun --set-emoji-font (frame)
+;;   "Adjust the font settings of FRAME so Emacs can display emoji properly."
+;;   (if (eq system-type 'darwin)
+;;       ;; For NS/Cocoa
+;;       (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") frame 'prepend)
+;;     ;; For Linux
+;;     (set-fontset-font t 'symbol (font-spec :family "Noto Emoji") frame 'prepend)))
 
-(--set-emoji-font nil)
+;; (--set-emoji-font nil)
 
-(add-hook 'after-make-frame-functions '--set-emoji-font)
+;; (add-hook 'after-make-frame-functions '--set-emoji-font)
 
 (tool-bar-mode 0)                       ;; disable toolbar
 ;; (global-linum-mode 1)                   ;; show line numbers
@@ -204,9 +218,6 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
-
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
 
 (provide 'init)
 ;;; init.el ends here

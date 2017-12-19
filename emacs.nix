@@ -9,10 +9,11 @@ emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
 
 ]) ++ (with epkgs.melpaPackages; [
 
+base16-theme
 company
-company-emoji
+#company-emoji
 diminish
-emojify
+#emojify
 flycheck
 flycheck-pos-tip
 flycheck-color-mode-line
@@ -23,16 +24,18 @@ ido-completing-read-plus
 jsonnet-mode
 magit
 markdown-mode
-material-theme
+#material-theme
 nix-mode
 nyan-mode
 org-bullets
 paredit
 protobuf-mode
 rainbow-delimiters
+smart-mode-line
 smex
-spaceline-all-the-icons
-spaceline
+#spaceline-all-the-icons
+#spaceline
+treemacs
 use-package
 web-mode
 yaml-mode
