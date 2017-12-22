@@ -1,20 +1,29 @@
-@define-color bg-color #2c393f;
-@define-color bg-tone #89ddff;
 @define-color active-window-color #374140;
 @define-color urgent-window-color #D9CB9E;
 @define-color font-color #cdd3de;
+@define-color background #2c393f;
+@define-color active #89ddff;
+@define-color active-dim #00aa00;
 
 .Contents {
-    border-radius: 10px;
     padding: 3px;
+    border-radius: 15px;
 }
 
-.Active .Contents, .Visible .Contents {
-    background-color: @bg-tone;
+.Active .Contents {
+    background-color: @active;
 }
 
 .Active .WorkspaceLabel {
-    color: @bg-color;
+    color: @active;
+}
+
+.Visible .WorkspaceLabel {
+    color: @active;
+}
+
+.Urgent {
+    background-color: @urgent-window-color;
 }
 
 .InnerPad {
@@ -22,8 +31,9 @@
 }
 
 .WorkspaceLabel {
-    padding-right: 3px;
-    padding-left: 2px;
+    border-radius: 15px;
+    padding: 0;
+    padding-right: 3pt;
 }
 
 .IconContainer {
@@ -53,16 +63,15 @@
 }
 
 #WindowSwitcher {
-    background-color: @bg-color;
-}
-
-.Taffybar {
-    background-color: @bg-color;
-    border-radius: 5px;
 }
 
 .Taffybar * {
-    font-family: "Operator Mono", monospace;
-    font-size: 35px;
     color: @font-color;
+    background-color: @background;
+    font-family: "Operator Mono", monospace;
+    font-size: 10pt;
+    border-width: 0;
+}
+
+.Taffybar {
 }
