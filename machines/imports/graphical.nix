@@ -164,19 +164,19 @@ let dotfiles = import ../.. {}; in
     };
   };
 
-  systemd.user.services.taffybar = {
-    description = "taffybar";
-    wantedBy = [ "graphical-session.target" ];
-    partOf = [ "graphical-session.target" ];
-    environment.GTK_THEME = "Breeze-Dark:dark";
-    path = config.environment.profiles;
-    serviceConfig = {
-      ExecStart = "${pkgs.taffybar}/bin/taffybar";
-      RestartSec = 3;
-      Restart = "always";
-      MemoryLimit = "512M";
-    };
-  };
+  # systemd.user.services.taffybar = {
+  #   description = "taffybar";
+  #   wantedBy = [ "graphical-session.target" ];
+  #   partOf = [ "graphical-session.target" ];
+  #   environment.GTK_THEME = "Breeze-Dark:dark";
+  #   path = config.environment.profiles;
+  #   serviceConfig = {
+  #     ExecStart = "${pkgs.taffybar}/bin/taffybar";
+  #     RestartSec = 3;
+  #     Restart = "always";
+  #     MemoryLimit = "512M";
+  #   };
+  # };
 
   programs.ssh.askPassword = "${pkgs.plasma5.ksshaskpass.out}/bin/ksshaskpass";
 
