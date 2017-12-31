@@ -211,7 +211,7 @@ __prompt_command() {
   __git_ps1 "$before" "$after" "$git_status_fmt"
 }
 
-PROMPT_COMMAND="__prompt_command"
+[[ "$TERM" != "dumb" ]] && PROMPT_COMMAND="__prompt_command"
 
 # Handled via nix
 #[[ -e /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
