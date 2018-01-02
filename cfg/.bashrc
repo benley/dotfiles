@@ -211,7 +211,11 @@ __prompt_command() {
   __git_ps1 "$before" "$after" "$git_status_fmt"
 }
 
-[[ "$TERM" != "dumb" ]] && PROMPT_COMMAND="__prompt_command"
+case $TERM in
+    dumb)   : ;; # fancy prompts break emacs tramp mode horribly
+    eterm*) : ;; # emacs ansi-term deals poorly with multi-line prompts
+    *) PROMPT_COMMAND="__prompt_command" ;;
+esac
 
 # Handled via nix
 #[[ -e /usr/local/bin/virtualenvwrapper.sh ]] && source /usr/local/bin/virtualenvwrapper.sh
