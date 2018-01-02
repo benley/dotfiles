@@ -5,6 +5,16 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 
+(global-unset-key (kbd "C-z"))     ;; ctrl-z should *not* freeze a gui app
+(global-unset-key (kbd "C-x C-z")) ;; why the heck would I ever want to suspend-frame
+;; (global-set-key (kbd "C-z C-z") 'my-suspend-frame)
+;; (defun my-suspend-frame ()
+;;   "Like 'suspend-frame', but refuses to work on graphical windows."
+;;   (interactive)
+;;   (if (display-graphic-p)
+;;       (message "nope, not backgrounding a gui frame")
+;;     (suspend-frame)))
+
 (require 'package)
 
 ;;; nix takes care of package installation for me now
@@ -44,19 +54,39 @@
 ;;   :config (add-to-list 'company-backends 'company-emoji)
 ;;           (setq company-emoji-insert-unicode nil))
 
+(use-package company-terraform
+  :config
+  (company-terraform-init))
+
 (use-package diminish)
 
 ;; (use-package emojify)
 
-(use-package flycheck
-  :diminish flycheck-mode
-  :config (global-flycheck-mode 1))
+;; (use-package flycheck
+;;   :config
+;;   (global-flycheck-mode 1))
+
+(use-package elscreen
+  :config (elscreen-start))
+
+(require 'flycheck)
+(global-flycheck-mode 1)
+(setq flycheck-ghc-stack-use-nix t)
 
 (use-package flycheck-pos-tip
   :config (flycheck-pos-tip-mode))
 
 (use-package flycheck-color-mode-line
-  :config (flycheck-color-mode-line-mode))
+  :after flycheck
+  :config
+  (flycheck-color-mode-line-mode)
+  (add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode))
+
+(use-package flycheck-status-emoji
+  :config (flycheck-status-emoji-mode t))
+
+(use-package git-gutter
+  :config (global-git-gutter-mode +1))
 
 (use-package gitignore-mode)
 
@@ -67,11 +97,11 @@
 (use-package ido-completing-read+
   ;; Really nice completion for commands and whatnot
   :init
-  (ido-mode 1)
-  (ido-everywhere 1)
   (setq ido-enable-flex-matching 1)
 
   :config
+  (ido-mode 1)
+  (ido-everywhere 1)
   ;; show ido autocomplete options pretty much everywhere, like when you hit M-x
   ;; (ido-ubiquitous-mode 1)
   )
@@ -89,16 +119,29 @@
 
 (use-package nix-mode)
 
-(use-package nyan-mode
- :config (nyan-mode 1))
+(use-package nix-sandbox)
+(require 'nix-sandbox)
+
+(setq haskell-process-wrapper-function
+      (lambda (args) (apply 'nix-shell-command (nix-current-sandbox) args)))
+
+;; (setq flycheck-command-wrapper-function
+;;       (lambda (cmd) (apply 'nix-shell-command (nix-current-sandbox) cmd)))
+
+(setq flycheck-executable-find
+      (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd)))
 
 (use-package org-bullets
   :config (add-hook 'org-mode-hook 'org-bullets-mode))
 
 (use-package paredit)
 
-;; (use-package powerline
-;;   :config (powerline-default-theme))
+(use-package powerline
+  :init
+  (setq powerline-default-separator 'wave)
+  (setq powerline-gui-use-vcs-glyph t)
+  :config
+  (powerline-default-theme))
 
 (use-package protobuf-mode)
 
@@ -121,12 +164,12 @@
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t))))
 
-(use-package smart-mode-line
-  :init
-  (setq sml/theme 'respectful)
-  :config
-  (sml/setup)
-  )
+;; (use-package smart-mode-line
+;;   :init
+;;   (setq sml/theme 'respectful)
+;;   :config
+;;   (sml/setup)
+;;   )
 
 (use-package smex
   ;; Put frequently-used commands at the front of ido completion list
@@ -159,17 +202,17 @@
 
 (use-package yaml-mode)
 
-;; (defun --set-emoji-font (frame)
-;;   "Adjust the font settings of FRAME so Emacs can display emoji properly."
-;;   (if (eq system-type 'darwin)
-;;       ;; For NS/Cocoa
-;;       (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") frame 'prepend)
-;;     ;; For Linux
-;;     (set-fontset-font t 'symbol (font-spec :family "Noto Emoji") frame 'prepend)))
+(defun --set-emoji-font (frame)
+  "Adjust the font settings of FRAME so Emacs can display emoji properly."
+  (if (eq system-type 'darwin)
+      ;; For NS/Cocoa
+      (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") frame 'prepend)
+    ;; For Linux
+    (set-fontset-font t 'symbol (font-spec :family "Noto Emoji") frame 'prepend)))
 
-;; (--set-emoji-font nil)
+(--set-emoji-font nil)
 
-;; (add-hook 'after-make-frame-functions '--set-emoji-font)
+(add-hook 'after-make-frame-functions '--set-emoji-font)
 
 (tool-bar-mode 0)                       ;; disable toolbar
 ;; (global-linum-mode 1)                   ;; show line numbers
@@ -197,15 +240,6 @@
 
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil)
-
-(global-unset-key (kbd "C-z"))  ;; ctrl-z should *not* background a gui app
-(global-set-key (kbd "C-z C-z") 'my-suspend-frame)
-(defun my-suspend-frame ()
-  "Like 'suspend-frame', but refuses to work on graphical windows."
-  (interactive)
-  (if (display-graphic-p)
-      (message "nope, not backgrounding a gui frame")
-    (suspend-frame)))
 
 (defun server-shutdown ()
   "Save buffers, quit, and shutdown the Emacs server."
