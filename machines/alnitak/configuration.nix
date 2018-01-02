@@ -18,7 +18,7 @@
     "button.lid_init_state=open"
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_4_13;
+  boot.kernelPackages = pkgs.linuxPackages_4_14;
 
   hardware.openrazer.enable = true;
 
