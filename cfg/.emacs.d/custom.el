@@ -21,7 +21,10 @@
  '(package-selected-packages
    (quote
     (git-gutter-mode flycheck-status-emoji smart-mode-line treemacs org-bullets protobuf-mode spaceline-all-the-icons nyan-mode yaml-mode web-mode use-package spacemacs-theme spaceline smex rainbow-delimiters puppet-mode paredit nix-mode material-theme markdown-mode magit jsonnet-mode ido-ubiquitous haskell-mode go-mode flycheck-pos-tip flycheck-color-mode-line evil emojify diminish company-emoji clojure-mode-extra-font-locking cider base16-theme)))
- '(require-final-newline t))
+ '(require-final-newline t)
+ '(sh-basic-offset 2)
+ '(sh-indentation 2)
+ '(sh-learn-basic-offset (quote usually)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
