@@ -13,8 +13,8 @@ mkDerivation {
   src = fetchFromGitHub {
     owner = "benley";
     repo = "taffybar";
-    rev = "d3c7e2648d81687576a186b3959519aa36b0bb1d";
-    sha256 = "12jkiqwsbx380fsiizbwva2607ih52kljfkap3icajxcds15ia5s";
+    rev = "6e481d257b3cb3d729113457160d19a29e371723";
+    sha256 = "0hvjxh0n9csswddwnvax32j46kl49q28gk98ypnh3aaq815c3iyf";
   };
   isLibrary = true;
   isExecutable = true;
