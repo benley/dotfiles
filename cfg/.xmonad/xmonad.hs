@@ -76,7 +76,7 @@ myLayoutHook =
 
 -- Which key to use as the default modMask
 -- mod1Mask: alt, mod4Mask: win
-defaultModMask = mod1Mask
+defaultModMask = mod4Mask
 
 defaultFont = "PragmataPro"
 

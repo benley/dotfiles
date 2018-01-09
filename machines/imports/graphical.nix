@@ -21,6 +21,7 @@ let dotfiles = import ../.. {}; in
     signal-desktop-beta
     slack
     steam
+    linux-steam-integration
     transmission_gtk
     vivaldi
     vlc
@@ -40,6 +41,7 @@ let dotfiles = import ../.. {}; in
     dunst             # notifications daemon
     #dzen2
     #haskellPackages.xmobar
+    feh               # For scaling / setting background image
     taffybar
     j4-dmenu-desktop  # dmenu .desktop app launcher
     libnotify         # includes notify-send
@@ -66,7 +68,7 @@ let dotfiles = import ../.. {}; in
     hicolor_icon_theme
     breeze-gtk
     breeze-qt5
-    breeze-qt4
+    # breeze-qt4  # gone, I think
 
     ksshaskpass
     pinentry_qt5
@@ -79,6 +81,7 @@ let dotfiles = import ../.. {}; in
     # make gtk3 apps shut the hell up about the gnome accessibility bus
     # https://github.com/NixOS/nixpkgs/issues/16327
     #NO_AT_BRIDGE = "1";
+    # ^^^^ not needed if sesrvices.gnome3.at-spi2-core.enable == true
 
     # Enable GTK applications to load SVG icons
     GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
