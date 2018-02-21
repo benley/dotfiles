@@ -9,6 +9,8 @@ rec {
 
   emacs = callPackage ./emacs.nix { };
 
+  eless = pkgs.writeScriptBin "eless" (builtins.readFile ./eless.sh);
+
   kubernetes-client = callPackage ./pkgs/kubernetes-client { };
 
   nix-home = callPackage ./pkgs/nix-home { };

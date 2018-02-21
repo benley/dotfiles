@@ -59,7 +59,10 @@ in
 
   services.emacs.defaultEditor = true;
 
+  environment.variables.PAGER = "eless";
+
   environment.systemPackages = with pkgs; [
+    dotfiles.eless
     dotfiles.nix-home
     acpi
     awscli
