@@ -36,7 +36,7 @@
 
 (setq use-package-always-ensure t)
 
-(require 'ansi-view-mode)
+(require 'ansi-view)
 
 (use-package base16-theme
  :config (load-theme 'base16-materia t))

@@ -1,3 +1,5 @@
+let dotfiles = import <dotfiles> {}; in
+
 {
   allowUnfree = true;
 
@@ -15,13 +17,15 @@
     benleyAll = with pkgs; buildEnv {
       name = "benleyAll";
       paths = [
+        dotfiles.emacs
+	dotfiles.eless
         bashInteractive
         bashCompletion
         bc
         #benleyDesktop
         benleyDevTools
         #benleyGuiStuff
-        benleyHaskellDev
+        #benleyHaskellDev
         benleyNetTools
         #benleyPythonDev
         #benleySystemTools
@@ -59,7 +63,7 @@
       name = "benleyDevTools";
       paths = [
         bundler
-        ctags
+        #ctags
         diffutils
         gitFull
         gitAndTools.hub
