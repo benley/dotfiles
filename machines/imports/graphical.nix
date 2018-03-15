@@ -22,6 +22,7 @@ let dotfiles = import ../.. {}; in
     slack
     steam
     linux-steam-integration
+    dotfiles.texlive
     transmission_gtk
     vivaldi
     vlc

@@ -29,5 +29,9 @@ rec {
 
   steamcontroller-udev-rules = callPackage ./pkgs/steamcontroller-udev-rules { };
 
+  texlive = pkgs.texlive.combine {
+    inherit (pkgs.texlive) scheme-small wrapfig capt-of cm-super;
+  };
+
   # yaml2json = callPackage ./pkgs/yaml2json { };
 }

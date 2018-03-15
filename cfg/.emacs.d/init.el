@@ -5,6 +5,8 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 
+(add-to-list 'load-path "~/.emacs.d/elisp")
+
 (global-unset-key (kbd "C-z"))     ;; ctrl-z should *not* freeze a gui app
 (global-unset-key (kbd "C-x C-z")) ;; why the heck would I ever want to suspend-frame
 ;; (global-set-key (kbd "C-z C-z") 'my-suspend-frame)
@@ -34,10 +36,13 @@
 
 (setq use-package-always-ensure t)
 
-(setq user-mail-address "benley@gmail.com")
+(require 'ansi-view)
 
 (use-package base16-theme
  :config (load-theme 'base16-materia t))
+
+(use-package bazel-mode
+  :config (add-to-list 'auto-mode-alist '("BUILD\\'" . bazel-mode)))
 
 ;; (use-package material-theme
 ;;  :config (load-theme 'material t))
@@ -50,24 +55,15 @@
   ;; Use company-mode in all buffers (more completion)
   :config (add-hook 'after-init-hook #'global-company-mode))
 
-;; (use-package company-emoji
-;;   :config (add-to-list 'company-backends 'company-emoji)
-;;           (setq company-emoji-insert-unicode nil))
-
 (use-package company-terraform
   :config
   (company-terraform-init))
 
 (use-package diminish)
 
-;; (use-package emojify)
-
 ;; (use-package flycheck
 ;;   :config
 ;;   (global-flycheck-mode 1))
-
-(use-package elscreen
-  :config (elscreen-start))
 
 (require 'flycheck)
 (global-flycheck-mode 1)
@@ -94,28 +90,35 @@
 
 (use-package haskell-mode)
 
-(use-package ido-completing-read+
-  ;; Really nice completion for commands and whatnot
-  :init
-  (setq ido-enable-flex-matching 1)
+(ido-mode 1)
+(ido-everywhere 1)
+;; (use-package ido-completing-read+
+;;   ;; Really nice completion for commands and whatnot
+;;   :init
+;;   (setq ido-enable-flex-matching 1)
 
-  :config
-  (ido-mode 1)
-  (ido-everywhere 1)
-  ;; show ido autocomplete options pretty much everywhere, like when you hit M-x
-  ;; (ido-ubiquitous-mode 1)
-  )
+;;   :config
+;;   (ido-mode 1)
+;;   (ido-everywhere 1)
+;;   ;; show ido autocomplete options pretty much everywhere, like when you hit M-x
+;;   ;; (ido-ubiquitous-mode 1)
+;;   )
 
-(use-package jsonnet-mode)
+;;(use-package jsonnet-mode)
+(require 'jsonnet-mode)
 
 (use-package magit
-  :bind ("C-x g" . magit-status))
+  :bind ("C-x g" . magit-status)
+  :config (setq magit-completing-read-function 'magit-ido-completing-read))
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
   :mode (("\\.md\\'" . gfm-mode))
   :init (setq markdown-command "pandoc")
   :config (add-hook 'gfm-mode-hook (lambda () (visual-line-mode 1))))
+
+(require 'mtail-mode)
+(add-to-list 'auto-mode-alist (cons "\\.mtail$" #'mtail-mode))
 
 (use-package nix-mode)
 
@@ -125,8 +128,14 @@
 (setq haskell-process-wrapper-function
       (lambda (args) (apply 'nix-shell-command (nix-current-sandbox) args)))
 
-;; (setq flycheck-command-wrapper-function
-;;       (lambda (cmd) (apply 'nix-shell-command (nix-current-sandbox) cmd)))
+;; Remove after https://github.com/travisbhartwell/nix-emacs/pull/45 is merged:
+(defun nix-shell-command (sandbox &rest args)
+  "Assemble a command to be executed in SANDBOX from ARGS."
+  (list "bash" "-c" (format "source %s; %s" (nix-sandbox-rc sandbox)
+                            (mapconcat 'shell-quote-argument args " "))))
+
+(setq flycheck-command-wrapper-function
+      (lambda (cmd) (apply 'nix-shell-command (nix-current-sandbox) cmd)))
 
 (setq flycheck-executable-find
       (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd)))
@@ -145,31 +154,10 @@
 
 (use-package protobuf-mode)
 
-;; (use-package spaceline-all-the-icons
-;;   :after spaceline
-;;   :config (spaceline-all-the-icons-theme))
-
-;; (use-package spaceline
-;;   ;; :init
-;;   ;; (setq powerline-default-separator 'wave)
-;;   ;; (setq powerline-gui-use-vcs-glyph t)
-;;   ;; :config
-;;   ;; (require 'spaceline-config)
-;;   ;; (spaceline-compile)
-;;   ;; (spaceline-spacemacs-theme)
-;;   )
-
 (use-package rainbow-delimiters
   :config
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t))))
-
-;; (use-package smart-mode-line
-;;   :init
-;;   (setq sml/theme 'respectful)
-;;   :config
-;;   (sml/setup)
-;;   )
 
 (use-package smex
   ;; Put frequently-used commands at the front of ido completion list
@@ -179,6 +167,19 @@
   ("M-x" . smex)
   ("M-X" . smex-major-mode-commands)
   ("C-c C-c M-x" . execute-extended-command))
+
+(use-package smooth-scrolling
+  :init
+  (setq smooth-scroll-margin 2)
+  :config
+  (smooth-scrolling-mode 1))
+
+(use-package ido-grid-mode
+  :init
+  (setq ido-grid-mode-keys (quote (tab backtab up down left right C-n C-p C-s C-r)))
+  :config
+  (ido-grid-mode +1)
+  )
 
 (use-package treemacs
   :bind
@@ -230,13 +231,10 @@
 (setq backup-directory-alist '(("." . "~/.emacs-backups")))
 
 ;; Remember what I had open when I quit
-;;(desktop-save-mode 1)
+;; (desktop-save-mode 1)
 
 ;; do not want
 (setq-default indent-tabs-mode nil)
-
-;; oh my god STOP BEEPING
-(setq visible-bell 1)
 
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil)
@@ -252,6 +250,56 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
+
+;; Scrolling
+(global-set-key [up] (lambda () (interactive) (previous-line)))
+(global-set-key [down] (lambda () (interactive) (next-line)))
+(global-set-key [S-up] (lambda () (interactive) (scroll-down 1)))
+(global-set-key [S-down] (lambda () (interactive) (scroll-up 1)))
+
+;; FONTS
+;; -----
+(defun set-buffer-variable-pitch ()
+  "Set variable-pitch font using `customize-face`.
+Set the fonts to format correctly for specific modes.
+Default face is fixed so we only need to have the exceptions."
+  (interactive)
+  (variable-pitch-mode t)
+  ;; (setq line-spacing 3)
+  (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+  ;; (set-face-attribute 'org-link nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-special-keyword nil :inherit 'fixed-pitch))
+
+;; (add-hook 'org-mode-hook 'set-buffer-variable-pitch)
+(add-hook 'markdown-mode-hook 'set-buffer-variable-pitch)
+(add-hook 'Info-mode-hook 'set-buffer-variable-pitch)
+
+;; (require 'ox-latex)
+;; (setq org-latex-listings nil)
+;; (add-to-list 'org-latex-packages-alist '("" "listings"))
+;; (add-to-list 'org-latex-packages-alist '("" "color"))
+
+(defun rename-current-buffer-file ()
+  "Renames current buffer and file it is visiting."
+  ;; from https://stackoverflow.com/questions/384284/how-do-i-rename-an-open-file-in-emacs/37456354#37456354
+  (interactive)
+  (let* ((name (buffer-name))
+        (filename (buffer-file-name))
+        (basename (file-name-nondirectory filename)))
+    (if (not (and filename (file-exists-p filename)))
+        (error "Buffer '%s' is not visiting a file!" name)
+      (let ((new-name (read-file-name "New name: " (file-name-directory filename) basename nil basename)))
+        (if (get-buffer new-name)
+            (error "A buffer named '%s' already exists!" new-name)
+          (rename-file filename new-name 1)
+          (rename-buffer new-name)
+          (set-visited-file-name new-name)
+          (set-buffer-modified-p nil)
+          (message "File '%s' successfully renamed to '%s'"
+                   name (file-name-nondirectory new-name)))))))
 
 (provide 'init)
 ;;; init.el ends here
