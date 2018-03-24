@@ -20,7 +20,7 @@ import XMonad.Layout.MouseResizableTile
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.Cursor as C
 import XMonad.Util.EZConfig (mkKeymap, removeKeysP)
-import XMonad.Util.Run (runProcessWithInput)
+import XMonad.Util.Run (runProcessWithInput, safeSpawn)
 import qualified XMonad.Util.Dmenu as Dmenu
 import XMonad.Hooks.DynamicProperty (dynamicPropertyChange)
 
@@ -93,38 +93,41 @@ doBrightnessUp :: X ()
 doBrightnessUp = do
   cur <- getCurrentBrightness
   io $ if cur < 0.11
-    then spawn "light -b -S 0.11"
-    else spawn "light -b -A 5"
+    then safeSpawn "light" ["-b", "-S", "0.11"]
+    else safeSpawn "light" ["-b", "-A", "5"]
 
 doBrightnessDown :: X ()
 doBrightnessDown = do
   cur <- getCurrentBrightness
   io $ if cur <= 6 && cur > 0.2
-    then spawn "light -b -S 0.11"
-    else spawn "light -b -U 5"
+    then safeSpawn "light" ["-b", "-S", "0.11"]
+    else safeSpawn "light" ["-b", "-U", "5"]
 
 myKeyBindings =
   flip mkKeymap
-    [ ("<XF86AudioLowerVolume>", spawn "amixer --quiet set Master 5%- unmute")
-    , ("<XF86AudioRaiseVolume>", spawn "amixer --quiet set Master 5%+ unmute")
-    , ("<XF86AudioMute>", spawn "amixer --quiet set Master toggle")
+    [ ("<XF86AudioLowerVolume>", safeSpawn "amixer" ["--quiet", "set", "Master", "5%-", "unmute"])
+    , ("<XF86AudioRaiseVolume>", safeSpawn "amixer" ["--quiet", "set", "Master", "5%+", "unmute"])
+    , ("<XF86AudioMute>", safeSpawn "amixer" ["--quiet", "set", "Master", "toggle"])
     , ("<XF86MonBrightnessUp>", doBrightnessUp)
     , ("<XF86MonBrightnessDown>", doBrightnessDown)
     , ("<XF86PowerOff>", quitWithWarning)
     , ("M-g", goToSelected defaultGSConfig)
-    , ("C-M-l", spawn "xset s activate")
+    , ("C-M-l", safeSpawn "xset" ["s", "activate"])
     , ("C-M-y", commands >>= runCommand)
-    , ("S-M-p", spawn ("dmenu_run -p 'cmdline:' " ++ dmenu_args))
-    , ("S-M-n", spawn ("networkmanager_dmenu -i -fn " ++ defaultFont))
-    , ("M-p", spawn ("j4-dmenu-desktop --dmenu=\"dmenu -p 'app:' " ++ dmenu_args ++ "\""))
+    , ("S-M-p", safeSpawn "dmenu_run" (["-p", "cmdline:"] ++ dmenu_args))
+    , ("S-M-n", spawnNetworkMenu)
+    , ("M-p", safeSpawn "j4-dmenu-desktop" ["--dmenu=dmenu -p app: " ++ unwords dmenu_args])
     , ("M-S-q", quitWithWarning)
     , ("M-a", sendMessage ShrinkSlave)
     , ("M-z", sendMessage ExpandSlave)
-    ] where dmenu_args = "-i -l 10 -fn " ++ defaultFont
+    ] where dmenu_args = ["-i", "-l", "10", "-fn", defaultFont]
             commands :: X [(String, X ())]
             commands = do
               dc <- defaultCommands
-              return (dc ++ [("nm-menu", spawn "networkmanager_dmenu")])
+              return (dc ++ [("nm-menu", spawnNetworkMenu)])
+
+spawnNetworkMenu :: X ()
+spawnNetworkMenu = safeSpawn "networkmanager_dmenu" ["-i", "-fn", defaultFont]
 
 quitWithWarning :: X ()
 quitWithWarning = do
