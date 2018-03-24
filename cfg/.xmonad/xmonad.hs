@@ -16,9 +16,11 @@ import XMonad.Hooks.Place (placeHook, simpleSmart)
 import XMonad.Layout.Fullscreen (fullscreenFull, fullscreenManageHook)
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.ThreeColumns as ThreeColumns
+import XMonad.Layout.MouseResizableTile
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.Cursor as C
 import XMonad.Util.EZConfig (mkKeymap, removeKeysP)
+import XMonad.Util.Run (runProcessWithInput)
 import qualified XMonad.Util.Dmenu as Dmenu
 import XMonad.Hooks.DynamicProperty (dynamicPropertyChange)
 
@@ -35,7 +37,7 @@ myManageHook = composeAll
   [ fullscreenManageHook
   , isDialog     --> doCenterFloat
   , className =? "Gimp"           --> doFloat
-  , resource  =? "Steam"          --> doFloat
+  -- , resource  =? "Steam"          --> doFloat
   , className =? "plasmashell"    --> doFloat
   , className =? "pinentry"       --> doCenterFloat  -- matches for pinentry-qt
   , resource  =? "pinentry"       --> doCenterFloat  -- matches for pinentry-gtk (wtf?)
@@ -59,8 +61,11 @@ myDynHook = composeAll
   ]
 
 myLayoutHook =
-    smartBorders $ desktopLayoutModifiers $
-    (ThreeColumns.ThreeColMid 1 (3/100) (1/2) ||| layoutHook desktopConfig)
+    smartBorders $ desktopLayoutModifiers
+    (ThreeColumns.ThreeCol 1 (3/100) (1/3) |||
+     ThreeColumns.ThreeColMid 1 (3/100) (1/3) |||
+     mouseResizableTile |||
+     layoutHook desktopConfig)
 
 ---- I have no idea why, but mouseResizeableTile was causing notification
 ---- windows to disappear behind regular windows :-(
@@ -80,13 +85,32 @@ defaultModMask = mod4Mask
 
 defaultFont = "PragmataPro"
 
+getCurrentBrightness = do
+  cur <- runProcessWithInput "light" ["-b", "-G"] ""
+  return $ read cur
+
+doBrightnessUp :: X ()
+doBrightnessUp = do
+  cur <- getCurrentBrightness
+  io $ if cur < 0.11
+    then spawn "light -b -S 0.11"
+    else spawn "light -b -A 5"
+
+doBrightnessDown :: X ()
+doBrightnessDown = do
+  cur <- getCurrentBrightness
+  io $ if cur <= 6 && cur > 0.2
+    then spawn "light -b -S 0.11"
+    else spawn "light -b -U 5"
+
 myKeyBindings =
   flip mkKeymap
     [ ("<XF86AudioLowerVolume>", spawn "amixer --quiet set Master 5%- unmute")
     , ("<XF86AudioRaiseVolume>", spawn "amixer --quiet set Master 5%+ unmute")
     , ("<XF86AudioMute>", spawn "amixer --quiet set Master toggle")
-    , ("<XF86MonBrightnessUp>", spawn "light -A 5")
-    , ("<XF86MonBrightnessDown>", spawn "light -U 5")
+    , ("<XF86MonBrightnessUp>", doBrightnessUp)
+    , ("<XF86MonBrightnessDown>", doBrightnessDown)
+    , ("<XF86PowerOff>", quitWithWarning)
     , ("M-g", goToSelected defaultGSConfig)
     , ("C-M-l", spawn "xset s activate")
     , ("C-M-y", commands >>= runCommand)
@@ -94,6 +118,8 @@ myKeyBindings =
     , ("S-M-n", spawn ("networkmanager_dmenu -i -fn " ++ defaultFont))
     , ("M-p", spawn ("j4-dmenu-desktop --dmenu=\"dmenu -p 'app:' " ++ dmenu_args ++ "\""))
     , ("M-S-q", quitWithWarning)
+    , ("M-a", sendMessage ShrinkSlave)
+    , ("M-z", sendMessage ExpandSlave)
     ] where dmenu_args = "-i -l 10 -fn " ++ defaultFont
             commands :: X [(String, X ())]
             commands = do
