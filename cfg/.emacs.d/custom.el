@@ -1,3 +1,6 @@
+;;; custom --- Custom stuff
+;;; Commentary:
+;;; Code:
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -18,6 +21,7 @@
  '(inhibit-startup-screen t)
  '(mac-option-modifier (quote (:ordinary meta :function alt :mouse alt)))
  '(mac-right-option-modifier nil)
+ '(mouse-yank-at-point t)
  '(org-agenda-files
    (quote
     ("~/Dropbox/org/notes.org" "~/.org-jira/INFRASTRUC.org" "~/Dropbox/org/work_calendar.org" "~/Dropbox/org/work.org" "~/Dropbox/org/stuff.org")))

@@ -14,7 +14,7 @@ _eless_stdin() {
 }
 
 _eless_run() {
-  emacsclient -e "(ansi-view-file \"$1\")"
+  emacsclient -e "(xterm-color-view-file \"$1\")"
 }
 
 if [[ -z "$INSIDE_EMACS" ]]; then

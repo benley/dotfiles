@@ -6,6 +6,7 @@
 
 ;;; Code:
 (require 'ansi-color)
+(require 'xterm-color)
 
 (defcustom ansi-view-mode-max-line-coloring 10000
   "Max lines to colorize.  Reduce if performance is bad."
@@ -28,6 +29,18 @@
                               (save-excursion
                                 (forward-line ansi-view-mode-max-line-coloring)
                                 (point))))
+
+(defun xterm-color-view-file (file)
+  "Open FILE in View mode with xterm-color enabled."
+  (interactive "fView file: ")
+  (unless (file-exists-p file) (error "%s does not exist" file))
+  (let ((had-a-buf (get-file-buffer file))
+        (buffer (find-file-noselect file)))
+    (switch-to-buffer buffer)
+    (insert (xterm-color-filter (delete-and-extract-region (point-min) (point-max))))
+    (goto-char (point-min))
+    (set-buffer-modified-p nil)
+    (view-buffer buffer (and (not had-a-buf) 'kill-buffer-if-not-modified))))
 
 (require 'view)
 (define-key view-mode-map "j" 'View-scroll-line-forward)

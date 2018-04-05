@@ -39,7 +39,7 @@
 (require 'ansi-view)
 
 (use-package base16-theme
- :config (load-theme 'base16-materia t))
+  :config (load-theme 'base16-materia t))
 
 (use-package bazel-mode
   :config (add-to-list 'auto-mode-alist '("BUILD\\'" . bazel-mode)))
@@ -107,6 +107,9 @@
 ;;(use-package jsonnet-mode)
 (require 'jsonnet-mode)
 
+(use-package jq-mode
+  :mode (("\\.jq$" . jq-mode)))
+
 (use-package magit
   :bind ("C-x g" . magit-status)
   :config (setq magit-completing-read-function 'magit-ido-completing-read))
@@ -140,8 +143,9 @@
 (setq flycheck-executable-find
       (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd)))
 
-(use-package org-bullets
-  :config (add-hook 'org-mode-hook 'org-bullets-mode))
+;; This is _really slow_ for some reason
+;; (use-package org-bullets
+;;   :config (add-hook 'org-mode-hook 'org-bullets-mode))
 
 (use-package paredit)
 
@@ -257,6 +261,14 @@
 (global-set-key [S-up] (lambda () (interactive) (scroll-down 1)))
 (global-set-key [S-down] (lambda () (interactive) (scroll-up 1)))
 
+;; It's annoying to see all the "<mouse-N> is undefined" errors when
+;; trying to scroll vertically on a trackpad in emacs 25, so tell
+;; emacs to ignore it for now.
+;; Left/right mwheel support will show up in emacs 26.
+;; See https://github.com/emacs-mirror/emacs/commit/88f43dc30cb8d71830e409973cafbaca13a66a45
+(global-set-key [mouse-6] 'ignore)
+(global-set-key [mouse-7] 'ignore)
+
 ;; FONTS
 ;; -----
 (defun set-buffer-variable-pitch ()
@@ -274,8 +286,8 @@ Default face is fixed so we only need to have the exceptions."
   (set-face-attribute 'org-special-keyword nil :inherit 'fixed-pitch))
 
 ;; (add-hook 'org-mode-hook 'set-buffer-variable-pitch)
-(add-hook 'markdown-mode-hook 'set-buffer-variable-pitch)
-(add-hook 'Info-mode-hook 'set-buffer-variable-pitch)
+;; (add-hook 'markdown-mode-hook 'set-buffer-variable-pitch)
+;; (add-hook 'Info-mode-hook 'set-buffer-variable-pitch)
 
 ;; (require 'ox-latex)
 ;; (setq org-latex-listings nil)
@@ -301,5 +313,15 @@ Default face is fixed so we only need to have the exceptions."
           (message "File '%s' successfully renamed to '%s'"
                    name (file-name-nondirectory new-name)))))))
 
+(defun expose-global-binding-in-term (binding)
+  "Expose BINDING from the global keymap in term-mode."
+  (define-key term-raw-map binding
+    (lookup-key (current-global-map) binding)))
+
+(expose-global-binding-in-term (kbd "M-x"))
+(define-key term-raw-map (kbd "C-c M-x")
+  (lookup-key (current-global-map) (kbd "M-x")))
+
+(load "~/.emacs.d/localonly.el")
 (provide 'init)
 ;;; init.el ends here

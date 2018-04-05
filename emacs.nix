@@ -26,6 +26,7 @@ company
 #company-emoji
 company-terraform
 diminish
+edit-indirect
 elscreen
 #emojify
 evil
@@ -42,6 +43,7 @@ ido-completing-read-plus
 ido-grid-mode
 json-mode
 # jsonnet-mode  # local copy
+jq-mode
 magit
 magit-popup  # a dep of magit, but I want the newer-than-melpaStable version
 markdown-mode
@@ -55,6 +57,7 @@ paredit
 powerline
 protobuf-mode
 rainbow-delimiters
+slack
 #smart-mode-line
 smex
 smooth-scrolling
@@ -64,6 +67,7 @@ terraform-mode
 treemacs
 use-package
 web-mode
+xterm-color
 yaml-mode
 
 ]) ++ (with epkgs.elpaPackages; [
