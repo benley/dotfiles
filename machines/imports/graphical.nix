@@ -10,6 +10,16 @@ let dotfiles = import ../.. {}; in
   # TODO: did this (or equivlent) get merged upstream for sddm?
   environment.pathsToLink = [ "/share" ];
 
+  environment.etc = {
+    "opt/chrome/policies/managed/test_policy.json" = {
+      text = builtins.toJSON {
+        "ExtensionInstallBlacklist" = [
+          "khpfeaanjngmcnplbdlpegiifgpfgdco"  # Smart Card Connector (breaks gpg/ssh agent!)
+        ];
+      };
+    };
+  };
+
   environment.systemPackages = with pkgs; [
     dropbox-cli
     firefox

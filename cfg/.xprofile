@@ -3,6 +3,6 @@ kwalletd5 &
 insync start &
 dropbox start &
 taffybar &
-nm-applet &
-pasystray -a &
+GDK_DPI_SCALE=0.5 GDK_SCALE=2 nm-applet &
+GDK_DPI_SCALE=0.5 GDK_SCALE=2 pasystray -a &
 setxkbmap
