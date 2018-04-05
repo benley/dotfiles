@@ -134,8 +134,11 @@ quitWithWarning = do
     s <- Dmenu.menuArgs "dmenu" [ "-p", "Quit?", "-nb", "red", "-nf", "black",
                                   "-sf", "white", "-sb", "black",
                                   "-i", "-l", "5", "-fn", defaultFont]
-                                ["Nope", "Yes, quit!"]
-    when (s == "Yes, quit!") (io exitSuccess)
+                                ["Nope", "Logout", "Suspend", "Reboot", "Power Off"]
+    when (s == "Logout") (io exitSuccess)
+    when (s == "Suspend") (safeSpawn "systemctl" ["suspend"])
+    when (s == "Reboot") (safeSpawn "systemctl" ["reboot"])
+    when (s == "Power Off") (safeSpawn "systemctl" ["poweroff"])
 
 myStartupHook =
     C.setDefaultCursor C.xC_left_ptr
