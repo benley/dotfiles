@@ -46,8 +46,9 @@ let dotfiles = import ../.. {}; in
     # vdpauinfo
     # libva       # for the vainfo command
 
-    dotfiles.sddm-theme-breeze-custom
+    # dotfiles.sddm-theme-breeze-custom
 
+    alsaUtils         # amixer, used in .xmonad.hs
     dmenu             # For xmonad
     dunst             # notifications daemon
     #dzen2
@@ -96,6 +97,13 @@ let dotfiles = import ../.. {}; in
 
     # Enable GTK applications to load SVG icons
     GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
+
+    # Redundant when programs.qt5ct.enable == true
+    # QT_QPA_PLATFORMTHEME = "qt5ct";
+
+    QT_FONT_DPI = toString (config.services.xserver.dpi / 2);
+    QT_SCALE_FACTOR = "2.0";
+    QT_AUTO_SCREEN_SCALE_FACTOR = "0";
   };
 
   services.gnome3.at-spi2-core.enable = true;
@@ -110,8 +118,9 @@ let dotfiles = import ../.. {}; in
 
   services.xserver = {
     enable = true;
-    displayManager.sddm.enable = true;
-    displayManager.sddm.theme = lib.mkForce "breeze-custom";
+#    displayManager.sddm.enable = true;
+#    displayManager.sddm.theme = lib.mkForce "breeze-custom";
+    displayManager.lightdm.enable = true;
     windowManager.xmonad.enable = true;
     windowManager.xmonad.enableContribAndExtras = true;
     windowManager.xmonad.extraPackages = haskellPackages: [
