@@ -2,6 +2,7 @@ import Control.Monad (when)
 import qualified Data.Map
 import Data.Monoid (mconcat)
 import System.Exit (exitSuccess)
+import System.Posix.User
 
 import System.Taffybar.Hooks.PagerHints (pagerHints)
 
@@ -37,7 +38,6 @@ myManageHook = composeAll
   [ fullscreenManageHook
   , isDialog     --> doCenterFloat
   , className =? "Gimp"           --> doFloat
-  -- , resource  =? "Steam"          --> doFloat
   , className =? "plasmashell"    --> doFloat
   , className =? "pinentry"       --> doCenterFloat  -- matches for pinentry-qt
   , resource  =? "pinentry"       --> doCenterFloat  -- matches for pinentry-gtk (wtf?)
@@ -120,6 +120,8 @@ myKeyBindings =
     , ("M-S-q", quitWithWarning)
     , ("M-a", sendMessage ShrinkSlave)
     , ("M-z", sendMessage ExpandSlave)
+    -- M-S-e is already taken
+    -- , ("M-S-e", safeSpawn "emacsclient" ["-n", "-c", "-a", ""])
     ] where dmenu_args = ["-i", "-l", "10", "-fn", defaultFont]
             commands :: X [(String, X ())]
             commands = do
@@ -156,9 +158,14 @@ myConfig =
         ]
     , startupHook = myStartupHook <+> startupHook desktopConfig
     , keys = myKeyBindings <+> keys desktopConfig
-    , terminal = "konsole"
     , normalBorderColor = "#263238"
     , focusedBorderColor = "#ea9560"
     } `removeKeysP` ["M-b"]
 
-main = xmonad $ pagerHints myConfig
+main = do
+  ue <- getLoginName >>= getUserEntryForName
+  let shell = userShell ue
+
+  xmonad $ pagerHints $ myConfig {
+    terminal = "emacsclient -n -c -a '' -e '(ansi-term \"" ++ shell ++ "\")'"
+    }
