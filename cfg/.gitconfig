@@ -4,7 +4,7 @@
 	email = benley@gmail.com
 	signingKey = FDBA38EE781A69D439A870A5A490C0134E09AF4A
 [commit]
-	gpgSign = true
+	gpgSign = false
 [core]
 	excludesfile = ~/.gitignore_global
 	hooksPath = ~/.githooks
