@@ -1,11 +1,13 @@
 ;;; init.el --- emacs init
 ;;; Commentary:
 ;;; Code:
+(prefer-coding-system 'utf-8)
+(set-language-environment "UTF-8")
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 
-(add-to-list 'load-path "~/.emacs.d/elisp")
+(add-to-list 'load-path "~/.emacs.d/elisp/")
 
 (global-unset-key (kbd "C-z"))     ;; ctrl-z should *not* freeze a gui app
 (global-unset-key (kbd "C-x C-z")) ;; why the heck would I ever want to suspend-frame
@@ -42,7 +44,7 @@
   :config (load-theme 'base16-materia t))
 
 (use-package bazel-mode
-  :config (add-to-list 'auto-mode-alist '("BUILD\\'" . bazel-mode)))
+  :config (add-to-list 'auto-mode-alist '("BUILD\\'" . #'bazel-mode)))
 
 ;; (use-package material-theme
 ;;  :config (load-theme 'material t))
@@ -76,9 +78,13 @@
   :after flycheck
   :config
   (flycheck-color-mode-line-mode)
-  (add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode))
+  (add-hook 'flycheck-mode-hook #'flycheck-color-mode-line-mode))
 
 (use-package flycheck-status-emoji
+  :init
+  (setq flycheck-status-emoji-indicator-finished-error ?💀)
+  (setq flycheck-status-emoji-indicator-finished-ok ?👍)
+  (setq flycheck-status-emoji-indicator-finished-warning ?👎)
   :config (flycheck-status-emoji-mode t))
 
 (use-package git-gutter
@@ -88,21 +94,15 @@
 
 (use-package go-mode)
 
-(use-package haskell-mode)
+(use-package haskell-mode
+  :config
+  (setq haskell-tags-on-save t))
 
 (ido-mode 1)
 (ido-everywhere 1)
-;; (use-package ido-completing-read+
-;;   ;; Really nice completion for commands and whatnot
-;;   :init
-;;   (setq ido-enable-flex-matching 1)
-
-;;   :config
-;;   (ido-mode 1)
-;;   (ido-everywhere 1)
-;;   ;; show ido autocomplete options pretty much everywhere, like when you hit M-x
-;;   ;; (ido-ubiquitous-mode 1)
-;;   )
+(setq ido-enable-flex-matching 1)
+(setq ido-ignore-directories '("\\`CVS/" "\\`\\.\\./" "\\`\\./" "bazel-.*/"))
+(setq ido-auto-merge-work-directories-length -1)
 
 ;;(use-package jsonnet-mode)
 (require 'jsonnet-mode)
@@ -112,7 +112,10 @@
 
 (use-package magit
   :bind ("C-x g" . magit-status)
-  :config (setq magit-completing-read-function 'magit-ido-completing-read))
+  :config (setq magit-completing-read-function #'magit-ido-completing-read))
+
+(use-package magit-gh-pulls
+  :config (add-hook 'magit-mode-hook #'turn-on-magit-gh-pulls))
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
@@ -122,6 +125,7 @@
 
 (require 'mtail-mode)
 (add-to-list 'auto-mode-alist (cons "\\.mtail$" #'mtail-mode))
+(add-to-list 'auto-mode-alist (cons "\\.em$" #'mtail-mode))
 
 (use-package nix-mode)
 
@@ -129,7 +133,7 @@
 (require 'nix-sandbox)
 
 (setq haskell-process-wrapper-function
-      (lambda (args) (apply 'nix-shell-command (nix-current-sandbox) args)))
+      (lambda (args) (apply #'nix-shell-command (nix-current-sandbox) args)))
 
 ;; Remove after https://github.com/travisbhartwell/nix-emacs/pull/45 is merged:
 (defun nix-shell-command (sandbox &rest args)
@@ -138,14 +142,14 @@
                             (mapconcat 'shell-quote-argument args " "))))
 
 (setq flycheck-command-wrapper-function
-      (lambda (cmd) (apply 'nix-shell-command (nix-current-sandbox) cmd)))
+      (lambda (cmd) (apply #'nix-shell-command (nix-current-sandbox) cmd)))
 
 (setq flycheck-executable-find
       (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd)))
 
 ;; This is _really slow_ for some reason
 ;; (use-package org-bullets
-;;   :config (add-hook 'org-mode-hook 'org-bullets-mode))
+;;   :config (add-hook 'org-mode-hook #'org-bullets-mode))
 
 (use-package paredit)
 
@@ -160,8 +164,9 @@
 
 (use-package rainbow-delimiters
   :config
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'prog-mode-hook (lambda () (setq show-trailing-whitespace t))))
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
+(save-place-mode t)
 
 (use-package smex
   ;; Put frequently-used commands at the front of ido completion list
@@ -180,14 +185,16 @@
 
 (use-package ido-grid-mode
   :init
-  (setq ido-grid-mode-keys (quote (tab backtab up down left right C-n C-p C-s C-r)))
+  (setq ido-grid-mode-keys '(tab backtab up down left right C-n C-p C-s C-r))
   :config
-  (ido-grid-mode +1)
-  )
+  (ido-grid-mode +1))
 
 (use-package treemacs
   :bind
   ("C-c t" . treemacs-select-window))
+
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
 
 (use-package web-mode
   :init
@@ -203,7 +210,7 @@
   (add-to-list 'auto-mode-alist '("\\.scss\\'" . web-mode))
 
   :hook
-  web-mode-hook 'custom-web-mode-hook)
+  web-mode-hook #'custom-web-mode-hook)
 
 (use-package yaml-mode)
 
@@ -217,9 +224,10 @@
 
 (--set-emoji-font nil)
 
-(add-hook 'after-make-frame-functions '--set-emoji-font)
+(add-hook 'after-make-frame-functions #'--set-emoji-font)
 
-(tool-bar-mode 0)                       ;; disable toolbar
+(tool-bar-mode 0)
+(menu-bar-mode 0)
 ;; (global-linum-mode 1)                   ;; show line numbers
 (global-hl-line-mode 1)                 ;; highlight current line
 (column-number-mode 1)                  ;; show column position in modeline
@@ -228,11 +236,11 @@
 (when (eq system-type 'darwin)
   (setq dired-use-ls-dired nil))        ;; ls doesn't have --dired on darwin
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-(add-hook 'text-mode-hook (lambda () (turn-on-auto-fill)))
+(add-hook 'before-save-hook #'delete-trailing-whitespace)
+(add-hook 'text-mode-hook #'turn-on-auto-fill)
 
 ;; Stop littering everywhere with save files, put them somewhere
-(setq backup-directory-alist '(("." . "~/.emacs-backups")))
+(setq backup-directory-alist `(("." . "~/.emacs-backups")))
 
 ;; Remember what I had open when I quit
 ;; (desktop-save-mode 1)
@@ -243,17 +251,33 @@
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil)
 
+;; Save clipboard strings into kill ring before replacing them
+(setq save-interprogram-paste-before-kill 1)
+
+(setq browse-url-browser-function #'browse-url-chrome)
+(setq inhibit-startup-screen t)
+(setq require-final-newline t)
+(setq mouse-yank-at-point t)  ;; middle-click paste where the cursor is, not
+                              ;; wherever the mouse happens to be pointing at
+                              ;; the time
+(setq visible-bell t)   ;; STOP BEEPING >_<
+(setq user-mail-address "benley@gmail.com")
+(setq load-prefer-newer t)
+
 (defun server-shutdown ()
   "Save buffers, quit, and shutdown the Emacs server."
   (interactive)
   (save-some-buffers)
   (kill-emacs))
 
+;; replace buffer-menu with ibuffer
+(global-set-key (kbd "C-x C-b") #'ibuffer)
+
 ;; keybindings for org mode
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cc" 'org-capture)
-(global-set-key "\C-cb" 'org-iswitchb)
+(global-set-key "\C-cl" #'org-store-link)
+(global-set-key "\C-ca" #'org-agenda)
+(global-set-key "\C-cc" #'org-capture)
+(global-set-key "\C-cb" #'org-iswitchb)
 
 ;; Scrolling
 (global-set-key [up] (lambda () (interactive) (previous-line)))
@@ -261,13 +285,12 @@
 (global-set-key [S-up] (lambda () (interactive) (scroll-down 1)))
 (global-set-key [S-down] (lambda () (interactive) (scroll-up 1)))
 
-;; It's annoying to see all the "<mouse-N> is undefined" errors when
-;; trying to scroll vertically on a trackpad in emacs 25, so tell
-;; emacs to ignore it for now.
-;; Left/right mwheel support will show up in emacs 26.
-;; See https://github.com/emacs-mirror/emacs/commit/88f43dc30cb8d71830e409973cafbaca13a66a45
-(global-set-key [mouse-6] 'ignore)
-(global-set-key [mouse-7] 'ignore)
+;; It's annoying to see all the "<mouse-N> is undefined" errors when trying to
+;; scroll vertically on a trackpad in emacs 25, so tell emacs to ignore it for
+;; now.  Left/right mwheel support will show up in emacs 26.  See
+;; https://github.com/emacs-mirror/emacs/commit/88f43dc30cb8d71830e409973cafbaca13a66a45
+(global-set-key [mouse-6] #'ignore)
+(global-set-key [mouse-7] #'ignore)
 
 ;; FONTS
 ;; -----
@@ -285,9 +308,9 @@ Default face is fixed so we only need to have the exceptions."
   (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
   (set-face-attribute 'org-special-keyword nil :inherit 'fixed-pitch))
 
-;; (add-hook 'org-mode-hook 'set-buffer-variable-pitch)
-;; (add-hook 'markdown-mode-hook 'set-buffer-variable-pitch)
-;; (add-hook 'Info-mode-hook 'set-buffer-variable-pitch)
+;; (add-hook 'org-mode-hook #'set-buffer-variable-pitch)
+;; (add-hook 'markdown-mode-hook #'set-buffer-variable-pitch)
+;; (add-hook 'Info-mode-hook #'set-buffer-variable-pitch)
 
 ;; (require 'ox-latex)
 ;; (setq org-latex-listings nil)
@@ -295,7 +318,7 @@ Default face is fixed so we only need to have the exceptions."
 ;; (add-to-list 'org-latex-packages-alist '("" "color"))
 
 (defun rename-current-buffer-file ()
-  "Renames current buffer and file it is visiting."
+  "Rename the current buffer and the file it is visiting."
   ;; from https://stackoverflow.com/questions/384284/how-do-i-rename-an-open-file-in-emacs/37456354#37456354
   (interactive)
   (let* ((name (buffer-name))
@@ -313,14 +336,55 @@ Default face is fixed so we only need to have the exceptions."
           (message "File '%s' successfully renamed to '%s'"
                    name (file-name-nondirectory new-name)))))))
 
+(require 'term)
 (defun expose-global-binding-in-term (binding)
   "Expose BINDING from the global keymap in term-mode."
   (define-key term-raw-map binding
     (lookup-key (current-global-map) binding)))
 
+;; Make M-x be same in ansi-term as everywhere else
 (expose-global-binding-in-term (kbd "M-x"))
+
+;; Same for C-c M-x to avoid confusion
 (define-key term-raw-map (kbd "C-c M-x")
   (lookup-key (current-global-map) (kbd "M-x")))
+
+;; ctrl-backspace doesn't do anything in normal terminals (there's no ascii
+;; code for it), and keeping it bound to backward-kill-word was confusing me
+;; endlessly.  Let's unmap that.
+(define-key term-raw-map (kbd "<C-backspace>")
+  'term-send-backspace)
+
+;;; Enable some languages that I want to use with org-babel
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (shell . t)
+   (jq . t)))
+
+(setq org-catch-invisible-edits 'error)
+(setq org-footnote-define-inline t)
+(setq org-goto-auto-isearch nil)
+(setq org-M-RET-may-split-line nil)
+(setq org-log-done 'time)
+(setq org-agenda-start-on-weekday 0)
+(setq org-ellipsis "⤵")
+
+(setq org-link-abbrev-alist
+      '(("jira" . "https://postmates.atlassian.net/browse/")))
+
+(setq sh-basic-offset 2)
+(setq sh-indentation 2)
+(setq sh-learn-basic-offset 'usually)
+
+(defun my-prog-mode-hook ()
+  "Setup stuff for 'prog-mode' derivatives."
+  (if window-system (hl-line-mode t))
+  (idle-highlight-mode t)
+  (highlight-indentation-mode t)
+  (setq-local show-trailing-whitespace t))
+
+(add-hook 'prog-mode-hook #'my-prog-mode-hook)
 
 (load "~/.emacs.d/localonly.el")
 (provide 'init)

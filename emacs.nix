@@ -1,7 +1,10 @@
 { pkgs ? import <nixpkgs> {} }:
 
 with rec {
-  myEmacs = pkgs.emacs;
+  myEmacs = pkgs.emacs.override {
+    withGTK3 = true;
+    withGTK2 = false;
+  };
 
   myEmacs26 = pkgs.emacs.overrideAttrs (oldAttrs: rec {
     name = "emacs-${version}";
@@ -14,7 +17,9 @@ with rec {
       sha256 = "0gp8jp7x857bsdgaw4r535qaspq65p0w8wznrdl8wvygp8sgbymr";
     };
   });
+
   emacsWithPackages = (pkgs.emacsPackagesNgGen myEmacs).emacsWithPackages;
+
 };
 
 emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
@@ -38,13 +43,16 @@ git-gutter
 gitignore-mode
 go-mode
 haskell-mode
+highlight-indentation
 htmlize
+idle-highlight-mode
 ido-completing-read-plus
 ido-grid-mode
 json-mode
 # jsonnet-mode  # local copy
 jq-mode
 magit
+magit-gh-pulls
 magit-popup  # a dep of magit, but I want the newer-than-melpaStable version
 markdown-mode
 #material-theme
@@ -57,7 +65,7 @@ paredit
 powerline
 protobuf-mode
 rainbow-delimiters
-slack
+# slack
 #smart-mode-line
 smex
 smooth-scrolling
@@ -67,6 +75,7 @@ terraform-mode
 treemacs
 use-package
 web-mode
+weechat
 xterm-color
 yaml-mode
 

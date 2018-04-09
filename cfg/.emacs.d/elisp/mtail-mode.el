@@ -88,5 +88,4 @@
   (mtail-mode))
 
 (provide 'mtail-mode)
-
-(add-to-list 'auto-mode-alist (cons "\\.em$" #'mtail-mode))
+;;; mtail-mode.el ends here
