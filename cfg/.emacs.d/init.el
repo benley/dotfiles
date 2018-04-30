@@ -1,6 +1,10 @@
 ;;; init.el --- emacs init
 ;;; Commentary:
 ;;; Code:
+
+;; Remember what I had open when I quit
+(desktop-save-mode t)
+
 (prefer-coding-system 'utf-8)
 (set-language-environment "UTF-8")
 
@@ -11,22 +15,18 @@
 
 (global-unset-key (kbd "C-z"))     ;; ctrl-z should *not* freeze a gui app
 (global-unset-key (kbd "C-x C-z")) ;; why the heck would I ever want to suspend-frame
-;; (global-set-key (kbd "C-z C-z") 'my-suspend-frame)
-;; (defun my-suspend-frame ()
-;;   "Like 'suspend-frame', but refuses to work on graphical windows."
-;;   (interactive)
-;;   (if (display-graphic-p)
-;;       (message "nope, not backgrounding a gui frame")
-;;     (suspend-frame)))
+
+; overwrite selected text on insert
+(delete-selection-mode 1)
 
 (require 'package)
 
 ;;; nix takes care of package installation for me now
-;; (setq package-archives
-;;       '(("gnu"   . "http://elpa.gnu.org/packages/")
-;;         ("melpa" . "http://melpa.org/packages/")
-;;         ("org"   . "http://orgmode.org/elpa/")))
-(setq package-archives nil)
+(setq package-archives
+      '(("gnu"   . "http://elpa.gnu.org/packages/")
+        ("melpa" . "http://melpa.org/packages/")
+        ("org"   . "http://orgmode.org/elpa/")))
+;; (setq package-archives nil)
 (setq package-enable-at-startup nil)
 (package-initialize)
 
@@ -44,18 +44,12 @@
   :config (load-theme 'base16-materia t))
 
 (use-package bazel-mode
-  :config (add-to-list 'auto-mode-alist '("BUILD\\'" . #'bazel-mode)))
-
-;; (use-package material-theme
-;;  :config (load-theme 'material t))
-
-;;(use-package clojure-mode)
-;;(use-package clojure-mode-extra-font-locking)
+  :mode "BUILD\\'" "WORKSPACE\\'" "\\.bzl\\'")
 
 (use-package company
   :diminish company-mode
   ;; Use company-mode in all buffers (more completion)
-  :config (add-hook 'after-init-hook #'global-company-mode))
+  :hook (after-init . global-company-mode))
 
 (use-package company-terraform
   :config
@@ -63,24 +57,21 @@
 
 (use-package diminish)
 
-;; (use-package flycheck
-;;   :config
-;;   (global-flycheck-mode 1))
-
-(require 'flycheck)
-(global-flycheck-mode 1)
-(setq flycheck-ghc-stack-use-nix t)
+(use-package flycheck
+  :config
+  (setq flycheck-ghc-stack-use-nix t)
+  (global-flycheck-mode 1))
 
 (use-package flycheck-pos-tip
+  :after (flycheck)
   :config (flycheck-pos-tip-mode))
 
 (use-package flycheck-color-mode-line
-  :after flycheck
-  :config
-  (flycheck-color-mode-line-mode)
-  (add-hook 'flycheck-mode-hook #'flycheck-color-mode-line-mode))
+  :after (flycheck)
+  :hook (flycheck-mode . flycheck-color-mode-line-mode))
 
 (use-package flycheck-status-emoji
+  :after (flycheck)
   :init
   (setq flycheck-status-emoji-indicator-finished-error ?💀)
   (setq flycheck-status-emoji-indicator-finished-ok ?👍)
@@ -95,8 +86,7 @@
 (use-package go-mode)
 
 (use-package haskell-mode
-  :config
-  (setq haskell-tags-on-save t))
+  :config (setq haskell-tags-on-save t))
 
 (ido-mode 1)
 (ido-everywhere 1)
@@ -108,20 +98,24 @@
 (require 'jsonnet-mode)
 
 (use-package jq-mode
-  :mode (("\\.jq$" . jq-mode)))
+  :mode "\\.jq$")
 
 (use-package magit
   :bind ("C-x g" . magit-status)
   :config (setq magit-completing-read-function #'magit-ido-completing-read))
 
 (use-package magit-gh-pulls
-  :config (add-hook 'magit-mode-hook #'turn-on-magit-gh-pulls))
+  :hook (magit-mode . turn-on-magit-gh-pulls))
+
+(defun enable-visual-line-mode ()
+  "Does the obvious thing."
+  (visual-line-mode 1))
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
-  :mode (("\\.md\\'" . gfm-mode))
-  :init (setq markdown-command "pandoc")
-  :config (add-hook 'gfm-mode-hook (lambda () (visual-line-mode 1))))
+  :mode ("\\.md\\'" . gfm-mode)
+  :config (setq markdown-command "pandoc")
+  :hook (gfm-mode . enable-visual-line-mode))
 
 (require 'mtail-mode)
 (add-to-list 'auto-mode-alist (cons "\\.mtail$" #'mtail-mode))
@@ -149,7 +143,7 @@
 
 ;; This is _really slow_ for some reason
 ;; (use-package org-bullets
-;;   :config (add-hook 'org-mode-hook #'org-bullets-mode))
+;;   :hook (org-mode . org-bullets-mode))
 
 (use-package paredit)
 
@@ -163,8 +157,7 @@
 (use-package protobuf-mode)
 
 (use-package rainbow-delimiters
-  :config
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  :hook (prog-mode . rainbow-delimiters-mode))
 
 (save-place-mode t)
 
@@ -204,13 +197,15 @@
     (setq web-mode-css-indent-offset 2)
     (setq web-mode-code-indent-offset 2))
 
-  :config
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.scss\\'" . web-mode))
+  :mode
+  "\\.html?\\'"
+  "\\.css\\'"
+  "\\.scss\\'"
 
   :hook
-  web-mode-hook #'custom-web-mode-hook)
+  (web-mode . custom-web-mode-hook))
+
+(use-package weechat)
 
 (use-package yaml-mode)
 
@@ -241,9 +236,6 @@
 
 ;; Stop littering everywhere with save files, put them somewhere
 (setq backup-directory-alist `(("." . "~/.emacs-backups")))
-
-;; Remember what I had open when I quit
-;; (desktop-save-mode 1)
 
 ;; do not want
 (setq-default indent-tabs-mode nil)
@@ -385,6 +377,32 @@ Default face is fixed so we only need to have the exceptions."
   (setq-local show-trailing-whitespace t))
 
 (add-hook 'prog-mode-hook #'my-prog-mode-hook)
+
+(defun my-term-mode-hook ()
+  "My term-mode hook."
+  ;;Attempt to unfuck ansi-term's colors after changing themes
+  (setq ansi-term-color-vector
+        [term term-color-black
+              term-color-red
+              term-color-green
+              term-color-yellow
+              term-color-blue
+              term-color-magenta
+              term-color-cyan
+              term-color-white])
+  ;; make URLs clickable
+  (goto-address-mode))
+
+;; maybe hopefully work around the thing where ansi-term breaks any time I change themes?
+(add-hook 'term-mode-hook #'my-term-mode-hook)
+
+(defun my-term-exec-hook ()
+  (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
+
+(add-hook 'term-exec-hook #'my-term-exec-hook)
+
+;; (use-package eterm-256color
+;;   :hook (term-mode . eterm-256color-mode))
 
 (load "~/.emacs.d/localonly.el")
 (provide 'init)

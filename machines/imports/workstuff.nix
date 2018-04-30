@@ -2,6 +2,7 @@
 
 {
   networking.networkmanager.useDnsmasq = true;
+  networking.networkmanager.enableStrongSwan = true;
 
   environment.etc = [{
     target = "NetworkManager/dnsmasq.d/work-vpn.conf";

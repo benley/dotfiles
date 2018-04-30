@@ -57,6 +57,8 @@ in
   # this can go in my homedir
   #programs.ssh.extraConfig = readFile ../../cfg/.ssh/config;
 
+  services.openssh.forwardX11 = true;
+
   services.emacs.defaultEditor = true;
 
   environment.variables.PAGER = "eless";
