@@ -20,7 +20,7 @@
 
   boot.kernelPackages = pkgs.linuxPackages_4_14;
 
-  hardware.openrazer.enable = true;
+  # hardware.openrazer.enable = true;
 
   # Make the cryptsetup password prompt readable
   boot.earlyVconsoleSetup = true;
@@ -55,7 +55,15 @@
       name = "crypted";
       device = "/dev/nvme0n1p7";
       allowDiscards = true;
+      # keyFile = "/root/luksroot.key";
     }];
+  };
+
+  # don't copy initrd secrets into /nix/store. Instead, add them
+  # directly to the initramfs during bootloader setup.
+  boot.loader.supportsInitrdSecrets = true;
+  boot.initrd.secrets = {
+    "/root/luksroot.key" = "/root/luksroot.key";
   };
 
   # From https://wiki.archlinux.org/index.php/razer#Webcam
@@ -73,6 +81,9 @@
 
   networking.hostId = "8425e349";
   networking.hostName = "alnitak";
+  networking.firewall.allowedTCPPorts = [
+    24800 # synergys
+  ];
 
   services.avahi.publish.enable = true;
   services.avahi.publish.workstation = true;
@@ -82,11 +93,15 @@
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
 
+  services.logind.extraConfig = ''
+    HandlePowerKey=ignore
+  '';
+
   services.xserver = {
     libinput.enable = true;
     libinput.naturalScrolling = true;
 
-    videoDrivers = [ "intel" ];
+#    videoDrivers = [ "intel" ];
 
     dpi = 240;  # Physical dpi is ~352 but as usual that makes the UI too big
 
@@ -122,7 +137,15 @@
 
   system.stateVersion = "17.03";
 
+  time.timeZone = "America/Los_Angeles";
+
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "zfs";
+  # virtualisation.docker.extraOptions = ["--storage-opt zfs.fsname=rpool/docker2"];
+
+  services.redshift = {
+    latitude = "37.7749";
+    longitude = "-122.4194";
+  };
 
 }

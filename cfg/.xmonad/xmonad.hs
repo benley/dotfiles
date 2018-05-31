@@ -92,8 +92,8 @@ getCurrentBrightness = do
 doBrightnessUp :: X ()
 doBrightnessUp = do
   cur <- getCurrentBrightness
-  io $ if cur < 0.11
-    then safeSpawn "light" ["-b", "-S", "0.11"]
+  io $ if cur < 0.19
+    then safeSpawn "light" ["-b", "-S", "0.19"]
     else safeSpawn "light" ["-b", "-A", "5"]
 
 doBrightnessDown :: X ()

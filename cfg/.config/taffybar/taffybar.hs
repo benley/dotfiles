@@ -143,7 +143,7 @@ main = defaultTaffybar defaultTaffybarConfig
                    , pollTextW 15 batString
                    , pollTextW 5 acStatus
                    , separator
-                   , wirelessMonitorNew 3 "wlp1s0"
+                   , wirelessMonitorNew 3 "wlp2s0"
                    , separator
                    , labelW (return $ fontAwesome "microchip")
                    , pollingGraphNew memCfg 1 memCallback
@@ -153,7 +153,7 @@ main = defaultTaffybar defaultTaffybarConfig
                    , cpuMonitorNew cpuCfg 1 "cpu1"
                    , cpuMonitorNew cpuCfg 1 "cpu0"
                    , separator
-                   , netMonitorNew 1 "wlp1s0"
+                   , netMonitorNew 1 "wlp2s0"
                    --, mprisNew defaultMPRISConfig
                    ]
     , barHeight = 61
