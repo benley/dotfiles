@@ -38,6 +38,7 @@ myManageHook = composeAll
   [ fullscreenManageHook
   , isDialog     --> doCenterFloat
   , className =? "Gimp"           --> doFloat
+  , className =? "Pavucontrol"    --> doCenterFloat
   , className =? "plasmashell"    --> doFloat
   , className =? "pinentry"       --> doCenterFloat  -- matches for pinentry-qt
   , resource  =? "pinentry"       --> doCenterFloat  -- matches for pinentry-gtk (wtf?)
