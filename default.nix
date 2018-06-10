@@ -17,6 +17,8 @@ rec {
 
   nixhomeLib = callPackage (import "${nix-home}/nix/lib/nixhome") {};
 
+  hddfancontrol = callPackage ./pkgs/hddfancontrol { };
+
   homedir = callPackage ./homedir.nix { mkHome = nixhomeLib.mkHome; };
 
   vim = vimPackages.vim;
