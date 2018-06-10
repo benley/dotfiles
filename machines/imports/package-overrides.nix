@@ -24,12 +24,12 @@
 
     plex = super.plex.overrideAttrs (x: rec {
       name = "plex-${version}";
-      version = "1.13.2.5102";
-      vsnHash = "4898d7d96";
+      version = "1.13.2.5154";
+      vsnHash = "fd05be322";
 
       src = pkgs.fetchurl {
         url = "https://downloads.plex.tv/plex-media-server/${version}-${vsnHash}/plexmediaserver-${version}-${vsnHash}.x86_64.rpm";
-        sha256 = "16mr9g6scv9ihqdq2lzaca8kbanr405mfsz0gip7cf65z1z4fjnj";
+        sha256 = "09hy9xhhv17jbzplyls13xrzaxndlc278amp6k3w8q4j6wpsi6np";
       };
     });
 
