@@ -28,14 +28,15 @@ let dotfiles = import ../.. {}; in
     inkscape
     insync
     minecraft
-    signal-desktop-beta
+    # signal-desktop-beta
     slack
     steam
     linux-steam-integration
     dotfiles.texlive
     transmission_gtk
     vivaldi
-    vlc
+    libsForQt5.vlc
+    gnome_mplayer
     vscode
     xlibs.xdpyinfo
     xlibs.xev
@@ -60,7 +61,8 @@ let dotfiles = import ../.. {}; in
     networkmanager_dmenu
     networkmanagerapplet
     pasystray
-    lxqt.pavucontrol-qt
+    # lxqt.pavucontrol-qt
+    pavucontrol
     xautolock         # so I can xautolock -locknow
     xorg.xbacklight
 
@@ -84,6 +86,7 @@ let dotfiles = import ../.. {}; in
 
     ksshaskpass
     pinentry_qt5
+    kwalletcli  # includes pinentry-kwallet
   ];
 
   environment.variables = {
