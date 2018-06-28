@@ -104,6 +104,19 @@ doBrightnessDown = do
     then safeSpawn "light" ["-b", "-S", "0.11"]
     else safeSpawn "light" ["-b", "-U", "5"]
 
+doXrandrThing :: X ()
+doXrandrThing =
+  safeSpawn "xrandr" ["--auto"] >>
+  safeSpawn "xrandr" ["--output", "eDP1",
+                      "--mode", "2560x1440",
+                      "--pos", "3840x720",
+                      "--rotate", "normal",
+                      "--output", "DP1",
+                      "--primary",
+                      "--mode", "3840x2160",
+                      "--pos", "0x0",
+                      "--rotate", "normal"]
+
 myKeyBindings =
   flip mkKeymap
     [ ("<XF86AudioLowerVolume>", safeSpawn "amixer" ["--quiet", "set", "Master", "5%-", "unmute"])
@@ -112,6 +125,7 @@ myKeyBindings =
     , ("<XF86MonBrightnessUp>", doBrightnessUp)
     , ("<XF86MonBrightnessDown>", doBrightnessDown)
     , ("<XF86PowerOff>", quitWithWarning)
+    , ("<XF86Display>", doXrandrThing)
     , ("M-g", goToSelected defaultGSConfig)
     , ("C-M-l", safeSpawn "xset" ["s", "activate"])
     , ("C-M-y", commands >>= runCommand)
