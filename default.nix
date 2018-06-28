@@ -37,5 +37,8 @@ rec {
     inherit (pkgs.texlive) scheme-small wrapfig capt-of cm-super;
   };
 
+  thunderbolt = callPackage ./pkgs/thunderbolt { };
+
   # yaml2json = callPackage ./pkgs/yaml2json { };
+
 }
