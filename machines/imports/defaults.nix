@@ -172,4 +172,6 @@ in
 
   services.keybase.enable = true;
   services.kbfs.enable = true;
+
+  networking.networkmanager.enableStrongSwan = true;
 }
