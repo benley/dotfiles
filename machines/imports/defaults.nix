@@ -68,6 +68,7 @@ in
   environment.systemPackages = with pkgs; [
     dotfiles.eless
     dotfiles.nix-home
+    dotfiles.powermate
     acpi
     awscli
     dotfiles.awsudo
@@ -149,6 +150,7 @@ in
 
   services.udev.packages = [
     dotfiles.steamcontroller-udev-rules
+    dotfiles.powermate
   ];
 
   i18n.defaultLocale = "en_US.UTF-8";

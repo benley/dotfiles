@@ -27,6 +27,8 @@ rec {
 
   neovim = vimPackages.neovim;
 
+  powermate = callPackage ./pkgs/powermate-linux { };
+
   sddm-theme-breeze-custom = callPackage ./pkgs/sddm-theme-breeze-custom { };
 
   slim-themes = callPackage ./pkgs/slim-themes { };
