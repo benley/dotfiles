@@ -1,0 +1,33 @@
+diff --git a/awsudo/config.py b/awsudo/config.py
+index db2000a..dc8927b 100644
+--- a/awsudo/config.py
++++ b/awsudo/config.py
+@@ -1,4 +1,4 @@
+-from awscli.handlers import awscli_initialize
++from awscli.customizations.assumerole import inject_assume_role_provider_cache
+ from botocore.session import Session
+ from botocore.hooks import HierarchicalEmitter
+ 
+@@ -12,7 +12,9 @@ class CredentialResolver(object):
+         if profile:
+             session.set_config_variable('profile', profile)
+ 
+-        awscli_initialize(eventHooks)
++        eventHooks.register('session-initialized',
++                            inject_assume_role_provider_cache,
++                            unique_id='inject_assume_role_cred_provider_cache')
+         session.emit('session-initialized', session=session)
+         creds = session.get_credentials()
+ 
+diff --git a/setup.py b/setup.py
+index 6c2ed2e..0e96c5c 100644
+--- a/setup.py
++++ b/setup.py
+@@ -16,6 +16,6 @@ setup(
+     install_requires=[
+         'boto',
+         'retrying',
+-        'awscli==1.12.2',
++        'awscli',
+     ],
+ )

@@ -1,11 +1,13 @@
 { nixpkgs ? import <nixpkgs> {} }:
 
-with { inherit (nixpkgs) pkgs lib; };
+with { inherit (nixpkgs) pkgs lib pythonPackages; };
 
 let vimPackages = import ./vim/vimPackages.nix pkgs; in
 
 rec {
   inherit (pkgs) callPackage;
+
+  awsudo = pythonPackages.callPackage ./pkgs/awsudo { };
 
   emacs = callPackage ./emacs.nix { };
 

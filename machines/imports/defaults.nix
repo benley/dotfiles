@@ -70,6 +70,7 @@ in
     dotfiles.nix-home
     acpi
     awscli
+    dotfiles.awsudo
     bazel
     binutils # strings, strip, ar, as, ...
     bc
