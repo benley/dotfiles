@@ -3,7 +3,7 @@
 ;;; Code:
 
 ;; Remember what I had open when I quit
-(desktop-save-mode t)
+;; (desktop-save-mode t)
 
 (prefer-coding-system 'utf-8)
 (set-language-environment "UTF-8")
@@ -57,9 +57,14 @@
 
 (use-package diminish)
 
+;; (use-package docker
+;;   :config (docker-global-mode))
+
 (use-package flycheck
   :config
   (setq flycheck-ghc-stack-use-nix t)
+  (setq flycheck-python-flake8-executable "flake8")
+  (setq flycheck-python-pylint-executable "pylint")
   (global-flycheck-mode 1))
 
 (use-package flycheck-pos-tip
@@ -79,6 +84,7 @@
   :config (flycheck-status-emoji-mode t))
 
 (use-package git-gutter
+  :diminish git-gutter-mode
   :config (global-git-gutter-mode +1))
 
 (use-package gitignore-mode)
@@ -143,7 +149,13 @@
 
 ;; This is _really slow_ for some reason
 ;; (use-package org-bullets
-;;   :hook (org-mode . org-bullets-mode))
+;;   :hook (org-mode . org-bullets-mode)
+;;   :config (setq (org-bullets-face-name (quote fixed-pitch))))
+
+(use-package org-journal
+  :config
+  (setq org-journal-dir "~/Dropbox/org/journal")
+  (setq org-journal-file-format "%Y-%m-%d.org"))
 
 (use-package paredit)
 
@@ -354,16 +366,36 @@ Default face is fixed so we only need to have the exceptions."
    (shell . t)
    (jq . t)))
 
+(setq org-M-RET-may-split-line nil)
+(setq org-agenda-start-on-weekday 0)
 (setq org-catch-invisible-edits 'error)
+(setq org-default-notes-file "~/Dropbox/org/notes.org")
+(setq org-directory "~/Dropbox/org")
+(setq org-ellipsis "⤵")
 (setq org-footnote-define-inline t)
 (setq org-goto-auto-isearch nil)
-(setq org-M-RET-may-split-line nil)
 (setq org-log-done 'time)
-(setq org-agenda-start-on-weekday 0)
-(setq org-ellipsis "⤵")
 
 (setq org-link-abbrev-alist
       '(("jira" . "https://postmates.atlassian.net/browse/")))
+
+(setq org-capture-templates
+      '(
+        ("n" "Note" entry (file+headline "" "unfiled")
+         "* NOTE %?\n  %U" :empty-lines 1)
+        ("N" "Note+paste" entry (file+headline "" "unfiled")
+         "* NOTE %?\n  %U\n  %c" :empty-lines 1)
+        ("t" "Task" entry (file+headline "" "Tasks")
+         "* TODO %?\n  %U\n  %a" :empty-lines 1)
+        ("T" "Task+paste" entry (file+headline "" "Tasks")
+         "* TODO %?\n  %U\n  %c" :empty-lines 1)
+        ("e" "Event" entry (file+headline "" "Events")
+         "* EVENT %?\n  %U" :empty-lines 1)
+        )
+      )
+
+(setq org-refile-targets
+      '((org-agenda-files :maxlevel . 3)))
 
 (setq sh-basic-offset 2)
 (setq sh-indentation 2)
@@ -397,6 +429,7 @@ Default face is fixed so we only need to have the exceptions."
 (add-hook 'term-mode-hook #'my-term-mode-hook)
 
 (defun my-term-exec-hook ()
+  "Try to make terminals work better with unicode I guess."
   (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
 
 (add-hook 'term-exec-hook #'my-term-exec-hook)

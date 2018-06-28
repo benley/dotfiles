@@ -209,5 +209,4 @@ let dotfiles = import ../.. {}; in
 
   programs.ssh.askPassword = "${pkgs.plasma5.ksshaskpass.out}/bin/ksshaskpass";
 
-  services.emacs.enable = true;
 }

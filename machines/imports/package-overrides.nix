@@ -33,5 +33,9 @@
       };
     });
 
+    # gnupg = super.gnupg.override (x: {
+    #   pinentry = pkgs.pinentry_qt5;
+    # });
+
   };
 }

@@ -18,3 +18,5 @@ amqping() {
   eval $cmd
   echo
 }
+
+alias e='emacseditor'

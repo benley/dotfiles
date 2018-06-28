@@ -168,5 +168,6 @@ main = do
   let shell = userShell ue
 
   xmonad $ pagerHints $ myConfig {
-    terminal = "emacsclient -n -c -a '' -e '(ansi-term \"" ++ shell ++ "\")'"
+    -- terminal = "emacsclient -n -c -a '' -e '(ansi-term \"" ++ shell ++ "\")'"
+    terminal = "konsole"
     }
