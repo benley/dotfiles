@@ -120,13 +120,15 @@ let dotfiles = import ../.. {}; in
     "interface-name:veth*"
   ];
 
-  services.printing.enable = true;
+  # This would enable CUPS, which I don't seem to actually use
+  # services.printing.enable = true;
 
   services.xserver = {
     enable = true;
 #    displayManager.sddm.enable = true;
 #    displayManager.sddm.theme = lib.mkForce "breeze-custom";
     displayManager.lightdm.enable = true;
+    displayManager.lightdm.background = "${/home/benley/Downloads/Clean-Desktop-Wallpaper-12.jpg}";
     windowManager.xmonad.enable = true;
     windowManager.xmonad.enableContribAndExtras = true;
     windowManager.xmonad.extraPackages = haskellPackages: [
