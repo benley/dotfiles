@@ -101,9 +101,15 @@ let dotfiles = import ../.. {}; in
     # Redundant when programs.qt5ct.enable == true
     # QT_QPA_PLATFORMTHEME = "qt5ct";
 
-    QT_FONT_DPI = toString (config.services.xserver.dpi / 2);
-    QT_SCALE_FACTOR = "2.0";
-    QT_AUTO_SCREEN_SCALE_FACTOR = "0";
+    # QT_FONT_DPI = toString (config.services.xserver.dpi / 2);
+    # QT_SCALE_FACTOR = "2.0";
+    # QT_AUTO_SCREEN_SCALE_FACTOR = "0";
+
+    # gtk3 is too dumb to notice the 240dpi display, so let's force it to scale
+    # GDK_SCALE = "2";
+
+    # ... but freetype sure as heck notices, so now we compensate for that
+    # GDK_DPI_SCALE = "0.5";
   };
 
   services.gnome3.at-spi2-core.enable = true;

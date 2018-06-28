@@ -1,8 +1,9 @@
 XCursor.size: 64
 XCursor.theme: breeze_cursors
 
-!Xft.dpi: 163.50
-!Xft.dpi: 192
+Xft.dpi: 144
+! Xft.dpi: 163.50
+! Xft.dpi: 192
 
 !Xft.antialias: true
 !Xft.autohint: 0

@@ -1,8 +1,14 @@
+# xrandr --dpi 144
+# xrdb -merge <<<"Xft.dpi: 144"
+# export QT_SCALE_FACTOR=1.5
+# export QT_FONT_DPI=96
+# export GDK_DPI_SCALE=1.0 GDK_SCALE=1
+
 # systemctl --user import-environment XDG_DATA_DIRS XDG_CONFIG_DIRS GDK_PIXBUF_MODULE_FILE
-kwalletd5 &
+# kwalletd5 &
 insync start &
 dropbox start &
 taffybar &
-GDK_DPI_SCALE=0.5 GDK_SCALE=2 nm-applet &
-GDK_DPI_SCALE=0.5 GDK_SCALE=2 pasystray -a &
+nm-applet &
+pasystray -a &
 setxkbmap
