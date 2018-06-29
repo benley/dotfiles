@@ -122,6 +122,7 @@ myKeyBindings =
     [ ("<XF86AudioLowerVolume>", safeSpawn "amixer" ["--quiet", "set", "Master", "5%-", "unmute"])
     , ("<XF86AudioRaiseVolume>", safeSpawn "amixer" ["--quiet", "set", "Master", "5%+", "unmute"])
     , ("<XF86AudioMute>", safeSpawn "amixer" ["--quiet", "set", "Master", "toggle"])
+    , ("<XF86AudioMicMute>", safeSpawn "amixer" ["--quiet", "set", "Capture", "toggle"])
     , ("<XF86MonBrightnessUp>", doBrightnessUp)
     , ("<XF86MonBrightnessDown>", doBrightnessDown)
     , ("<XF86PowerOff>", quitWithWarning)
