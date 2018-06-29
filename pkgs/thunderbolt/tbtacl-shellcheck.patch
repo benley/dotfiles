@@ -1,4 +1,4 @@
-commit 4ac6998fcac632ab98ffbc8ee536acecae988337
+commit bddc011bd4c1cb7b3d9099962e3aee85d442a7d2
 Author: Benjamin Staffin <benley@gmail.com>
 Date:   Thu Jun 28 18:16:08 2018 -0400
 
@@ -7,7 +7,7 @@ Date:   Thu Jun 28 18:16:08 2018 -0400
     This is mostly just the result of running shellcheck and following its advice.
 
 diff --git a/tbtacl/tbtacl.in b/tbtacl/tbtacl.in
-index 4835d82..ca5e69d 100644
+index 4835d82..8455c33 100644
 --- a/tbtacl/tbtacl.in
 +++ b/tbtacl/tbtacl.in
 @@ -32,7 +32,7 @@
@@ -112,8 +112,7 @@ index 4835d82..ca5e69d 100644
 -	change)	list=$device/*/authorized
 +	change)	list="$device/*/authorized"  # this glob is expanded later
  		# Stop if no substitution was done (no relevant childs found)
--		echo $list | grep -Fvq '*' || die no childs found
-+		echo "$list" | grep -Fvq '*' || die no childs found
+ 		echo $list | grep -Fvq '*' || die no childs found
  
  		for i in $list ; do
 -			i=$( dirname $i )
