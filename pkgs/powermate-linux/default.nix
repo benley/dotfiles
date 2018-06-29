@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "0r96s0fdk4c9ily1xvppv23h7kxy8qhnbvyc06q3h6xbg5pf8fsa";
   };
 
-  patches = [ ./dont-daemonize.patch ];
+  patches = [
+    ./dont-daemonize.patch
+    ./udev.patch
+  ];
 
   buildInputs = [
     libpulseaudio
