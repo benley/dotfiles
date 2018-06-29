@@ -12,3 +12,4 @@ taffybar &
 nm-applet &
 pasystray -a &
 setxkbmap
+xmodmap -e "keycode 107 = Super_R Sys_Req"

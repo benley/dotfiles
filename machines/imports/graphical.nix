@@ -65,6 +65,7 @@ let dotfiles = import ../.. {}; in
     pavucontrol
     xautolock         # so I can xautolock -locknow
     xorg.xbacklight
+    xorg.xmodmap
 
     gnome3.cheese     # KDE seems to lack a webcam app?
     gwenview          # photo viewer
