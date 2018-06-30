@@ -119,6 +119,14 @@ with {
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "zfs";
 
+  services.udev.extraHwdb = ''
+    # evdev:atkbd:... modalias string comes from `evemu-describe /dev/input/event0` (it comes from DMI data, you can probably also find it with `cat /sys/class/dmi/id/modalias`)
+    evdev:atkbd:dmi:bvn*:bvr*:bd*:svn*:pn*:pvrThinkPadX1C*
+      # remap PrintScreen (which is bizarrely located between
+      # right-alt and right-ctrl on this laptop) to right-meta
+      KEYBOARD_KEY_b7=rightmeta
+  '';
+
   services.udev.packages = [
     dotfiles.thunderbolt
   ];
