@@ -1,7 +1,5 @@
 { config, pkgs, lib, ... }:
 
-let dotfiles = import ../.. {}; in
-
 {
   imports = [
     ./fonts.nix
@@ -32,12 +30,13 @@ let dotfiles = import ../.. {}; in
     slack
     steam
     linux-steam-integration
-    dotfiles.texlive
+    # texlive
     transmission_gtk
     vivaldi
     libsForQt5.vlc
     gnome_mplayer
-    vscode
+    gnome3.gnome_themes_standard  # I think this fixes some "can't find theme engine adwaita" erorrs
+    # vscode
     xlibs.xdpyinfo
     xlibs.xev
     xlsfonts
@@ -47,7 +46,7 @@ let dotfiles = import ../.. {}; in
     # vdpauinfo
     # libva       # for the vainfo command
 
-    # dotfiles.sddm-theme-breeze-custom
+    # sddm-theme-breeze-custom
 
     alsaUtils         # amixer, used in .xmonad.hs
     dmenu             # For xmonad

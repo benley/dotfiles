@@ -3,7 +3,6 @@
 { config, pkgs, lib, ... }:
 
 with {
-  dotfiles = import ../.. {};
   x1c_patched_dsdt = pkgs.makeInitrd {
     compressor = "cat";
     contents = [
@@ -39,7 +38,9 @@ with {
     "zswap.zpool=z3fold"
   ];
   # boot.initrd.prepend = ["${x1c_patched_dsdt}/initrd"];
-  boot.initrd.availableKernelModules = [ "lz4" "lz4_compress" ];
+  boot.initrd.availableKernelModules = [
+    "lz4" "lz4_compress" "z3fold"
+  ];
 
   boot.supportedFilesystems = ["zfs"];
   boot.zfs.enableUnstable = true;
@@ -119,19 +120,21 @@ with {
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "zfs";
 
+  # evdev:atkbd:... modalias string comes from `evemu-describe /dev/input/event0` (it comes from DMI data, you can probably also find it with `cat /sys/class/dmi/id/modalias`)
+  # Remap PrintScreen (which is bizarrely located between right-alt
+  # and right-ctrl on this laptop) to right-meta
   services.udev.extraHwdb = ''
-    # evdev:atkbd:... modalias string comes from `evemu-describe /dev/input/event0` (it comes from DMI data, you can probably also find it with `cat /sys/class/dmi/id/modalias`)
     evdev:atkbd:dmi:bvn*:bvr*:bd*:svn*:pn*:pvrThinkPadX1C*
-      # remap PrintScreen (which is bizarrely located between
-      # right-alt and right-ctrl on this laptop) to right-meta
       KEYBOARD_KEY_b7=rightmeta
   '';
 
+  services.powermate.enable = true;
+
   services.udev.packages = [
-    dotfiles.thunderbolt
+    pkgs.thunderbolt
   ];
   environment.systemPackages = [
-    dotfiles.thunderbolt
+    pkgs.thunderbolt
   ];
 
 }

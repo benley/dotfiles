@@ -1,10 +1,5 @@
 { config, pkgs, lib, ... }:
 
-let
-  dotfiles = import ../.. {};
-  readFile = builtins.readFile;
-in
-
 # Stuff I want to config/install on every machine, regardless of type.
 {
 
@@ -13,6 +8,7 @@ in
     ./package-overrides.nix
     ./users.nix
     ./yubikey.nix
+    ../../modules/powermate.nix
   ];
 
   boot.zfs.forceImportAll = false;
@@ -27,6 +23,11 @@ in
     monthly = 12;
   };
 
+  nixpkgs.overlays = [
+    (import ../../overlays/default.nix)
+    (import ../../overlays/emacs.nix)
+  ];
+
   nixpkgs.config.allowUnfree = true;
 
   # These have no effect on google-chrome (I think), just chromium
@@ -40,11 +41,9 @@ in
   # http://nicknovitski.com/vim-nix-syntax wtf
   nixpkgs.config.vim.ftNix = false;
 
-  nixpkgs.config.permittedInsecurePackages = [
-    "linux-4.13.16"
-  ];
-
   programs.bash.enableCompletion = true;
+
+  programs.mtr.enable = true;
 
   programs.tmux = {
     enable = true;
@@ -61,17 +60,17 @@ in
 
   services.emacs.defaultEditor = true;
   services.emacs.install = true;
-  services.emacs.package = (import ../../emacs.nix) {inherit pkgs;};
+  # now handled via overlay
+  # services.emacs.package = (import ../../emacs.nix) {inherit pkgs;};
 
   environment.variables.PAGER = "eless";
 
   environment.systemPackages = with pkgs; [
-    dotfiles.eless
-    dotfiles.nix-home
-    dotfiles.powermate
+    eless
+    nix-home
     acpi
     awscli
-    dotfiles.awsudo
+    awsudo
     bazel
     binutils # strings, strip, ar, as, ...
     bc
@@ -103,7 +102,7 @@ in
     iw
     jq
     jsonnet
-    dotfiles.kubernetes-client
+    kubernetes-client
     keybase
     keybase-gui
     kops
@@ -112,8 +111,8 @@ in
     lsof
     gnumake
     mosh
-    mtr
-    dotfiles.neovim
+    # mtr   # see programs.mtr.enable
+    # neovim
     nethogs
     nix-prefetch-scripts
     nix-repl
@@ -149,8 +148,7 @@ in
   ];
 
   services.udev.packages = [
-    dotfiles.steamcontroller-udev-rules
-    dotfiles.powermate
+    pkgs.steamcontroller-udev-rules
   ];
 
   i18n.defaultLocale = "en_US.UTF-8";

@@ -21,21 +21,5 @@
     taffybar = super.taffybar.override (_: {
       packages = _: [haskellPackages.taffybar-plugins];
     });
-
-    plex = super.plex.overrideAttrs (x: rec {
-      name = "plex-${version}";
-      version = "1.13.2.5154";
-      vsnHash = "fd05be322";
-
-      src = pkgs.fetchurl {
-        url = "https://downloads.plex.tv/plex-media-server/${version}-${vsnHash}/plexmediaserver-${version}-${vsnHash}.x86_64.rpm";
-        sha256 = "09hy9xhhv17jbzplyls13xrzaxndlc278amp6k3w8q4j6wpsi6np";
-      };
-    });
-
-    # gnupg = super.gnupg.override (x: {
-    #   pinentry = pkgs.pinentry_qt5;
-    # });
-
   };
 }
