@@ -6,7 +6,7 @@ let secrets = import ./secrets.nix; in
   imports = [
     ./hardware-configuration.nix
     ../imports/defaults.nix
-    ./fancontrol.nix
+    ../../modules/fancontrol.nix
   ];
 
   boot.loader.grub = {
@@ -15,7 +15,9 @@ let secrets = import ./secrets.nix; in
     version = 2;
   };
 
-  networking.hostName = "nyanbox"; # Define your hostname.
+  boot.kernelModules = ["nct6775"]; # make /sys/class/hwmon/hwmon2 exist
+
+  networking.hostName = "nyanbox";
   networking.hostId = "007f0101";
 
   services.avahi.publish.enable = true;
@@ -28,8 +30,6 @@ let secrets = import ./secrets.nix; in
   services.openssh.enable = true;
 
   networking.firewall.allowedTCPPorts = [ 9090 3000 80 443 54191 ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # networking.firewall.enable = false;
 
   system.stateVersion = "18.03";
 
