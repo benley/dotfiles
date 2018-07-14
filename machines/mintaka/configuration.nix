@@ -3,13 +3,24 @@
 { config, pkgs, lib, ... }:
 
 with {
-  x1c_patched_dsdt = pkgs.makeInitrd {
-    compressor = "cat";
-    contents = [
-      { object = ./dsdt.aml;
-        symlink = "kernel/firmware/acpi/dsdt.aml";
-      }
-    ];
+  # x1c_patched_dsdt = pkgs.makeInitrd {
+  #   compressor = "cat";
+  #   contents = [
+  #     { object = ./dsdt.aml;
+  #       symlink = "kernel/firmware/acpi/dsdt.aml";
+  #     }
+  #   ];
+  # };
+  x1c_patched_dsdt = pkgs.stdenv.mkDerivation {
+    name = "x1c-patched-dsdt";
+    src = ./.;
+    buildInputs = [ pkgs.libarchive ];
+    installPhase = ''
+      mkdir -p kernel/firmware/acpi
+      cp ${./dsdt.aml} kernel/firmware/acpi/dsdt.aml
+      mkdir -p $out
+      echo kernel/firmware/acpi/dsdt.aml | bsdcpio -v -o -H newc -R 0:0 > $out/x1c-dsdt.img
+    '';
   };
 };
 
@@ -27,17 +38,19 @@ with {
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelParams = [
     # Enable S0i3 sleep support, according to the arch wiki
-    "acpi.ec_no_wakeup=1"
+    # "acpi.ec_no_wakeup=1"
 
     # Or, with the patched DSDT:
-    # "mem_sleep_default=deep"
+    "mem_sleep_default=deep"
 
     "zswap.enabled=1"
     "zswap.compressor=lz4"
     "zswap.max_pool_percent=25"
     "zswap.zpool=z3fold"
   ];
-  # boot.initrd.prepend = ["${x1c_patched_dsdt}/initrd"];
+
+  boot.initrd.prepend = ["${x1c_patched_dsdt}/x1c-dsdt.img"];
+
   boot.initrd.availableKernelModules = [
     "lz4" "lz4_compress" "z3fold"
   ];
