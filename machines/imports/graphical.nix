@@ -132,6 +132,15 @@
 #    displayManager.sddm.theme = lib.mkForce "breeze-custom";
     displayManager.lightdm.enable = true;
     displayManager.lightdm.background = "${/home/benley/Downloads/Clean-Desktop-Wallpaper-12.jpg}";
+    displayManager.sessionCommands = lib.concatStringsSep "\n" [
+      "${pkgs.plasma5.polkit-kde-agent}/lib/libexec/polkit-kde-authentication-agent-1 &"
+      "${pkgs.insync}/bin/insync start &"
+      "${pkgs.dropbox-cli}/bin/dropbox start &"
+      "${pkgs.taffybar}/bin/taffybar &"
+      "${pkgs.networkmanagerapplet}/bin/nm-applet &"
+      "${pkgs.pasystray}/bin/pasystray -a &"
+      "setxkbmap"  # is this still necessary?
+    ];
     windowManager.xmonad.enable = true;
     windowManager.xmonad.enableContribAndExtras = true;
     windowManager.xmonad.extraPackages = haskellPackages: [
