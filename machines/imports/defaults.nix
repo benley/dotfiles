@@ -83,7 +83,7 @@
     exercism
     file
     gdb
-    git
+    gitFull
     gnupg
     go
     google-cloud-sdk

@@ -85,8 +85,11 @@
     # breeze-qt4  # gone, I think
 
     ksshaskpass
-    pinentry_qt5
-    kwalletcli  # includes pinentry-kwallet
+    # pinentry_qt5
+    pinentry_gnome
+    # kwalletcli      # includes pinentry-kwallet
+    gnome3.seahorse   # gnome-wallet manager gui
+    git-credential-libsecret
   ];
 
   environment.variables = {
@@ -116,6 +119,8 @@
   };
 
   services.gnome3.at-spi2-core.enable = true;
+  services.gnome3.gnome-keyring.enable = true;
+  security.pam.services.lightdm.enableGnomeKeyring = true;
 
   networking.networkmanager.enable = true;
   networking.networkmanager.unmanaged = [
@@ -128,6 +133,7 @@
 
   services.xserver = {
     enable = true;
+    updateDbusEnvironment = true;
 #    displayManager.sddm.enable = true;
 #    displayManager.sddm.theme = lib.mkForce "breeze-custom";
     displayManager.lightdm.enable = true;
