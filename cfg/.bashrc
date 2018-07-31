@@ -185,8 +185,9 @@ __prompt_command() {
   # the part that __git__ps1 formats into:
   git_status_fmt="─( %s )"
 
-  # End of the first line: show my current kubernetes context
-  if kube_context=$(kubectl config current-context 2>/dev/null); then
+  # End of the first line: show my current kubernetes context if I'm
+  # in a work dir and kubectl is available
+  if [[ $PWD =~ ~/pm.* ]] && kube_context=$(kubectl config current-context 2>/dev/null); then
     after="─(${colors[blue]}☸️${colors[normal]} ${kube_context})"
   else
     after="─(${colors[red]} ☸️ ${colors[normal]})"
