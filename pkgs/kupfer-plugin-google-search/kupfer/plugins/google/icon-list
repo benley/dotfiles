@@ -1,0 +1,4 @@
+# ID  File  flags
+# !override means that it overrides the current icon theme
+# (the default is to not override it)
+google-search	Google__G__Logo.svg	!override

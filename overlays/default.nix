@@ -9,6 +9,8 @@ with { callPackage = super.callPackage; };
 
   kubernetes-client = callPackage ../pkgs/kubernetes-client { };
 
+  kupfer-plugin-google-search = callPackage ../pkgs/kupfer-plugin-google-search { };
+
   nix-home = callPackage ../pkgs/nix-home { };
 
   nixhomeLib = callPackage (import "${nix-home}/nix/lib/nixhome") {};

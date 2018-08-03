@@ -74,6 +74,8 @@
     kgpg
     krita             # gimp-alike
     konsole
+    kupfer            # task launcher a la QuickSilver
+    kupfer-plugin-google-search
     qt5.qttools       # includes qdbusviewer
     spectacle         # screenshot
     dolphin
@@ -149,6 +151,7 @@
       "${pkgs.networkmanagerapplet}/bin/nm-applet &"
       "${pkgs.pasystray}/bin/pasystray -a &"
       "${pkgs.blueman}/bin/blueman-applet &"
+      "${pkgs.kupfer}/bin/kupfer --no-splash &"
       "setxkbmap"  # is this still necessary?
     ];
     windowManager.xmonad.enable = true;
