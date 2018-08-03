@@ -19,6 +19,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    blueman
     dropbox-cli
     firefox
     glxinfo
@@ -138,6 +139,8 @@
 #    displayManager.sddm.theme = lib.mkForce "breeze-custom";
     displayManager.lightdm.enable = true;
     displayManager.lightdm.background = "${/home/benley/Downloads/Clean-Desktop-Wallpaper-12.jpg}";
+
+    # Commands to run just before starting my window manager:
     displayManager.sessionCommands = lib.concatStringsSep "\n" [
       "${pkgs.plasma5.polkit-kde-agent}/lib/libexec/polkit-kde-authentication-agent-1 &"
       "${pkgs.insync}/bin/insync start &"
@@ -145,6 +148,7 @@
       "${pkgs.taffybar}/bin/taffybar &"
       "${pkgs.networkmanagerapplet}/bin/nm-applet &"
       "${pkgs.pasystray}/bin/pasystray -a &"
+      "${pkgs.blueman}/bin/blueman-applet &"
       "setxkbmap"  # is this still necessary?
     ];
     windowManager.xmonad.enable = true;
@@ -176,7 +180,7 @@
 
   services.upower.enable = true;
 
-  services.dbus.packages = with pkgs; [ gnome3.dconf dunst ];
+  services.dbus.packages = with pkgs; [ gnome3.dconf dunst blueman ];
   services.dbus.socketActivated = true;
 
   systemd.packages = with pkgs; [ dunst ];
