@@ -1,0 +1,27 @@
+commit 23c6fdd8acca07cb1dd56be07eea7eaf47a0e19a
+Author: Benjamin Staffin <benley@gmail.com>
+Date:   Tue Aug 7 13:43:19 2018 -0400
+
+    Be quiet while retrying
+
+diff --git a/main.c b/main.c
+index 739c286..b49c635 100644
+--- a/main.c
++++ b/main.c
+@@ -94,11 +94,14 @@ int poll_func(struct pollfd *ufds, unsigned long nfds, int timeout, void *userda
+   memcpy(pfds, ufds, nfds*sizeof(struct pollfd));
+ 
+   // wait for devfd
++  _Bool tried_once = 0;
+   while (devfd < 0) {
+-    fprintf(stderr, "Attempting to open %s\n", dev);
+     devfd = open(dev, O_RDWR);
+     if (devfd == -1) {
+-      fprintf(stderr, "Could not open %s: %s\n", dev, strerror(errno));
++      if (tried_once == 0) {
++        fprintf(stderr, "Could not open %s: %s (will retry)\n", dev, strerror(errno));
++        tried_once = 1;
++      }
+       sleep(1);
+     }
+     else {

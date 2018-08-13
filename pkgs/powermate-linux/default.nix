@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./dont-daemonize.patch
     ./udev.patch
+    ./be-quiet.patch
   ];
 
   buildInputs = [
