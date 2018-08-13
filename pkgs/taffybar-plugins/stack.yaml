@@ -15,7 +15,7 @@
 # resolver:
 #  name: custom-snapshot
 #  location: "./custom-snapshot.yaml"
-resolver: lts-9.12
+resolver: lts-12.4
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -40,8 +40,22 @@ packages:
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)
 extra-deps:
-  - taffybar-0.4.6
-  - gtk-traymanager-0.1.6
+  - taffybar-3.0.0
+  - ConfigFile-1.1.4
+  - dbus-hslogger-0.1.0.1
+  - gi-gdkx11-3.0.2
+  - gi-xlib-2.0.2
+  - gtk-sni-tray-0.1.5.0
+  - gi-dbusmenugtk3-0.4.2
+  - gi-dbusmenu-0.4.1
+  - gtk-strut-0.1.2.1
+  - rate-limit-1.4.0
+  - status-notifier-item-0.3.0.0
+  - spool-0.1
+  - time-units-1.0.0
+  - xml-helpers-1.0.0
+  - xmonad-0.14
+  - xmonad-contrib-0.14
 
 # Override default flag values for local packages and extra-deps
 flags: {}
@@ -71,7 +85,8 @@ nix:
   packages: [
     cairo,
     gcc,
-    gtk2,
+    gobjectIntrospection,
+    gtk3,
     libxml2,
     pango,
     pkgconfig,
@@ -80,5 +95,6 @@ nix:
     xorg.libXext,
     xorg.libXinerama,
     xorg.libXrandr,
+    xorg.libXScrnSaver,
     zlib,
   ]

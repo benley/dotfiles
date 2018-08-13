@@ -4,7 +4,7 @@ import Data.Monoid (mconcat)
 import System.Exit (exitSuccess)
 import System.Posix.User
 
-import System.Taffybar.Hooks.PagerHints (pagerHints)
+import System.Taffybar.Support.PagerHints (pagerHints)
 
 import XMonad
 import XMonad.Actions.Commands (defaultCommands, runCommand)

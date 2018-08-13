@@ -10,6 +10,7 @@ import GHC.Generics
 import qualified Data.Yaml as Y
 import Data.Maybe (isNothing, fromJust)
 import Data.Yaml (FromJSON(..), (.:), (.:?))
+import qualified Data.Text as T
 
 -- https://artyom.me/aeson#fromjson-instances-for-other-types
 

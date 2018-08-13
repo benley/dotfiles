@@ -137,18 +137,21 @@
   services.xserver = {
     enable = true;
     updateDbusEnvironment = true;
-#    displayManager.sddm.enable = true;
-#    displayManager.sddm.theme = lib.mkForce "breeze-custom";
+    desktopManager.gnome3.enable = true;
+
     displayManager.lightdm.enable = true;
     displayManager.lightdm.background = "${/home/benley/Downloads/Clean-Desktop-Wallpaper-12.jpg}";
 
     # Commands to run just before starting my window manager:
     displayManager.sessionCommands = lib.concatStringsSep "\n" [
+      # status-notifier-watcher needs to be up and running before any
+      # apps try to create indicator icons, and before taffybar goes looking for it
+      "${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher &"
       "${pkgs.plasma5.polkit-kde-agent}/lib/libexec/polkit-kde-authentication-agent-1 &"
       "${pkgs.insync}/bin/insync start &"
       "${pkgs.dropbox-cli}/bin/dropbox start &"
       "${pkgs.taffybar}/bin/taffybar &"
-      "${pkgs.networkmanagerapplet}/bin/nm-applet &"
+      "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator &"
       "${pkgs.pasystray}/bin/pasystray -a &"
       "${pkgs.blueman}/bin/blueman-applet &"
       "${pkgs.kupfer}/bin/kupfer --no-splash &"

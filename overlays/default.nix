@@ -77,4 +77,15 @@ with { callPackage = super.callPackage; };
       mv contrib/credential/libsecret/git-credential-libsecret $out/bin/
     '';
   });
+
+  haskellPackages = let pkgs = super; in super.haskellPackages.override {
+    overrides = self: super: {
+      taffybar-plugins = self.callPackage ../pkgs/taffybar-plugins {};
+    };
+  };
+
+  taffybar = super.taffybar.override (_: {
+    packages = _: [self.haskellPackages.taffybar-plugins];
+  });
+
 }
