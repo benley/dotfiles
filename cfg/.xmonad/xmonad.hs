@@ -40,9 +40,12 @@ myManageHook = composeAll
   , className =? "Gimp"           --> doFloat
   , className =? "Pavucontrol"    --> doCenterFloat
   , className =? "plasmashell"    --> doFloat
+  , title     =? "Bluetooth Devices" --> doFloat
   , className =? "pinentry"       --> doCenterFloat  -- matches for pinentry-qt
   , resource  =? "pinentry"       --> doCenterFloat  -- matches for pinentry-gtk (wtf?)
   , className =? "krunner"        --> doCenterFloat
+  , className =? "Nm-connection-editor" --> doFloat
+  , className =? "Kupfer.py"      --> doCenterFloat
   , title     =? "Slack Call Minipanel" --> (doFloat <+> doCopyToAll)
   , title     =? "Steam Keyboard" --> doIgnore
   -- I honestly don't know what the swapMaster part accomplishes here
