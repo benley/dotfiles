@@ -71,18 +71,6 @@ myLayoutHook =
      mouseResizableTile |||
      layoutHook desktopConfig)
 
----- I have no idea why, but mouseResizeableTile was causing notification
----- windows to disappear behind regular windows :-(
--- myLayoutHook =
---     smartborders $ desktopLayoutModifiers $
---     myResizable
---      ||| Mirror myResizable
---      ||| fullscreenFull Full
---     where myResizable = mouseResizableTile { masterFrac = 0.5
---                                            , fracIncrement = 1/100
---                                            , draggerType = FixedDragger 5 15
---                                            }
-
 -- Which key to use as the default modMask
 -- mod1Mask: alt, mod4Mask: win
 defaultModMask = mod4Mask
