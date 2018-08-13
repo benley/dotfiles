@@ -14,7 +14,6 @@ mkHome {
   user = "benley";
   files = genOverlay ./cfg //
     {
-      ".config/awesome/debian".link = "/etc/xdg/awesome/debian";
       ".config/dunst/dunstrc".content = pkgs.callPackage ./dunstrc.nix {};
     };
 }

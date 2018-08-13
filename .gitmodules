@@ -1,6 +1,0 @@
-[submodule "external/shFlags"]
-	path = external/shFlags
-	url = https://github.com/nvie/shFlags.git
-[submodule "vim/dotvim/bundle/vundle"]
-	path = vim/dotvim/bundle/vundle
-	url = https://github.com/gmarik/vundle.git
