@@ -14,13 +14,16 @@ import XMonad.Config.Desktop (desktopConfig, desktopLayoutModifiers)
 import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
 import XMonad.Hooks.ManageHelpers (doCenterFloat, isDialog, isInProperty, doFullFloat)
 import XMonad.Hooks.Place (placeHook, simpleSmart)
+import XMonad.Layout.BoringWindows
 import XMonad.Layout.Fullscreen (fullscreenFull, fullscreenManageHook)
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.ThreeColumns as ThreeColumns
 import XMonad.Layout.MouseResizableTile
+import XMonad.Layout.SubLayouts
+import XMonad.Layout.WindowNavigation
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.Cursor as C
-import XMonad.Util.EZConfig (mkKeymap, removeKeysP)
+import XMonad.Util.EZConfig (checkKeymap, mkKeymap, removeKeysP)
 import XMonad.Util.Run (runProcessWithInput, safeSpawn)
 import qualified XMonad.Util.Dmenu as Dmenu
 import XMonad.Hooks.DynamicProperty (dynamicPropertyChange)
@@ -65,11 +68,12 @@ myDynHook = composeAll
   ]
 
 myLayoutHook =
-    smartBorders $ desktopLayoutModifiers
-    (ThreeColumns.ThreeCol 1 (3/100) (1/3) |||
-     ThreeColumns.ThreeColMid 1 (3/100) (1/3) |||
-     mouseResizableTile |||
-     layoutHook desktopConfig)
+    -- smartBorders $ desktopLayoutModifiers
+    -- (ThreeColumns.ThreeCol 1 (3/100) (1/3) |||
+    --  ThreeColumns.ThreeColMid 1 (3/100) (1/3) |||
+    --  mouseResizableTile)
+    smartBorders $ windowNavigation $ subTabbed $ boringWindows $ desktopLayoutModifiers $
+    Tall 1 (3/100) (1/2)
 
 -- Which key to use as the default modMask
 -- mod1Mask: alt, mod4Mask: win
@@ -108,8 +112,7 @@ doXrandrThing =
                       "--pos", "0x0",
                       "--rotate", "normal"]
 
-myKeyBindings =
-  flip mkKeymap
+myKeys =
     [ ("<XF86AudioLowerVolume>", safeSpawn "amixer" ["--quiet", "set", "Master", "5%-", "unmute"])
     , ("<XF86AudioRaiseVolume>", safeSpawn "amixer" ["--quiet", "set", "Master", "5%+", "unmute"])
     , ("<XF86AudioMute>", safeSpawn "amixer" ["--quiet", "set", "Master", "toggle"])
@@ -119,7 +122,7 @@ myKeyBindings =
     , ("<XF86PowerOff>", quitWithWarning)
     , ("<XF86Display>", doXrandrThing)
     , ("M-g", goToSelected defaultGSConfig)
-    , ("C-M-l", safeSpawn "xset" ["s", "activate"])
+    , ("M-S-l", safeSpawn "xset" ["s", "activate"])
     , ("C-M-y", commands >>= runCommand)
     , ("S-M-p", safeSpawn "dmenu_run" (["-p", "cmdline:"] ++ dmenu_args))
     , ("S-M-n", spawnNetworkMenu)
@@ -127,8 +130,22 @@ myKeyBindings =
     , ("M-S-q", quitWithWarning)
     , ("M-a", sendMessage ShrinkSlave)
     , ("M-z", sendMessage ExpandSlave)
-    -- M-S-e is already taken
-    -- , ("M-S-e", safeSpawn "emacsclient" ["-n", "-c", "-a", ""])
+    , ("C-M-h", sendMessage $ pullGroup L)
+    , ("C-M-l", sendMessage $ pullGroup R)
+    , ("C-M-k", sendMessage $ pullGroup U)
+    , ("C-M-j", sendMessage $ pullGroup D)
+    , ("C-M-m", withFocused (sendMessage . MergeAll))
+    , ("C-M-u", withFocused (sendMessage . UnMerge))
+    , ("M-,", onGroup W.focusUp')
+    , ("M-.", onGroup W.focusDown')
+    , ("M-S-`", onGroup W.focusUp')
+    , ("M-`", onGroup W.focusDown')
+    , ("M-j", focusDown)
+    , ("M-k", focusUp)
+    , ("M-=", sendMessage $ IncMasterN 1)
+    , ("M--", sendMessage $ IncMasterN (-1))
+    , ("M-<Tab>", focusDown)
+    , ("M-S-<Tab>", focusUp)
     ] where dmenu_args = ["-i", "-l", "10", "-fn", defaultFont]
             commands :: X [(String, X ())]
             commands = do
@@ -163,15 +180,17 @@ myConfig =
         , handleEventHook desktopConfig
         , dynamicPropertyChange "WM_NAME" myDynHook
         ]
-    , startupHook = myStartupHook <+> startupHook desktopConfig
-    , keys = myKeyBindings <+> keys desktopConfig
+    , startupHook = do
+        return ()  -- (see checkKeymap docs for why this is here)
+        checkKeymap myConfig myKeys
+        (myStartupHook <+> startupHook desktopConfig)
+    , keys = flip mkKeymap myKeys <+> keys desktopConfig
     , normalBorderColor = "#263238"
     , focusedBorderColor = "#ea9560"
     } `removeKeysP` ["M-b"]
 
 main = do
-  ue <- getLoginName >>= getUserEntryForName
-  let shell = userShell ue
+  -- shell <- getLoginName >>= getUserEntryForName >>= return . userShell
 
   xmonad $ pagerHints $ myConfig {
     -- terminal = "emacsclient -n -c -a '' -e '(ansi-term \"" ++ shell ++ "\")'"
