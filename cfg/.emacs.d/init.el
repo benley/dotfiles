@@ -356,8 +356,12 @@ Default face is fixed so we only need to have the exceptions."
 ;; ctrl-backspace doesn't do anything in normal terminals (there's no ascii
 ;; code for it), and keeping it bound to backward-kill-word was confusing me
 ;; endlessly.  Let's unmap that.
-(define-key term-raw-map (kbd "<C-backspace>")
-  'term-send-backspace)
+(define-key term-raw-map (kbd "<C-backspace>") #'term-send-backspace)
+
+;; In shell-mode, make up and down arrows act more like a normal
+;; (i.e. readline) shell prompt
+(define-key shell-mode-map (kbd "<up>")   #'comint-previous-input)
+(define-key shell-mode-map (kbd "<down>") #'comint-next-input)
 
 ;;; Enable some languages that I want to use with org-babel
 (org-babel-do-load-languages
