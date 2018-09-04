@@ -379,6 +379,7 @@ Default face is fixed so we only need to have the exceptions."
 (setq org-footnote-define-inline t)
 (setq org-goto-auto-isearch nil)
 (setq org-log-done 'time)
+(setq org-startup-indented t)
 
 (setq org-link-abbrev-alist
       '(("jira" . "https://postmates.atlassian.net/browse/")))
