@@ -411,7 +411,8 @@ Default face is fixed so we only need to have the exceptions."
   (if window-system (hl-line-mode t))
   (idle-highlight-mode t)
   (highlight-indentation-mode t)
-  (setq-local show-trailing-whitespace t))
+  (setq-local show-trailing-whitespace t)
+  (linum-mode t))
 
 (add-hook 'prog-mode-hook #'my-prog-mode-hook)
 
@@ -428,7 +429,8 @@ Default face is fixed so we only need to have the exceptions."
               term-color-cyan
               term-color-white])
   ;; make URLs clickable
-  (goto-address-mode))
+  (goto-address-mode)
+  (linum-mode 0))
 
 ;; maybe hopefully work around the thing where ansi-term breaks any time I change themes?
 (add-hook 'term-mode-hook #'my-term-mode-hook)
