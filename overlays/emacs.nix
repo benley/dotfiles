@@ -82,7 +82,7 @@ with rec {
     org
 
   ]) ++ (with epkgs; [
-
+    emacs-libvterm
   ])
 
   );

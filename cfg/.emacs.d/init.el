@@ -208,6 +208,11 @@
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
+
+(setq vterm-keymap-exceptions
+      '("C-x" "M-x"))
+(require 'vterm)
+
 (use-package web-mode
   :init
   (defun custom-web-mode-hook ()
