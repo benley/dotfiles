@@ -64,6 +64,7 @@ with rec {
     smooth-scrolling
     # spaceline-all-the-icons
     # spaceline
+    terminal-here
     terraform-mode
     treemacs
     use-package

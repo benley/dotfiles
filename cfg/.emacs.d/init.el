@@ -194,6 +194,13 @@
   :config
   (ido-grid-mode +1))
 
+(use-package terminal-here
+  :init
+  (setq terminal-here-terminal-command '("konsole"))
+  :bind
+  ("C-c C-S-t C-S-t" . terminal-here-launch)
+  ("C-c C-S-t C-S-p" . terminal-here-project-launch))
+
 (use-package treemacs
   :bind
   ("C-c t" . treemacs-select-window))
