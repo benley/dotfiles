@@ -68,6 +68,8 @@ with rec {
     terraform-mode
     treemacs
     use-package
+    vdiff
+    vdiff-magit
     web-mode
     weechat
     xterm-color
