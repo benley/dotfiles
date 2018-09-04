@@ -444,6 +444,9 @@ Default face is fixed so we only need to have the exceptions."
 ;; (use-package eterm-256color
 ;;   :hook (term-mode . eterm-256color-mode))
 
+(setq js-indent-level 2)
+
+(setq woman-fill-frame t)
 
 ;; Set the X11 window title like "benley@mintaka: init.el (~/.emacs.d/init.el)"
 (setq-default frame-title-format
