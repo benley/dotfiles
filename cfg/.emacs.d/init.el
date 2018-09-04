@@ -437,6 +437,24 @@ Default face is fixed so we only need to have the exceptions."
 ;; (use-package eterm-256color
 ;;   :hook (term-mode . eterm-256color-mode))
 
+
+;; Set the X11 window title like "benley@mintaka: init.el (~/.emacs.d/init.el)"
+(setq-default frame-title-format
+              '(:eval
+                (format "%s@%s: %s %s"
+                        (or (file-remote-p default-directory 'user)
+                            user-real-login-name)
+                        (or (file-remote-p default-directory 'host)
+                            system-name)
+                        (buffer-name)
+                        (cond
+                         (buffer-file-truename
+                          (concat "(" buffer-file-truename ")"))
+                         (dired-directory
+                          (concat "{" dired-directory "}"))
+                         (t
+                          "[no file]")))))
+
 (load "~/.emacs.d/localonly.el")
 (provide 'init)
 ;;; init.el ends here
