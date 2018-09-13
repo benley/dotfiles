@@ -4,6 +4,7 @@ with rec {
   myEmacs = super.emacs.override {
     withGTK3 = true;
     withGTK2 = false;
+    imagemagick = self.imagemagick;  # why isn't this enabled by default?
   };
 
   emacsWithPackages = (self.emacsPackagesNgGen myEmacs).emacsWithPackages;

@@ -99,6 +99,7 @@
     htop
     httpie
     iftop
+    imagemagick  # so emacs can resize images
     iotop
     iw
     jq
