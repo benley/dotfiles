@@ -5,6 +5,10 @@ with { callPackage = super.callPackage; };
 {
   awsudo = super.pythonPackages.callPackage ../pkgs/awsudo { };
 
+  dunst = super.dunst.override {
+    dunstify = true;
+  };
+
   eless = super.writeScriptBin "eless" (builtins.readFile ../eless.sh);
 
   kubernetes-client = callPackage ../pkgs/kubernetes-client { };

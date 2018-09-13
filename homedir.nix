@@ -12,8 +12,5 @@ in
 
 mkHome {
   user = "benley";
-  files = genOverlay ./cfg //
-    {
-      ".config/dunst/dunstrc".content = pkgs.callPackage ./dunstrc.nix {};
-    };
+  files = genOverlay ./cfg;
 }

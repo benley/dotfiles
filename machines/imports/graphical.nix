@@ -5,6 +5,9 @@
     ./fonts.nix
   ];
 
+  services.dunst.enable = true;
+  services.dunst.config = pkgs.callPackage ../../dunstrc.nix {};
+
   # TODO: did this (or equivlent) get merged upstream for sddm?
   environment.pathsToLink = [ "/share" ];
 
@@ -51,7 +54,6 @@
 
     alsaUtils         # amixer, used in .xmonad.hs
     dmenu             # For xmonad
-    dunst             # notifications daemon
     #dzen2
     #haskellPackages.xmobar
     feh               # For scaling / setting background image
@@ -186,10 +188,9 @@
 
   services.upower.enable = true;
 
-  services.dbus.packages = with pkgs; [ gnome3.dconf dunst blueman ];
-  services.dbus.socketActivated = true;
+  services.dbus.packages = with pkgs; [ gnome3.dconf blueman ];
 
-  systemd.packages = with pkgs; [ dunst ];
+  services.dbus.socketActivated = true;
 
   systemd.user.services.xautolock = {
     description = "xautolock";

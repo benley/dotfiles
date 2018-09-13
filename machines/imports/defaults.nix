@@ -9,6 +9,7 @@
     ./users.nix
     ./yubikey.nix
     ../../modules/powermate.nix
+    ../../modules/dunst.nix
   ];
 
   boot.zfs.forceImportAll = false;
