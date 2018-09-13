@@ -154,7 +154,7 @@
 
 (use-package org-journal
   :config
-  (setq org-journal-dir "~/Dropbox/org/journal")
+  (setq org-journal-dir "~/benley@gmail.com/org/journal")
   (setq org-journal-file-format "%Y-%m-%d.org"))
 
 (use-package paredit)
@@ -414,13 +414,17 @@ Default face is fixed so we only need to have the exceptions."
 (setq org-M-RET-may-split-line nil)
 (setq org-agenda-start-on-weekday 0)
 (setq org-catch-invisible-edits 'error)
-(setq org-default-notes-file "~/Dropbox/org/notes.org")
-(setq org-directory "~/Dropbox/org")
+(setq org-default-notes-file "~/benley@gmail.com/org/notes.org")
+(setq org-directory "~/benley@gmail.com/org")
 (setq org-ellipsis "⤵")
 (setq org-footnote-define-inline t)
 (setq org-goto-auto-isearch nil)
 (setq org-log-done 'time)
 (setq org-startup-indented t)
+
+(setq org-agenda-files
+      '("~/benley@gmail.com/org" "~/benley@gmail.com/org/journal"
+        "~/benley@gmail.com/evernote_export"))
 
 (setq org-link-abbrev-alist
       '(("jira" . "https://postmates.atlassian.net/browse/")))
