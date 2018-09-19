@@ -282,7 +282,7 @@
 
 (tool-bar-mode 0)
 (menu-bar-mode 0)
-;; (global-linum-mode 1)                   ;; show line numbers
+(scroll-bar-mode 0)
 (global-hl-line-mode 1)                 ;; highlight current line
 (column-number-mode 1)                  ;; show column position in modeline
 (show-paren-mode 1)                     ;; highlight matching parens
@@ -463,7 +463,7 @@ Default face is fixed so we only need to have the exceptions."
   (idle-highlight-mode t)
   (highlight-indentation-mode t)
   (setq-local show-trailing-whitespace t)
-  (linum-mode t))
+  (setq-local display-line-numbers t))
 
 (add-hook 'prog-mode-hook #'my-prog-mode-hook)
 
