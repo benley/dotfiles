@@ -304,6 +304,8 @@
 ;; do not want
 (setq-default indent-tabs-mode nil)
 
+(setq vc-follow-symlinks t)
+
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil)
 
