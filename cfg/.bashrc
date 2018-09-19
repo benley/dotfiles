@@ -212,10 +212,19 @@ __prompt_command() {
   __git_ps1 "$before" "$after" "$git_status_fmt"
 }
 
-case $TERM in
-    dumb)   : ;; # fancy prompts break emacs tramp mode horribly
-    eterm*) : ;; # emacs ansi-term deals poorly with multi-line prompts
-    *) PROMPT_COMMAND="__prompt_command" ;;
+case "$TERM,$INSIDE_EMACS" in
+  dumb,|eterm*)
+    # emacs ansi-term deals poorly with multi-line prompts
+    # and fancy prompts break emacs tramp mode horribly
+    :
+    ;;
+  dumb,*,comint)
+    # in shell-mode, presumably with xterm-color handling enabled
+    TERM=eterm-256color
+    ;;
+  *)
+    PROMPT_COMMAND="__prompt_command"
+    ;;
 esac
 
 # Handled via nix

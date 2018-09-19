@@ -489,6 +489,17 @@ Default face is fixed so we only need to have the exceptions."
 ;; (use-package eterm-256color
 ;;   :hook (term-mode . eterm-256color-mode))
 
+(use-package xterm-color)
+
+(setq comint-output-filter-functions
+      (remove 'ansi-color-process-output comint-output-filter-functions))
+
+(defun my-shell-mode-hook ()
+  "Add xterm-color-filter to 'comint-preoutput-filter-functions, but only for shell-mode."
+  (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter nil t))
+
+(add-hook 'shell-mode-hook #'my-shell-mode-hook)
+
 (setq js-indent-level 2)
 
 (setq woman-fill-frame t)
