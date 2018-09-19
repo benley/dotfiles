@@ -90,6 +90,7 @@ with rec {
     vdiff-magit
     web-mode
     # weechat  # someday I'll start using this probably
+    which-key
     xterm-color
     yaml-mode
 

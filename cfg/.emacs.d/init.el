@@ -544,6 +544,13 @@ Default face is fixed so we only need to have the exceptions."
   :hook
   (pdf-view-mode . pdf-view-fit-page-to-window))
 
+(use-package which-key
+  :diminish
+  which-key-mode
+  :config
+  (which-key-mode t)
+  (which-key-setup-side-window-right-bottom))
+
 (load "~/.emacs.d/localonly.el")
 (provide 'init)
 ;;; init.el ends here
