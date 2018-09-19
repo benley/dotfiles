@@ -70,6 +70,7 @@ with rec {
     org-bullets
     org-jira
     org-journal
+    org-pdfview
     paredit
     powerline
     protobuf-mode
@@ -102,6 +103,7 @@ with rec {
 
   ]) ++ (with epkgs; [
     emacs-libvterm
+    pdf-tools
   ] ++ [
 
     (epkgs.melpaBuild my-jsonnet-mode)

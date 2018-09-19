@@ -527,6 +527,15 @@ Default face is fixed so we only need to have the exceptions."
                          (t
                           "[no file]")))))
 
+
+(use-package pdf-tools
+  :config
+  (pdf-tools-install)
+  :mode
+  ("\\.pdf\\'" . pdf-view-mode)
+  :hook
+  (pdf-view-mode . pdf-view-fit-page-to-window))
+
 (load "~/.emacs.d/localonly.el")
 (provide 'init)
 ;;; init.el ends here
