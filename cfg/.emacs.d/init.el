@@ -175,6 +175,7 @@
 (use-package protobuf-mode)
 
 (use-package rainbow-delimiters
+  :commands rainbow-delimiters-mode
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (save-place-mode t)
