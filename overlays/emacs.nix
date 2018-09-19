@@ -37,9 +37,9 @@ with rec {
     # company-emoji
     company-terraform
     diminish
-    docker
+    # docker
     edit-indirect
-    elscreen
+    # elscreen
     # emojify
     evil
     flycheck
@@ -58,9 +58,9 @@ with rec {
     json-mode
     # jsonnet-mode  # local copy
     jq-mode
-    kubernetes
+    # kubernetes  # build broken?
     magit
-    magit-gh-pulls
+    # magit-gh-pulls  # build broken?
     magit-popup  # a dep of magit, but I want the newer-than-melpaStable version
     markdown-mode
     # material-theme

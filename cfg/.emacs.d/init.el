@@ -109,12 +109,15 @@
 (use-package jq-mode
   :mode "\\.jq$")
 
+;; (use-package kubernetes
+;;   :commands (kubernetes-overview))
+
 (use-package magit
   :bind ("C-x g" . magit-status)
   :config (setq magit-completing-read-function #'magit-ido-completing-read))
 
-(use-package magit-gh-pulls
-  :hook (magit-mode . turn-on-magit-gh-pulls))
+;; (use-package magit-gh-pulls
+;;   :hook (magit-mode . turn-on-magit-gh-pulls))
 
 (defun enable-visual-line-mode ()
   "Does the obvious thing."
@@ -185,11 +188,11 @@
   ("M-X" . smex-major-mode-commands)
   ("C-c C-c M-x" . execute-extended-command))
 
-(use-package smooth-scrolling
-  :init
-  (setq smooth-scroll-margin 2)
-  :config
-  (smooth-scrolling-mode 1))
+;; (use-package smooth-scrolling
+;;   :init
+;;   (setq smooth-scroll-margin 2)
+;;   :config
+;;   (smooth-scrolling-mode 1))
 
 (use-package ido-grid-mode
   :init
