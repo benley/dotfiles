@@ -100,8 +100,7 @@
 (setq ido-ignore-directories '("\\`CVS/" "\\`\\.\\./" "\\`\\./" "bazel-.*/"))
 (setq ido-auto-merge-work-directories-length -1)
 
-;;(use-package jsonnet-mode)
-(require 'jsonnet-mode)
+(use-package jsonnet-mode)
 
 (use-package jq-mode
   :mode "\\.jq$")

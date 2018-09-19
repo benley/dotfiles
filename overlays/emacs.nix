@@ -9,6 +9,21 @@ with rec {
 
   emacsWithPackages = (self.emacsPackagesNgGen myEmacs).emacsWithPackages;
 
+
+  my-jsonnet-mode = {
+    pname = "jsonnet-mode";
+    version = "20180829.8";
+    src = super.fetchFromGitHub {
+      owner = "mgyucht";
+      repo = "jsonnet-mode";
+      rev = "160a35e21163cb88ab91293082afe7f12fc1ecfe";
+      sha256 = "1f99s38rn26glp0423isr9x90nmfng3cxgxmc4pw3jx4xh4allfv";
+    };
+    recipe = super.writeText "recipe" ''
+      (jsonnet-mode :fetcher github :repo "mgyucht/jsonnet-mode")
+    '';
+    packageRequires = [];
+  };
 };
 
 {
@@ -86,6 +101,10 @@ with rec {
 
   ]) ++ (with epkgs; [
     emacs-libvterm
+  ] ++ [
+
+    (epkgs.melpaBuild my-jsonnet-mode)
+
   ])
 
   );
