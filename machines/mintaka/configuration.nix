@@ -72,9 +72,13 @@ with {
   networking.hostName = "mintaka";
   networking.hostId = "8425e349";
 
-  # ports for steam in-home streaming
-  networking.firewall.allowedUDPPorts = [ 27031 27036 ];
-  networking.firewall.allowedTCPPorts = [ 27036 27037 ];
+  networking.firewall.allowedUDPPorts = [
+    27031 27036  # Steam in-home streaming
+  ];
+  networking.firewall.allowedTCPPorts = [
+    27036 27037  # Steam in-home streaming
+    51413  # transmission
+  ];
 
   networking.networkmanager.enable = true;
 
