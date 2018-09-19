@@ -264,7 +264,12 @@
   :hook
   (web-mode . custom-web-mode-hook))
 
-(use-package weechat)
+;; (use-package weechat
+;;   :config
+;;    (setq weechat-modules '(weechat-button weechat-complete weechat-image weechat-notifications))
+;;    (setq weechat-notification-mode t)
+;;    (setq weechat-return-always-replace-input nil)
+;;    (setq weechat-time-format "%H:%M"))
 
 (use-package yaml-mode)
 
