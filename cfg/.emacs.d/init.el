@@ -458,8 +458,8 @@ Default face is fixed so we only need to have the exceptions."
         )
       )
 
-(setq org-refile-targets
-      '((org-agenda-files :maxlevel . 3)))
+(setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
+(setq org-refile-use-outline-path 'file)
 
 (setq sh-basic-offset 2)
 (setq sh-indentation 2)
