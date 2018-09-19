@@ -80,6 +80,7 @@ with rec {
     smooth-scrolling
     # spaceline-all-the-icons
     # spaceline
+    spacemacs-theme
     terminal-here
     terraform-mode
     treemacs
