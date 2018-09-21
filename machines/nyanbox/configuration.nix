@@ -29,7 +29,16 @@ let secrets = import ./secrets.nix; in
 
   services.openssh.enable = true;
 
-  networking.firewall.allowedTCPPorts = [ 9090 3000 80 443 54191 ];
+  networking.firewall.allowedTCPPorts = [
+    9090 # Prometheus
+    3000 # Grafana
+    80 443
+    54191 # Transmission peering
+    139 445 # Samba
+  ];
+  networking.firewall.allowedUDPPorts = [
+    137 138 # Samba
+  ];
 
   system.stateVersion = "18.03";
 
@@ -112,9 +121,9 @@ let secrets = import ./secrets.nix; in
   services.nginx = {
     enable = true;
     upstreams = {
-      prometheus.servers = { "localhost:9090" = {}; };
-      grafana.servers = { "localhost:3000" = {}; };
-      transmission.servers = { "localhost:9091" = {}; };
+      prometheus.servers = { "127.0.0.1:9090" = {}; };
+      grafana.servers = { "127.0.0.1:3000" = {}; };
+      transmission.servers = { "127.0.0.1:9091" = {}; };
     };
 
     virtualHosts = {
@@ -211,5 +220,15 @@ let secrets = import ./secrets.nix; in
   services.plex = {
     enable = true;
     openFirewall = true;
+  };
+
+  services.samba = {
+    enable = true;
+    # Broken?
+    # syncPasswordsByPam = true;
+
+    shares.downloads = {
+      path = "/zfs/nyanbox/downloads";
+    };
   };
 }

@@ -141,6 +141,7 @@
     telnet
     tig
     tree
+    unrar
     unzip
     usbutils
     wakelan

@@ -15,15 +15,7 @@
  '(org-bullets-face-name (quote fixed-pitch))
  '(package-selected-packages
    (quote
-    (magit-gh-pulls alert slack yaml-mode xterm-color weechat web-mode use-package treemacs smooth-scrolling smex rainbow-delimiters protobuf-mode powerline paredit org-jira org-bullets org nix-sandbox nix-mode markdown-mode magit json-mode jq-mode ido-grid-mode ido-completing-read+ idle-highlight-mode htmlize haskell-mode go-mode gitignore-mode git-gutter flycheck-status-emoji flycheck-pos-tip flycheck-color-mode-line exwm evil elscreen edit-indirect diminish company-terraform bazel-mode base16-theme)))
- '(slack-request-timeout 500)
- '(weechat-modules
-   (quote
-    (weechat-button weechat-complete weechat-image weechat-notifications)))
- '(weechat-notification-mode t)
- '(weechat-return-always-replace-input nil)
- '(weechat-time-format "%H:%M")
- '(woman-fill-frame t))
+    (which-key pdf-tools vdiff-magit vdiff terminal-here jsonnet-mode spacemacs-theme magit-gh-pulls alert slack yaml-mode xterm-color weechat web-mode use-package treemacs smooth-scrolling smex rainbow-delimiters protobuf-mode powerline paredit org-jira org-bullets org nix-sandbox nix-mode markdown-mode magit json-mode jq-mode ido-grid-mode ido-completing-read+ idle-highlight-mode htmlize haskell-mode go-mode gitignore-mode git-gutter flycheck-status-emoji flycheck-pos-tip flycheck-color-mode-line exwm evil elscreen edit-indirect diminish company-terraform bazel-mode base16-theme))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

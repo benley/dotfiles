@@ -40,12 +40,11 @@
 
 (require 'ansi-view)
 
-;; (use-package base16-theme
-;;   :config (load-theme 'base16-materia t))
-
-(use-package spacemacs-common
-    :ensure spacemacs-theme
-    :config (load-theme 'spacemacs-dark t))
+(if (display-graphic-p)
+    (use-package spacemacs-common
+      :ensure spacemacs-theme
+      :config (load-theme 'spacemacs-dark t))
+  (xterm-mouse-mode t))
 
 (use-package bazel-mode
   :mode "BUILD\\'" "WORKSPACE\\'" "\\.bzl\\'")

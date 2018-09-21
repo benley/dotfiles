@@ -40,12 +40,12 @@ with { callPackage = super.callPackage; };
 
   plex = super.plex.overrideAttrs (x: rec {
     name = "plex-${version}";
-    version = "1.13.4.5251";
-    vsnHash = "2e6e8f841";
+    version = "1.13.5.5291";
+    vsnHash = "6fa5e50a8";
 
     src = super.fetchurl {
       url = "https://downloads.plex.tv/plex-media-server/${version}-${vsnHash}/plexmediaserver-${version}-${vsnHash}.x86_64.rpm";
-      sha256 = "4be3f55b246b0af81fdcdcf49329926ed2d54e374b0544d5c090718af85e161a";
+      sha256 = "dd76984df76c64e02e7af9200aa4f0e3a0dac29196118e6c134e16de3b3c19c0";
     };
   });
 
