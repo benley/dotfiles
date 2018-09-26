@@ -93,6 +93,17 @@ let secrets = import ./secrets.nix; in
 
   services.smartd = {
     enable = true;
+    autodetect = false;
+    # Don't check disks in sleep or standby mode, unless smartd has
+    # already skipped the previous 25 checks for that reason.
+    defaults.monitored = "-a -n standby,25";
+    devices = [
+      { device = "/dev/sda"; options = "-d sat"; }
+      { device = "/dev/sdb"; options = "-d sat"; }
+      { device = "/dev/sdc"; options = "-d sat"; }
+      { device = "/dev/sdd"; options = "-d sat"; }
+      { device = "/dev/sde"; options = "-d sat"; }
+    ];
   };
 
   systemd.services.grafana = {
