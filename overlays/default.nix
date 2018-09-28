@@ -5,6 +5,8 @@ with { callPackage = super.callPackage; };
 {
   awsudo = super.pythonPackages.callPackage ../pkgs/awsudo { };
 
+  battery-monitor = super.pythonPackages.callPackage ../pkgs/battery-monitor { };
+
   dunst = super.dunst.override {
     dunstify = true;
   };
