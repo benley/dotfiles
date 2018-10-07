@@ -132,7 +132,12 @@
 (add-to-list 'auto-mode-alist (cons "\\.mtail$" #'mtail-mode))
 (add-to-list 'auto-mode-alist (cons "\\.em$" #'mtail-mode))
 
-(use-package nix-mode)
+(use-package nix-mode
+  :config
+  (setq nix-indent-function "nix-indent-line")
+  :mode
+  ("\\.nix\\'" . #'nix-mode)
+  ("\\.drv\\'" . #'nix-drv-mode))
 
 (use-package nix-sandbox)
 (require 'nix-sandbox)
