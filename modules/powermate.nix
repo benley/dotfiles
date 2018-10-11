@@ -13,7 +13,11 @@ let cfg = config.services.powermate; in
       description = "Powermate knob controller";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
-      serviceConfig.ExecStart = "${pkgs.powermate}/bin/powermate";
+      serviceConfig = {
+        ExecStart = "${pkgs.powermate}/bin/powermate";
+        RestartSec = "2000ms";
+        Restart = "on-failure";
+      };
     };
 
     services.udev.packages = [

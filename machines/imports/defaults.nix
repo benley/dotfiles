@@ -72,7 +72,7 @@
     acpi
     awscli
     awsudo
-    bazel
+    # bazel  # I'll install this into my user profile
     binutils # strings, strip, ar, as, ...
     bc
     cabal-install
@@ -90,8 +90,8 @@
     google-cloud-sdk
     gotags
     haskellPackages.ghc
-    # haskellPackages.ghc-mod
-    haskellPackages.hdevtools
+    # haskellPackages.ghc-mod  # broken?
+    # haskellPackages.hdevtools # broken?
     haskellPackages.hindent
     haskellPackages.hlint
     haskellPackages.ShellCheck
@@ -117,7 +117,6 @@
     # neovim
     nethogs
     nix-prefetch-scripts
-    nix-repl
     nmap
     nodePackages.js-yaml
     nodePackages.jshint
@@ -131,7 +130,7 @@
     pythonPackages.autopep8
     pythonPackages.flake8
     pythonPackages.pep8
-    pythonPackages.pylint
+    python3Packages.pylint
     pythonPackages.virtualenv
     pythonPackages.virtualenvwrapper
     socat
@@ -177,4 +176,8 @@
   services.kbfs.enable = true;
 
   networking.networkmanager.enableStrongSwan = true;
+
+  services.logind.extraConfig = ''
+    HandlePowerKey=suspend
+  '';
 }

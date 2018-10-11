@@ -11,17 +11,18 @@ with {
   #     }
   #   ];
   # };
-  x1c_patched_dsdt = pkgs.stdenv.mkDerivation {
-    name = "x1c-patched-dsdt";
-    src = ./.;
-    buildInputs = [ pkgs.libarchive ];
-    installPhase = ''
-      mkdir -p kernel/firmware/acpi
-      cp ${./dsdt.aml} kernel/firmware/acpi/dsdt.aml
-      mkdir -p $out
-      echo kernel/firmware/acpi/dsdt.aml | bsdcpio -v -o -H newc -R 0:0 > $out/x1c-dsdt.img
-    '';
-  };
+
+  # x1c_patched_dsdt = pkgs.stdenv.mkDerivation {
+  #   name = "x1c-patched-dsdt";
+  #   src = ./.;
+  #   buildInputs = [ pkgs.libarchive ];
+  #   installPhase = ''
+  #     mkdir -p kernel/firmware/acpi
+  #     cp ${./dsdt.aml} kernel/firmware/acpi/dsdt.aml
+  #     mkdir -p $out
+  #     echo kernel/firmware/acpi/dsdt.aml | bsdcpio -v -o -H newc -R 0:0 > $out/x1c-dsdt.img
+  #   '';
+  # };
 };
 
 {
@@ -33,6 +34,8 @@ with {
     ../imports/wacom.nix
     ../imports/workstuff.nix
   ];
+
+  boot.kernelPackages = pkgs.linuxPackages_4_18;
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -57,7 +60,7 @@ with {
     echo lz4 > /sys/module/zswap/parameters/compressor
   '';
 
-  boot.initrd.prepend = ["${x1c_patched_dsdt}/x1c-dsdt.img"];
+  # boot.initrd.prepend = ["${x1c_patched_dsdt}/x1c-dsdt.img"];
 
   boot.initrd.availableKernelModules = [
     "lz4" "lz4_compress" "z3fold"
@@ -194,4 +197,12 @@ with {
     wantedBy = [ "timers.target" ];
   };
 
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.hplipWithPlugin ];
+    # gutenprint = true;
+  };
+
+
+  services.fwupd.enable = true;
 }

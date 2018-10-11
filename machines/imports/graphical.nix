@@ -140,7 +140,7 @@
     enable = true;
     updateDbusEnvironment = true;
     desktopManager.gnome3.enable = true;
-
+    displayManager.gdm.enable = false;
     displayManager.lightdm.enable = true;
     displayManager.lightdm.background = "${/home/benley/Downloads/Clean-Desktop-Wallpaper-12.jpg}";
 
