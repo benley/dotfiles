@@ -5,6 +5,7 @@ with rec {
     withGTK3 = true;
     withGTK2 = false;
     imagemagick = self.imagemagick;  # why isn't this enabled by default?
+    # withXwidgets = true;  # Cool, but I haven't found much of a use for it
   };
 
   emacsWithPackages = (self.emacsPackagesNgGen myEmacs).emacsWithPackages;
@@ -31,7 +32,7 @@ with rec {
 
   ]) ++ (with epkgs.melpaPackages; [
 
-    base16-theme
+    # base16-theme
     bazel-mode
     company
     # company-emoji
@@ -42,6 +43,7 @@ with rec {
     # elscreen
     # emojify
     evil
+    flx-ido
     flycheck
     flycheck-pos-tip
     flycheck-color-mode-line
@@ -71,8 +73,10 @@ with rec {
     org-jira
     org-journal
     org-pdfview
+    ox-gfm
     paredit
     powerline
+    projectile
     protobuf-mode
     rainbow-delimiters
     # slack
@@ -82,12 +86,17 @@ with rec {
     # spaceline-all-the-icons
     # spaceline
     spacemacs-theme
+    # slime
+    # stumpwm-mode
+    tabbar
     terminal-here
     terraform-mode
     treemacs
+    treemacs-projectile
     use-package
     vdiff
     vdiff-magit
+    vimrc-mode
     web-mode
     # weechat  # someday I'll start using this probably
     which-key

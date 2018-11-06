@@ -36,15 +36,14 @@
 
 (require 'use-package)
 
-(setq use-package-always-ensure t)
+;; (setq use-package-always-ensure t)
 
 (require 'ansi-view)
 
-(if (display-graphic-p)
-    (use-package spacemacs-common
-      :ensure spacemacs-theme
-      :config (load-theme 'spacemacs-dark t))
-  (xterm-mouse-mode t))
+(use-package spacemacs-common
+  :ensure spacemacs-theme
+  :config (load-theme 'spacemacs-dark t))
+(xterm-mouse-mode t)
 
 (use-package bazel-mode
   :mode "BUILD\\'" "WORKSPACE\\'" "\\.bzl\\'")
@@ -99,9 +98,14 @@
 
 (ido-mode 1)
 (ido-everywhere 1)
-(setq ido-enable-flex-matching 1)
+(setq ido-enable-flex-matching t)
+(setq ido-use-faces nil)
 (setq ido-ignore-directories '("\\`CVS/" "\\`\\.\\./" "\\`\\./" "bazel-.*/"))
 (setq ido-auto-merge-work-directories-length -1)
+
+(use-package flx-ido
+  :config
+  (flx-ido-mode 1))
 
 (use-package jsonnet-mode)
 
@@ -118,15 +122,15 @@
 ;; (use-package magit-gh-pulls
 ;;   :hook (magit-mode . turn-on-magit-gh-pulls))
 
-(defun enable-visual-line-mode ()
-  "Does the obvious thing."
+(defun my-markdown-mode-hook ()
+  "Enable visual line mode."
   (visual-line-mode 1))
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
   :mode ("\\.md\\'" . gfm-mode)
   :config (setq markdown-command "pandoc")
-  :hook (gfm-mode . enable-visual-line-mode))
+  :hook (gfm-mode . my-markdown-mode-hook))
 
 (require 'mtail-mode)
 (add-to-list 'auto-mode-alist (cons "\\.mtail$" #'mtail-mode))
@@ -134,7 +138,7 @@
 
 (use-package nix-mode
   :config
-  (setq nix-indent-function "nix-indent-line")
+  (setq nix-indent-function #'nix-indent-line)
   :mode
   ("\\.nix\\'" . #'nix-mode)
   ("\\.drv\\'" . #'nix-drv-mode))
@@ -157,10 +161,9 @@
 (setq flycheck-executable-find
       (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd)))
 
-;; This is _really slow_ for some reason
-;; (use-package org-bullets
-;;   :hook (org-mode . org-bullets-mode)
-;;   :config (setq (org-bullets-face-name (quote fixed-pitch))))
+(use-package org-bullets
+  :hook
+  (org-mode . org-bullets-mode))
 
 (use-package org-journal
   :config
@@ -208,6 +211,7 @@
 (use-package terminal-here
   :init
   (setq terminal-here-terminal-command '("konsole"))
+  (setq terminal-here-project-root-function #'projectile-project-root)
   :bind
   ("C-c C-S-t C-S-t" . terminal-here-launch)
   ("C-c C-S-t C-S-p" . terminal-here-project-launch))
@@ -223,31 +227,31 @@
   :config
   (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map))
 
-(use-package vdiff-magit)
+(use-package vdiff-magit
+  :config
+  (define-key magit-mode-map "e" #'vdiff-magit-dwim)
+  (define-key magit-mode-map "E" #'vdiff-magit-popup)
+  (setcdr (assoc ?e (plist-get magit-dispatch-popup :actions))
+          '("vdiff dwim" #'vdiff-magit-dwim))
+  (setcdr (assoc ?E (plist-get magit-dispatch-popup :actions))
+          '("vdiff popup" #'vdiff-magit-popup))
+  ;; This flag will default to using ediff for merges. vdiff-magit does not yet
+  ;; support 3-way merges. Please see the docstring of this variable for more
+  ;; information
+  ;; (setq vdiff-magit-use-ediff-for-merges nil)
 
-(define-key magit-mode-map "e" #'vdiff-magit-dwim)
-(define-key magit-mode-map "E" #'vdiff-magit-popup)
-(setcdr (assoc ?e (plist-get magit-dispatch-popup :actions))
-        '("vdiff dwim" #'vdiff-magit-dwim))
-(setcdr (assoc ?E (plist-get magit-dispatch-popup :actions))
-        '("vdiff popup" #'vdiff-magit-popup))
-;; This flag will default to using ediff for merges. vdiff-magit does not yet
-;; support 3-way merges. Please see the docstring of this variable for more
-;; information
-;; (setq vdiff-magit-use-ediff-for-merges nil)
+  ;; Whether vdiff-magit-dwim runs show variants on hunks.  If non-nil,
+  ;; vdiff-magit-show-staged or vdiff-magit-show-unstaged are called based on what
+  ;; section the hunk is in.  Otherwise, vdiff-magit-dwim runs vdiff-magit-stage
+  ;; when point is on an uncommitted hunk.  (setq vdiff-magit-dwim-show-on-hunks
+  ;; nil)
 
-;; Whether vdiff-magit-dwim runs show variants on hunks.  If non-nil,
-;; vdiff-magit-show-staged or vdiff-magit-show-unstaged are called based on what
-;; section the hunk is in.  Otherwise, vdiff-magit-dwim runs vdiff-magit-stage
-;; when point is on an uncommitted hunk.  (setq vdiff-magit-dwim-show-on-hunks
-;; nil)
+  ;; Whether vdiff-magit-show-stash shows the state of the index.
+  ;; (setq vdiff-magit-show-stash-with-index t)
 
-;; Whether vdiff-magit-show-stash shows the state of the index.
-;; (setq vdiff-magit-show-stash-with-index t)
-
-;; Only use two buffers (working file and index) for vdiff-magit-stage
-;; (setq vdiff-magit-stage-is-2way nil)
-
+  ;; Only use two buffers (working file and index) for vdiff-magit-stage
+  ;; (setq vdiff-magit-stage-is-2way nil)
+  )
 
 (setq vterm-keymap-exceptions
       '("C-x" "M-x"))
@@ -340,7 +344,7 @@
 (global-set-key "\C-cl" #'org-store-link)
 (global-set-key "\C-ca" #'org-agenda)
 (global-set-key "\C-cc" #'org-capture)
-(global-set-key "\C-cb" #'org-iswitchb)
+;; (global-set-key "\C-cb" #'org-switchb)
 
 ;; Scrolling
 (global-set-key [up] (lambda () (interactive) (previous-line)))
@@ -354,6 +358,12 @@
 ;; https://github.com/emacs-mirror/emacs/commit/88f43dc30cb8d71830e409973cafbaca13a66a45
 (global-set-key [mouse-6] #'ignore)
 (global-set-key [mouse-7] #'ignore)
+
+;; Window movement
+(global-set-key (kbd "s-h") #'windmove-left)
+(global-set-key (kbd "s-j") #'windmove-down)
+(global-set-key (kbd "s-k") #'windmove-up)
+(global-set-key (kbd "s-l") #'windmove-right)
 
 ;; FONTS
 ;; -----
@@ -401,7 +411,7 @@ Default face is fixed so we only need to have the exceptions."
 
 (require 'term)
 (defun expose-global-binding-in-term (binding)
-  "Expose BINDING from the global keymap in term-mode."
+  "Expose BINDING from the global keymap in `term-mode'."
   (define-key term-raw-map binding
     (lookup-key (current-global-map) binding)))
 
@@ -429,6 +439,16 @@ Default face is fixed so we only need to have the exceptions."
    (shell . t)
    (jq . t)))
 
+;; (part of org-mode) make org bullets clickable, etc
+(require 'org-mouse)
+
+;; (local stuff) add github:... links to org mode
+(require 'org-github-links)
+
+;; ox-gfm: Export to github-flavored markdown
+(use-package ox-gfm :ensure t)
+
+(setq org-special-ctrl-a/e t)
 (setq org-M-RET-may-split-line nil)
 (setq org-agenda-start-on-weekday 0)
 (setq org-catch-invisible-edits 'error)
@@ -439,13 +459,20 @@ Default face is fixed so we only need to have the exceptions."
 (setq org-goto-auto-isearch nil)
 (setq org-log-done 'time)
 (setq org-startup-indented t)
+(setq org-fontify-whole-heading-line t)
 
 (setq org-agenda-files
-      '("~/benley@gmail.com/org" "~/benley@gmail.com/org/journal"
-        "~/benley@gmail.com/evernote_export"))
+      '("~/benley@gmail.com/org"
+        "~/benley@gmail.com/org/journal"
+        "~/benley@gmail.com/evernote_export"
+        "~/.org-jira"))
 
 (setq org-link-abbrev-alist
-      '(("jira" . "https://postmates.atlassian.net/browse/")))
+      '(
+        ;; I think org-jira covers this:
+        ;; ("jira" . "https://postmates.atlassian.net/browse/")
+        ("gmap" . "https://maps.google.com/maps?q=%s")
+        ))
 
 (setq org-capture-templates
       '(
@@ -470,7 +497,7 @@ Default face is fixed so we only need to have the exceptions."
 (setq sh-learn-basic-offset 'usually)
 
 (defun my-prog-mode-hook ()
-  "Setup stuff for 'prog-mode' derivatives."
+  "Setup stuff for `prog-mode' derivatives."
   (if window-system (hl-line-mode t))
   (idle-highlight-mode t)
   (highlight-indentation-mode t)
@@ -480,8 +507,24 @@ Default face is fixed so we only need to have the exceptions."
 (add-hook 'prog-mode-hook #'my-prog-mode-hook)
 
 (defun my-term-mode-hook ()
-  "My term-mode hook."
-  ;;Attempt to unfuck ansi-term's colors after changing themes
+  "My `term-mode' hook."
+  (goto-address-mode)  ;; Make URLs clickable
+  (linum-mode 0))      ;; No line numbers in terminals
+
+;; maybe hopefully work around the thing where ansi-term breaks any time I change themes?
+(add-hook 'term-mode-hook #'my-term-mode-hook)
+
+;; Define a new hook to be run after changing themes:
+(defvar after-load-theme-hook nil
+  "Hook run after a color theme is loaded using `load-theme'.")
+
+(defadvice load-theme (after run-after-load-theme-hook activate)
+  "Run `after-load-theme-hook'."
+  (run-hooks 'after-load-theme-hook))
+
+;; What I want to actually run after load-them:
+(defun fix-ansi-term-after-load-theme ()
+  "Attempt to unfuck `ansi-term' after changing themes."
   (setq ansi-term-color-vector
         [term term-color-black
               term-color-red
@@ -490,13 +533,9 @@ Default face is fixed so we only need to have the exceptions."
               term-color-blue
               term-color-magenta
               term-color-cyan
-              term-color-white])
-  ;; make URLs clickable
-  (goto-address-mode)
-  (linum-mode 0))
-
-;; maybe hopefully work around the thing where ansi-term breaks any time I change themes?
-(add-hook 'term-mode-hook #'my-term-mode-hook)
+              term-color-white]))
+;; Add my function to that new hook:
+(add-hook 'after-load-theme-hook #'fix-ansi-term-after-load-theme)
 
 (defun my-term-exec-hook ()
   "Try to make terminals work better with unicode I guess."
@@ -513,23 +552,26 @@ Default face is fixed so we only need to have the exceptions."
       (remove 'ansi-color-process-output comint-output-filter-functions))
 
 (defun my-shell-mode-hook ()
-  "Add xterm-color-filter to 'comint-preoutput-filter-functions, but only for shell-mode."
+  "Add xterm-color-filter to `comint-preoutput-filter-functions'.
+This is what makes 256-color output work in shell-mode."
   (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter nil t))
 
 (add-hook 'shell-mode-hook #'my-shell-mode-hook)
+
+(setq async-shell-command-buffer 'new-buffer)
 
 (setq js-indent-level 2)
 
 (setq woman-fill-frame t)
 
-;; Set the X11 window title like "benley@mintaka: init.el (~/.emacs.d/init.el)"
+;; Set the X11 window title like "emacs: init.el (~/.emacs.d/init.el)"
 (setq-default frame-title-format
               '(:eval
-                (format "%s@%s: %s %s"
-                        (or (file-remote-p default-directory 'user)
-                            user-real-login-name)
-                        (or (file-remote-p default-directory 'host)
-                            system-name)
+                (format "emacs: %s %s"
+                        ;; (or (file-remote-p default-directory 'user)
+                        ;;     user-real-login-name)
+                        ;; (or (file-remote-p default-directory 'host)
+                        ;;     system-name)
                         (buffer-name)
                         (cond
                          (buffer-file-truename
@@ -538,7 +580,6 @@ Default face is fixed so we only need to have the exceptions."
                           (concat "{" dired-directory "}"))
                          (t
                           "[no file]")))))
-
 
 (use-package pdf-tools
   :config
@@ -554,6 +595,57 @@ Default face is fixed so we only need to have the exceptions."
   :config
   (which-key-mode t)
   (which-key-setup-side-window-right-bottom))
+
+(use-package stumpwm-mode)
+
+;; (use-package frames-only-mode
+;;   :ensure t
+;;   :config
+;;   (frames-only-mode t))
+
+(use-package slime
+  :ensure t
+  :init
+  (setq slime-contribs '(slime-fancy)))
+
+(setq calendar-latitude "42.3601")
+(setq calendar-longitude "-71.0589")
+(setq calendar-location-name "Boston, MA")
+
+(defun my-tabbar-buffer-groups-by-project ()
+  "Group tabbar buffers by projectile project."
+  (list
+   (cond
+    ((memq major-mode '(eshell-mode term-mode shell-mode))
+     (if (projectile-project-p)
+         (projectile-project-name)
+       "Common"))
+    ((string-equal "*" (substring (buffer-name) 0 1))
+     "Emacs")
+    ((memq major-mode '(fundamental-mode))
+     "Emacs")
+    ((memq major-mode '(org-mode org-agenda-mode diary-mode org-journal-mode))
+     "OrgMode")
+    (t
+     (if (projectile-project-p)
+         (projectile-project-name)
+       "Common")))))
+
+(use-package tabbar
+  :config
+  (setq tabbar-buffer-groups-function 'my-tabbar-buffer-groups-by-project)
+  (tabbar-mode 1))
+
+(use-package projectile
+  :init
+  (setq projectile-project-search-path '("~/p/" "~/pm/"))
+  :config
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode 1))
+
+(use-package treemacs-projectile)
+(server-start)
+(load "~/.emacs.d/exwm.el")
 
 (load "~/.emacs.d/localonly.el")
 (provide 'init)
