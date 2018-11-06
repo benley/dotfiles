@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 import Control.Monad (when)
 import qualified Data.Map
 import Data.Monoid (mconcat)
@@ -15,16 +17,21 @@ import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
 import XMonad.Hooks.ManageHelpers (doCenterFloat, isDialog, isInProperty, doFullFloat)
 import XMonad.Hooks.Place (placeHook, simpleSmart)
 import XMonad.Layout.BoringWindows
+import XMonad.Layout.Decoration
 import XMonad.Layout.Fullscreen (fullscreenFull, fullscreenManageHook)
+import XMonad.Layout.LayoutModifier
 import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.Simplest
 import XMonad.Layout.ThreeColumns as ThreeColumns
 import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.SubLayouts
+import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.Cursor as C
 import XMonad.Util.EZConfig (checkKeymap, mkKeymap, removeKeysP)
 import XMonad.Util.Run (runProcessWithInput, safeSpawn)
+import XMonad.Util.Themes
 import qualified XMonad.Util.Dmenu as Dmenu
 import XMonad.Hooks.DynamicProperty (dynamicPropertyChange)
 
@@ -49,6 +56,8 @@ myManageHook = composeAll
   , className =? "krunner"        --> doCenterFloat
   , className =? "Nm-connection-editor" --> doFloat
   , className =? "Kupfer.py"      --> doCenterFloat
+  , title     =? "PlayOnLinux"    --> doFloat
+  -- , className =? "BridgeConstructor.x86" --> doFullFloat
   , title     =? "Slack Call Minipanel" --> (doFloat <+> doCopyToAll)
   , title     =? "Steam Keyboard" --> doIgnore
   -- I honestly don't know what the swapMaster part accomplishes here
@@ -67,13 +76,26 @@ myDynHook = composeAll
   , title =? "Signal" <&&> className =? "Google-chrome" --> doF (W.shift "7")
   ]
 
+subTabbedWithTheme :: (Eq a, LayoutModifier (Sublayout Simplest) a, LayoutClass l a)
+                   => Theme
+                   -> l a
+                   -> ModifiedLayout (Decoration TabbedDecoration DefaultShrinker) (ModifiedLayout (Sublayout Simplest) l) a
+subTabbedWithTheme t x = addTabs shrinkText t $ subLayout [] Simplest x
+
 myLayoutHook =
-    -- smartBorders $ desktopLayoutModifiers
-    -- (ThreeColumns.ThreeCol 1 (3/100) (1/3) |||
-    --  ThreeColumns.ThreeColMid 1 (3/100) (1/3) |||
-    --  mouseResizableTile)
-    smartBorders $ windowNavigation $ subTabbed $ boringWindows $ desktopLayoutModifiers $
+    windowNavigation $
+    subTabbedWithTheme tabTheme $ -- (theme kavonFireTheme) $
+    boringWindows $
+    desktopLayoutModifiers $
+    smartBorders $
+
     Tall 1 (3/100) (1/2)
+
+    where tabTheme = def { decoHeight = 30
+                         , activeColor = "#ea9560"
+                         , activeTextColor = "#31363b"
+                         , fontName = "xft: Noto Sans-10"
+                         }
 
 -- Which key to use as the default modMask
 -- mod1Mask: alt, mod4Mask: win
@@ -113,16 +135,17 @@ doXrandrThing =
                       "--rotate", "normal"]
 
 myKeys =
+  -- keymap reference: http://hackage.haskell.org/package/xmonad-contrib-0.14/docs/XMonad-Util-EZConfig.html#v:mkKeymap
     [ ("<XF86AudioLowerVolume>", safeSpawn "amixer" ["--quiet", "set", "Master", "5%-", "unmute"])
     , ("<XF86AudioRaiseVolume>", safeSpawn "amixer" ["--quiet", "set", "Master", "5%+", "unmute"])
-    , ("<XF86AudioMute>", safeSpawn "amixer" ["--quiet", "set", "Master", "toggle"])
-    , ("<XF86AudioMicMute>", safeSpawn "amixer" ["--quiet", "set", "Capture", "toggle"])
-    , ("<XF86MonBrightnessUp>", doBrightnessUp)
+    , ("<XF86AudioMute>",        safeSpawn "amixer" ["--quiet", "set", "Master", "toggle"])
+    , ("<XF86AudioMicMute>",     safeSpawn "amixer" ["--quiet", "set", "Capture", "toggle"])
+    , ("<XF86MonBrightnessUp>",   doBrightnessUp)
     , ("<XF86MonBrightnessDown>", doBrightnessDown)
     , ("<XF86PowerOff>", quitWithWarning)
     , ("<XF86Display>", doXrandrThing)
     , ("M-g", goToSelected defaultGSConfig)
-    , ("M-S-l", safeSpawn "xset" ["s", "activate"])
+    , ("M-M1-S-l", safeSpawn "xset" ["s", "activate"])
     , ("C-M-y", commands >>= runCommand)
     , ("S-M-p", safeSpawn "dmenu_run" (["-p", "cmdline:"] ++ dmenu_args))
     , ("S-M-n", spawnNetworkMenu)
@@ -131,17 +154,27 @@ myKeys =
     , ("M-a", sendMessage ShrinkSlave)
     , ("M-z", sendMessage ExpandSlave)
     , ("C-M-h", sendMessage $ pullGroup L)
-    , ("C-M-l", sendMessage $ pullGroup R)
-    , ("C-M-k", sendMessage $ pullGroup U)
     , ("C-M-j", sendMessage $ pullGroup D)
+    , ("C-M-k", sendMessage $ pullGroup U)
+    , ("C-M-l", sendMessage $ pullGroup R)
     , ("C-M-m", withFocused (sendMessage . MergeAll))
     , ("C-M-u", withFocused (sendMessage . UnMerge))
-    , ("M-,", onGroup W.focusUp')
-    , ("M-.", onGroup W.focusDown')
-    , ("M-S-`", onGroup W.focusUp')
-    , ("M-`", onGroup W.focusDown')
-    , ("M-j", focusDown)
-    , ("M-k", focusUp)
+    , ("M-,",   onGroup W.focusUp')
+    , ("M-.",   onGroup W.focusDown')
+    -- , ("M-S-`", onGroup W.focusUp')
+    -- , ("M-`",   onGroup W.focusDown')
+    , ("M-S-,", windows W.swapUp)
+    , ("M-S-.", windows W.swapDown)
+    , ("M-M1-h", sendMessage Shrink)
+    , ("M-M1-l", sendMessage Expand)
+    , ("M-h", sendMessage $ Go L)
+    , ("M-j", sendMessage $ Go D)
+    , ("M-k", sendMessage $ Go U)
+    , ("M-l", sendMessage $ Go R)
+    , ("M-S-h", sendMessage $ Swap L)
+    , ("M-S-j", sendMessage $ Swap D)
+    , ("M-S-k", sendMessage $ Swap U)
+    , ("M-S-l", sendMessage $ Swap R)
     , ("M-=", sendMessage $ IncMasterN 1)
     , ("M--", sendMessage $ IncMasterN (-1))
     , ("M-<Tab>", focusDown)
