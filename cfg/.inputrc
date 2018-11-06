@@ -1,3 +1,5 @@
+# -*- conf -*-
+
 # http://cnswww.cns.cwru.edu/php/chet/readline/rluserman.html#SEC10
 # http://www.gnu.org/software/bash/manual/html_node/Miscellaneous-Commands.html
 
@@ -14,7 +16,7 @@ set skip-completed-text on
 # Immediately add / after tab-completed directories that are symlinks
 #set mark-symlinked-directories on
 
-# Holy cow awesome
+# When I type a close-paren, momentarily highlight the matching open-paren
 set blink-matching-paren on
 
 # Colorful completion list display
@@ -33,16 +35,11 @@ set editing-mode emacs
 
 # Macros that are convenient for shell interaction
 $if Bash
+
+set enable-bracketed-paste on
+
 # edit the path
 "\C-xp": "PATH=${PATH}\e\C-e\C-a\ef\C-f"
-
-# insert open and close double quotes
-# and move to just after the open quote
-#"\C-x\"": "\"\"\C-b"
-
-# insert a backslash (testing backslash escapes
-# in sequences and macros)
-#"\C-x\\": "\\"
 
 # Add a binding to refresh the line (normally not bound to a key)
 "\C-xr": redraw-current-line
