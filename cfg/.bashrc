@@ -177,7 +177,7 @@ __prompt_command() {
   esac
 
   # first line:  right-aligned HH:MM:SS, then put the cursor back at column 0
-  before="$(printf "%$((COLUMNS - 8))s")\t\r"
+  before+="$(printf "%$((COLUMNS - 8))s")\t\r"
   # ... then left-aligned half of the first line
   before+="┌─( ${colors[brightgreen]}\u${colors[normal]}@\h "
   before+=")─( ${colors[brightblue]}\w${colors[normal]} )"
