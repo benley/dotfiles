@@ -2,29 +2,6 @@
 
 { config, pkgs, lib, ... }:
 
-with {
-  # x1c_patched_dsdt = pkgs.makeInitrd {
-  #   compressor = "cat";
-  #   contents = [
-  #     { object = ./dsdt.aml;
-  #       symlink = "kernel/firmware/acpi/dsdt.aml";
-  #     }
-  #   ];
-  # };
-
-  # x1c_patched_dsdt = pkgs.stdenv.mkDerivation {
-  #   name = "x1c-patched-dsdt";
-  #   src = ./.;
-  #   buildInputs = [ pkgs.libarchive ];
-  #   installPhase = ''
-  #     mkdir -p kernel/firmware/acpi
-  #     cp ${./dsdt.aml} kernel/firmware/acpi/dsdt.aml
-  #     mkdir -p $out
-  #     echo kernel/firmware/acpi/dsdt.aml | bsdcpio -v -o -H newc -R 0:0 > $out/x1c-dsdt.img
-  #   '';
-  # };
-};
-
 {
   imports = [
     ./hardware-configuration.nix
@@ -60,8 +37,6 @@ with {
     echo lz4 > /sys/module/zswap/parameters/compressor
   '';
 
-  # boot.initrd.prepend = ["${x1c_patched_dsdt}/x1c-dsdt.img"];
-
   boot.initrd.availableKernelModules = [
     "lz4" "lz4_compress" "z3fold"
   ];
@@ -89,7 +64,6 @@ with {
   i18n.consolePackages = [ pkgs.terminus_font ];
 
   # time.timeZone = "America/Los_Angeles";
-
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
