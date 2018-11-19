@@ -188,11 +188,11 @@ many windows and the window's actual title is more useful."
 
 (require 'exwm-randr)
 (setq exwm-randr-workspace-output-plist
-      '(0 "DP1" 1 "DP1" 2 "eDP1"))
+      '(0 "eDP1" 1 "DP1" 2 "DP2"))
 
 (defun benley/randr-screen-change-hook ()
   "My exwm xrandr screen change hook."
-  (start-process-shell-command "xrandr" nil "~/.screenlayout/fart.sh"))
+  (start-process-shell-command "xrandr" nil "~/.screenlayout/home.sh"))
 
 (add-hook 'exwm-randr-screen-change-hook #'benley/randr-screen-change-hook)
 
