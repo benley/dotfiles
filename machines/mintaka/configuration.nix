@@ -122,12 +122,17 @@
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "zfs";
 
-  # evdev:atkbd:... modalias string comes from `evemu-describe /dev/input/event0` (it comes from DMI data, you can probably also find it with `cat /sys/class/dmi/id/modalias`)
-  # Remap PrintScreen (which is bizarrely located between right-alt
-  # and right-ctrl on this laptop) to right-meta
+  # evdev:atkbd:... modalias string comes from `evemu-describe /dev/input/event0`
+  # (it comes from DMI data, you can probably also find it with `cat /sys/class/dmi/id/modalias`)
   services.udev.extraHwdb = ''
+    # Remap PrtSc (which is bizarrely between right-alt and right-ctl) to right-meta
     evdev:atkbd:dmi:bvn*:bvr*:bd*:svn*:pn*:pvrThinkPadX1C*
       KEYBOARD_KEY_b7=rightmeta
+
+    # Remap fn-f11 and fn-12 to something usable (XF86Launch1, XF86Launch2)
+    evdev:name:ThinkPad Extra Buttons:dmi:bvn*:bvr*:bd*:svnLENOVO*:pn*
+      KEYBOARD_KEY_49=prog1
+      KEYBOARD_KEY_45=prog2
   '';
 
   services.powermate.enable = true;
