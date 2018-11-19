@@ -47,16 +47,14 @@ many windows and the window's actual title is more useful."
 
 (setq exwm-manage-configurations
       '(
-        ;; default to char-mode instead of line-mode
-        (t char-mode t
-           tiling-mode-line nil)
         ;; float Authy windows (matching exwm-title doesn't work
         ;; because WM_NAME isn't set until after the windows is
         ;; created, so this manage hook never sees it)
         ((equal exwm-instance-name "crx_gaedmjdfmmahhbjefcbgaolhhanlaolb")
          floating t)
-        ;; ((equal exwm-class-name "konsole")
-        ;;  char-mode t)
+        ;; default to char-mode instead of line-mode
+        (t char-mode t
+           tiling-mode-line nil)
         ))
 
 (defun benley/exwm-input-line-mode ()
