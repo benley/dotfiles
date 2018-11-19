@@ -144,6 +144,14 @@
     displayManager.lightdm.enable = true;
     displayManager.lightdm.background = "${/home/benley/Downloads/Clean-Desktop-Wallpaper-12.jpg}";
 
+    windowManager.session = [{
+      name = "exwm";
+      start = ''
+        emacs -mm &
+        waitPID=$!
+      '';
+    }];
+
     # Commands to run just before starting my window manager:
     displayManager.sessionCommands = lib.concatStringsSep "\n" [
       # status-notifier-watcher needs to be up and running before any
