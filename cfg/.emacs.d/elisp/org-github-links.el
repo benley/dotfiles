@@ -64,8 +64,9 @@
   "Export the link to the url recognized in PATH, displayed as DESC (or path if nil), to BACKEND."
   (let ((url (org-github-links-generate-url path)))
     (cl-case backend
-      (html  (format "<a href=\"%s\">%s</a>" url (or desc path)))
-      (latex (format "\href{%s}{%s}" url (or desc path))))))
+      (html (format "<a href=\"%s\">%s</a>" url (or desc path)))
+      (latex (format "\href{%s}{%s}" url (or desc path)))
+      (md (format "[%s](%s)" (or desc path) url)))))
 
 (org-link-set-parameters "github"
                          :follow #'org-github-links-open
