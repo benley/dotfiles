@@ -106,27 +106,17 @@ let secrets = import ./secrets.nix; in
     ];
   };
 
-  systemd.services.grafana = {
-    description = "Grafana";
-    wantedBy = [ "multi-user.target" ];
-    requires = [ "docker.service" ];
-    preStart = "${pkgs.docker}/bin/docker rm -f grafana || true";
-    script = ''
-      exec ${pkgs.docker}/bin/docker run \
-          --restart=always \
-          --name=grafana \
-          -p 3000:3000 \
-          --network=host \
-          -v grafana_data:/var/lib/grafana \
-          -v ${./grafana.ini}:/etc/grafana/grafana.ini \
-          --user 104 \
-          -e "GF_AUTH_GOOGLE_CLIENT_ID=${secrets.grafana.google_client_id}" \
-          -e "GF_AUTH_GOOGLE_CLIENT_SECRET=${secrets.grafana.google_client_secret}" \
-          grafana/grafana:5.1.0
-        '';
-    preStop = "${pkgs.docker}/bin/docker stop grafana";
-    postStop = "${pkgs.docker}/bin/docker rm -f grafana || true";
-    reload = "${pkgs.docker}/bin/docker restart grafana";
+  services.grafana = {
+    enable = true;
+    extraOptions = {
+      AUTH_GOOGLE_CLIENT_ID = secrets.grafana.google_client_id;
+      AUTH_GOOGLE_CLIENT_SECRET = secrets.grafana.google_client_secret;
+      AUTH_DISABLE_LOGIN_FORM = "true";
+      AUTH_GOOGLE_ENABLED = "true";
+      AUTH_GOOGLE_ALLOW_SIGN_UP = "false";
+    };
+    rootUrl = "https://nyanbox.zoiks.net/grafana";
+    security.adminPassword = secrets.grafana.admin_password;
   };
 
   services.nginx = {
