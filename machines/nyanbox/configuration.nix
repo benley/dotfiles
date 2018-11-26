@@ -65,7 +65,7 @@ let secrets = import ./secrets.nix; in
       "--web.console.libraries=/usr/share/prometheus/console_libraries"
       "--web.console.templates=/usr/share/prometheus/consoles"
       "--storage.tsdb.retention=30d"
-      "--web.external-url=http://nyanbox.zoiks.net/prometheus"
+      "--web.external-url=https://nyanbox.zoiks.net/prometheus"
       "--web.route-prefix=/"
     ];
     preStop = "${pkgs.docker}/bin/docker stop prometheus";
@@ -203,7 +203,7 @@ let secrets = import ./secrets.nix; in
     enable = true;
     settings = {
       blocklist-enabled = true;
-      blocklist-url = "http://list.iblocklist.com/?list=bt_level1&fileformat=p2p&archiveformat=gz";
+      blocklist-url = "https://list.iblocklist.com/?list=bt_level1&fileformat=p2p&archiveformat=gz";
       download-dir = "/z/downloads";
       incomplete-dir = "/z/downloads/incomplete";
       peer-port = 54191;
