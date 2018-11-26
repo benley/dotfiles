@@ -3,9 +3,8 @@
 {
   nix = {
     nixPath = [
+      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
       "nixos-config=/home/benley/p/dotfiles/machines/${config.networking.hostName}/configuration.nix"
-      "dotfiles=/home/benley/p/dotfiles"
-      "nixpkgs=/home/benley/p/nixpkgs"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
     buildCores = 0;

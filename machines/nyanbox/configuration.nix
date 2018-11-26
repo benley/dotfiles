@@ -232,4 +232,12 @@ let secrets = import ./secrets.nix; in
       path = "/zfs/nyanbox/downloads";
     };
   };
+
+  system.autoUpgrade = {
+    channel = "https://nixos.org/channels/nixos-18.09";
+    enable = true;
+  };
+
+  nix.gc.automatic = true;
+  nix.gc.options = "--delete-older-than 14d";
 }
