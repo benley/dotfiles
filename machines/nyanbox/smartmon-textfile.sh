@@ -59,16 +59,15 @@ workld_media_wear_indic
 workload_minutes
 SMARTMONATTRS
 )"
-smartmon_attrs="$(echo ${smartmon_attrs} | xargs | tr ' ' '|')"
+smartmon_attrs="$(echo "$smartmon_attrs" | xargs | tr ' ' '|')"
 
 parse_smartctl_attributes() {
   local disk="$1"
   local disk_type="$2"
   local labels="disk=\"${disk}\",type=\"${disk_type}\""
-  local vars="$(echo "${smartmon_attrs}" | xargs | tr ' ' '|')"
   sed 's/^ \+//g' \
-    | awk -v labels="${labels}" "${parse_smartctl_attributes_awk}" 2>/dev/null \
-    | tr A-Z a-z \
+    | awk -v labels="$labels" "$parse_smartctl_attributes_awk" 2>/dev/null \
+    | tr '[:upper:]' '[:lower:]' \
     | grep -E "(${smartmon_attrs})"
 }
 
@@ -76,30 +75,30 @@ parse_smartctl_info() {
   local -i smart_available=0 smart_enabled=0 smart_healthy=0
   local disk="$1" disk_type="$2"
   while read line ; do
-    info_type="$(echo "${line}" | cut -f1 -d: | tr ' ' '_')"
-    info_value="$(echo "${line}" | cut -f2- -d: | sed 's/^ \+//g')"
+    info_type="$(echo "$line" | cut -f1 -d: | tr ' ' '_')"
+    info_value="$(echo "$line" | cut -f2- -d: | sed 's/^ \+//g')"
     case "${info_type}" in
-      Model_Family) model_family="${info_value}" ;;
-      Device_Model) device_model="${info_value}" ;;
-      Serial_Number) serial_number="${info_value}" ;;
-      Firmware_Version) fw_version="${info_value}" ;;
-      Vendor) vendor="${info_value}" ;;
-      Product) product="${info_value}" ;;
-      Revision) revision="${info_value}" ;;
-      Logical_Unit_id) lun_id="${info_value}" ;;
+      Model_Family) model_family="$info_value" ;;
+      Device_Model) device_model="$info_value" ;;
+      Serial_Number) serial_number="$info_value" ;;
+      Firmware_Version) fw_version="$info_value" ;;
+      Vendor) vendor="$info_value" ;;
+      Product) product="$info_value" ;;
+      Revision) revision="$info_value" ;;
+      Logical_Unit_id) lun_id="$info_value" ;;
     esac
-    if [[ "${info_type}" == 'SMART_support_is' ]] ; then
+    if [[ "$info_type" == 'SMART_support_is' ]] ; then
       case "${info_value:0:7}" in
         Enabled) smart_enabled=1 ;;
         Availab) smart_available=1 ;;
         Unavail) smart_available=0 ;;
       esac
     fi
-    if [[ "${info_type}" == 'SMART_overall-health_self-assessment_test_result' ]] ; then
+    if [[ "$info_type" == 'SMART_overall-health_self-assessment_test_result' ]] ; then
       case "${info_value:0:6}" in
         PASSED) smart_healthy=1 ;;
       esac
-    elif [[ "${info_type}" == 'SMART_Health_Status' ]] ; then
+    elif [[ "$info_type" == 'SMART_Health_Status' ]] ; then
       case "${info_value:0:2}" in
         OK) smart_healthy=1 ;;
       esac
@@ -128,7 +127,7 @@ OUTPUTAWK
 
 format_output() {
   sort \
-  | awk -F'{' "${output_format_awk}"
+  | awk -F'{' "$output_format_awk"
 }
 
 smartctl_version="$("$SMARTCTL" -V | head -n1  | awk '$1 == "smartctl" {print $2}')"
@@ -141,12 +140,12 @@ fi
 
 device_list="$("$SMARTCTL" -n standby --scan-open | awk '/^\/dev/{print $1 "|" $3}')"
 
-for device in ${device_list}; do
-  disk="$(echo ${device} | cut -f1 -d'|')"
-  type="$(echo ${device} | cut -f2 -d'|')"
-  echo "smartctl_run{disk=\"${disk}\",type=\"${type}\"}" $(TZ=UTC date '+%s')
+for device in $device_list; do
+  disk="$(echo "$device" | cut -f1 -d'|')"
+  type="$(echo "$device" | cut -f2 -d'|')"
+  echo "smartctl_run{disk=\"${disk}\",type=\"${type}\"}" "$(TZ=UTC date '+%s')"
   # Get the SMART information and health
-  "$SMARTCTL" -n standby  -i -H -d "${type}" "${disk}" | parse_smartctl_info "${disk}" "${type}"
+  "$SMARTCTL" -n standby  -i -H -d "$type" "$disk" | parse_smartctl_info "$disk" "$type"
   # Get the SMART attributes
-  "$SMARTCTL" -n standby -A -d "${type}" "${disk}" | parse_smartctl_attributes "${disk}" "${type}"
+  "$SMARTCTL" -n standby -A -d "$type" "$disk" | parse_smartctl_attributes "$disk" "$type"
 done | format_output
