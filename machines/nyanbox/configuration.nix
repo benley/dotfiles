@@ -47,16 +47,16 @@ let secrets = import ./secrets.nix; in
   systemd.services.prometheus = {
     description = "Prometheus";
     wantedBy = [ "multi-user.target" ];
-    requires = [ "docker.service" ];
-    preStart = "${pkgs.docker}/bin/docker rm -f prometheus || true";
+    after = [ "docker.service" "docker.socket" ];
+    requires = [ "docker.service" "docker.socket" ];
     script = ''
       exec ${pkgs.docker}/bin/docker run \
-          --restart=always \
+          --rm \
           --name=prometheus \
-          -p 9090:9090 \
           --network=host \
           -v ${./prometheus.yml}:/etc/prometheus/prometheus.yml \
-          -v prometheus_data:/prometheus prom/prometheus:v2.2.1 \
+          -v prometheus_data:/prometheus \
+          prom/prometheus:v2.2.1 \
           "$@"
     '';
     scriptArgs = lib.concatStringsSep " " [
@@ -69,8 +69,14 @@ let secrets = import ./secrets.nix; in
       "--web.route-prefix=/"
     ];
     preStop = "${pkgs.docker}/bin/docker stop prometheus";
-    postStop = "${pkgs.docker}/bin/docker rm -f prometheus || true";
     reload = "${pkgs.docker}/bin/docker restart prometheus";
+    serviceConfig = {
+      ExecStartPre = "-${pkgs.docker}/bin/docker rm -f prometheus";
+      ExecStopPost = "-${pkgs.docker}/bin/docker rm -f prometheus";
+      TimeoutStartSec = 0;
+      TimeoutStopSec = 120;
+      Restart = "always";
+    };
   };
 
   services.prometheus.exporters.node = {
