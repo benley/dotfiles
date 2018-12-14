@@ -8,13 +8,7 @@ in
 {
   options = {
 
-    services.fancontrol.enable = lib.mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to enable the fancontrol daemon.
-      '';
-    };
+    services.fancontrol.enable = lib.mkEnableOption "the fancontrol daemon";
 
     services.fancontrol.configFile = lib.mkOption {
       type = types.either types.path types.str;
@@ -38,6 +32,9 @@ in
       script = ''
         exec ${pkgs.lm_sensors}/sbin/fancontrol ${confFile}
       '';
+      serviceConfig = {
+        Restart = "always";
+      };
     };
   };
 }

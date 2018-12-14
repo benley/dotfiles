@@ -8,8 +8,10 @@
     ./package-overrides.nix
     ./users.nix
     ./yubikey.nix
-    ../../modules/powermate.nix
     ../../modules/dunst.nix
+    ../../modules/fancontrol.nix
+    ../../modules/hddfancontrol.nix
+    ../../modules/powermate.nix
   ];
 
   boot.zfs.forceImportAll = false;
