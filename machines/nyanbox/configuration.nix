@@ -125,7 +125,8 @@ let secrets = import ./secrets.nix; in
       AUTH_GOOGLE_CLIENT_SECRET = secrets.grafana.google_client_secret;
       AUTH_DISABLE_LOGIN_FORM = "true";
       AUTH_GOOGLE_ENABLED = "true";
-      AUTH_GOOGLE_ALLOW_SIGN_UP = "false";
+      AUTH_GOOGLE_ALLOW_SIGN_UP = "true";
+      AUTH_GOOGLE_ALLOWED_DOMAINS = "zoiks.net postmates.com";
     };
     rootUrl = "https://nyanbox.zoiks.net/grafana";
     security.adminPassword = secrets.grafana.admin_password;
