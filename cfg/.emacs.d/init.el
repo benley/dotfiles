@@ -40,6 +40,29 @@
 
 (require 'ansi-view)
 
+;; Define a new hook to be run after changing themes:
+(defvar after-load-theme-hook nil
+  "Hook run after a color theme is loaded using `load-theme'.")
+
+(defadvice load-theme (after run-after-load-theme-hook activate)
+  "Run `after-load-theme-hook'."
+  (run-hooks 'after-load-theme-hook))
+
+;; What I want to actually run after load-them:
+(defun fix-ansi-term-after-load-theme ()
+  "Attempt to unfuck `ansi-term' after changing themes."
+  (setq ansi-term-color-vector
+        [term term-color-black
+              term-color-red
+              term-color-green
+              term-color-yellow
+              term-color-blue
+              term-color-magenta
+              term-color-cyan
+              term-color-white]))
+;; Add my function to that new hook:
+(add-hook 'after-load-theme-hook #'fix-ansi-term-after-load-theme)
+
 (use-package spacemacs-common
   :ensure spacemacs-theme
   :config (load-theme 'spacemacs-dark t))
@@ -511,31 +534,7 @@ Default face is fixed so we only need to have the exceptions."
   (goto-address-mode)  ;; Make URLs clickable
   (linum-mode 0))      ;; No line numbers in terminals
 
-;; maybe hopefully work around the thing where ansi-term breaks any time I change themes?
 (add-hook 'term-mode-hook #'my-term-mode-hook)
-
-;; Define a new hook to be run after changing themes:
-(defvar after-load-theme-hook nil
-  "Hook run after a color theme is loaded using `load-theme'.")
-
-(defadvice load-theme (after run-after-load-theme-hook activate)
-  "Run `after-load-theme-hook'."
-  (run-hooks 'after-load-theme-hook))
-
-;; What I want to actually run after load-them:
-(defun fix-ansi-term-after-load-theme ()
-  "Attempt to unfuck `ansi-term' after changing themes."
-  (setq ansi-term-color-vector
-        [term term-color-black
-              term-color-red
-              term-color-green
-              term-color-yellow
-              term-color-blue
-              term-color-magenta
-              term-color-cyan
-              term-color-white]))
-;; Add my function to that new hook:
-(add-hook 'after-load-theme-hook #'fix-ansi-term-after-load-theme)
 
 (defun my-term-exec-hook ()
   "Try to make terminals work better with unicode I guess."
