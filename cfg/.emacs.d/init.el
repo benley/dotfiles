@@ -23,9 +23,9 @@
 
 ;;; nix takes care of package installation for me now
 (setq package-archives
-      '(("gnu"   . "http://elpa.gnu.org/packages/")
-        ("melpa" . "http://melpa.org/packages/")
-        ("org"   . "http://orgmode.org/elpa/")))
+      '(("gnu"   . "https://elpa.gnu.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")
+        ("org"   . "https://orgmode.org/elpa/")))
 ;; (setq package-archives nil)
 (setq package-enable-at-startup nil)
 (package-initialize)
