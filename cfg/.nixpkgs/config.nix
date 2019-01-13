@@ -18,7 +18,7 @@ let dotfiles = import <dotfiles> {}; in
       name = "benleyAll";
       paths = [
         dotfiles.emacs
-	dotfiles.eless
+        dotfiles.eless
         bashInteractive
         bashCompletion
         bc
