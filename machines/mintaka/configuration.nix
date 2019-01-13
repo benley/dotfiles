@@ -81,7 +81,6 @@
   services.avahi.publish.workstation = true;
   services.avahi.publish.userServices = true;
 
-  # services.crashplan.enable = true;
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
 
