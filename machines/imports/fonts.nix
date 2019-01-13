@@ -48,5 +48,8 @@
     vistafonts
   ];
 
-  fonts.fontconfig.localConf = builtins.readFile ./fonts.conf;
+  # Seems like penultimate.enable may break emoji support somehow?
+  # https://github.com/NixOS/nixpkgs/issues/53139
+  fonts.fontconfig.penultimate.enable = false;
+
 }
