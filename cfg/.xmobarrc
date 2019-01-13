@@ -1,4 +1,4 @@
--- vi:ft=haskell
+-- -*- haskell -*-
 Config {
          font = "xft:Operator Mono:style=Book,Symbola,FontAwesome"
        , additionalFonts = [ "xft:Operator Mono:style=Book Italic"

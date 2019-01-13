@@ -1,5 +1,5 @@
-# vi:ft=sh
-d=. ; while [[ ! -d $d/debian && `readlink -e $d` != / ]]; do d=$d/..; done
+# -*- sh -*-
+d=. ; while [[ ! -d $d/debian && $(readlink -e $d) != / ]]; do d=$d/..; done
 if [[ -d $d/debian ]] && [[ -z $QUILT_PATCHES ]]; then
   # if in Debian packaging tree with unset $QUILT_PATCHES
   QUILT_PATCHES="debian/patches"
