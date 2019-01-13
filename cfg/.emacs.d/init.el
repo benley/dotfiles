@@ -145,15 +145,11 @@
 ;; (use-package magit-gh-pulls
 ;;   :hook (magit-mode . turn-on-magit-gh-pulls))
 
-(defun my-markdown-mode-hook ()
-  "Enable visual line mode."
-  (visual-line-mode 1))
-
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
   :mode ("\\.md\\'" . gfm-mode)
   :config (setq markdown-command "pandoc")
-  :hook (gfm-mode . my-markdown-mode-hook))
+  :hook (gfm-mode . turn-on-visual-line-mode))
 
 (require 'mtail-mode)
 (add-to-list 'auto-mode-alist (cons "\\.mtail$" #'mtail-mode))
@@ -328,7 +324,7 @@
   (setq dired-use-ls-dired nil))        ;; ls doesn't have --dired on darwin
 
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
-(add-hook 'text-mode-hook #'turn-on-auto-fill)
+;; (add-hook 'text-mode-hook #'turn-on-auto-fill)
 
 ;; Stop littering everywhere with save files, put them somewhere
 (setq backup-directory-alist `(("." . "~/.emacs-backups")))
