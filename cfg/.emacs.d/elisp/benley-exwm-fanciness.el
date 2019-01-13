@@ -100,5 +100,15 @@ Enlarge/shrink by ARG columns, or 5 if ARG is nil."
   (interactive "P")
   (benley/move-border-left-or-right arg nil))
 
+(defun benley/exwm-next-workspace ()
+  "Switch to the next workspace."
+  (interactive)
+  (exwm-workspace-switch (+ exwm-workspace-current-index 1)))
+
+(defun benley/exwm-prev-workspace ()
+  "Switch to the previous workspace."
+  (interactive)
+  (exwm-workspace-switch (- exwm-workspace-current-index 1)))
+
 (provide 'benley-exwm-fanciness)
 ;;; benley-exwm-fanciness.el ends here

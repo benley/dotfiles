@@ -185,7 +185,8 @@ many windows and the window's actual title is more useful."
 (exwm-input-set-key (kbd "s-}") #'benley/move-border-right)
 (exwm-input-set-key (kbd "s-a") #'benley/move-border-up)
 (exwm-input-set-key (kbd "s-z") #'benley/move-border-down)
-
+(exwm-input-set-key (kbd "s-<right>") #'benley/exwm-next-workspace)
+(exwm-input-set-key (kbd "s-<left>")  #'benley/exwm-prev-workspace)
 (require 'exwm-randr)
 (setq exwm-randr-workspace-output-plist
       '(0 "eDP1" 1 "DP1" 2 "DP2"))
