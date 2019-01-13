@@ -138,6 +138,7 @@
     pythonPackages.virtualenvwrapper
     socat
     stack
+    stern
     sysstat
     tcpdump
     telnet
