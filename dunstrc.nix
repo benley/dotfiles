@@ -152,7 +152,7 @@ icon_position = right
 max_icon_size = 96
 
 # Paths to default icons.
-icon_folders = "/run/current-system/sw/share/icons/hicolor/22x22/apps/"
+icon_path = "/run/current-system/sw/share/icons/hicolor/22x22/apps/"
 
 ### History ###
 
