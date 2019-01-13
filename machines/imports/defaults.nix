@@ -8,6 +8,9 @@
     ./package-overrides.nix
     ./users.nix
     ./yubikey.nix
+
+    # These have on/off toggles, so including them does not
+    # automatically enable anything
     ../../modules/dunst.nix
     ../../modules/fancontrol.nix
     ../../modules/hddfancontrol.nix
