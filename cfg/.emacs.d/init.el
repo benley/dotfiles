@@ -532,7 +532,7 @@ Default face is fixed so we only need to have the exceptions."
 (defun my-term-mode-hook ()
   "My `term-mode' hook."
   (goto-address-mode)  ;; Make URLs clickable
-  (linum-mode 0))      ;; No line numbers in terminals
+  (setq-local display-line-numbers nil))      ;; No line numbers in terminals
 
 (add-hook 'term-mode-hook #'my-term-mode-hook)
 
