@@ -185,9 +185,14 @@
   (org-mode . org-bullets-mode))
 
 (use-package org-journal
-  :config
+  :init
+  ;; I think you have to set org-journal-dir before loading
+  ;; org-journal for it to work correctly
   (setq org-journal-dir "~/benley@gmail.com/org/journal")
-  (setq org-journal-file-format "%Y-%m-%d.org"))
+  (setq org-journal-file-format "%Y-%m-%d.org")
+  (setq org-journal-date-format "%A, %B %d %Y")
+  (setq org-journal-date-prefix "#+DATE: ")
+  (setq org-journal-time-prefix "* "))
 
 (use-package paredit)
 
@@ -364,6 +369,7 @@
 (global-set-key "\C-ca" #'org-agenda)
 (global-set-key "\C-cc" #'org-capture)
 ;; (global-set-key "\C-cb" #'org-switchb)
+(global-set-key (kbd "C-c j") #'org-journal-new-entry)
 
 ;; Scrolling
 (global-set-key [up] (lambda () (interactive) (previous-line)))
