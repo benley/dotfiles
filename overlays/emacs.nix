@@ -2,7 +2,7 @@ self: super:
 
 with rec {
   myEmacs = super.emacs.override {
-    withGTK3 = true;
+    withGTK3 = false;  # fucking X11 disconnect crash bug...
     withGTK2 = false;
     imagemagick = self.imagemagick;  # why isn't this enabled by default?
     # withXwidgets = true;  # Cool, but I haven't found much of a use for it
