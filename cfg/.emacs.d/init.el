@@ -452,6 +452,9 @@ Default face is fixed so we only need to have the exceptions."
 (define-key shell-mode-map (kbd "<up>")   #'comint-previous-input)
 (define-key shell-mode-map (kbd "<down>") #'comint-next-input)
 
+(setq comint-prompt-read-only t)  ;; make various REPL prompts readonly
+(setq comint-scroll-to-bottom-on-input 'this)  ;; scroll only _this_ window
+
 ;;; Enable some languages that I want to use with org-babel
 (org-babel-do-load-languages
  'org-babel-load-languages
