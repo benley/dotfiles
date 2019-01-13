@@ -63,8 +63,6 @@
   i18n.consoleFont = "ter-132b";
   i18n.consolePackages = [ pkgs.terminus_font ];
 
-  # time.timeZone = "America/Los_Angeles";
-
   # Accommodate Windows nonsesnse
   time.hardwareClockInLocalTime = true;
 
@@ -115,11 +113,6 @@
 
   hardware.bluetooth.enable = true;
   hardware.cpu.intel.updateMicrocode = true;
-
-  # services.redshift = {
-  #   latitude = "37.7749";
-  #   longitude = "-122.4194";
-  # };
 
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "zfs";
