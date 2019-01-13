@@ -341,6 +341,8 @@
 
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil)
+(setq mouse-wheel-tilt-scroll t)
+(setq mouse-wheel-flip-direction t)
 
 ;; Save clipboard strings into kill ring before replacing them
 (setq save-interprogram-paste-before-kill 1)
@@ -376,13 +378,6 @@
 (global-set-key [down] (lambda () (interactive) (next-line)))
 (global-set-key [S-up] (lambda () (interactive) (scroll-down 1)))
 (global-set-key [S-down] (lambda () (interactive) (scroll-up 1)))
-
-;; It's annoying to see all the "<mouse-N> is undefined" errors when trying to
-;; scroll vertically on a trackpad in emacs 25, so tell emacs to ignore it for
-;; now.  Left/right mwheel support will show up in emacs 26.  See
-;; https://github.com/emacs-mirror/emacs/commit/88f43dc30cb8d71830e409973cafbaca13a66a45
-(global-set-key [mouse-6] #'ignore)
-(global-set-key [mouse-7] #'ignore)
 
 ;; Window movement
 (global-set-key (kbd "s-h") #'windmove-left)
