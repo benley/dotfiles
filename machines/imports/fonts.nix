@@ -18,10 +18,11 @@
     fira-mono
     freefont_ttf
     font-awesome-ttf
-    font-droid
+    go-font
     #google-fonts  # Like 1800 fonts. Whoa.
     hack-font
     hasklig
+    ibm-plex
     inconsolata
     iosevka
     liberation_ttf
