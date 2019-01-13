@@ -60,6 +60,7 @@
   #programs.ssh.extraConfig = readFile ../../cfg/.ssh/config;
 
   services.openssh.forwardX11 = true;
+  services.openssh.passwordAuthentication = false;
 
   services.emacs.defaultEditor = true;
   services.emacs.install = true;
