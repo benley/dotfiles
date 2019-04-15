@@ -37,12 +37,12 @@
   nixpkgs.config.allowUnfree = true;
 
   # These have no effect on google-chrome (I think), just chromium
-  nixpkgs.config.chromium = {
-    gnomeSupport = true;
-    enablePepperFlash = true;
-    enablePepperPDF = true;
-    enableWideVine = true;
-  };
+  # nixpkgs.config.chromium = {
+  #   gnomeSupport = true;
+  #   enablePepperFlash = true;
+  #   enablePepperPDF = true;
+  #   enableWideVine = true;
+  # };
 
   # http://nicknovitski.com/vim-nix-syntax wtf
   nixpkgs.config.vim.ftNix = false;

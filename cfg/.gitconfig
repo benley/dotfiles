@@ -19,7 +19,7 @@
 	showbranch = auto
 	interactive = auto
 [diff]
-	guitool = gvimdiff
+	guitool = meld
 	tool = vimdiff
 [difftool]
 	prompt = false

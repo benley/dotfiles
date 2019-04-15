@@ -3,7 +3,7 @@
 {
   services.xserver.wacom.enable = true;
 
-  # http://linuxwacom.sourceforge.net/wiki/index.php/Consumer_Tablet_ExpressKey_Mapping_Issue
+  # https://github.com/linuxwacom/xf86-input-wacom/wiki/Consumer-Tablet-ExpressKey-Mapping-Issue
   services.xserver.inputClassSections = [
     ''
       Identifier "Wacom Bamboo 16FG 4x5 Pad pad GNOME compatibility"

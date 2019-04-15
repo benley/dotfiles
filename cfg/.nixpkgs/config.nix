@@ -9,9 +9,9 @@ let dotfiles = import <dotfiles> {}; in
   firefox.enableGnomeExtensions = true;
   #firefox.enableAdobeFlash = true;
 
-  chromium.enablePepperFlash = true;
-  chromium.enablePepperPDF = true;
-  chromium.enableWideVine = true;
+  # chromium.enablePepperFlash = true;
+  # chromium.enablePepperPDF = true;
+  # chromium.enableWideVine = true;
 
   packageOverrides = origPkgs: with origPkgs; {
     benleyAll = with pkgs; buildEnv {

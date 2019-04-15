@@ -52,5 +52,9 @@
   # Seems like penultimate.enable may break emoji support somehow?
   # https://github.com/NixOS/nixpkgs/issues/53139
   fonts.fontconfig.penultimate.enable = false;
-
+  fonts.fontconfig.defaultFonts = {
+    monospace = [ "Noto Color Emoji" "DejaVu Sans Mono" ];
+    sansSerif = [ "Noto Color Emoji" "DejaVu Sans" ];
+    serif = [ "Noto Color Emoji" "DejaVu Serif" ];
+  };
 }
