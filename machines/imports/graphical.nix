@@ -5,8 +5,8 @@
     ./fonts.nix
   ];
 
-  services.dunst.enable = true;
-  services.dunst.config = pkgs.callPackage ../../dunstrc.nix {};
+  # services.dunst.enable = true;
+  # services.dunst.config = pkgs.callPackage ../../dunstrc.nix {};
 
   # TODO: did this (or equivlent) get merged upstream for sddm?
   environment.pathsToLink = [ "/share" ];
@@ -22,7 +22,9 @@
   };
 
   environment.systemPackages = with pkgs; [
-    blueman
+    # arandr
+    # battery-monitor
+    # blueman
     dropbox-cli
     firefox
     glxinfo
@@ -30,22 +32,33 @@
     inkscape
     insync
     minecraft
-    # signal-desktop-beta
+    # nixnote2  # evernote client
+    remmina  # RDP/VNC/NX/Spice client
+    signal-desktop
     slack
     steam
-    linux-steam-integration
+    # linux-steam-integration  # build broken?
     # texlive
     transmission_gtk
-    vivaldi
-    libsForQt5.vlc
+    # vivaldi
+    # libsForQt5.vlc
     gnome_mplayer
     gnome3.gnome_themes_standard  # I think this fixes some "can't find theme engine adwaita" erorrs
+
+    gnomeExtensions.appindicator
+    gnomeExtensions.dash-to-dock
+    gnomeExtensions.dash-to-panel
+    gnomeExtensions.icon-hider
+    gnomeExtensions.no-title-bar
+    gnomeExtensions.system-monitor
+    gnomeExtensions.topicons-plus
+    gnomeExtensions.tilingnome
     # vscode
     xlibs.xdpyinfo
     xlibs.xev
     xlsfonts
     xsel
-    zathura       # keyboard-driven PDF viewer
+    # zathura       # keyboard-driven PDF viewer (build broken)
     # xsettingsd  # for dump_xsettings
     # vdpauinfo
     # libva       # for the vainfo command
@@ -53,35 +66,37 @@
     # sddm-theme-breeze-custom
 
     alsaUtils         # amixer, used in .xmonad.hs
-    dmenu             # For xmonad
+    # dmenu             # For xmonad
+    rofi              # maybe replace dmenu?
     #dzen2
     #haskellPackages.xmobar
     feh               # For scaling / setting background image
-    taffybar
-    j4-dmenu-desktop  # dmenu .desktop app launcher
-    libnotify         # includes notify-send
-    networkmanager_dmenu
-    networkmanagerapplet
-    pasystray
-    # lxqt.pavucontrol-qt
-    pavucontrol
-    xautolock         # so I can xautolock -locknow
+    # taffybar
+    # j4-dmenu-desktop  # dmenu .desktop app launcher
+    # libnotify         # includes notify-send
+    # networkmanager_dmenu
+    # networkmanagerapplet
+    # pasystray
+    # lxqt.pavucontrol-qt  # This is nicer, but pasystray wants to launch regular pavucontrol
+    # pavucontrol
+    # xautolock         # so I can xautolock -locknow
     xorg.xbacklight
     xorg.xmodmap
 
+    gimp
     gnome3.cheese     # KDE seems to lack a webcam app?
-    gwenview          # photo viewer
-    ark               # archive thinger
-    kate
-    kgpg
+    # gwenview          # photo viewer
+    # ark               # archive thinger
+    # kate
+    # kgpg
     krita             # gimp-alike
-    konsole
-    kupfer            # task launcher a la QuickSilver
-    kupfer-plugin-google-search
-    qt5.qttools       # includes qdbusviewer
-    spectacle         # screenshot
-    dolphin
-    kdeApplications.dolphin-plugins
+    # konsole
+    # kupfer            # task launcher a la QuickSilver
+    # kupfer-plugin-google-search
+    # qt5.qttools       # includes qdbusviewer
+    # spectacle         # screenshot
+    # dolphin
+    # kdeApplications.dolphin-plugins
 
     breeze-icons
     hicolor_icon_theme
@@ -89,13 +104,23 @@
     breeze-qt5
     # breeze-qt4  # gone, I think
 
-    ksshaskpass
+    # ksshaskpass
     # pinentry_qt5
     pinentry_gnome
     # kwalletcli      # includes pinentry-kwallet
     gnome3.seahorse   # gnome-wallet manager gui
-    git-credential-libsecret
+
+    # stumpish
+    ddccontrol
+    # udiskie
   ];
+
+  environment.sessionVariables = {
+    # This is probably a terrible idea but there doesn't seem to be a
+    # great alternative if I want xcursor stuff to work in non-gtk
+    # emacs, xterm, etc.
+    LD_LIBRARY_PATH = ["${pkgs.xorg.libXcursor}/lib"];
+  };
 
   environment.variables = {
     XCURSOR_SIZE = "64";
@@ -125,7 +150,7 @@
 
   services.gnome3.at-spi2-core.enable = true;
   services.gnome3.gnome-keyring.enable = true;
-  security.pam.services.lightdm.enableGnomeKeyring = true;
+  security.pam.services.gdm.enableGnomeKeyring = true;
 
   networking.networkmanager.enable = true;
   networking.networkmanager.unmanaged = [
@@ -140,9 +165,9 @@
     enable = true;
     updateDbusEnvironment = true;
     desktopManager.gnome3.enable = true;
-    displayManager.gdm.enable = false;
-    displayManager.lightdm.enable = true;
-    displayManager.lightdm.background = "${/home/benley/Downloads/Clean-Desktop-Wallpaper-12.jpg}";
+    displayManager.gdm.enable = true;
+    # displayManager.lightdm.enable = true;
+    # displayManager.lightdm.background = "${/home/benley/Downloads/Clean-Desktop-Wallpaper-12.jpg}";
 
     windowManager.session = [{
       name = "exwm";
@@ -156,22 +181,26 @@
     displayManager.sessionCommands = lib.concatStringsSep "\n" [
       # status-notifier-watcher needs to be up and running before any
       # apps try to create indicator icons, and before taffybar goes looking for it
-      "${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher &"
-      "${pkgs.plasma5.polkit-kde-agent}/lib/libexec/polkit-kde-authentication-agent-1 &"
+      # "${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher &"
+      # "${pkgs.plasma5.polkit-kde-agent}/lib/libexec/polkit-kde-authentication-agent-1 &"
+      # "xsetroot -cursor_name left_ptr"
       "${pkgs.insync}/bin/insync start &"
-      "${pkgs.dropbox-cli}/bin/dropbox start &"
-      "${pkgs.taffybar}/bin/taffybar &"
-      "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator &"
-      "${pkgs.pasystray}/bin/pasystray -a &"
-      "${pkgs.blueman}/bin/blueman-applet &"
-      "${pkgs.kupfer}/bin/kupfer --no-splash &"
-      "setxkbmap"  # is this still necessary?
+      # "${pkgs.dropbox-cli}/bin/dropbox start &"
+      # "${pkgs.taffybar}/bin/taffybar &"
+      # "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator &"
+      # "${pkgs.networkmanagerapplet}/bin/nm-applet &"
+      # "${pkgs.pasystray}/bin/pasystray -a &"
+      # "${pkgs.blueman}/bin/blueman-applet &"
+      # "${pkgs.kupfer}/bin/kupfer --no-splash &"
+      # "${pkgs.battery-monitor}/bin/battery-monitor &"
+      # "${pkgs.udiskie}/bin/udiskie --tray --notify --no-automount &"
+      # "setxkbmap"  # is this still necessary?
     ];
-    windowManager.xmonad.enable = true;
-    windowManager.xmonad.enableContribAndExtras = true;
-    windowManager.xmonad.extraPackages = haskellPackages: [
-      haskellPackages.taffybar
-    ];
+    # windowManager.xmonad.enable = true;
+    # windowManager.xmonad.enableContribAndExtras = true;
+    # windowManager.xmonad.extraPackages = haskellPackages: [
+    #   haskellPackages.taffybar
+    # ];
   };
 
   hardware.opengl.enable = true;
@@ -189,10 +218,10 @@
     # enableBrowserSocket = true;  # What is this for?
   };
 
-  programs.light.enable = true;  # backlight control helper
-  programs.qt5ct.enable = true;  # Qt theme/font/icon config for non-kde envs
+  # programs.light.enable = true;  # backlight control helper
+  # programs.qt5ct.enable = true;  # Qt theme/font/icon config for non-kde envs
 
-  services.compton.enable = true;  # X11 compositor
+  #services.compton.enable = true;  # X11 compositor
 
   services.upower.enable = true;
 
@@ -200,44 +229,47 @@
 
   services.dbus.socketActivated = true;
 
-  systemd.user.services.xautolock = {
-    description = "xautolock";
-    wantedBy = [ "graphical-session.target" ];
-    partOf = [ "graphical-session.target" ];
-    serviceConfig = {
-      ExecStart = ''
-        ${pkgs.xautolock}/bin/xautolock \
-          -time 10 \
-          -locker '${pkgs.i3lock}/bin/i3lock -n -e -f -c "#263238" -i $HOME/.background-image' \
-          -notify 15 \
-          -notifier "${pkgs.libnotify}/bin/notify-send -u critical -t 14000 -- 'Locking screen in 15 seconds'" \
-          -detectsleep
-      '';
-      RestartSec = 3;
-      Restart = "always";
-    };
-  };
+  # systemd.user.services.xautolock = {
+  #   description = "xautolock";
+  #   wantedBy = [ "graphical-session.target" ];
+  #   partOf = [ "graphical-session.target" ];
+  #   serviceConfig = {
+  #     ExecStart = ''
+  #       ${pkgs.xautolock}/bin/xautolock \
+  #         -time 10 \
+  #         -locker '${pkgs.i3lock}/bin/i3lock -n -e -f -c "#263238" -i $HOME/.background-image' \
+  #         -notify 15 \
+  #         -notifier "${pkgs.libnotify}/bin/notify-send -u critical -t 14000 -- 'Locking screen in 15 seconds'" \
+  #         -detectsleep
+  #     '';
+  #     RestartSec = 3;
+  #     Restart = "always";
+  #   };
+  # };
 
-  systemd.user.services.xss-lock = {
-    description = "xss-lock";
-    wantedBy = [ "graphical-session.target" ];
-    partOf = [ "graphical-session.target" ];
-    serviceConfig = {
-      ExecStart = ''
-        ${pkgs.xss-lock}/bin/xss-lock \
-          -- ${pkgs.xautolock}/bin/xautolock -locknow
-      '';
-      RestartSec = 3;
-      Restart = "always";
-    };
-  };
+  # systemd.user.services.xss-lock = {
+  #   description = "xss-lock";
+  #   wantedBy = [ "graphical-session.target" ];
+  #   partOf = [ "graphical-session.target" ];
+  #   serviceConfig = {
+  #     ExecStart = ''
+  #       ${pkgs.xss-lock}/bin/xss-lock \
+  #         -- ${pkgs.xautolock}/bin/xautolock -locknow
+  #     '';
+  #     RestartSec = 3;
+  #     Restart = "always";
+  #   };
+  # };
 
   # systemd.user.services.taffybar = {
   #   description = "taffybar";
   #   wantedBy = [ "graphical-session.target" ];
+  #   wants = [ "status-notifier-watcher.service" ];
+  #   after = [ "status-notifier-watcher.service" ];
   #   partOf = [ "graphical-session.target" ];
-  #   environment.GTK_THEME = "Breeze-Dark:dark";
-  #   path = config.environment.profiles;
+  #   # environment.GTK_THEME = "Breeze-Dark:dark";
+  #   # path = config.environment.profiles;
+  #   path = [ pkgs.upower ];
   #   serviceConfig = {
   #     ExecStart = "${pkgs.taffybar}/bin/taffybar";
   #     RestartSec = 3;
@@ -246,6 +278,14 @@
   #   };
   # };
 
-  programs.ssh.askPassword = "${pkgs.plasma5.ksshaskpass.out}/bin/ksshaskpass";
+  # systemd.user.services.status-notifier-watcher = {
+  #   description = "status-notifier-watcher";
+  #   wantedBy = [ "graphical-session.target" ];
+  #   partOf = [ "graphical-session.target" ];
+  #   serviceConfig.ExecStart =
+  #       "${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher";
+  # };
+
+  # programs.ssh.askPassword = "${pkgs.plasma5.ksshaskpass.out}/bin/ksshaskpass";
 
 }

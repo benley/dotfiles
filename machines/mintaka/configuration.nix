@@ -62,6 +62,9 @@
 
   i18n.consoleFont = "ter-132b";
   i18n.consolePackages = [ pkgs.terminus_font ];
+  i18n.inputMethod.enabled = "ibus";
+  i18n.inputMethod.ibus.engines = with pkgs.ibus-engines; [ uniemoji ];
+
 
   # Accommodate Windows nonsesnse
   time.hardwareClockInLocalTime = true;
