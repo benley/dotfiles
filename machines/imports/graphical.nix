@@ -288,4 +288,11 @@
 
   # programs.ssh.askPassword = "${pkgs.plasma5.ksshaskpass.out}/bin/ksshaskpass";
 
+  # Probably don't want this on headless machines, but workstations/laptops
+  # sure. This makes sure that things like my user dbus session don't persist
+  # across multiple logout/login cycles and mess things up.
+  services.logind.extraConfig = ''
+    KillUserProcesses=yes
+  '';
+
 }
