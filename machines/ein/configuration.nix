@@ -55,6 +55,10 @@
 
   services.xserver = {
     videoDrivers = [ "nvidia" ];
+
+    # nvidia driver doesn't support wayland.  sigh
+    displayManager.gdm.wayland = false;
+
     # ForceCompositionPipeline supposedly reduces screen tearing
     screenSection = ''
       Option "metamodes" "nvidia-auto-select +0+0 {ForceCompositionPipeline=On}"
