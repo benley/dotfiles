@@ -23,7 +23,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    pythonPackages.pythondaemon
+    pythonPackages.python-daemon
     hddtemp
     hdparm
   ];

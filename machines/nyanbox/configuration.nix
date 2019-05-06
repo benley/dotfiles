@@ -247,7 +247,7 @@ let secrets = import ./secrets.nix; in
   };
 
   system.autoUpgrade = {
-    channel = "https://nixos.org/channels/nixos-18.09";
+    channel = "https://nixos.org/channels/nixos-19.03";
     enable = true;
   };
 
