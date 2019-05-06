@@ -139,60 +139,36 @@ let secrets = import ./secrets.nix; in
       grafana.servers = { "127.0.0.1:3000" = {}; };
       transmission.servers = { "127.0.0.1:9091" = {}; };
     };
+    recommendedProxySettings = true;
 
+    # TODO: in theory the stuff that oauth2_proxy puts in the root extraConfig
+    # could actually go in the outer nginx "server" section, and then I
+    # wouldn't have to hack it into each subpath like I'm doing here.  I think
+    #  it would just require adding "auth_request off" to the the location block
+    # for /.well-known/acme-challenge to keep ACME stuff working.
     virtualHosts = {
-      "nyanbox.zoiks.net" = {
+      "nyanbox.zoiks.net" = let rootExtraConfig = config.services.nginx.virtualHosts."nyanbox.zoiks.net".locations."/".extraConfig; in {
         enableACME = true;
         forceSSL = true;
 
         locations."/" = {
           tryFiles = "$uri $uri/ =404";
-          extraConfig = ''
-            allow 192.168.7.0/24;
-            allow 71.192.172.48/32;
-          '';
         };
 
         locations."/prometheus/" = {
           proxyPass = "http://prometheus/";
-          extraConfig = ''
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-Host $host;
-            proxy_set_header X-Forwarded-Server $host;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            allow 192.168.7.0/24;
-            allow 71.192.172.48/32;
-            deny all;
-          '';
+          extraConfig = rootExtraConfig;
         };
 
         locations."/grafana/" = {
           proxyPass = "http://grafana/";
-          extraConfig = ''
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-Host $host;
-            proxy_set_header X-Forwarded-Server $host;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          '';
-          # Allow all here since it's authenticated
+          extraConfig = rootExtraConfig;
         };
 
         locations."/transmission/" = {
           proxyPass = "http://transmission";  # no trailing /! I don't remember why.
-          extraConfig = ''
-            allow 192.168.7.0/24;
-            allow 71.192.172.48/32;
-            deny all;
-
+          extraConfig = rootExtraConfig + ''
             proxy_pass_header X-Transmission-Session-Id;
-
-            proxy_set_header Host $http_host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Server $host;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
             proxy_set_header X-NginX-Proxy true;
             proxy_http_version 1.1;
@@ -253,4 +229,14 @@ let secrets = import ./secrets.nix; in
 
   nix.gc.automatic = true;
   nix.gc.options = "--delete-older-than 14d";
+
+  services.oauth2_proxy = {
+    enable = true;
+    email.domains = [ "zoiks.net" ];
+    nginx.virtualHosts = [ "nyanbox.zoiks.net" ];
+    provider = "google";
+    clientID = secrets.oauth2_proxy.clientID;
+    clientSecret = secrets.oauth2_proxy.clientSecret;
+    cookie.secret = secrets.oauth2_proxy.cookie.secret;
+  };
 }
