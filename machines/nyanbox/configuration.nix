@@ -238,5 +238,10 @@ let secrets = import ./secrets.nix; in
     clientID = secrets.oauth2_proxy.clientID;
     clientSecret = secrets.oauth2_proxy.clientSecret;
     cookie.secret = secrets.oauth2_proxy.cookie.secret;
+    setXauthrequest = true;
+    extraConfig = {
+      skip-provider-button = true;
+      whitelist-domain = ".zoiks.net";
+    };
   };
 }
