@@ -34,7 +34,10 @@
 ;;   (package-refresh-contents)
 ;;   (package-install 'use-package))
 
-(require 'use-package)
+(eval-when-compile
+  (require 'use-package))
+(use-package diminish)
+(use-package delight)
 
 ;; (setq use-package-always-ensure t)
 
@@ -49,7 +52,7 @@
   (run-hooks 'after-load-theme-hook))
 
 ;; What I want to actually run after load-them:
-(defun fix-ansi-term-after-load-theme ()
+(defun ansi-term-reset-color-vector ()
   "Attempt to unfuck `ansi-term' after changing themes."
   (setq ansi-term-color-vector
         [term term-color-black
@@ -61,11 +64,12 @@
               term-color-cyan
               term-color-white]))
 ;; Add my function to that new hook:
-(add-hook 'after-load-theme-hook #'fix-ansi-term-after-load-theme)
+(add-hook 'after-load-theme-hook #'ansi-term-reset-color-vector)
 
 (use-package spacemacs-common
-  :ensure spacemacs-theme
-  :config (load-theme 'spacemacs-dark t))
+  :config (load-theme 'spacemacs-light t))
+
+;; Enable mouse input in terminals
 (xterm-mouse-mode t)
 
 (use-package bazel-mode
@@ -76,18 +80,26 @@
   ;; Use company-mode in all buffers (more completion)
   :hook (after-init . global-company-mode))
 
+(use-package company-posframe
+  :diminish company-posframe-mode
+  :config (company-posframe-mode 1))
+
 (use-package company-terraform
   :config
   (company-terraform-init))
 
-(use-package diminish)
+(diminish 'eldoc-mode)
 
-;; (use-package docker
-;;   :config (docker-global-mode))
+(use-package arduino-mode)
+
+(use-package dockerfile-mode
+  :mode "Dockerfile\\'")
+
+(use-package erlang)
 
 (use-package flycheck
   :config
-  (setq flycheck-ghc-stack-use-nix t)
+  ;; (setq flycheck-ghc-stack-use-nix t)
   (setq flycheck-python-flake8-executable "flake8")
   (setq flycheck-python-pylint-executable "pylint")
   (global-flycheck-mode 1))
@@ -116,6 +128,12 @@
 
 (use-package go-mode)
 
+(use-package graphviz-dot-mode
+  :after org
+  :config
+  (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot))
+  (setq graphviz-dot-view-command "dotty %s"))
+
 (use-package haskell-mode
   :config (setq haskell-tags-on-save t))
 
@@ -130,6 +148,15 @@
   :config
   (flx-ido-mode 1))
 
+(use-package highlight-indentation
+  :hook
+  (prog-mode . highlight-indentation-mode)
+  (yaml-mode . highlight-indentation-mode)
+  :diminish highlight-indentation-mode)
+
+(use-package idle-highlight-mode
+  :hook (prog-mode . idle-highlight-mode))
+
 (use-package jsonnet-mode)
 
 (use-package jq-mode
@@ -138,12 +165,13 @@
 ;; (use-package kubernetes
 ;;   :commands (kubernetes-overview))
 
+(defun benley/set-left-fringe-width ()
+  (setq left-fringe-width 20))
+
 (use-package magit
   :bind ("C-x g" . magit-status)
-  :config (setq magit-completing-read-function #'magit-ido-completing-read))
-
-;; (use-package magit-gh-pulls
-;;   :hook (magit-mode . turn-on-magit-gh-pulls))
+  :config (setq magit-completing-read-function #'magit-ido-completing-read)
+  :hook (magit-mode . benley/set-left-fringe-width))
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
@@ -180,6 +208,8 @@
 (setq flycheck-executable-find
       (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd)))
 
+(use-package org)
+
 (use-package org-bullets
   :hook
   (org-mode . org-bullets-mode))
@@ -190,9 +220,23 @@
   ;; org-journal for it to work correctly
   (setq org-journal-dir "~/benley@gmail.com/org/journal")
   (setq org-journal-file-format "%Y-%m-%d.org")
-  (setq org-journal-date-format "%A, %B %d %Y")
+  (setq org-journal-date-format "%A, %B %e %Y")
   (setq org-journal-date-prefix "#+DATE: ")
-  (setq org-journal-time-prefix "* "))
+  (setq org-journal-time-prefix "* ")
+  (setq org-journal-time-format "%A, %B %e %Y %R %Z"))
+
+;; (use-package org-make-toc
+;;   ;; :init
+;;   ;; (defalias 'second #'cadr)
+;;   :hook (org-mode . org-make-toc-mode))
+
+(use-package form-feed
+  :hook
+  (emacs-lisp-mode . form-feed-mode)
+  (help-mode . form-feed-mode)
+  :diminish form-feed-mode)
+
+
 
 (use-package paredit)
 
@@ -200,8 +244,9 @@
   :init
   (setq powerline-default-separator 'wave)
   (setq powerline-gui-use-vcs-glyph t)
-  :config
-  (powerline-default-theme))
+  (powerline-default-theme)
+  :hook ((after-load-theme . powerline-reset)
+         (after-init . powerline-reset)))
 
 (use-package protobuf-mode)
 
@@ -234,7 +279,7 @@
 
 (use-package terminal-here
   :init
-  (setq terminal-here-terminal-command '("konsole"))
+  (setq terminal-here-terminal-command '("gnome-terminal"))
   (setq terminal-here-project-root-function #'projectile-project-root)
   :bind
   ("C-c C-S-t C-S-t" . terminal-here-launch)
@@ -247,35 +292,35 @@
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
-(use-package vdiff
-  :config
-  (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map))
+;; (use-package vdiff
+;;   :config
+;;   (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map))
 
-(use-package vdiff-magit
-  :config
-  (define-key magit-mode-map "e" #'vdiff-magit-dwim)
-  (define-key magit-mode-map "E" #'vdiff-magit-popup)
-  (setcdr (assoc ?e (plist-get magit-dispatch-popup :actions))
-          '("vdiff dwim" #'vdiff-magit-dwim))
-  (setcdr (assoc ?E (plist-get magit-dispatch-popup :actions))
-          '("vdiff popup" #'vdiff-magit-popup))
-  ;; This flag will default to using ediff for merges. vdiff-magit does not yet
-  ;; support 3-way merges. Please see the docstring of this variable for more
-  ;; information
-  ;; (setq vdiff-magit-use-ediff-for-merges nil)
+;; (use-package vdiff-magit
+;;   :config
+;;   (define-key magit-mode-map "e" #'vdiff-magit-dwim)
+;;   (define-key magit-mode-map "E" #'vdiff-magit-popup)
+;;   (setcdr (assoc ?e (plist-get magit-dispatch-popup :actions))
+;;           '("vdiff dwim" #'vdiff-magit-dwim))
+;;   (setcdr (assoc ?E (plist-get magit-dispatch-popup :actions))
+;;           '("vdiff popup" #'vdiff-magit-popup))
+;;   ;; This flag will default to using ediff for merges. vdiff-magit does not yet
+;;   ;; support 3-way merges. Please see the docstring of this variable for more
+;;   ;; information
+;;   ;; (setq vdiff-magit-use-ediff-for-merges nil)
 
-  ;; Whether vdiff-magit-dwim runs show variants on hunks.  If non-nil,
-  ;; vdiff-magit-show-staged or vdiff-magit-show-unstaged are called based on what
-  ;; section the hunk is in.  Otherwise, vdiff-magit-dwim runs vdiff-magit-stage
-  ;; when point is on an uncommitted hunk.  (setq vdiff-magit-dwim-show-on-hunks
-  ;; nil)
+;;   ;; Whether vdiff-magit-dwim runs show variants on hunks.  If non-nil,
+;;   ;; vdiff-magit-show-staged or vdiff-magit-show-unstaged are called based on what
+;;   ;; section the hunk is in.  Otherwise, vdiff-magit-dwim runs vdiff-magit-stage
+;;   ;; when point is on an uncommitted hunk.  (setq vdiff-magit-dwim-show-on-hunks
+;;   ;; nil)
 
-  ;; Whether vdiff-magit-show-stash shows the state of the index.
-  ;; (setq vdiff-magit-show-stash-with-index t)
+;;   ;; Whether vdiff-magit-show-stash shows the state of the index.
+;;   ;; (setq vdiff-magit-show-stash-with-index t)
 
-  ;; Only use two buffers (working file and index) for vdiff-magit-stage
-  ;; (setq vdiff-magit-stage-is-2way nil)
-  )
+;;   ;; Only use two buffers (working file and index) for vdiff-magit-stage
+;;   ;; (setq vdiff-magit-stage-is-2way nil)
+;;   )
 
 (setq vterm-keymap-exceptions
       '("C-x" "M-x"))
@@ -312,7 +357,7 @@
       ;; For NS/Cocoa
       (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") frame 'prepend)
     ;; For Linux
-    (set-fontset-font t 'symbol (font-spec :family "Noto Emoji") frame 'prepend)))
+    (set-fontset-font t 'symbol (font-spec :family "Noto Color Emoji") frame 'prepend)))
 
 (--set-emoji-font nil)
 
@@ -330,6 +375,12 @@
 
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 ;; (add-hook 'text-mode-hook #'turn-on-auto-fill)
+(add-hook 'text-mode-hook #'turn-on-flyspell)
+
+;; unfortunately this makes a variety of things _extremely slow_
+;; (add-hook 'text-mode-hook #'flyspell-buffer)
+
+(setq flyspell-issue-message-flag nil)
 
 ;; Stop littering everywhere with save files, put them somewhere
 (setq backup-directory-alist `(("." . "~/.emacs-backups")))
@@ -367,10 +418,10 @@
 (global-set-key (kbd "C-x C-b") #'ibuffer)
 
 ;; keybindings for org mode
-(global-set-key "\C-cl" #'org-store-link)
-(global-set-key "\C-ca" #'org-agenda)
-(global-set-key "\C-cc" #'org-capture)
-;; (global-set-key "\C-cb" #'org-switchb)
+(global-set-key (kbd "C-c l") #'org-store-link)
+(global-set-key (kbd "C-c a") #'org-agenda)
+(global-set-key (kbd "C-c c") #'org-capture)
+;; (global-set-key (kbd "C-c b") #'org-switchb)
 (global-set-key (kbd "C-c j") #'org-journal-new-entry)
 
 ;; Scrolling
@@ -392,16 +443,33 @@
 Set the fonts to format correctly for specific modes.
 Default face is fixed so we only need to have the exceptions."
   (interactive)
+  (setq visual-fill-column-center-text t)
+  (setq cursor-type '(bar . 3))
   (variable-pitch-mode t)
+  (visual-line-mode t)
+  (visual-fill-column-mode t)
   ;; (setq line-spacing 3)
-  (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
+  ;; (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
   ;; (set-face-attribute 'org-link nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-special-keyword nil :inherit 'fixed-pitch))
+  ;; (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
+  ;; (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+  ;; (set-face-attribute 'org-date nil :inherit 'fixed-pitch)
+  ;; (set-face-attribute 'org-special-keyword nil :inherit 'fixed-pitch)
+  )
+
+(defun benley/org-mode-setup ()
+  (interactive)
+  (setq fill-column 79)
+  (visual-line-mode t))
+
+(add-hook 'org-mode-hook #'benley/org-mode-setup)
+(add-hook 'org-journal-mode-hook #'set-buffer-variable-pitch)
+
+;; (add-hook 'org-mode-hook #'variable-pitch-mode)
+;; (add-hook 'org-mode-hook #'visual-line-mode)
 
 ;; (add-hook 'org-mode-hook #'set-buffer-variable-pitch)
+
 ;; (add-hook 'markdown-mode-hook #'set-buffer-variable-pitch)
 ;; (add-hook 'Info-mode-hook #'set-buffer-variable-pitch)
 
@@ -449,6 +517,7 @@ Default face is fixed so we only need to have the exceptions."
 
 ;; In shell-mode, make up and down arrows act more like a normal
 ;; (i.e. readline) shell prompt
+(require 'shell)
 (define-key shell-mode-map (kbd "<up>")   #'comint-previous-input)
 (define-key shell-mode-map (kbd "<down>") #'comint-next-input)
 
@@ -460,16 +529,32 @@ Default face is fixed so we only need to have the exceptions."
  'org-babel-load-languages
  '((emacs-lisp . t)
    (shell . t)
-   (jq . t)))
+   (jq . t)
+   (ruby . t)
+   (dot . t)))
 
-;; (part of org-mode) make org bullets clickable, etc
-(require 'org-mouse)
+(defun my-org-confirm-babel-evaluate (lang body)
+  "Don't prompt before evaluating yaml or dot blocks."
+  (not (member lang '("yaml" "dot"))))
 
-;; (local stuff) add github:... links to org mode
-(require 'org-github-links)
+(setq org-confirm-babel-evaluate #'my-org-confirm-babel-evaluate)
+
+;; do-nothing execute function for yaml, so I can use yaml src blocks
+;; as input to other code blocks
+(defun org-babel-execute:yaml (body params) body)
+
+;; make org bullets clickable, etc (part of org-mode)
+(add-to-list 'org-modules 'org-mouse)
+
+;; add github:... links to org mode (my local stuff)
+(add-to-list 'org-modules 'org-github-links)
 
 ;; ox-gfm: Export to github-flavored markdown
-(use-package ox-gfm :ensure t)
+(use-package ox-gfm)
+(use-package ox-asciidoc)
+(use-package ox-rst)
+(use-package ox-ipynb)
+
 
 (setq org-special-ctrl-a/e t)
 (setq org-M-RET-may-split-line nil)
@@ -483,6 +568,9 @@ Default face is fixed so we only need to have the exceptions."
 (setq org-log-done 'time)
 (setq org-startup-indented t)
 (setq org-fontify-whole-heading-line t)
+(setq org-fontify-quote-and-verse-blocks t)
+(setq org-columns-default-format "%25ITEM %TODO %3PRIORITY %TAGS %LOCATION")
+(setq org-hide-emphasis-markers t)
 
 (setq org-agenda-files
       '("~/benley@gmail.com/org"
@@ -490,12 +578,14 @@ Default face is fixed so we only need to have the exceptions."
         "~/benley@gmail.com/evernote_export"
         "~/.org-jira"))
 
-(setq org-link-abbrev-alist
-      '(
-        ;; I think org-jira covers this:
-        ;; ("jira" . "https://postmates.atlassian.net/browse/")
-        ("gmap" . "https://maps.google.com/maps?q=%s")
-        ))
+;; I think org-jira covers this:
+;; (add-to-list 'org-link-abbrev-alist '("jira" . "https://postmates.atlassian.net/browse/"))
+
+(add-to-list 'org-link-abbrev-alist '("gmap" . "https://maps.google.com/maps?q=%s"))
+
+;; https://emacs.stackexchange.com/questions/18404/can-i-display-org-mode-attachments-as-inline-images-in-my-document
+(require 'org-attach)
+(add-to-list 'org-link-abbrev-alist '("att" . org-attach-expand-link))
 
 (setq org-capture-templates
       '(
@@ -522,8 +612,6 @@ Default face is fixed so we only need to have the exceptions."
 (defun my-prog-mode-hook ()
   "Setup stuff for `prog-mode' derivatives."
   (if window-system (hl-line-mode t))
-  (idle-highlight-mode t)
-  (highlight-indentation-mode t)
   (setq-local show-trailing-whitespace t)
   (setq-local display-line-numbers t))
 
@@ -541,9 +629,6 @@ Default face is fixed so we only need to have the exceptions."
   (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
 
 (add-hook 'term-exec-hook #'my-term-exec-hook)
-
-;; (use-package eterm-256color
-;;   :hook (term-mode . eterm-256color-mode))
 
 (use-package xterm-color)
 
@@ -595,17 +680,20 @@ This is what makes 256-color output work in shell-mode."
   (which-key-mode t)
   (which-key-setup-side-window-right-bottom))
 
-(use-package stumpwm-mode)
+(use-package ssh-config-mode
+  :mode
+  ("/\\.ssh/config\\'" . ssh-config-mode)
+  ("/sshd?_config\\'" . ssh-config-mode)
+  ("/known_hosts\\'" . ssh-known-hosts-mode)
+  ("/authorized_keys2?\\'" . ssh-authorized-keys-mode)
+  :hook
+  (ssh-config-mode . turn-on-font-lock))  ; is this even necessary?
 
-;; (use-package frames-only-mode
-;;   :ensure t
-;;   :config
-;;   (frames-only-mode t))
+;; (use-package stumpwm-mode)
 
-(use-package slime
-  :ensure t
-  :init
-  (setq slime-contribs '(slime-fancy)))
+;; (use-package slime
+;;   :init
+;;   (setq slime-contribs '(slime-fancy)))
 
 (setq calendar-latitude "42.3601")
 (setq calendar-longitude "-71.0589")
@@ -640,12 +728,51 @@ This is what makes 256-color output work in shell-mode."
   (setq projectile-project-search-path '("~/p/" "~/pm/"))
   :config
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-mode 1))
+  (projectile-mode 1)
+  :delight
+  '(:eval (concat " " (projectile-project-name))))
 
 (use-package treemacs-projectile)
-(server-start)
-(load "~/.emacs.d/exwm.el")
+
+(use-package visual-fill-column
+  ;; :hook
+  ;; (visual-line-mode . visual-fill-column-mode)
+  :config
+  (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust))
+
+(use-package imenu-list
+  :config
+  (imenu-list-minor-mode t)
+  (setq imenu-list-auto-resize t)
+  (setq imenu-list-size 0.15)
+  :bind
+  ("C-'" . imenu-list-smart-toggle))
+
+;; (server-start)
+;; (load "~/.emacs.d/exwm.el")
+
+(defun jsonnet-reformat-buffer ()
+  "Reformat entire buffer using the Jsonnet format utility."
+  (interactive)
+  (call-process-region (point-min) (point-max)
+                       jsonnet-command t t nil "fmt"
+                       "--string-style" "l"
+                       "--comment-style" "l"
+                       "-"))
+
+(use-package atomic-chrome
+  :init
+  (setq atomic-chrome-buffer-open-style 'frame)
+  (setq atomic-chrome-url-major-mode-alist
+        '(("github\\.com" . gfm-mode)
+          ("reddit\\.com" . markdown-mode)))
+  (setq atomic-chrome-extention-type-list '(atomic-chrome))
+  (setq atomic-chrome-buffer-frame-height 40)
+  (setq atomic-chrome-buffer-frame-width 100)
+  :config
+  (atomic-chrome-start-server))
 
 (load "~/.emacs.d/localonly.el")
+(message "Finished with init.el")
 (provide 'init)
 ;;; init.el ends here

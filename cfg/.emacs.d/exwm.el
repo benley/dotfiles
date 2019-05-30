@@ -148,6 +148,18 @@ many windows and the window's actual title is more useful."
   (interactive)
   (switch-to-buffer (other-buffer (current-buffer) 1)))
 
+;; (defun benley/app-launcher ()
+;;   (interactive)
+;;   (shell-command-to-string "rofi -show drun"))
+
+;; (defun benley/window-switcher ()
+;;   (interactive)
+;;   (shell-command-to-string "rofi -show window"))
+
+;; (defun benley/window-switcher-current-desktop ()
+;;   (interactive)
+;;   (shell-command-to-string "rofi -show windowcd"))
+
 (exwm-input-set-key (kbd "s-0") #'delete-window)
 (exwm-input-set-key (kbd "s-1") #'delete-other-windows)
 (exwm-input-set-key (kbd "s-2") #'split-window-below)
@@ -176,6 +188,18 @@ many windows and the window's actual title is more useful."
 (exwm-input-set-key (kbd "<XF86AudioMute>") #'benley/volume-mute-toggle)
 (exwm-input-set-key (kbd "<XF86AudioMicMute>") #'benley/audio-mic-mute-toggle)
 (exwm-input-set-key (kbd "s-<tab>") #'benley/switch-to-last-buffer)
+;; (exwm-input-set-key (kbd "s-SPC") #'benley/app-launcher)
+;; (exwm-input-set-key (kbd "S-s-SPC") #'benley/window-switcher)
+(exwm-input-set-key (kbd "s-`") #'other-window)
+(exwm-input-set-key (kbd "s-~") (lambda () (interactive) (other-window -1)))
+
+;; fn-f11 (the "keyboard" key): send the following keystroke to the
+;; emacs global keymap, bypassing whatever X11 window happens to be
+;; focused at the time.  So I can hit [f11 C-x-f] and get `find-file',
+;; for example.
+(define-prefix-command 'benley/meep-global-map)
+(set-keymap-parent benley/meep-global-map global-map)
+(exwm-input-set-key (kbd "<XF86Launch1>") 'benley/meep-global-map)
 
 ;; To add a key binding only available in line-mode, simply define it in
 ;; `exwm-mode-map'.  The following example shortens 'C-c q' to 'C-q'.
