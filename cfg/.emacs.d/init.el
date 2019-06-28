@@ -418,7 +418,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 (scroll-bar-mode 0)
-(global-hl-line-mode 1)                 ;; highlight current line
 (column-number-mode 1)                  ;; show column position in modeline
 (show-paren-mode 1)                     ;; highlight matching parens
 
