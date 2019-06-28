@@ -4,6 +4,8 @@
 {
 
   imports = [
+    <home-manager/nixos>
+
     ./nix.nix
     ./package-overrides.nix
     ./users.nix

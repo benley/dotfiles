@@ -74,7 +74,7 @@
     # taffybar
     # j4-dmenu-desktop  # dmenu .desktop app launcher
     # libnotify         # includes notify-send
-    # networkmanager_dmenu
+    networkmanager_dmenu
     # networkmanagerapplet
     # pasystray
     # lxqt.pavucontrol-qt  # This is nicer, but pasystray wants to launch regular pavucontrol
