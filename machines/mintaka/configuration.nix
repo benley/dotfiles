@@ -12,7 +12,7 @@
     ../imports/workstuff.nix
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_4_19;
+  boot.kernelPackages = pkgs.linuxPackages_5_1;
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -65,9 +65,11 @@
   i18n.inputMethod.enabled = "ibus";
   i18n.inputMethod.ibus.engines = with pkgs.ibus-engines; [ uniemoji ];
 
-
   # Accommodate Windows nonsesnse
   time.hardwareClockInLocalTime = true;
+
+  # Allow changing timezone via dbus, so GeoIP location detection can work
+  time.timeZone = null;
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
@@ -78,9 +80,9 @@
   programs.gnupg.agent.enable = true;
   programs.gnupg.agent.enableSSHSupport = true;
 
-  services.avahi.publish.enable = true;
-  services.avahi.publish.workstation = true;
-  services.avahi.publish.userServices = true;
+  services.avahi.publish.enable = false;
+  services.avahi.publish.workstation = false;
+  services.avahi.publish.userServices = false;
 
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
@@ -182,4 +184,9 @@
 
 
   services.fwupd.enable = true;
+
+  services.logind.extraConfig = ''
+    KillUserProcesses=yes
+  '';
+
 }
