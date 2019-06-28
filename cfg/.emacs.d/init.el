@@ -252,7 +252,7 @@
 
 (use-package powerline
   :init
-  (setq powerline-default-separator 'wave)
+  (setq powerline-default-separator 'slant)
   (setq powerline-gui-use-vcs-glyph t)
   (powerline-default-theme)
   :hook ((after-load-theme . powerline-reset)
