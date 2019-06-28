@@ -124,6 +124,8 @@
   :diminish git-gutter-mode
   :config (global-git-gutter-mode +1))
 
+(use-package gitattributes-mode)
+(use-package gitconfig-mode)
 (use-package gitignore-mode)
 
 (use-package go-mode)
@@ -229,6 +231,14 @@
 ;;   ;; :init
 ;;   ;; (defalias 'second #'cadr)
 ;;   :hook (org-mode . org-make-toc-mode))
+
+(use-package forge
+  :after magit
+  :init
+  (when (< emacs-major-version 27)
+    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"
+          ghub-use-workaround-for-emacs-bug nil))
+  :ensure t)
 
 (use-package form-feed
   :hook
@@ -813,6 +823,9 @@ This is what makes 256-color output work in shell-mode."
   (setq atomic-chrome-buffer-frame-width 100)
   :config
   (atomic-chrome-start-server))
+
+(setq auth-sources
+      '((:source "~/.authinfo.gpg")))
 
 (load "~/.emacs.d/localonly.el")
 (message "Finished with init.el")
