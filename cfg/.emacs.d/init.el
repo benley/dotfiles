@@ -472,20 +472,21 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 (global-set-key (kbd "C-c l") #'org-store-link)
 (global-set-key (kbd "C-c a") #'org-agenda)
 (global-set-key (kbd "C-c c") #'org-capture)
-;; (global-set-key (kbd "C-c b") #'org-switchb)
 (global-set-key (kbd "C-c j") #'org-journal-new-entry)
 
 ;; Scrolling
-(global-set-key [up] (lambda () (interactive) (previous-line)))
-(global-set-key [down] (lambda () (interactive) (next-line)))
-(global-set-key [S-up] (lambda () (interactive) (scroll-down 1)))
-(global-set-key [S-down] (lambda () (interactive) (scroll-up 1)))
+(global-set-key (kbd "M-p") (lambda () (interactive) (scroll-down 2)))
+(global-set-key (kbd "M-n") (lambda () (interactive) (scroll-up 2)))
 
 ;; Window movement
-(global-set-key (kbd "s-h") #'windmove-left)
-(global-set-key (kbd "s-j") #'windmove-down)
-(global-set-key (kbd "s-k") #'windmove-up)
-(global-set-key (kbd "s-l") #'windmove-right)
+;; (global-set-key (kbd "s-h") #'windmove-left)
+;; (global-set-key (kbd "s-j") #'windmove-down)
+;; (global-set-key (kbd "s-k") #'windmove-up)
+;; (global-set-key (kbd "s-l") #'windmove-right)
+
+;; mouse back/fwd buttons
+(global-set-key [mouse-8] #'previous-buffer)
+(global-set-key [mouse-9] #'next-buffer)
 
 ;; FONTS
 ;; -----
