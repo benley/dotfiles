@@ -66,8 +66,11 @@ with rec {
     flycheck-pos-tip
     flycheck-color-mode-line
     flycheck-status-emoji
+    forge
     form-feed
     git-gutter
+    gitattributes-mode
+    gitconfig-mode
     gitignore-mode
     go-mode
     graphviz-dot-mode
