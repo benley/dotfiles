@@ -3,6 +3,8 @@ self: super:
 with { callPackage = super.callPackage; };
 
 {
+  adafruit-udev-rules = callPackage ../pkgs/adafruit-udev-rules { };
+
   awsudo = super.pythonPackages.callPackage ../pkgs/awsudo { };
 
   battery-monitor = super.pythonPackages.callPackage ../pkgs/battery-monitor { };

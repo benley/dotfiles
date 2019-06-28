@@ -1,0 +1,13 @@
+
+# Make Trinket/Pro Trinket/Gemma/Flora programmable without running Arduino as root.
+# SUBSYSTEM=="usb", ATTRS{idProduct}=="0c9f", ATTRS{idVendor}=="1781", MODE="0660", GROUP="dialout"
+
+# Blacklist Adafruit USB CDC boards from being manipulated by ModemManager.
+# Fixes issue with hanging references to /dev/ttyACM* devices on Ubuntu 15.04.
+# ATTRS{idVendor}=="239a", ENV{ID_MM_DEVICE_IGNORE}="1"
+
+# Adafruit feather 32u4
+SUBSYSTEM=="tty", ATTRS{idVendor}=="239a", ATTRS{idProduct}=="800c", TAG+="uaccess"
+
+# Adafruit feather32 usb-serial interface (Silicon Labs CP2104)
+SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", TAG+="uaccess"
