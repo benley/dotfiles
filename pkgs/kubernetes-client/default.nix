@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
-let version = "1.7.5"; in
+let version = "1.11.5"; in
 
 stdenv.mkDerivation {
   name = "kubernetes-client-${version}";
   srcs = fetchurl {
     url = "https://dl.k8s.io/v${version}/kubernetes-client-linux-amd64.tar.gz";
-    sha256 = "1b8p0n17s7ndpbjl5rpav05sjcfwmfb4d7gpqp8smk71gcsxqip2";
+    sha256 = "1s1ynbh27vwadyb4y3nzixfb15akd5iri91b67d4ja1b9v24q65p";
   };
 
   installPhase = ''
