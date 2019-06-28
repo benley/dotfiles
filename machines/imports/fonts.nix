@@ -46,7 +46,7 @@
     ttf_bitstream_vera
     ubuntu_font_family
     unifont
-    vistafonts
+    # vistafonts  # broken?
   ];
 
   # Seems like penultimate.enable may break emoji support somehow?

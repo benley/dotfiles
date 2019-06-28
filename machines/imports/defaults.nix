@@ -72,7 +72,7 @@
   # now handled via overlay
   # services.emacs.package = (import ../../emacs.nix) {inherit pkgs;};
 
-  environment.variables.PAGER = "eless";
+  # environment.variables.PAGER = "eless";
 
   environment.systemPackages = with pkgs; [
     eless

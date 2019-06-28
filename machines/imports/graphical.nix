@@ -22,17 +22,21 @@
   };
 
   environment.systemPackages = with pkgs; [
+    (hunspellWithDicts [pkgs.hunspellDicts.en-us])
     # arandr
     # battery-monitor
     # blueman
     dropbox-cli
     firefox
+    fritzing
     glxinfo
     google-chrome
+    graphviz
     inkscape
     insync
     minecraft
     # nixnote2  # evernote client
+    pinta
     remmina  # RDP/VNC/NX/Spice client
     signal-desktop
     slack
@@ -48,11 +52,11 @@
     gnomeExtensions.appindicator
     gnomeExtensions.dash-to-dock
     gnomeExtensions.dash-to-panel
-    gnomeExtensions.icon-hider
-    gnomeExtensions.no-title-bar
-    gnomeExtensions.system-monitor
+    # gnomeExtensions.icon-hider
+    # gnomeExtensions.no-title-bar
+    # gnomeExtensions.system-monitor
     gnomeExtensions.topicons-plus
-    gnomeExtensions.tilingnome
+    # gnomeExtensions.tilingnome
     # vscode
     xlibs.xdpyinfo
     xlibs.xev
@@ -141,7 +145,7 @@
     # QT_SCALE_FACTOR = "2.0";
     # QT_AUTO_SCREEN_SCALE_FACTOR = "0";
 
-    # gtk3 is too dumb to notice the 240dpi display, so let's force it to scale
+    # gtk3 is too dumb to notice the 240dpi display, so force it to scale
     # GDK_SCALE = "2";
 
     # ... but freetype sure as heck notices, so now we compensate for that
@@ -149,8 +153,8 @@
   };
 
   services.gnome3.at-spi2-core.enable = true;
-  services.gnome3.gnome-keyring.enable = true;
-  security.pam.services.gdm.enableGnomeKeyring = true;
+  # services.gnome3.gnome-keyring.enable = true;
+  # security.pam.services.gdm.enableGnomeKeyring = true;
 
   networking.networkmanager.enable = true;
   networking.networkmanager.unmanaged = [
