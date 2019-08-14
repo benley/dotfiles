@@ -137,7 +137,10 @@
   (setq graphviz-dot-view-command "dotty %s"))
 
 (use-package haskell-mode
-  :config (setq haskell-tags-on-save t))
+  :config
+  (setq haskell-tags-on-save t)
+  :hook
+  (haskell-mode . interactive-haskell-mode))
 
 (ido-mode 1)
 (ido-everywhere 1)
