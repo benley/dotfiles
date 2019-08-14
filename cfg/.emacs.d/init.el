@@ -328,7 +328,9 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
                                    (when smerge-mode
                                      (unpackaged/smerge-hydra/body)))))
 
+(use-package systemd)
 
+
 (use-package terminal-here
   :init
   (setq terminal-here-terminal-command '("gnome-terminal"))

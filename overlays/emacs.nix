@@ -116,6 +116,7 @@ with rec {
     spacemacs-theme
     # slime
     # stumpwm-mode
+    systemd
     tabbar
     terminal-here
     terraform-mode
