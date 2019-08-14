@@ -346,9 +346,11 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :bind
   ("C-c t" . treemacs-select-window))
 
+
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
+
 ;; (use-package vdiff
 ;;   :config
 ;;   (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map))
@@ -382,7 +384,9 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 (setq vterm-keymap-exceptions
       '("C-x" "M-x"))
 (require 'vterm)
+
 
+
 (use-package web-mode
   :init
   (defun custom-web-mode-hook ()
@@ -399,6 +403,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :hook
   (web-mode . custom-web-mode-hook))
 
+
 ;; (use-package weechat
 ;;   :config
 ;;    (setq weechat-modules '(weechat-button weechat-complete weechat-image weechat-notifications))
@@ -554,6 +559,7 @@ Default face is fixed so we only need to have the exceptions."
           (message "File '%s' successfully renamed to '%s'"
                    name (file-name-nondirectory new-name)))))))
 
+
 (require 'term)
 (defun expose-global-binding-in-term (binding)
   "Expose BINDING from the global keymap in `term-mode'."
@@ -581,6 +587,7 @@ Default face is fixed so we only need to have the exceptions."
 (setq comint-prompt-read-only t)  ;; make various REPL prompts readonly
 (setq comint-scroll-to-bottom-on-input 'this)  ;; scroll only _this_ window
 
+
 ;;; Enable some languages that I want to use with org-babel
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -662,6 +669,7 @@ Default face is fixed so we only need to have the exceptions."
 (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
 (setq org-refile-use-outline-path 'file)
 
+
 (setq sh-basic-offset 2)
 (setq sh-indentation 2)
 (setq sh-learn-basic-offset 'usually)
