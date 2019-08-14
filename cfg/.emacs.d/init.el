@@ -381,10 +381,11 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 ;;   ;; (setq vdiff-magit-stage-is-2way nil)
 ;;   )
 
-(setq vterm-keymap-exceptions
-      '("C-x" "M-x"))
-(require 'vterm)
 
+(use-package vterm
+  :init
+  (setq vterm-keymap-exceptions
+        '("C-x" "M-x")))
 
 
 (use-package web-mode
