@@ -761,9 +761,9 @@ This is what makes 256-color output work in shell-mode."
 ;;   :init
 ;;   (setq slime-contribs '(slime-fancy)))
 
-(setq calendar-latitude "42.3601")
-(setq calendar-longitude "-71.0589")
-(setq calendar-location-name "Boston, MA")
+(setq calendar-latitude "42.3601"
+      calendar-longitude "-71.0589"
+      calendar-location-name "Boston, MA")
 
 (defun benley/tabbar-buffer-groups-by-project ()
   "Group tabbar buffers by projectile project."
