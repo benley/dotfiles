@@ -26,6 +26,7 @@
     # arandr
     # battery-monitor
     # blueman
+    discord
     dropbox-cli
     firefox
     fritzing
