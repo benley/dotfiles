@@ -1,0 +1,6 @@
+rofi.dpi: 137
+rofi.show-icons: true
+# rofi.terminal: konsole
+rofi.theme: Paper
+rofi.font: IBM Plex Mono 12
+rofi.modi: drun,window,windowcd,ssh
