@@ -587,11 +587,11 @@ Default face is fixed so we only need to have the exceptions."
    (ruby . t)
    (dot . t)))
 
-(defun my-org-confirm-babel-evaluate (lang body)
+(defun benley/org-confirm-babel-evaluate (lang body)
   "Don't prompt before evaluating yaml or dot blocks."
   (not (member lang '("yaml" "dot"))))
 
-(setq org-confirm-babel-evaluate #'my-org-confirm-babel-evaluate)
+(setq org-confirm-babel-evaluate #'benley/org-confirm-babel-evaluate)
 
 ;; do-nothing execute function for yaml, so I can use yaml src blocks
 ;; as input to other code blocks
@@ -663,38 +663,38 @@ Default face is fixed so we only need to have the exceptions."
 (setq sh-indentation 2)
 (setq sh-learn-basic-offset 'usually)
 
-(defun my-prog-mode-hook ()
+(defun benley/prog-mode-hook ()
   "Setup stuff for `prog-mode' derivatives."
   (if window-system (hl-line-mode t))
   (setq-local show-trailing-whitespace t)
   (setq-local display-line-numbers t))
 
-(add-hook 'prog-mode-hook #'my-prog-mode-hook)
+(add-hook 'prog-mode-hook #'benley/prog-mode-hook)
 
-(defun my-term-mode-hook ()
+(defun benley/term-mode-hook ()
   "My `term-mode' hook."
   (goto-address-mode)  ;; Make URLs clickable
   (setq-local display-line-numbers nil))      ;; No line numbers in terminals
 
-(add-hook 'term-mode-hook #'my-term-mode-hook)
+(add-hook 'term-mode-hook #'benley/term-mode-hook)
 
-(defun my-term-exec-hook ()
+(defun benley/term-exec-hook ()
   "Try to make terminals work better with unicode I guess."
   (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
 
-(add-hook 'term-exec-hook #'my-term-exec-hook)
+(add-hook 'term-exec-hook #'benley/term-exec-hook)
 
 (use-package xterm-color)
 
 (setq comint-output-filter-functions
       (remove 'ansi-color-process-output comint-output-filter-functions))
 
-(defun my-shell-mode-hook ()
+(defun benley/shell-mode-hook ()
   "Add xterm-color-filter to `comint-preoutput-filter-functions'.
 This is what makes 256-color output work in shell-mode."
   (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter nil t))
 
-(add-hook 'shell-mode-hook #'my-shell-mode-hook)
+(add-hook 'shell-mode-hook #'benley/shell-mode-hook)
 
 (setq async-shell-command-buffer 'new-buffer)
 
@@ -753,7 +753,7 @@ This is what makes 256-color output work in shell-mode."
 (setq calendar-longitude "-71.0589")
 (setq calendar-location-name "Boston, MA")
 
-(defun my-tabbar-buffer-groups-by-project ()
+(defun benley/tabbar-buffer-groups-by-project ()
   "Group tabbar buffers by projectile project."
   (list
    (cond
@@ -774,7 +774,7 @@ This is what makes 256-color output work in shell-mode."
 
 (use-package tabbar
   :config
-  (setq tabbar-buffer-groups-function 'my-tabbar-buffer-groups-by-project)
+  (setq tabbar-buffer-groups-function 'benley/tabbar-buffer-groups-by-project)
   (tabbar-mode 1))
 
 (use-package projectile
