@@ -731,13 +731,21 @@ This is what makes 256-color output work in shell-mode."
                          (t
                           "[no file]")))))
 
+(defun benley/confirm-kill-current-buffer ()
+  "Prompt before killing the current buffer."
+  (interactive)
+  (when (y-or-n-p "Really kill current buffer? ")
+    (kill-buffer (current-buffer))))
+
 (use-package pdf-tools
   :config
   (pdf-tools-install)
   :mode
   ("\\.pdf\\'" . pdf-view-mode)
   :hook
-  (pdf-view-mode . pdf-view-fit-page-to-window))
+  (pdf-view-mode . pdf-view-fit-page-to-window)
+  :bind
+  (:map pdf-view-mode-map ("k" . benley/confirm-kill-current-buffer)))
 
 (use-package which-key
   :diminish
