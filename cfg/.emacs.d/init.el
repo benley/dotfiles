@@ -98,10 +98,11 @@
 (use-package erlang)
 
 (use-package flycheck
+  :custom
+  ;; (flycheck-ghc-stack-use-nix t)
+  (flycheck-python-flake8-executable "flake8")
+  (flycheck-python-pylint-executable "pylint")
   :config
-  ;; (setq flycheck-ghc-stack-use-nix t)
-  (setq flycheck-python-flake8-executable "flake8")
-  (setq flycheck-python-pylint-executable "pylint")
   (global-flycheck-mode 1))
 
 (use-package flycheck-pos-tip
@@ -114,10 +115,10 @@
 
 (use-package flycheck-status-emoji
   :after (flycheck)
-  :init
-  (setq flycheck-status-emoji-indicator-finished-error ?💀)
-  (setq flycheck-status-emoji-indicator-finished-ok ?👍)
-  (setq flycheck-status-emoji-indicator-finished-warning ?👎)
+  :custom
+  (flycheck-status-emoji-indicator-finished-error ?💀)
+  (flycheck-status-emoji-indicator-finished-ok ?👍)
+  (flycheck-status-emoji-indicator-finished-warning ?👎)
   :config (flycheck-status-emoji-mode t))
 
 (use-package git-gutter
@@ -134,11 +135,12 @@
   :after org
   :config
   (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot))
-  (setq graphviz-dot-view-command "dotty %s"))
+  :custom
+  (graphviz-dot-view-command "dotty %s"))
 
 (use-package haskell-mode
-  :config
-  (setq haskell-tags-on-save t)
+  :custom
+  (haskell-tags-on-save t)
   :hook
   (haskell-mode . interactive-haskell-mode))
 
@@ -175,13 +177,13 @@
 
 (use-package magit
   :bind ("C-x g" . magit-status)
-  :config (setq magit-completing-read-function #'magit-ido-completing-read)
+  :custom (magit-completing-read-function #'magit-ido-completing-read)
   :hook (magit-mode . benley/set-left-fringe-width))
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
   :mode ("\\.md\\'" . gfm-mode)
-  :config (setq markdown-command "pandoc")
+  :custom (markdown-command "pandoc")
   :hook (gfm-mode . turn-on-visual-line-mode))
 
 (require 'mtail-mode)
@@ -189,29 +191,30 @@
 (add-to-list 'auto-mode-alist (cons "\\.em$" #'mtail-mode))
 
 (use-package nix-mode
-  :config
-  (setq nix-indent-function #'nix-indent-line)
+  :custom
+  (nix-indent-function #'nix-indent-line)
   :mode
   ("\\.nix\\'" . #'nix-mode)
   ("\\.drv\\'" . #'nix-drv-mode))
 
-(use-package nix-sandbox)
-(require 'nix-sandbox)
+
 
-(setq haskell-process-wrapper-function
-      (lambda (args) (apply #'nix-shell-command (nix-current-sandbox) args)))
+(use-package nix-sandbox
+  :after (haskell-mode flycheck)
+  :config
+  ;; Remove after https://github.com/travisbhartwell/nix-emacs/pull/45 is merged:
+  (defun nix-shell-command (sandbox &rest args)
+    "Assemble a command to be executed in SANDBOX from ARGS."
+    (list "bash" "-c" (format "source %s; %s" (nix-sandbox-rc sandbox)
+                              (mapconcat 'shell-quote-argument args " "))))
+  :custom
+  (haskell-process-wrapper-function (lambda (args) (apply #'nix-shell-command (nix-current-sandbox) args)))
 
-;; Remove after https://github.com/travisbhartwell/nix-emacs/pull/45 is merged:
-(defun nix-shell-command (sandbox &rest args)
-  "Assemble a command to be executed in SANDBOX from ARGS."
-  (list "bash" "-c" (format "source %s; %s" (nix-sandbox-rc sandbox)
-                            (mapconcat 'shell-quote-argument args " "))))
+  (flycheck-command-wrapper-function (lambda (cmd) (apply #'nix-shell-command (nix-current-sandbox) cmd)))
 
-(setq flycheck-command-wrapper-function
-      (lambda (cmd) (apply #'nix-shell-command (nix-current-sandbox) cmd)))
+  (flycheck-executable-find (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd))))
 
-(setq flycheck-executable-find
-      (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd)))
+
 
 (use-package org)
 
@@ -220,15 +223,15 @@
   (org-mode . org-bullets-mode))
 
 (use-package org-journal
-  :init
+  :custom
   ;; I think you have to set org-journal-dir before loading
-  ;; org-journal for it to work correctly
-  (setq org-journal-dir "~/benley@gmail.com/org/journal")
-  (setq org-journal-file-format "%Y-%m-%d.org")
-  (setq org-journal-date-format "%A, %B %e %Y")
-  (setq org-journal-date-prefix "#+DATE: ")
-  (setq org-journal-time-prefix "* ")
-  (setq org-journal-time-format "%A, %B %e %Y %R %Z"))
+  ;; org-journal for it to work correctly (if so, change this back to :init with (setq ...))
+  (org-journal-dir "~/benley@gmail.com/org/journal")
+  (org-journal-file-format "%Y-%m-%d.org")
+  (org-journal-date-format "%A, %B %e %Y")
+  (org-journal-date-prefix "#+DATE: ")
+  (org-journal-time-prefix "* ")
+  (org-journal-time-format "%A, %B %e %Y %R %Z"))
 
 ;; (use-package org-make-toc
 ;;   ;; :init
@@ -255,9 +258,10 @@
 
 (use-package powerline
   :init
-  (setq powerline-default-separator 'slant)
-  (setq powerline-gui-use-vcs-glyph t)
   (powerline-default-theme)
+  :custom
+  (powerline-default-separator 'slant)
+  (powerline-gui-use-vcs-glyph t)
   :hook ((after-load-theme . powerline-reset)
          (after-init . powerline-reset)))
 
@@ -285,8 +289,8 @@
 ;;   (smooth-scrolling-mode 1))
 
 (use-package ido-grid-mode
-  :init
-  (setq ido-grid-mode-keys '(tab backtab up down left right C-n C-p C-s C-r))
+  :custom
+  (ido-grid-mode-keys '(tab backtab up down left right C-n C-p C-s C-r))
   :config
   (ido-grid-mode +1))
 
@@ -334,10 +338,11 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 (use-package systemd)
 
 
+
 (use-package terminal-here
-  :init
-  (setq terminal-here-terminal-command '("gnome-terminal"))
-  (setq terminal-here-project-root-function #'projectile-project-root)
+  :custom
+  (terminal-here-terminal-command '("gnome-terminal"))
+  (terminal-here-project-root-function #'projectile-project-root)
   :bind
   ("C-c C-S-t C-S-t" . terminal-here-launch)
   ("C-c C-S-t C-S-p" . terminal-here-project-launch))
@@ -347,10 +352,12 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   ("C-c t" . treemacs-select-window))
 
 
+
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
 
+
 ;; (use-package vdiff
 ;;   :config
 ;;   (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map))
@@ -382,27 +389,22 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 ;;   )
 
 
+
 (use-package vterm
-  :init
-  (setq vterm-keymap-exceptions
-        '("C-x" "M-x")))
+  :custom
+  (vterm-keymap-exceptions '("C-x" "M-x" "C-c")))
 
 
 (use-package web-mode
-  :init
-  (defun custom-web-mode-hook ()
-    "Hooks for Web mode."
-    (setq web-mode-markup-indent-offset 2)
-    (setq web-mode-css-indent-offset 2)
-    (setq web-mode-code-indent-offset 2))
+  :custom
+  (web-mode-markup-indent-offset 2)
+  (web-mode-css-indent-offset 2)
+  (web-mode-code-indent-offset 2)
 
   :mode
   "\\.html?\\'"
   "\\.css\\'"
-  "\\.scss\\'"
-
-  :hook
-  (web-mode . custom-web-mode-hook))
+  "\\.scss\\'")
 
 
 ;; (use-package weechat
@@ -766,8 +768,8 @@ This is what makes 256-color output work in shell-mode."
 ;; (use-package stumpwm-mode)
 
 ;; (use-package slime
-;;   :init
-;;   (setq slime-contribs '(slime-fancy)))
+;;   :custom
+;;   (slime-contribs '(slime-fancy)))
 
 (setq calendar-latitude "42.3601"
       calendar-longitude "-71.0589"
@@ -798,8 +800,8 @@ This is what makes 256-color output work in shell-mode."
   (tabbar-mode 1))
 
 (use-package projectile
-  :init
-  (setq projectile-project-search-path '("~/p/" "~/pm/"))
+  :custom
+  (projectile-project-search-path '("~/p/" "~/pm/"))
   :config
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode 1)
@@ -817,8 +819,9 @@ This is what makes 256-color output work in shell-mode."
 (use-package imenu-list
   :config
   (imenu-list-minor-mode t)
-  (setq imenu-list-auto-resize t)
-  (setq imenu-list-size 0.15)
+  :custom
+  (imenu-list-auto-resize t)
+  (imenu-list-size 0.15)
   :bind
   ("C-'" . imenu-list-smart-toggle))
 
@@ -835,14 +838,14 @@ This is what makes 256-color output work in shell-mode."
                        "-"))
 
 (use-package atomic-chrome
-  :init
-  (setq atomic-chrome-buffer-open-style 'frame)
-  (setq atomic-chrome-url-major-mode-alist
-        '(("github\\.com" . gfm-mode)
-          ("reddit\\.com" . markdown-mode)))
-  (setq atomic-chrome-extention-type-list '(atomic-chrome))
-  (setq atomic-chrome-buffer-frame-height 40)
-  (setq atomic-chrome-buffer-frame-width 100)
+  :custom
+  (atomic-chrome-buffer-open-style 'frame)
+  (atomic-chrome-url-major-mode-alist
+   '(("github\\.com" . gfm-mode)
+     ("reddit\\.com" . markdown-mode)))
+  (atomic-chrome-extention-type-list '(atomic-chrome))
+  (atomic-chrome-buffer-frame-height 40)
+  (atomic-chrome-buffer-frame-width 100)
   :config
   (atomic-chrome-start-server))
 
