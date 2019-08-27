@@ -8,6 +8,11 @@
 (prefer-coding-system 'utf-8)
 (set-language-environment "UTF-8")
 
+;; Do these early to make interactive startup seem faster
+(tool-bar-mode 0)
+(menu-bar-mode 0)
+(scroll-bar-mode 0)
+
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 
@@ -428,9 +433,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 (add-hook 'after-make-frame-functions #'--set-emoji-font)
 
-(tool-bar-mode 0)
-(menu-bar-mode 0)
-(scroll-bar-mode 0)
 (column-number-mode 1)                  ;; show column position in modeline
 (show-paren-mode 1)                     ;; highlight matching parens
 
