@@ -35,6 +35,9 @@
 (setq package-enable-at-startup nil)
 (package-initialize)
 
+;; this has to be set before loading use-package in order to work
+(setq use-package-enable-imenu-support t)
+
 ;; (unless (require 'use-package nil t)
 ;;   (package-refresh-contents)
 ;;   (package-install 'use-package))
