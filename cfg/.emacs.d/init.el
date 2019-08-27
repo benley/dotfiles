@@ -172,10 +172,11 @@
 (use-package idle-highlight-mode
   :hook (prog-mode . idle-highlight-mode))
 
-(use-package jsonnet-mode)
+(use-package jsonnet-mode
+  :mode "\\.jsonnet\\'" "\\.libsonnet\\'")
 
 (use-package jq-mode
-  :mode "\\.jq$")
+  :mode "\\.jq\\'")
 
 ;; (use-package kubernetes
 ;;   :commands (kubernetes-overview))
