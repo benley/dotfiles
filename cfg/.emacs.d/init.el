@@ -367,7 +367,15 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 (use-package treemacs
   :bind
-  ("C-c t" . treemacs-select-window))
+  ("C-c t" . treemacs-select-window)
+  :custom
+  (treemacs-is-never-other-window t))
+
+(use-package treemacs-projectile
+  :after treemacs)
+
+(use-package treemacs-magit
+  :after treemacs magit)
 
 
 
