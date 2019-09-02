@@ -218,19 +218,18 @@
 
 
 (use-package nix-sandbox
-  :after (haskell-mode flycheck)
   :config
-  ;; Remove after https://github.com/travisbhartwell/nix-emacs/pull/45 is merged:
-  (defun nix-shell-command (sandbox &rest args)
+  ;; Should be obsolete after https://github.com/travisbhartwell/nix-emacs/pull/45 is merged:
+  (defun benley/nix-shell-command (sandbox &rest args)
     "Assemble a command to be executed in SANDBOX from ARGS."
     (list "bash" "-c" (format "source %s; %s" (nix-sandbox-rc sandbox)
                               (mapconcat 'shell-quote-argument args " "))))
+  (defalias 'nix-shell-command #'benley/nix-shell-command)
+
   :custom
-  (haskell-process-wrapper-function (lambda (args) (apply #'nix-shell-command (nix-current-sandbox) args)))
-
+  (haskell-process-wrapper-function  (lambda (cmd) (apply #'nix-shell-command (nix-current-sandbox) cmd)))
   (flycheck-command-wrapper-function (lambda (cmd) (apply #'nix-shell-command (nix-current-sandbox) cmd)))
-
-  (flycheck-executable-find (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd))))
+  (flycheck-executable-find          (lambda (cmd) (nix-executable-find       (nix-current-sandbox) cmd))))
 
 
 
