@@ -74,8 +74,17 @@
 ;; Add my function to that new hook:
 (add-hook 'after-load-theme-hook #'ansi-term-reset-color-vector)
 
+
+;;; THEMES
+
 (use-package spacemacs-common
+  :disabled t
   :config (load-theme 'spacemacs-light t))
+
+(use-package doom-themes
+  :config (load-theme 'doom-palenight t))
+
+
 
 ;; Enable mouse input in terminals
 (xterm-mouse-mode t)
