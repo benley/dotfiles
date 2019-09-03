@@ -77,12 +77,51 @@
 
 ;;; THEMES
 
+(use-package all-the-icons)
+
+(use-package centaur-tabs
+  :after all-the-icons
+  :demand
+  :custom
+  (centaur-tabs-set-icons t)
+  (centaur-tabs-style "bar")
+  (centaur-tabs-set-bar 'left)
+  (centaur-tabs-height 40)
+  (centaur-tabs-set-modified-marker t)
+  (centaur-tabs-mode t)
+  :bind
+  ("C-<prior>" . centaur-tabs-backward)
+  ("C-<next>" . centaur-tabs-forward)
+  :config
+  (centaur-tabs-headline-match)
+  (centaur-tabs-group-by-projectile-project)
+  :hook
+  (imenu-list-major-mode . centaur-tabs-local-mode))
+
+(use-package solaire-mode
+  :ensure t
+  :hook
+  ;; I'm not sure if this first set of hooks is necessary, or if
+  ;; solaire-global-mode takes care of it
+  ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
+  (minibuffer-setup . solaire-mode-in-minibuffer)
+  :custom
+  (solaire-mode-auto-swap-bg t)
+  (solaire-global-mode t))
+
 (use-package spacemacs-common
   :disabled t
   :config (load-theme 'spacemacs-light t))
 
 (use-package doom-themes
-  :config (load-theme 'doom-palenight t))
+  :after solaire-mode centaur-tabs
+  :config
+  (load-theme 'doom-palenight t)
+  (require 'doom-themes-ext-treemacs)
+  (doom-themes-org-config)
+  :custom
+  (doom-themes-treemacs-enable-variable-pitch nil)
+  (doom-themes-treemacs-theme "doom-colors"))
 
 
 
@@ -123,20 +162,20 @@
   (global-flycheck-mode 1))
 
 (use-package flycheck-pos-tip
-  :after (flycheck)
+  :after flycheck
   :config (flycheck-pos-tip-mode))
 
 (use-package flycheck-color-mode-line
-  :after (flycheck)
+  :after flycheck
   :hook (flycheck-mode . flycheck-color-mode-line-mode))
 
 (use-package flycheck-status-emoji
-  :after (flycheck)
+  :after flycheck
   :custom
   (flycheck-status-emoji-indicator-finished-error ?💀)
   (flycheck-status-emoji-indicator-finished-ok ?👍)
   (flycheck-status-emoji-indicator-finished-warning ?👎)
-  :config (flycheck-status-emoji-mode t))
+  (flycheck-status-emoji-mode t))
 
 (use-package git-gutter
   :diminish git-gutter-mode
@@ -172,7 +211,18 @@
   :config
   (flx-ido-mode 1))
 
+(use-package highlight-indent-guides
+  :ensure t
+  :diminish highlight-indent-guides-mode
+  :custom
+  (highlight-indent-guides-responsive 'stack)
+  (highlight-indent-guides-method 'character)
+  :hook
+  (prog-mode . highlight-indent-guides-mode)
+  (yaml-mode . highlight-indent-guides-mode))
+
 (use-package highlight-indentation
+  :disabled t
   :hook
   (prog-mode . highlight-indentation-mode)
   (yaml-mode . highlight-indentation-mode)
@@ -182,7 +232,16 @@
   :hook (prog-mode . idle-highlight-mode))
 
 (use-package jsonnet-mode
-  :mode "\\.jsonnet\\'" "\\.libsonnet\\'")
+  :mode "\\.jsonnet\\'" "\\.libsonnet\\'"
+  :config
+  (defun jsonnet-reformat-buffer ()
+    "Reformat entire buffer using the Jsonnet format utility."
+    (interactive)
+    (call-process-region (point-min) (point-max)
+                         jsonnet-command t t nil "fmt"
+                         "--string-style" "l"
+                         "--comment-style" "l"
+                         "-")))
 
 (use-package jq-mode
   :mode "\\.jq\\'")
@@ -195,7 +254,10 @@
 
 (use-package magit
   :bind ("C-x g" . magit-status)
-  :custom (magit-completing-read-function #'magit-ido-completing-read)
+  :custom
+  (magit-completing-read-function #'magit-ido-completing-read)
+  (magit-section-visibility-indicator
+   '(magit-fringe-bitmap-bold> . magit-fringe-bitmap-boldv))
   :hook (magit-mode . benley/set-left-fringe-width))
 
 (use-package markdown-mode
@@ -204,9 +266,10 @@
   :custom (markdown-command "pandoc")
   :hook (gfm-mode . turn-on-visual-line-mode))
 
-(require 'mtail-mode)
-(add-to-list 'auto-mode-alist (cons "\\.mtail$" #'mtail-mode))
-(add-to-list 'auto-mode-alist (cons "\\.em$" #'mtail-mode))
+(use-package mtail-mode
+  :mode
+  ("\\.mtail\\'" . #'mtail-mode)
+  ("\\.em\\'" . #'mtail-mode))
 
 (use-package nix-mode
   :custom
@@ -232,14 +295,66 @@
   (flycheck-executable-find          (lambda (cmd) (nix-executable-find       (nix-current-sandbox) cmd))))
 
 
+(use-package org
+  :init
+  (defun benley/org-mode-setup ()
+    (interactive)
+    (setq fill-column 79))
 
-(use-package org)
+  :hook
+  (org-mode . visual-line-mode)
+  (org-mode . hl-line-mode)
+  (org-mode . benley/org-mode-setup)
+
+  :custom
+  (org-attach-store-link-p 'attached)
+  (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
+  (org-image-actual-width nil)
+  (org-special-ctrl-a/e t)
+  (org-M-RET-may-split-line nil)
+  (org-agenda-start-on-weekday 0)
+  (org-catch-invisible-edits 'error)
+  (org-default-notes-file "~/benley@gmail.com/org/notes.org")
+  (org-directory "~/benley@gmail.com/org")
+  (org-ellipsis "⤵")
+  (org-footnote-define-inline t)
+  (org-goto-auto-isearch nil)
+  (org-log-done 'time)
+  (org-startup-indented t)
+  (org-fontify-whole-heading-line t)
+  (org-fontify-quote-and-verse-blocks t)
+  (org-columns-default-format "%25ITEM %TODO %3PRIORITY %TAGS %LOCATION")
+  (org-hide-emphasis-markers t)
+  (org-todo-keywords '((sequence "TODO" "WIP" "|" "DONE" "NOPE")))
+
+  (org-agenda-files
+   '("~/benley@gmail.com/org"
+     "~/benley@gmail.com/org/journal"
+     "~/benley@gmail.com/evernote_export"
+     "~/.org-jira"))
+
+  (org-capture-templates
+   '(("n" "Note" entry (file+headline "" "unfiled")
+      "* NOTE %?\n  %U" :empty-lines 1)
+     ("N" "Note+paste" entry (file+headline "" "unfiled")
+      "* NOTE %?\n  %U\n  %c" :empty-lines 1)
+     ("t" "Task" entry (file+headline "" "Tasks")
+      "* TODO %?\n  %U\n  %a" :empty-lines 1)
+     ("T" "Task+paste" entry (file+headline "" "Tasks")
+      "* TODO %?\n  %U\n  %c" :empty-lines 1)
+     ("e" "Event" entry (file+headline "" "Events")
+      "* EVENT %?\n  %U" :empty-lines 1)))
+
+  (org-refile-targets '((org-agenda-files :maxlevel . 3)))
+  (org-refile-use-outline-path 'file))
 
 (use-package org-bullets
+  :after org
   :hook
   (org-mode . org-bullets-mode))
 
 (use-package org-journal
+  :after org
   :custom
   ;; I think you have to set org-journal-dir before loading
   ;; org-journal for it to work correctly (if so, change this back to :init with (setq ...))
@@ -248,20 +363,23 @@
   (org-journal-date-format "%A, %B %e %Y")
   (org-journal-date-prefix "#+DATE: ")
   (org-journal-time-prefix "* ")
-  (org-journal-time-format "%A, %B %e %Y %R %Z"))
+  (org-journal-time-format "%A, %B %e %Y %R %Z")
+  (org-journal-hide-entries-p nil))
 
 ;; (use-package org-make-toc
 ;;   ;; :init
 ;;   ;; (defalias 'second #'cadr)
 ;;   :hook (org-mode . org-make-toc-mode))
 
+
+
 (use-package forge
   :after magit
   :init
+  ;; TODO: this can probably come out after updating to emacs 26.3
   (when (< emacs-major-version 27)
     (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"
-          ghub-use-workaround-for-emacs-bug nil))
-  :ensure t)
+          ghub-use-workaround-for-emacs-bug nil)))
 
 (use-package form-feed
   :hook
@@ -271,9 +389,11 @@
 
 
 
-(use-package paredit)
+(use-package paredit
+  :disabled t)
 
 (use-package powerline
+  :disabled t
   :init
   (powerline-default-theme)
   :custom
@@ -308,8 +428,7 @@
 (use-package ido-grid-mode
   :custom
   (ido-grid-mode-keys '(tab backtab up down left right C-n C-p C-s C-r))
-  :config
-  (ido-grid-mode +1))
+  (ido-grid-mode t))
 
 ;; from https://github.com/alphapapa/unpackaged.el#smerge-mode
 (use-package smerge-mode
@@ -364,6 +483,9 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   ("C-c C-S-t C-S-t" . terminal-here-launch)
   ("C-c C-S-t C-S-p" . terminal-here-project-launch))
 
+
+;; TREEMACS
+
 (use-package treemacs
   :bind
   ("C-c t" . treemacs-select-window)
@@ -371,7 +493,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (treemacs-is-never-other-window t))
 
 (use-package treemacs-projectile
-  :after treemacs)
+  :after treemacs projectile)
 
 (use-package treemacs-magit
   :after treemacs magit)
@@ -441,6 +563,9 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 (use-package yaml-mode)
 
+
+;;; emoji stuff?
+
 (defun --set-emoji-font (frame)
   "Adjust the font settings of FRAME so Emacs can display emoji properly."
   (if (eq system-type 'darwin)
@@ -453,20 +578,29 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 (add-hook 'after-make-frame-functions #'--set-emoji-font)
 
+
+
 (column-number-mode 1)                  ;; show column position in modeline
 (show-paren-mode 1)                     ;; highlight matching parens
 
-(when (eq system-type 'darwin)
-  (setq dired-use-ls-dired nil))        ;; ls doesn't have --dired on darwin
+;;; I think this happens automatically now - default is "Use --direct only if ls supports it"
+;; (when (eq system-type 'darwin)
+;;   (setq dired-use-ls-dired nil))        ;; ls doesn't have --dired on darwin
 
 (add-hook 'before-save-hook #'delete-trailing-whitespace)
 ;; (add-hook 'text-mode-hook #'turn-on-auto-fill)
+
+
+;; FLYSPELL
+
 (add-hook 'text-mode-hook #'turn-on-flyspell)
 
 ;; unfortunately this makes a variety of things _extremely slow_
 ;; (add-hook 'text-mode-hook #'flyspell-buffer)
 
 (setq flyspell-issue-message-flag nil)
+
+
 
 ;; Stop littering everywhere with save files, put them somewhere
 (setq backup-directory-alist `(("." . "~/.emacs-backups")))
@@ -493,6 +627,8 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 (setq visible-bell t)   ;; STOP BEEPING >_<
 (setq user-mail-address "benley@gmail.com")
 (setq load-prefer-newer t)
+
+(setq visual-line-fringe-indicators '(nil right-curly-arrow))
 
 (defun server-shutdown ()
   "Save buffers, quit, and shutdown the Emacs server."
@@ -544,12 +680,6 @@ Default face is fixed so we only need to have the exceptions."
   ;; (set-face-attribute 'org-special-keyword nil :inherit 'fixed-pitch)
   )
 
-(defun benley/org-mode-setup ()
-  (interactive)
-  (setq fill-column 79)
-  (visual-line-mode t))
-
-(add-hook 'org-mode-hook #'benley/org-mode-setup)
 (add-hook 'org-journal-mode-hook #'set-buffer-variable-pitch)
 
 ;; (add-hook 'org-mode-hook #'variable-pitch-mode)
@@ -644,29 +774,6 @@ Default face is fixed so we only need to have the exceptions."
 (use-package ox-rst)
 (use-package ox-ipynb)
 
-
-(setq org-special-ctrl-a/e t)
-(setq org-M-RET-may-split-line nil)
-(setq org-agenda-start-on-weekday 0)
-(setq org-catch-invisible-edits 'error)
-(setq org-default-notes-file "~/benley@gmail.com/org/notes.org")
-(setq org-directory "~/benley@gmail.com/org")
-(setq org-ellipsis "⤵")
-(setq org-footnote-define-inline t)
-(setq org-goto-auto-isearch nil)
-(setq org-log-done 'time)
-(setq org-startup-indented t)
-(setq org-fontify-whole-heading-line t)
-(setq org-fontify-quote-and-verse-blocks t)
-(setq org-columns-default-format "%25ITEM %TODO %3PRIORITY %TAGS %LOCATION")
-(setq org-hide-emphasis-markers t)
-
-(setq org-agenda-files
-      '("~/benley@gmail.com/org"
-        "~/benley@gmail.com/org/journal"
-        "~/benley@gmail.com/evernote_export"
-        "~/.org-jira"))
-
 ;; I think org-jira covers this:
 ;; (add-to-list 'org-link-abbrev-alist '("jira" . "https://postmates.atlassian.net/browse/"))
 
@@ -675,24 +782,6 @@ Default face is fixed so we only need to have the exceptions."
 ;; https://emacs.stackexchange.com/questions/18404/can-i-display-org-mode-attachments-as-inline-images-in-my-document
 (require 'org-attach)
 (add-to-list 'org-link-abbrev-alist '("att" . org-attach-expand-link))
-
-(setq org-capture-templates
-      '(
-        ("n" "Note" entry (file+headline "" "unfiled")
-         "* NOTE %?\n  %U" :empty-lines 1)
-        ("N" "Note+paste" entry (file+headline "" "unfiled")
-         "* NOTE %?\n  %U\n  %c" :empty-lines 1)
-        ("t" "Task" entry (file+headline "" "Tasks")
-         "* TODO %?\n  %U\n  %a" :empty-lines 1)
-        ("T" "Task+paste" entry (file+headline "" "Tasks")
-         "* TODO %?\n  %U\n  %c" :empty-lines 1)
-        ("e" "Event" entry (file+headline "" "Events")
-         "* EVENT %?\n  %U" :empty-lines 1)
-        )
-      )
-
-(setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
-(setq org-refile-use-outline-path 'file)
 
 
 (setq sh-basic-offset 2)
@@ -764,6 +853,9 @@ This is what makes 256-color output work in shell-mode."
 (use-package pdf-tools
   :config
   (pdf-tools-install)
+  :custom
+  (pdf-view-resize-factor 1.1)
+
   :mode
   ("\\.pdf\\'" . pdf-view-mode)
   :hook
@@ -797,40 +889,44 @@ This is what makes 256-color output work in shell-mode."
       calendar-longitude "-71.0589"
       calendar-location-name "Boston, MA")
 
-(defun benley/tabbar-buffer-groups-by-project ()
-  "Group tabbar buffers by projectile project."
-  (list
-   (cond
-    ((memq major-mode '(eshell-mode term-mode shell-mode))
-     (if (projectile-project-p)
-         (projectile-project-name)
-       "Common"))
-    ((string-equal "*" (substring (buffer-name) 0 1))
-     "Emacs")
-    ((memq major-mode '(fundamental-mode))
-     "Emacs")
-    ((memq major-mode '(org-mode org-agenda-mode diary-mode org-journal-mode))
-     "OrgMode")
-    (t
-     (if (projectile-project-p)
-         (projectile-project-name)
-       "Common")))))
+
+;; TABS
 
 (use-package tabbar
-  :config
-  (setq tabbar-buffer-groups-function 'benley/tabbar-buffer-groups-by-project)
-  (tabbar-mode 1))
+  :disabled t
+  :init
+  (defun benley/tabbar-buffer-groups-by-project ()
+    "Group tabbar buffers by projectile project."
+    (list
+     (cond
+      ((memq major-mode '(eshell-mode term-mode shell-mode))
+       (if (projectile-project-p)
+           (projectile-project-name)
+         "Common"))
+      ((string-equal "*" (substring (buffer-name) 0 1))
+       "Emacs")
+      ((memq major-mode '(fundamental-mode))
+       "Emacs")
+      ((memq major-mode '(org-mode org-agenda-mode diary-mode org-journal-mode))
+       "OrgMode")
+      (t
+       (if (projectile-project-p)
+           (projectile-project-name)
+         "Common")))))
+  :custom
+  (tabbar-buffer-groups-function 'benley/tabbar-buffer-groups-by-project)
+  (tabbar-mode t))
+
+
 
 (use-package projectile
   :custom
   (projectile-project-search-path '("~/p/" "~/pm/"))
+  (projectile-mode t)
   :config
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-mode 1)
   :delight
-  '(:eval (concat " " (projectile-project-name))))
-
-(use-package treemacs-projectile)
+  '(:eval (concat "[" (projectile-project-name) "]")))
 
 (use-package visual-fill-column
   ;; :hook
@@ -844,20 +940,12 @@ This is what makes 256-color output work in shell-mode."
   :custom
   (imenu-list-auto-resize t)
   (imenu-list-size 0.15)
+  (imenu-list-mode-line-format nil)
   :bind
   ("C-'" . imenu-list-smart-toggle))
 
 ;; (server-start)
 ;; (load "~/.emacs.d/exwm.el")
-
-(defun jsonnet-reformat-buffer ()
-  "Reformat entire buffer using the Jsonnet format utility."
-  (interactive)
-  (call-process-region (point-min) (point-max)
-                       jsonnet-command t t nil "fmt"
-                       "--string-style" "l"
-                       "--comment-style" "l"
-                       "-"))
 
 (use-package atomic-chrome
   :custom
