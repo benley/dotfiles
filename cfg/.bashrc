@@ -172,9 +172,16 @@ __prompt_command() {
   case $TERM in
     xterm*)
       # Set the title bar to include the current directory.
-      before+="\[\033]0;\u@\h: \w\007\]${before}"
+      before+="\[\033]0;\u@\h: \w\007\]"
       ;;
   esac
+
+  # Directory tracking for emacs-libvterm
+  if [[ $INSIDE_EMACS == "vterm" ]]; then
+    # Don't use \w here because it can break if PROMPT_DIRTRIM is set. $(pwd) is better.
+    # TODO: is $(pwd) better than $PWD for some reason?
+    before+="\[\e]51;A\$(pwd)\e\\\]"
+  fi
 
   # first line:  right-aligned HH:MM:SS, then put the cursor back at column 0
   before+="$(printf "%$((COLUMNS - 8))s")\t\r"
