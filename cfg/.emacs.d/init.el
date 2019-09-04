@@ -85,18 +85,31 @@
   :custom
   (centaur-tabs-set-icons t)
   (centaur-tabs-style "bar")
-  (centaur-tabs-set-bar 'left)
-  (centaur-tabs-height 40)
+  (centaur-tabs-set-bar 'over)
+  (centaur-tabs-height 45)
   (centaur-tabs-set-modified-marker t)
   (centaur-tabs-mode t)
   :bind
   ("C-<prior>" . centaur-tabs-backward)
   ("C-<next>" . centaur-tabs-forward)
   :config
-  (centaur-tabs-headline-match)
+  ;;; This seems to be ineffective when emacs starts as a
+  ;;; daemon. Doing it via before-make-frame-hook works.
+  ;; (centaur-tabs-headline-match)
   (centaur-tabs-group-by-projectile-project)
+
+  (defun benley/centaur-tabs-hide-tab-wrapper (orig-fn &rest args)
+    "Wrapper for the default centaur-tabs-hide-tab function."
+    (let ((name (format "%s" (car args))))
+      (or (string-prefix-p "*Ilist*" name)
+          (string-prefix-p "*Completions*" name)
+          (apply orig-fn args))))
+
+  (advice-add 'centaur-tabs-hide-tab :around #'benley/centaur-tabs-hide-tab-wrapper)
+
   :hook
-  (imenu-list-major-mode . centaur-tabs-local-mode))
+  (imenu-list-major-mode . centaur-tabs-local-mode)
+  (before-make-frame-hook . centaur-tabs-headline-match))
 
 (use-package solaire-mode
   :ensure t
