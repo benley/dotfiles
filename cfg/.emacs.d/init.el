@@ -151,7 +151,8 @@
 
 (use-package company-posframe
   :diminish company-posframe-mode
-  :config (company-posframe-mode 1))
+  :hook
+  (before-make-frame-hook . company-posframe-mode))
 
 (use-package company-terraform
   :config
