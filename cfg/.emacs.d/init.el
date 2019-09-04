@@ -165,7 +165,8 @@
 (use-package dockerfile-mode
   :mode "Dockerfile\\'")
 
-(use-package erlang)
+(use-package erlang
+  :disabled t)
 
 (use-package flycheck
   :custom
@@ -222,7 +223,7 @@
 (setq ido-auto-merge-work-directories-length -1)
 
 (use-package flx-ido
-  :config
+  :custom
   (flx-ido-mode 1))
 
 (use-package highlight-indent-guides
