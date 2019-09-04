@@ -136,6 +136,12 @@
   (doom-themes-treemacs-enable-variable-pitch nil)
   (doom-themes-treemacs-theme "doom-colors"))
 
+(use-package doom-modeline
+  :after all-the-icons doom-themes
+  :ensure t
+  :custom
+  (doom-modeline-mode t))
+
 
 
 ;; Enable mouse input in terminals
