@@ -63,7 +63,7 @@
     xlibs.xev
     xlsfonts
     xsel
-    # zathura       # keyboard-driven PDF viewer (build broken)
+    zathura       # keyboard-driven PDF viewer
     # xsettingsd  # for dump_xsettings
     # vdpauinfo
     # libva       # for the vainfo command

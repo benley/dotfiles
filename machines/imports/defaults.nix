@@ -84,6 +84,7 @@
     binutils # strings, strip, ar, as, ...
     bc
     cabal-install
+    cabal2nix
     ctags
     dnsutils
     dropbox-cli
@@ -135,6 +136,7 @@
     pv
     pwgen
     python27Full
+    python3Full
     pythonPackages.autopep8
     pythonPackages.flake8
     pythonPackages.pep8
