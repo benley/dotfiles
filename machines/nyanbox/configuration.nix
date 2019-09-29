@@ -220,6 +220,12 @@ let secrets = import ./secrets.nix; in
     shares.downloads = {
       path = "/zfs/nyanbox/downloads";
     };
+
+    extraConfig = ''
+      [homes]
+      read only = no
+      guest ok = no
+    '';
   };
 
   system.autoUpgrade = {
