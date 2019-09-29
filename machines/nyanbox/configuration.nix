@@ -52,22 +52,9 @@ let secrets = import ./secrets.nix; in
 
   virtualisation.docker.enable = true;
 
-  systemd.services.prometheus = {
-    description = "Prometheus";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "docker.service" "docker.socket" ];
-    requires = [ "docker.service" "docker.socket" ];
-    script = ''
-      exec ${pkgs.docker}/bin/docker run \
-          --rm \
-          --name=prometheus \
-          --network=host \
-          -v ${./prometheus.yml}:/etc/prometheus/prometheus.yml \
-          -v prometheus_data:/prometheus \
-          prom/prometheus:v2.2.1 \
-          "$@"
-    '';
-    scriptArgs = lib.concatStringsSep " " [
+  docker-containers.prometheus = {
+    image = "prom/prometheus:v2.12.0";
+    cmd = [
       "--config.file=/etc/prometheus/prometheus.yml"
       "--storage.tsdb.path=/prometheus"
       "--web.console.libraries=/usr/share/prometheus/console_libraries"
@@ -76,15 +63,11 @@ let secrets = import ./secrets.nix; in
       "--web.external-url=https://nyanbox.zoiks.net/prometheus"
       "--web.route-prefix=/"
     ];
-    preStop = "${pkgs.docker}/bin/docker stop prometheus";
-    reload = "${pkgs.docker}/bin/docker restart prometheus";
-    serviceConfig = {
-      ExecStartPre = "-${pkgs.docker}/bin/docker rm -f prometheus";
-      ExecStopPost = "-${pkgs.docker}/bin/docker rm -f prometheus";
-      TimeoutStartSec = 0;
-      TimeoutStopSec = 120;
-      Restart = "always";
-    };
+    volumes = [
+      "prometheus_data:/prometheus"
+      "${./prometheus.yml}:/etc/prometheus/prometheus.yml"
+    ];
+    extraDockerOptions = ["--network=host"];
   };
 
   services.prometheus.exporters.node = {
