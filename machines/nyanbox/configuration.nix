@@ -46,6 +46,8 @@ let secrets = import ./secrets.nix; in
     137 138 # Samba
   ];
 
+  programs.mosh.enable = true;  # this opens UDP 60000 to 61000 in the firewall
+
   system.stateVersion = "18.03";
 
   virtualisation.docker.enable = true;
