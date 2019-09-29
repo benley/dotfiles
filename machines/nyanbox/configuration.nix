@@ -30,7 +30,7 @@ let secrets = import ./secrets.nix; in
     enable = true;
     disks = ["/dev/sdb" "/dev/sdc" "/dev/sdd" "/dev/sde"];
     pwm_paths = ["/sys/class/hwmon/hwmon2/pwm1"];
-    extra_args = "--pwm-start-value 32 --pwm-stop-value 0 --spin-down-time 900 -v debug";
+    extra_args = "--pwm-start-value 32 --pwm-stop-value 0 --spin-down-time 900"; # " -v debug";
   };
 
   services.openssh.enable = true;
