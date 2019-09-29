@@ -15,6 +15,9 @@ with { callPackage = super.callPackage; };
 
   eless = super.writeScriptBin "eless" (builtins.readFile ../eless.sh);
 
+
+  insync = callPackage ../pkgs/insync { };
+
   kubernetes-client = callPackage ../pkgs/kubernetes-client { };
 
   kupfer-plugin-google-search = callPackage ../pkgs/kupfer-plugin-google-search { };
