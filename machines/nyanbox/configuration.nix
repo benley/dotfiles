@@ -233,6 +233,8 @@ let secrets = import ./secrets.nix; in
     extraConfig = {
       skip-provider-button = true;
       whitelist-domain = ".zoiks.net";
+      set-authorization-header = true;
     };
+    scope = "openid email profile";
   };
 }
