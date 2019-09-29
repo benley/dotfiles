@@ -184,9 +184,9 @@ let secrets = import ./secrets.nix; in
       peer-port-random-on-start = false;
       ratio-limit = "0.0010";
       ratio-limit-enabled = true;
-      rpc-host-whitelist-enabled = false;
-      rpc-whitelist = "127.0.0.1,192.168.7.*";
-      rpc-whitelist-enabled = false;
+      rpc-bind-address = "127.0.0.1";
+      rpc-host-whitelist-enabled = true;
+      rpc-host-whitelist = "nyanbox.zoiks.net";
       speed-limit-up = 40;
       speed-limit-up-enabled = true;
     };
