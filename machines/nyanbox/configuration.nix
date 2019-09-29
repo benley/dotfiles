@@ -84,7 +84,7 @@ let secrets = import ./secrets.nix; in
 
   services.cron.systemCronJobs = [
     ''
-      * * * * * root mkdir -p /var/lib/node-exporter/textfile; cd /var/lib/node-exporter/textfile; PATH=${pkgs.smartmontools}/bin:$PATH ${./smartmon-textfile.sh} > .smartmon.prom && mv .smartmon.prom smartmon.prom
+      * * * * * root mkdir -p /var/lib/node-exporter/textfile; cd /var/lib/node-exporter/textfile; PATH=${pkgs.smartmontools}/bin:$PATH ${./smartmon-textfile.sh} | ${pkgs.moreutils}/bin/sponge smartmon.prom
     ''
   ];
 
