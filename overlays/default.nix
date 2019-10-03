@@ -18,6 +18,8 @@ with { callPackage = super.callPackage; };
 
   insync = callPackage ../pkgs/insync { };
 
+  insync-v3 = callPackage ../pkgs/insync/insync-v3.nix { };
+
   kubernetes-client = callPackage ../pkgs/kubernetes-client { };
 
   kupfer-plugin-google-search = callPackage ../pkgs/kupfer-plugin-google-search { };
