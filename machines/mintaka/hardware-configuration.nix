@@ -22,6 +22,11 @@
       fsType = "zfs";
     };
 
+  fileSystems."/mnt/steamlibrary" =
+    { device = "rpool/steamlibrary";
+      fsType = "zfs";
+    };
+
   fileSystems."/tmp" =
     { device = "rpool/tmp";
       fsType = "zfs";
