@@ -49,7 +49,8 @@
     # libsForQt5.vlc
     gnome_mplayer
     gnome3.gnome_themes_standard  # I think this fixes some "can't find theme engine adwaita" erorrs
-
+    gnome3.gnome-tweaks
+    gnome3.dconf-editor
     gnomeExtensions.appindicator
     gnomeExtensions.dash-to-dock
     gnomeExtensions.dash-to-panel
