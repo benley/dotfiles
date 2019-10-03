@@ -138,10 +138,10 @@
   services.powermate.enable = true;
 
   services.udev.packages = [
-    pkgs.thunderbolt
+    # pkgs.thunderbolt
   ];
   environment.systemPackages = [
-    pkgs.thunderbolt
+    # pkgs.thunderbolt
   ];
 
   # Temporary fix for cpu throttling issues visible in the kernel log
