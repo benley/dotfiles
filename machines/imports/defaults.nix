@@ -51,6 +51,7 @@
 
   programs.bash.enableCompletion = true;
 
+  programs.iftop.enable = true;
   programs.mtr.enable = true;
 
   programs.tmux = {
@@ -107,7 +108,7 @@
     html-tidy
     htop
     httpie
-    iftop
+    # iftop  # see programs.iftop.enable
     imagemagick  # so emacs can resize images
     iotop
     iw
