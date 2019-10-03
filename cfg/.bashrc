@@ -180,7 +180,7 @@ __prompt_command() {
   if [[ $INSIDE_EMACS == "vterm" ]]; then
     # Don't use \w here because it can break if PROMPT_DIRTRIM is set. $(pwd) is better.
     # TODO: is $(pwd) better than $PWD for some reason?
-    before+="\[\e]51;A\$(pwd)\e\\\]"
+    before+='\[\e]51;A$(pwd)\e\\\]'
   fi
 
   # first line:  right-aligned HH:MM:SS, then put the cursor back at column 0
