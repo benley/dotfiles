@@ -1,0 +1,164 @@
+;; -*- mode: lisp; eval: (stumpwm-mode 1); -*-
+
+(in-package :stumpwm)
+;; (ql:quickload :swank)
+;; (ql:quickload :clx-truetype)
+(require :swank)
+(require :clx-truetype)
+(set-module-dir "~/.stumpwm.d/modules")
+(load-module "ttf-fonts")
+(load-module "urgentwindows")
+(load-module "stumptray")
+(load-module "cpu")
+
+(defcommand swank () ()
+  (swank:create-server :port 4005
+                       :style swank:*communication-style*
+                       :dont-close nil)
+  (echo-string (current-screen)
+               "Starting swank. M-x slime-connect RET RET, then (in-package stumpwm)."))
+;; (swank)
+
+(defun file-get-lines (filename)
+  (with-open-file (stream filename)
+    (loop for line = (read-line stream nil)
+          while line
+          collect line)))
+
+(defun battery-percentage (ml)
+  (declare (ignore ml))
+  (car (file-get-lines "/sys/class/power_supply/BAT0/capacity")))
+(add-screen-mode-line-formatter #\B #'battery-percentage)
+
+(setf *screen-mode-line-format* (list "[%n] %W^> [%B%%][%C][%d]%T"))
+(setf *mode-line-position* :top)
+(setf *mode-line-timeout* 10)
+(setf *time-modeline-string* "%a %b %e %k:%M")
+(setf *mode-line-border-width* 1)
+
+;; fallback font
+(set-font "-xos4-terminus-medium-r-normal--24-240-72-72-c-120-iso10646-1")
+
+(setf clx-truetype:*font-dirs* (list "/home/benley/.nix-profile/share/fonts"))
+(clx-truetype:cache-fonts)
+
+(set-font (make-instance 'xft:font :family "PragmataPro" :subfamily "Regular" :size 11))
+
+(enable-mode-line (current-screen) (current-head) t)
+(stumptray:stumptray)
+
+(setf *mouse-focus-policy* :click)
+
+;; (run-shell-command "xsetroot -cursor_name left_ptr")
+
+(define-key *top-map* (kbd "s-h") "move-focus left")
+(define-key *top-map* (kbd "s-j") "move-focus down")
+(define-key *top-map* (kbd "s-k") "move-focus up")
+(define-key *top-map* (kbd "s-l") "move-focus right")
+(define-key *top-map* (kbd "s-;") "colon")
+(define-key *top-map* (kbd "s-H") "move-window left")
+(define-key *top-map* (kbd "s-J") "move-window down")
+(define-key *top-map* (kbd "s-K") "move-window up")
+(define-key *top-map* (kbd "s-L") "move-window right")
+
+(define-key *top-map* (kbd "XF86AudioLowerVolume")  "exec amixer --quiet set Master 5%- unmute")
+(define-key *top-map* (kbd "XF86AudioRaiseVolume")  "exec amixer --quiet set Master 5%+ unmute")
+(define-key *top-map* (kbd "XF86AudioMute")         "exec amixer --quiet set Master toggle")
+(define-key *top-map* (kbd "XF86AudioMicMute")      "exec amixer --quiet set Capture toggle")
+(define-key *top-map* (kbd "XF86MonBrightnessDown") "exec light -b -U 5")
+(define-key *top-map* (kbd "XF86MonBrightnessUp")   "exec light -b -A 5")
+;; (define-key *top-map* (kbd "XF86Display") "do-xrandr-thing")
+
+
+(define-key *root-map* (kbd "c") "terminal")
+(define-key *root-map* (kbd "C-c") "terminal")
+(define-key *root-map* (kbd "C-l") "lock-screen")
+
+(set-focus-color "Orange2")
+(setf *maxsize-border-width* 2)
+(setf *normal-border-width*  2)
+(setf *transient-border-width* 2)
+(setf *window-border-style* :tight)
+
+(defcommand emacs () ()
+  "Start or raise emacs."
+  (run-or-raise "emacsclient -n -c" '(:class "Emacs")))
+
+(defcommand terminal () ()
+  "Start or raise a terminal."
+  (run-or-raise "konsole" '(:class "konsole")))
+
+(defcommand lock-screen () ()
+  "Lock the screen."
+  (run-shell-command "xset s activate"))
+
+;; ugh this makes stumpwm hang for like 30 seconds
+(defcommand do-xrandr-thing () ()
+  "refresh the xrandr layout and stuff"
+  (stumptray:stumptray) ;; disable stumptray so refresh-heads works
+  (sleep 1)
+  (run-shell-command "~/.screenlayout/fart.sh")
+  (sleep 2)
+  (stumptray:stumptray))
+
+(set-prefix-key (kbd "C-t"))
+
+;; prompt the user for an interactive command. The first arg is an
+;; optional initial contents.
+;; (defcommand colon1 (&optional (initial "")) (:rest)
+;;   (let ((cmd (read-one-line (current-screen) ": " :initial-input initial)))
+;;     (when cmd
+;;       (eval-command cmd t))))
+
+;; (define-key *root-map* (kbd "d") "exec gv")
+;; (define-key *root-map* (kbd "b") "colon1 exec firefox http://www.")
+;; (define-key *root-map* (kbd "C-s") "colon1 exec xterm -e ssh ")
+
+
+;; Web jump (works for Google and Imdb)
+;; (defmacro make-web-jump (name prefix)
+;;   `(defcommand ,(intern name) (search) ((:rest ,(concatenate 'string name " search: ")))
+;;     (substitute #\+ #\Space search)
+;;     (run-shell-command (concatenate 'string ,prefix search))))
+
+;; (make-web-jump "google" "xdg-open http://www.google.fr/search?q=")
+;; (make-web-jump "imdb" "xdg-open http://www.imdb.com/find?q=")
+
+;; C-t M-s is a terrble binding, but you get the idea.
+;; (define-key *root-map* (kbd "M-s") "google")
+;; (define-key *root-map* (kbd "i") "imdb")
+
+;;; Define window placement policy...
+
+;; Clear rules
+;; (clear-window-placement-rules)
+
+;; Last rule to match takes precedence!
+;; TIP: if the argument to :title or :role begins with an ellipsis, a substring
+;; match is performed.
+;; TIP: if the :create flag is set then a missing group will be created and
+;; restored from *data-dir*/create file.
+;; TIP: if the :restore flag is set then group dump is restored even for an
+;; existing group using *data-dir*/restore file.
+;; (define-frame-preference "Default"
+;;   ;; frame raise lock (lock AND raise == jumpto)
+;;   (0 t nil :class "Konqueror" :role "...konqueror-mainwindow")
+;;   (1 t nil :class "XTerm"))
+
+;; (define-frame-preference "Ardour"
+;;   (0 t   t   :instance "ardour_editor" :type :normal)
+;;   (0 t   t   :title "Ardour - Session Control")
+;;   (0 nil nil :class "XTerm")
+;;   (1 t   nil :type :normal)
+;;   (1 t   t   :instance "ardour_mixer")
+;;   (2 t   t   :instance "jvmetro")
+;;   (1 t   t   :instance "qjackctl")
+;;   (3 t   t   :instance "qjackctl" :role "qjackctlMainForm"))
+
+;; (define-frame-preference "Shareland"
+;;   (0 t   nil :class "XTerm")
+;;   (1 nil t   :class "aMule"))
+
+;; (define-frame-preference "Emacs"
+;;   (1 t t :restore "emacs-editing-dump" :title "...xdvi")
+;;   (0 t t :create "emacs-dump" :class "Emacs"))
