@@ -44,10 +44,12 @@ with rec {
   emacs = emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
 
   ]) ++ (with epkgs.melpaPackages; [
+    all-the-icons
     arduino-mode
     atomic-chrome
     # base16-theme
     bazel-mode
+    centaur-tabs
     company
     # company-emoji
     company-posframe
@@ -56,6 +58,8 @@ with rec {
     diminish
     # docker
     dockerfile-mode
+    doom-modeline
+    doom-themes
     edit-indirect
     # elscreen
     # emojify
@@ -75,7 +79,8 @@ with rec {
     go-mode
     graphviz-dot-mode
     haskell-mode
-    highlight-indentation
+    # highlight-indentation
+    highlight-indent-guides
     htmlize
     idle-highlight-mode
     ido-completing-read-plus
@@ -105,7 +110,9 @@ with rec {
     powerline
     projectile
     protobuf-mode
+    quelpa-use-package
     rainbow-delimiters
+    solaire-mode
     ssh-config-mode
     # slack
     # smart-mode-line
@@ -121,12 +128,14 @@ with rec {
     terminal-here
     terraform-mode
     treemacs
+    treemacs-magit
     treemacs-projectile
     use-package
     vdiff
     vdiff-magit
     vimrc-mode
     visual-fill-column
+    w3m
     web-mode
     # weechat  # someday I'll start using this probably
     which-key

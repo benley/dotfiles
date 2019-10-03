@@ -1,9 +1,18 @@
 ;;; init.el --- emacs init
 ;;; Commentary:
 ;;; Code:
+;; -*- lexical-binding: t; -*-
 
 ;; Remember what I had open when I quit
 ;; (desktop-save-mode t)
+
+;; Crank up GC parameters during startup
+(setq gc-cons-threshold 402653184
+      gc-cons-percentage 0.6)
+
+;; During startup, clear file-name-handler-alist (we'll put it back later)
+(defvar benley--file-name-handler-alist file-name-handler-alist)
+(setq file-name-handler-alist nil)
 
 (prefer-coding-system 'utf-8)
 (set-language-environment "UTF-8")
@@ -51,16 +60,18 @@
 
 (require 'ansi-view)
 
+
 ;; Define a new hook to be run after changing themes:
 (defvar after-load-theme-hook nil
   "Hook run after a color theme is loaded using `load-theme'.")
 
-(defadvice load-theme (after run-after-load-theme-hook activate)
-  "Run `after-load-theme-hook'."
-  (run-hooks 'after-load-theme-hook))
+(advice-add 'load-theme :after
+            (lambda (&rest r)
+              "Run `after-load-theme-hook'."
+              (run-hooks 'after-load-theme-hook)))
 
 ;; What I want to actually run after load-them:
-(defun ansi-term-reset-color-vector ()
+(defun ansi-term-reset-color-vector (&rest r)
   "Attempt to unfuck `ansi-term' after changing themes."
   (setq ansi-term-color-vector
         [term term-color-black
@@ -75,9 +86,23 @@
 (add-hook 'after-load-theme-hook #'ansi-term-reset-color-vector)
 
 
+;; ;; Define a new hook to be run after creating a new frame
+(defvar server-create-window-system-frame-hook nil
+  "Hook run after Emacs server creates a GUI frame.")
+
+(advice-add 'server-create-window-system-frame :after
+            (lambda (&rest r)
+              "Run `server-create-window-system-frame-hook'."
+              (run-hooks 'server-create-window-system-frame-hook)))
+
+
+
 ;;; THEMES
 
-(use-package all-the-icons)
+(use-package all-the-icons
+  :config
+  (add-to-list 'all-the-icons-mode-icon-alist
+               '(vterm-mode all-the-icons-octicon "terminal" :v-adjust 0.2)))
 
 (use-package centaur-tabs
   :after all-the-icons
@@ -93,9 +118,6 @@
   ("C-<prior>" . centaur-tabs-backward)
   ("C-<next>" . centaur-tabs-forward)
   :config
-  ;;; This seems to be ineffective when emacs starts as a
-  ;;; daemon. Doing it via before-make-frame-hook works.
-  ;; (centaur-tabs-headline-match)
   (centaur-tabs-group-by-projectile-project)
 
   (defun benley/centaur-tabs-hide-tab-wrapper (orig-fn &rest args)
@@ -103,16 +125,16 @@
     (let ((name (format "%s" (car args))))
       (or (string-prefix-p "*Ilist*" name)
           (string-prefix-p "*Completions*" name)
+          (string-equal "TAGS" name)
           (apply orig-fn args))))
 
   (advice-add 'centaur-tabs-hide-tab :around #'benley/centaur-tabs-hide-tab-wrapper)
 
   :hook
   (imenu-list-major-mode . centaur-tabs-local-mode)
-  (before-make-frame-hook . centaur-tabs-headline-match))
+  (server-create-window-system-frame . centaur-tabs-headline-match))
 
 (use-package solaire-mode
-  :ensure t
   :hook
   ;; I'm not sure if this first set of hooks is necessary, or if
   ;; solaire-global-mode takes care of it
@@ -124,7 +146,8 @@
 
 (use-package spacemacs-common
   :disabled t
-  :config (load-theme 'spacemacs-light t))
+  :config
+  (load-theme 'spacemacs-light t))
 
 (use-package doom-themes
   :after solaire-mode centaur-tabs
@@ -138,10 +161,8 @@
 
 (use-package doom-modeline
   :after all-the-icons doom-themes
-  :ensure t
-  :custom
-  (doom-modeline-mode t))
-
+  :hook
+  (server-create-window-system-frame . doom-modeline-mode))
 
 
 ;; Enable mouse input in terminals
@@ -158,7 +179,7 @@
 (use-package company-posframe
   :diminish company-posframe-mode
   :hook
-  (before-make-frame-hook . company-posframe-mode))
+  (server-create-window-system-frame . company-posframe-mode))
 
 (use-package company-terraform
   :config
@@ -233,7 +254,6 @@
   (flx-ido-mode 1))
 
 (use-package highlight-indent-guides
-  :ensure t
   :diminish highlight-indent-guides-mode
   :custom
   (highlight-indent-guides-responsive 'stack)
@@ -351,8 +371,7 @@
   (org-agenda-files
    '("~/benley@gmail.com/org"
      "~/benley@gmail.com/org/journal"
-     "~/benley@gmail.com/evernote_export"
-     "~/.org-jira"))
+     "~/benley@gmail.com/evernote_export"))
 
   (org-capture-templates
    '(("n" "Note" entry (file+headline "" "unfiled")
@@ -420,8 +439,9 @@
   :custom
   (powerline-default-separator 'slant)
   (powerline-gui-use-vcs-glyph t)
-  :hook ((after-load-theme . powerline-reset)
-         (after-init . powerline-reset)))
+  :hook
+  (after-load-theme . powerline-reset)
+  (after-init . powerline-reset))
 
 (use-package protobuf-mode)
 
@@ -560,9 +580,15 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 (use-package vterm
   :custom
-  (vterm-keymap-exceptions '("C-x" "M-x" "C-c")))
+  (vterm-keymap-exceptions '("C-x" "M-x" "C-c"))
+  (vterm-max-scrollback 10000)
+  :config
+  (defun vterm--rename-buffer-as-title (title)
+    (rename-buffer (format "%s" title) t))
+  (add-hook 'vterm-set-title-functions 'vterm--rename-buffer-as-title))
 
 
+
 (use-package web-mode
   :custom
   (web-mode-markup-indent-offset 2)
@@ -984,6 +1010,16 @@ This is what makes 256-color output work in shell-mode."
       '((:source "~/.authinfo.gpg")))
 
 (load "~/.emacs.d/localonly.el")
+
+;; After startup, set more conservative GC options
+(add-hook 'emacs-startup-hook
+          (lambda () (setq gc-cons-threshold 16777216
+                           gc-cons-percentage 0.1)))
+
+;; After startup, restore file-name-handler-alist
+(add-hook 'emacs-startup-hook
+          (lambda () (setq file-name-handler-alist benley--file-name-handler-alist)))
+
 (message "Finished with init.el")
 (provide 'init)
 ;;; init.el ends here
