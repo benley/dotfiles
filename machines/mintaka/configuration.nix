@@ -12,7 +12,7 @@
     ../imports/workstuff.nix
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_5_1;
+  boot.kernelPackages = pkgs.linuxPackages_5_2;
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
