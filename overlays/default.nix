@@ -103,4 +103,5 @@ with { callPackage = super.callPackage; };
     packages = _: [self.haskellPackages.taffybar-plugins];
   });
 
+  terminfo-extras = callPackage ../pkgs/terminfo-extras { } ;
 }

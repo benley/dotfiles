@@ -151,6 +151,7 @@
     sysstat
     tcpdump
     telnet
+    terminfo-extras  # my custom stuff
     tig
     tree
     unrar
