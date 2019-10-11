@@ -35,6 +35,8 @@
     graphviz
     inkscape
     insync
+    keybase
+    keybase-gui
     minecraft
     # nixnote2  # evernote client
     pinta
@@ -303,5 +305,9 @@
   services.logind.extraConfig = ''
     KillUserProcesses=yes
   '';
+
+  services.keybase.enable = true;
+  services.kbfs.enable = true;
+
 
 }

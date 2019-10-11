@@ -114,8 +114,6 @@
     iw
     jq
     jsonnet
-    keybase
-    keybase-gui
     lastpass-cli
     lsof
     gnumake
@@ -180,8 +178,6 @@
 
   time.timeZone = lib.mkDefault "America/New_York";
 
-  services.keybase.enable = true;
-  services.kbfs.enable = true;
   services.logind.extraConfig = ''
     HandlePowerKey=suspend
   '';
