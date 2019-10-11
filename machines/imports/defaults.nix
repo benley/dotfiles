@@ -82,7 +82,6 @@
     nix-home
     acpi
     awscli
-    # bazel  # I'll install this into my user profile
     binutils # strings, strip, ar, as, ...
     bc
     cabal-install
@@ -115,24 +114,19 @@
     iw
     jq
     jsonnet
-    kubernetes-client
     keybase
     keybase-gui
-    kops
-    kubernetes-helm
     lastpass-cli
     lsof
     gnumake
     mosh
     # mtr   # see programs.mtr.enable
-    # neovim
     nethogs
     nix-prefetch-scripts
     nmap
     nodePackages.js-yaml
     nodePackages.jshint
     openssl
-    #oraclejdk
     pandoc
     pciutils
     pv
@@ -147,7 +141,6 @@
     pythonPackages.virtualenvwrapper
     socat
     stack
-    stern
     sysstat
     tcpdump
     telnet
@@ -189,9 +182,6 @@
 
   services.keybase.enable = true;
   services.kbfs.enable = true;
-
-  networking.networkmanager.enableStrongSwan = true;
-
   services.logind.extraConfig = ''
     HandlePowerKey=suspend
   '';
