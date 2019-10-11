@@ -247,8 +247,4 @@ if [[ -e "$HOME/.nix-profile/etc/ssl/certs/ca-bundle.crt" ]]; then
   export GIT_SSL_CAINFO=$HOME/.nix-profile/etc/ssl/certs/ca-bundle.crt
 fi
 
-if ! [[ "$NIX_PATH" =~ dotfiles= ]]; then
-  NIX_PATH="${NIX_PATH:+$NIX_PATH:}dotfiles=https://github.com/benley/dotfiles/archive/master.tar.gz"
-fi
-
 : # always end with $?=0
