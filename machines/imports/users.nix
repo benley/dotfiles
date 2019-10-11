@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
 
 {
+  imports = [
+    <home-manager/nixos>
+  ];
+
   users.users.benley = {
     isNormalUser = true;
     uid = 1000;
