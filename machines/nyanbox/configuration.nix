@@ -96,22 +96,14 @@ let secrets = import ./secrets.nix; in
     ];
   };
 
-  docker-containers.prometheus = {
-    image = "prom/prometheus:v2.12.0";
-    cmd = [
-      "--config.file=/etc/prometheus/prometheus.yml"
-      "--storage.tsdb.path=/prometheus"
-      "--web.console.libraries=/usr/share/prometheus/console_libraries"
-      "--web.console.templates=/usr/share/prometheus/consoles"
+  services.prometheus = {
+    enable = true;
+    configText = builtins.readFile ./prometheus.yml;
+    extraFlags = [
       "--storage.tsdb.retention=30d"
-      "--web.external-url=https://nyanbox.zoiks.net/prometheus"
       "--web.route-prefix=/"
     ];
-    volumes = [
-      "prometheus_data:/prometheus"
-      "${./prometheus.yml}:/etc/prometheus/prometheus.yml"
-    ];
-    extraDockerOptions = ["--network=host"];
+    webExternalUrl = "https://nyanbox.zoiks.net/prometheus";
   };
 
   services.prometheus.exporters.node = {
