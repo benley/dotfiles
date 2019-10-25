@@ -35,16 +35,33 @@ let secrets = import ./secrets.nix; in
 
   services.openssh.enable = true;
 
-  networking.firewall.allowedTCPPorts = [
-    9090 # Prometheus
-    3000 # Grafana
-    80 443
-    54191 # Transmission peering
-    139 445 # Samba
-  ];
-  networking.firewall.allowedUDPPorts = [
-    137 138 # Samba
-  ];
+  networking.firewall = {
+    enable = true;
+    logRefusedConnections = true;
+    logRefusedPackets = true;
+    logRefusedUnicastsOnly = false;
+    logReversePathDrops = true;
+    allowedTCPPorts = [
+      1883 # mqtt
+      8989 # WeMo device callback
+      9090 # Prometheus
+      3000 # Grafana
+      80 443
+      54191 # Transmission peering
+      139 445 # Samba
+      6052 # esphome dashboard
+      25565 # minecraft
+    ];
+    allowedUDPPorts = [
+      67 68 # bootp
+      137 138 # Samba
+      # 3084  # WeMo?
+    ];
+    allowedUDPPortRanges = [
+      # Allow all the upnp nonsense that's impossible to handle correctly
+      { from = 32767; to = 65535; }
+    ];
+  };
 
   programs.mosh.enable = true;  # this opens UDP 60000 to 61000 in the firewall
 
