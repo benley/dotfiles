@@ -82,6 +82,20 @@ let secrets = import ./secrets.nix; in
     };
   };
 
+  docker-containers.home-assistant = {
+    image = "homeassistant/home-assistant:0.100.3";
+    volumes = [
+      "/var/lib/hass:/config"
+    ];
+    # ports = ["8123:8123"];
+    extraDockerOptions = [
+      "--network=host"
+      "--init"
+      "--device=/dev/zigbee"
+      "--device=/dev/zwave"
+    ];
+  };
+
   docker-containers.prometheus = {
     image = "prom/prometheus:v2.12.0";
     cmd = [
@@ -153,6 +167,7 @@ let secrets = import ./secrets.nix; in
       prometheus.servers = { "127.0.0.1:9090" = {}; };
       grafana.servers = { "127.0.0.1:3000" = {}; };
       transmission.servers = { "127.0.0.1:9091" = {}; };
+      home-assistant.servers = { "127.0.0.1:8123" = {}; };
     };
     recommendedProxySettings = true;
 
@@ -162,6 +177,23 @@ let secrets = import ./secrets.nix; in
     #  it would just require adding "auth_request off" to the the location block
     # for /.well-known/acme-challenge to keep ACME stuff working.
     virtualHosts = {
+
+      "hass.zoiks.net" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://home-assistant";
+        };
+        locations."/api/websocket" = {
+          proxyPass = "http://home-assistant/api/websocket";
+          extraConfig = ''
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+          '';
+        };
+      };
+
       "nyanbox.zoiks.net" = let rootExtraConfig = config.services.nginx.virtualHosts."nyanbox.zoiks.net".locations."/".extraConfig; in {
         enableACME = true;
         forceSSL = true;
@@ -267,4 +299,16 @@ let secrets = import ./secrets.nix; in
     };
     scope = "openid email profile";
   };
+
+  services.udev.packages = [
+
+    # I think this could go in 99-local.rules but I'm not entirely sure
+    (pkgs.writeTextFile {
+      name = "hubZ-udev-rules";
+      text = builtins.readFile ./zigbee-zwave-udev.rules;
+      destination = "/etc/udev/rules.d/70-hubZ.rules";
+    })
+
+  ];
+
 }
