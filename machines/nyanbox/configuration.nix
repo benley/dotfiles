@@ -69,6 +69,19 @@ let secrets = import ./secrets.nix; in
 
   virtualisation.docker.enable = true;
 
+  services.mosquitto = {
+    enable = true;
+    host = "0.0.0.0";  # non-ssl host
+    users = {
+      esphome = {
+        acl = ["topic readwrite #"];
+      };
+      hass = {
+        acl = ["topic readwrite #"];
+      };
+    };
+  };
+
   docker-containers.prometheus = {
     image = "prom/prometheus:v2.12.0";
     cmd = [
