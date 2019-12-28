@@ -37,7 +37,7 @@
   ];
 
   nixpkgs.config.allowUnfree = true;
-
+  nixpkgs.config.oraclejdk.accept_license = true;
   # These have no effect on google-chrome (I think), just chromium
   # nixpkgs.config.chromium = {
   #   gnomeSupport = true;
@@ -49,6 +49,8 @@
   # http://nicknovitski.com/vim-nix-syntax wtf
   nixpkgs.config.vim.ftNix = false;
 
+  documentation.dev.enable = true;
+
   programs.bash.enableCompletion = true;
 
   programs.iftop.enable = true;
@@ -57,7 +59,7 @@
   programs.tmux = {
     enable = true;
     terminal = "screen-256color";
-    keyMode = "vi";
+    keyMode = "emacs";
     # this can go in my homedir
     #extraTmuxConf = builtins.readFile ../../cfg/.tmux.conf;
   };
@@ -80,7 +82,7 @@
     nix-home
     acpi
     awscli
-    awsudo
+    # awsudo
     # bazel  # I'll install this into my user profile
     binutils # strings, strip, ar, as, ...
     bc

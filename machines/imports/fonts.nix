@@ -1,7 +1,10 @@
 { config, pkgs, ... }:
 
+let localFonts = pkgs.callPackage "/home/benley/benley@gmail.com/Fonts" {}; in
+
 {
   fonts.fonts = with pkgs; [
+    localFonts.pragmataPro
     corefonts
     anonymousPro
     aurulent-sans

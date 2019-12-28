@@ -119,6 +119,7 @@
     # stumpish
     ddccontrol
     # udiskie
+    powertop
   ];
 
   environment.sessionVariables = {
@@ -216,6 +217,8 @@
   hardware.pulseaudio.enable = true;
   hardware.pulseaudio.support32Bit = true;
   hardware.pulseaudio.package = pkgs.pulseaudioFull;  # With bluetooth support
+
+  programs.adb.enable = true;
 
   programs.gnupg.agent = {
     enable = true;

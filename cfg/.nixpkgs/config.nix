@@ -5,6 +5,8 @@ let dotfiles = import <dotfiles> {}; in
 
   #allowBroken = true;
 
+  oraclejdk.accept_license = true;
+
   firefox.enableGoogleTalkPlugin = true;
   firefox.enableGnomeExtensions = true;
   #firefox.enableAdobeFlash = true;
