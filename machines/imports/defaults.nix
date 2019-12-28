@@ -82,7 +82,6 @@
     nix-home
     acpi
     awscli
-    # awsudo
     # bazel  # I'll install this into my user profile
     binutils # strings, strip, ar, as, ...
     bc

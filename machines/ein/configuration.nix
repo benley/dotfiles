@@ -10,7 +10,8 @@
     ../imports/wacom.nix
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_4_13;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   boot.kernelParams = [
     "zswap.enabled=1"
     "zswap.compressor=lz4"
@@ -30,14 +31,12 @@
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.supportedFilesystems = [ "zfs" ];
+  boot.supportedFilesystems = [ "zfs" "ntfs-3g" ];
 
   networking.hostName = "ein";
   networking.hostId = "40ec1be4";
 
   networking.firewall.enable = false;
-
-  #services.crashplan.enable = true;
 
   services.nix-serve = {
     enable = true;
@@ -50,10 +49,11 @@
   services.printing = {
     enable = true;
     drivers = [ pkgs.hplipWithPlugin ];
-    gutenprint = true;
   };
 
   services.xserver = {
+    dpi = 137;
+
     videoDrivers = [ "nvidia" ];
 
     # nvidia driver doesn't support wayland.  sigh
@@ -68,7 +68,7 @@
     #  Option "RegistryDwords" "RMUseSwI2c=0x01; RMI2cSpeed=100"
     #'';
 
-    xkbOptions = "altwin:swap_alt_win";
+    # xkbOptions = "altwin:swap_alt_win";
   };
 
   services.avahi.publish.enable = true;
@@ -90,9 +90,9 @@
   # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "17.03";
 
-  services.synergy.server.enable = true;
-  services.synergy.server.enableCrypto = true;
-  services.synergy.server.configFile = ./synergy.conf;
+  # services.synergy.server.enable = true;
+  # services.synergy.server.enableCrypto = true;
+  # services.synergy.server.configFile = ./synergy.conf;
 
   hardware.opengl = {
      extraPackages = with pkgs; [ vaapiVdpau ];
