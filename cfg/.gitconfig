@@ -50,3 +50,5 @@
 	clean = git-lfs clean %f
 [credential]
         helper = libsecret
+[url "https://github.com/"]
+	insteadOf = git@github.com:
