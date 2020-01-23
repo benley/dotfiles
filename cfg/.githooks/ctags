@@ -1,12 +1,20 @@
 #!/usr/bin/env bash
-set -e
-trap "rm -f .git/tags.$$" EXIT
-ctags=ctags
-[[ -e /usr/local/bin/ctags ]] && ctags=/usr/local/bin/ctags
-$ctags -R -f ".git/tags.$$" \
+
+trap 'rm -f .git/tags.$$' EXIT
+
+echo -e "Updating .git/tags... " 1>&2
+
+timeout 10s ctags -R -f ".git/tags.$$" \
   --exclude=".git" \
   --exclude="bazel-*" \
   --exclude="result" \
   --exclude=".stack-work" \
   --tag-relative
-mv ".git/tags.$$" .git/tags
+rt=$?
+
+case $rt in
+  0)   mv ".git/tags.$$" .git/tags; echo "done" 1>&2 ;;
+  124) echo "Timed out!" 1>&2 ;;
+  *)   echo "Failed! (ctags exited $rt)" 1>&2 ;;
+esac
+exit $rt
