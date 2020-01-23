@@ -228,6 +228,8 @@
   :custom
   (graphviz-dot-view-command "dotty %s"))
 
+(load "pragmatapro-prettify-symbols-v0.827")
+
 (use-package haskell-mode
   :custom
   (haskell-tags-on-save t)
@@ -235,7 +237,9 @@
   (haskell-process-show-overlays nil)
   (haskell-process-use-presentation-mode nil)
   :hook
-  (haskell-mode . interactive-haskell-mode))
+  (haskell-mode . interactive-haskell-mode)
+  (haskell-mode . prettify-symbols-mode)
+  (haskell-mode . add-pragmatapro-prettify-symbols-alist))
 
 (ido-mode 1)
 (ido-everywhere 1)
