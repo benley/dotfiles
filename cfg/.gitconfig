@@ -1,3 +1,5 @@
+[include]
+	path = ~/.config/git/secret-stuff.config
 [user]
 	name = Benjamin Staffin
 	useconfigonly = true
@@ -10,8 +12,6 @@
 	hooksPath = ~/.githooks
 [gpg]
 	program = gpg
-[gitreview]
-	username = ben
 [color]
 	ui = auto
 	diff = auto
