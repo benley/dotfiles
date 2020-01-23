@@ -737,7 +737,8 @@ Default face is fixed so we only need to have the exceptions."
    (shell . t)
    (jq . t)
    (ruby . t)
-   (dot . t)))
+   (dot . t)
+   (haskell . t)))
 
 (defun benley/org-confirm-babel-evaluate (lang body)
   "Don't prompt before evaluating yaml or dot blocks."
