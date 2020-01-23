@@ -144,11 +144,6 @@
   (solaire-mode-auto-swap-bg t)
   (solaire-global-mode t))
 
-(use-package spacemacs-common
-  :disabled t
-  :config
-  (load-theme 'spacemacs-light t))
-
 (use-package doom-themes
   :after solaire-mode centaur-tabs
   :config
@@ -191,9 +186,6 @@
 
 (use-package dockerfile-mode
   :mode "Dockerfile\\'")
-
-(use-package erlang
-  :disabled t)
 
 (use-package flycheck
   :custom
@@ -265,13 +257,6 @@
   (prog-mode . highlight-indent-guides-mode)
   (yaml-mode . highlight-indent-guides-mode))
 
-(use-package highlight-indentation
-  :disabled t
-  :hook
-  (prog-mode . highlight-indentation-mode)
-  (yaml-mode . highlight-indentation-mode)
-  :diminish highlight-indentation-mode)
-
 (use-package idle-highlight-mode
   :hook (prog-mode . idle-highlight-mode))
 
@@ -290,9 +275,6 @@
 (use-package jq-mode
   :mode "\\.jq\\'")
 
-;; (use-package kubernetes
-;;   :commands (kubernetes-overview))
-
 (defun benley/set-left-fringe-width ()
   (setq left-fringe-width 20))
 
@@ -309,11 +291,6 @@
   :mode ("\\.md\\'" . gfm-mode)
   :custom (markdown-command "pandoc")
   :hook (gfm-mode . turn-on-visual-line-mode))
-
-(use-package mtail-mode
-  :mode
-  ("\\.mtail\\'" . #'mtail-mode)
-  ("\\.em\\'" . #'mtail-mode))
 
 (use-package nix-mode
   :custom
@@ -432,20 +409,6 @@
 
 
 
-(use-package paredit
-  :disabled t)
-
-(use-package powerline
-  :disabled t
-  :init
-  (powerline-default-theme)
-  :custom
-  (powerline-default-separator 'slant)
-  (powerline-gui-use-vcs-glyph t)
-  :hook
-  (after-load-theme . powerline-reset)
-  (after-init . powerline-reset))
-
 (use-package protobuf-mode)
 
 (use-package rainbow-delimiters
@@ -462,12 +425,6 @@
   ("M-x" . smex)
   ("M-X" . smex-major-mode-commands)
   ("C-c C-c M-x" . execute-extended-command))
-
-;; (use-package smooth-scrolling
-;;   :init
-;;   (setq smooth-scroll-margin 2)
-;;   :config
-;;   (smooth-scrolling-mode 1))
 
 (use-package ido-grid-mode
   :custom
@@ -546,38 +503,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
-
-
-
-;; (use-package vdiff
-;;   :config
-;;   (define-key vdiff-mode-map (kbd "C-c") vdiff-mode-prefix-map))
-
-;; (use-package vdiff-magit
-;;   :config
-;;   (define-key magit-mode-map "e" #'vdiff-magit-dwim)
-;;   (define-key magit-mode-map "E" #'vdiff-magit-popup)
-;;   (setcdr (assoc ?e (plist-get magit-dispatch-popup :actions))
-;;           '("vdiff dwim" #'vdiff-magit-dwim))
-;;   (setcdr (assoc ?E (plist-get magit-dispatch-popup :actions))
-;;           '("vdiff popup" #'vdiff-magit-popup))
-;;   ;; This flag will default to using ediff for merges. vdiff-magit does not yet
-;;   ;; support 3-way merges. Please see the docstring of this variable for more
-;;   ;; information
-;;   ;; (setq vdiff-magit-use-ediff-for-merges nil)
-
-;;   ;; Whether vdiff-magit-dwim runs show variants on hunks.  If non-nil,
-;;   ;; vdiff-magit-show-staged or vdiff-magit-show-unstaged are called based on what
-;;   ;; section the hunk is in.  Otherwise, vdiff-magit-dwim runs vdiff-magit-stage
-;;   ;; when point is on an uncommitted hunk.  (setq vdiff-magit-dwim-show-on-hunks
-;;   ;; nil)
-
-;;   ;; Whether vdiff-magit-show-stash shows the state of the index.
-;;   ;; (setq vdiff-magit-show-stash-with-index t)
-
-;;   ;; Only use two buffers (working file and index) for vdiff-magit-stage
-;;   ;; (setq vdiff-magit-stage-is-2way nil)
-;;   )
 
 
 
@@ -824,9 +749,6 @@ Default face is fixed so we only need to have the exceptions."
 (use-package ox-rst)
 (use-package ox-ipynb)
 
-;; I think org-jira covers this:
-;; (add-to-list 'org-link-abbrev-alist '("jira" . "https://postmates.atlassian.net/browse/"))
-
 (add-to-list 'org-link-abbrev-alist '("gmap" . "https://maps.google.com/maps?q=%s"))
 
 ;; https://emacs.stackexchange.com/questions/18404/can-i-display-org-mode-attachments-as-inline-images-in-my-document
@@ -940,34 +862,6 @@ This is what makes 256-color output work in shell-mode."
       calendar-location-name "Boston, MA")
 
 
-;; TABS
-
-(use-package tabbar
-  :disabled t
-  :init
-  (defun benley/tabbar-buffer-groups-by-project ()
-    "Group tabbar buffers by projectile project."
-    (list
-     (cond
-      ((memq major-mode '(eshell-mode term-mode shell-mode))
-       (if (projectile-project-p)
-           (projectile-project-name)
-         "Common"))
-      ((string-equal "*" (substring (buffer-name) 0 1))
-       "Emacs")
-      ((memq major-mode '(fundamental-mode))
-       "Emacs")
-      ((memq major-mode '(org-mode org-agenda-mode diary-mode org-journal-mode))
-       "OrgMode")
-      (t
-       (if (projectile-project-p)
-           (projectile-project-name)
-         "Common")))))
-  :custom
-  (tabbar-buffer-groups-function 'benley/tabbar-buffer-groups-by-project)
-  (tabbar-mode t))
-
-
 
 (use-package projectile
   :custom
@@ -1011,8 +905,6 @@ This is what makes 256-color output work in shell-mode."
 
 (setq auth-sources
       '((:source "~/.authinfo.gpg")))
-
-(load "~/.emacs.d/localonly.el")
 
 ;; After startup, set more conservative GC options
 (add-hook 'emacs-startup-hook
