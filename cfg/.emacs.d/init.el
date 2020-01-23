@@ -395,6 +395,14 @@
 ;;   ;; (defalias 'second #'cadr)
 ;;   :hook (org-mode . org-make-toc-mode))
 
+(use-package org-sticky-header
+  :hook
+  (org-mode . org-sticky-header-mode)
+  :custom
+  (org-sticky-header-full-path 'full)
+  ;; Child and parent headings are seperated by a /.
+  (org-sticky-header-outline-path-separator " / "))
+
 
 
 (use-package forge

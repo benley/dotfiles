@@ -111,6 +111,7 @@ with rec {
     org-journal
     org-make-toc
     org-pdfview
+    org-sticky-header
     ox-asciidoc
     ox-gfm
     ox-rst
