@@ -580,12 +580,15 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 ;; FLYSPELL
 
-(add-hook 'text-mode-hook #'turn-on-flyspell)
-
-;; unfortunately this makes a variety of things _extremely slow_
-;; (add-hook 'text-mode-hook #'flyspell-buffer)
-
-(setq flyspell-issue-message-flag nil)
+(use-package flyspell
+  :hook
+  (prog-mode . flyspell-prog-mode)
+  (text-mode . turn-on-flyspell)
+  (pdf-outline . turn-off-flyspell)
+  ;; unfortunately this makes a variety of things _extremely slow_
+  ;; (text-mode flyspell-buffer)
+  :custom
+  (flyspell-issue-message-flag nil))
 
 
 
