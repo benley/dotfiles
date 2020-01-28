@@ -49,17 +49,6 @@ with { callPackage = super.callPackage; };
   #   configure = (import ./vim/customization.nix { pkgs = super; });
   # };
 
-  plex = super.plex.overrideAttrs (x: rec {
-    name = "plex-${version}";
-    version = "1.13.5.5291";
-    vsnHash = "6fa5e50a8";
-
-    src = super.fetchurl {
-      url = "https://downloads.plex.tv/plex-media-server/${version}-${vsnHash}/plexmediaserver-${version}-${vsnHash}.x86_64.rpm";
-      sha256 = "dd76984df76c64e02e7af9200aa4f0e3a0dac29196118e6c134e16de3b3c19c0";
-    };
-  });
-
   # This causes a lot of rebuilds
   # gnupg = super.gnupg.override (x: {
   #   pinentry = self.pinentry_qt5;
