@@ -25,7 +25,8 @@
 	prompt = false
 [alias]
 	st = status
-	lg = log --graph --pretty=format:'%Cred%h%Creset - %Cgreen%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+	lg = log --graph --pretty=format:'%Cblue%h%Creset %Cgreen%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+	uplog = lg ..@{u}
 [gui]
 	warndetachedcommit = true
 [push]
