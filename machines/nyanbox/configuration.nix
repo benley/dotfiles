@@ -92,10 +92,8 @@ let secrets = import ./secrets.nix; in
   };
 
   docker-containers.home-assistant = {
-    image = "homeassistant/home-assistant:0.100.3";
-    volumes = [
-      "/var/lib/hass:/config"
-    ];
+    image = "homeassistant/home-assistant:0.104.0";
+    volumes = ["/var/lib/hass:/config"];
     # ports = ["8123:8123"];
     extraDockerOptions = [
       "--network=host"
