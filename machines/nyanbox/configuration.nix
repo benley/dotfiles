@@ -23,14 +23,23 @@ let secrets = import ./secrets.nix; in
   services.avahi.publish.workstation = true;
   services.avahi.publish.userServices = true;
 
-  services.fancontrol.enable = true;
-  services.fancontrol.configFile = ./fancontrol.conf;
+  # services.fancontrol.enable = true;
+  # services.fancontrol.configFile = ./fancontrol.conf;
 
   services.hddfancontrol = {
     enable = true;
     disks = ["/dev/sdb" "/dev/sdc" "/dev/sdd" "/dev/sde"];
     pwm_paths = ["/sys/class/hwmon/hwmon0/pwm1"];
-    extra_args = "--pwm-start-value 32 --pwm-stop-value 0 --spin-down-time 900"; # " -v debug";
+    use_smartctl = true;
+    extra_args = lib.concatStringsSep " " [
+      "--pwm-start-value 32"
+      "--pwm-stop-value 0"
+      "--spin-down-time 900"
+      "--max-temp 45"
+      "--cpu-sensor /sys/devices/platform/nct6775.656/hwmon/hwmon0/temp2_input"
+      "--cpu-temp-range 30 75"
+      # " -v debug";
+    ];
   };
 
   services.openssh.enable = true;

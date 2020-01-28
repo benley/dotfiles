@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 
-let cfg = config.services.hddfancontrol;
+let
+  cfg = config.services.hddfancontrol;
   types = lib.types;
 in
 
@@ -13,7 +14,7 @@ in
       type = types.listOf types.str;
       default = [];
       description = ''
-        List of devices to monitor
+        Drive(s) to get temperature from
       '';
       example = ["/dev/sda"];
     };
@@ -27,6 +28,14 @@ in
       example = ["/sys/class/hwmon/hwmon2/pwm1"];
     };
 
+    services.hddfancontrol.use_smartctl = lib.mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Probe temperature using smartctl instead of hddtemp or hdparm
+      '';
+    };
+
     services.hddfancontrol.extra_args = lib.mkOption {
       type = types.str;
       default = "";
@@ -37,23 +46,19 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.enable (
+    let args = lib.concatLists [
+      ["-d"] cfg.disks
+      ["-p"] cfg.pwm_paths
+      (lib.optional cfg.use_smartctl "--smartctl")
+    ]; in {
+
+    systemd.packages = [pkgs.hddfancontrol];
 
     systemd.services.hddfancontrol = {
-      description = "hddfancontrol daemon";
+      enable = true;
       wantedBy = [ "multi-user.target" ];
-      script = ''
-        exec ${pkgs.hddfancontrol}/bin/hddfancontrol \
-          -d ${lib.concatStringsSep " " cfg.disks} \
-          -p ${lib.concatStringsSep " " cfg.pwm_paths} \
-          "$@"
-        '';
-      scriptArgs = cfg.extra_args;
-
-      serviceConfig = {
-        Restart = "always";
-      };
+      environment.HDDFANCONTROL_ARGS = "${lib.escapeShellArgs args} ${cfg.extra_args}";
     };
-
-  };
+  });
 }
