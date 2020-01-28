@@ -56,8 +56,8 @@ let localFonts = pkgs.callPackage "/home/benley/benley@gmail.com/Fonts" {}; in
   # https://github.com/NixOS/nixpkgs/issues/53139
   fonts.fontconfig.penultimate.enable = false;
   fonts.fontconfig.defaultFonts = {
-    monospace = [ "Noto Color Emoji" "DejaVu Sans Mono" ];
-    sansSerif = [ "Noto Color Emoji" "DejaVu Sans" ];
-    serif = [ "Noto Color Emoji" "DejaVu Serif" ];
+    monospace = [ "Cousine" "Noto Color Emoji" ];
+    sansSerif = [ "Noto Sans" "Noto Color Emoji" ];
+    serif = [ "Noto Serif" "Noto Color Emoji" ];
   };
 }
