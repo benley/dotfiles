@@ -21,8 +21,7 @@ let secrets = import ./secrets.nix; in
   networking.hostId = "007f0101";
 
   services.avahi.publish.enable = true;
-  services.avahi.publish.workstation = true;
-  services.avahi.publish.userServices = true;
+  services.avahi.publish.addresses = true;
 
   # services.fancontrol.enable = true;
   # services.fancontrol.configFile = ./fancontrol.conf;
