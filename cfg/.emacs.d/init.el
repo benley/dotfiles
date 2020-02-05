@@ -239,6 +239,9 @@
 (use-package haskell-mode
   :custom
   (haskell-tags-on-save t)
+  (haskell-interactive-popup-errors nil)
+  (haskell-process-show-overlays nil)
+  (haskell-process-use-presentation-mode nil)
   :hook
   (haskell-mode . interactive-haskell-mode))
 
