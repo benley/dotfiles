@@ -1,3 +1,4 @@
+# -*- sh-shell: bash -*-
 # Work around gnome-terminal's bullshit
 # https://bugs.launchpad.net/ubuntu/+source/gnome-terminal/+bug/1429584
 
