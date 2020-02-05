@@ -89,18 +89,6 @@ let secrets = import ./secrets.nix; in
     };
   };
 
-  docker-containers.home-assistant = {
-    image = "homeassistant/home-assistant:0.104.0";
-    volumes = ["/var/lib/hass:/config"];
-    # ports = ["8123:8123"];
-    extraDockerOptions = [
-      "--network=host"
-      "--init"
-      "--device=/dev/zigbee"
-      "--device=/dev/zwave"
-    ];
-  };
-
   services.prometheus = {
     enable = true;
     configText = builtins.readFile ./prometheus.yml;
@@ -164,14 +152,14 @@ let secrets = import ./secrets.nix; in
       prometheus.servers = { "127.0.0.1:9090" = {}; };
       grafana.servers = { "127.0.0.1:3000" = {}; };
       transmission.servers = { "127.0.0.1:9091" = {}; };
-      home-assistant.servers = { "127.0.0.1:8123" = {}; };
+      home-assistant.servers = { "192.168.7.146:8123" = {}; };
     };
     recommendedProxySettings = true;
 
     # TODO: in theory the stuff that oauth2_proxy puts in the root extraConfig
     # could actually go in the outer nginx "server" section, and then I
     # wouldn't have to hack it into each subpath like I'm doing here.  I think
-    #  it would just require adding "auth_request off" to the the location block
+    # it would just require adding "auth_request off" to the the location block
     # for /.well-known/acme-challenge to keep ACME stuff working.
     virtualHosts = {
 
@@ -183,15 +171,12 @@ let secrets = import ./secrets.nix; in
         };
         locations."/api/websocket" = {
           proxyPass = "http://home-assistant/api/websocket";
-          extraConfig = ''
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection "upgrade";
-          '';
+          proxyWebsockets = true;
         };
       };
 
       "nyanbox.zoiks.net" = let rootExtraConfig = config.services.nginx.virtualHosts."nyanbox.zoiks.net".locations."/".extraConfig; in {
+        default = true;  # this is the default vhost
         enableACME = true;
         forceSSL = true;
 
@@ -290,6 +275,7 @@ let secrets = import ./secrets.nix; in
     cookie.secret = secrets.oauth2_proxy.cookie.secret;
     setXauthrequest = true;
     extraConfig = {
+      cookie-domain = ".zoiks.net";
       skip-provider-button = true;
       whitelist-domain = ".zoiks.net";
       set-authorization-header = true;
