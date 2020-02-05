@@ -42,6 +42,8 @@ let secrets = import ./secrets.nix; in
     ];
   };
 
+  services.zfs.autoSnapshot.enable = true;
+
   services.openssh.enable = true;
 
   networking.firewall = {

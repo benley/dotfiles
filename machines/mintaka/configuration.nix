@@ -44,6 +44,8 @@
   boot.supportedFilesystems = ["zfs"];
   boot.zfs.enableUnstable = false;  # zfs 0.8.1 is stable now, yay!
 
+  services.zfs.autoSnapshot.enable = true;
+
   # Make the cryptsetup password prompt readable
   boot.earlyVconsoleSetup = true;
 

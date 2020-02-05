@@ -7,13 +7,11 @@
       "nixos-config=/home/benley/p/dotfiles/machines/${config.networking.hostName}/configuration.nix"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
-    buildCores = 0;
+    # buildCores = 0;
     daemonIONiceLevel = 7;
     daemonNiceLevel = 10;
     useSandbox = true;
-    extraOptions = ''
-      auto-optimise-store = true
-    '';
+    autoOptimiseStore = true;
     trustedBinaryCaches = [
       https://cache.nixos.org
       https://hydra.nixos.org

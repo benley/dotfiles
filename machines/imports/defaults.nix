@@ -7,7 +7,6 @@
     ./nix.nix
     ./package-overrides.nix
     ./users.nix
-    ./yubikey.nix
 
     # These have on/off toggles, so including them does not
     # automatically enable anything
@@ -20,7 +19,7 @@
   boot.zfs.forceImportAll = false;
   boot.zfs.forceImportRoot = false;
   services.zfs.autoSnapshot = {
-    enable = true;
+    enable = lib.mkDefault false;
     flags = "-k -p --utc";
     frequent = 4;  # 15-minutely snapshots
     daily = 7;
@@ -36,13 +35,6 @@
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.oraclejdk.accept_license = true;
-  # These have no effect on google-chrome (I think), just chromium
-  # nixpkgs.config.chromium = {
-  #   gnomeSupport = true;
-  #   enablePepperFlash = true;
-  #   enablePepperPDF = true;
-  #   enableWideVine = true;
-  # };
 
   # http://nicknovitski.com/vim-nix-syntax wtf
   nixpkgs.config.vim.ftNix = false;
@@ -58,8 +50,7 @@
     enable = true;
     terminal = "screen-256color";
     keyMode = "emacs";
-    # this can go in my homedir
-    #extraTmuxConf = builtins.readFile ../../cfg/.tmux.conf;
+    extraTmuxConf = builtins.readFile ../../cfg/.tmux.conf;
   };
 
   # this can go in my homedir
@@ -70,8 +61,7 @@
 
   services.emacs.defaultEditor = true;
   services.emacs.install = true;
-  # now handled via overlay
-  # services.emacs.package = (import ../../emacs.nix) {inherit pkgs;};
+  services.emacs.package = pkgs.basicEmacs;
 
   # environment.variables.PAGER = "eless";
 
@@ -79,64 +69,28 @@
     eless
     nix-home
     acpi
-    awscli
     binutils # strings, strip, ar, as, ...
     bc
-    cabal-install
-    cabal2nix
-    ctags
     dnsutils
-    dropbox-cli
     dstat
     ethtool
-    exercism
     file
-    gdb
-    gitFull
     gnupg
-    go
-    google-cloud-sdk
-    gotags
-    haskellPackages.ghc
-    # haskellPackages.ghc-mod  # broken?
-    # haskellPackages.hdevtools # broken?
-    haskellPackages.hindent
-    haskellPackages.hlint
-    haskellPackages.ShellCheck
-    html-tidy
     htop
     httpie
-    # iftop  # see programs.iftop.enable
-    imagemagick  # so emacs can resize images
     iotop
     iw
     jq
-    jsonnet
-    lastpass-cli
     lsof
-    gnumake
     mosh
-    # mtr   # see programs.mtr.enable
     nethogs
     nix-prefetch-scripts
     nmap
-    nodePackages.js-yaml
-    nodePackages.jshint
     openssl
-    pandoc
     pciutils
     pv
     pwgen
-    python27Full
-    python3Full
-    pythonPackages.autopep8
-    pythonPackages.flake8
-    pythonPackages.pep8
-    python3Packages.pylint
-    pythonPackages.virtualenv
-    pythonPackages.virtualenvwrapper
     socat
-    stack
     sysstat
     tcpdump
     telnet

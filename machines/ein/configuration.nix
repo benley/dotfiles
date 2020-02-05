@@ -44,6 +44,8 @@
     secretKeyFile = "/etc/nix/signing-key.sec";
   };
 
+  services.zfs.autoSnapshot.enable = true;
+
   services.openssh.enable = true;
 
   services.printing = {

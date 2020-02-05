@@ -41,7 +41,15 @@ with rec {
 };
 
 {
-  emacs = emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
+  basicEmacs = super.emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
+    json-mode
+    nix-mode
+    smex
+    use-package
+    yaml-mode
+  ]));
+
+  fancyEmacs = emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
 
   ]) ++ (with epkgs.melpaPackages; [
     all-the-icons
