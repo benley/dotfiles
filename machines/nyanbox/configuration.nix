@@ -48,10 +48,6 @@ let secrets = import ./secrets.nix; in
 
   networking.firewall = {
     enable = true;
-    logRefusedConnections = true;
-    logRefusedPackets = true;
-    logRefusedUnicastsOnly = false;
-    logReversePathDrops = true;
     allowedTCPPorts = [
       1883 # mqtt
       8989 # WeMo device callback
