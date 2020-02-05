@@ -6,6 +6,7 @@ let secrets = import ./secrets.nix; in
   imports = [
     ./hardware-configuration.nix
     ../imports/defaults.nix
+    ../imports/workstation.nix
   ];
 
   boot.loader.grub = {

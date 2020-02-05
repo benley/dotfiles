@@ -3,6 +3,7 @@
 {
   imports = [
     ./fonts.nix
+    ./workstation.nix
   ];
 
   # services.dunst.enable = true;

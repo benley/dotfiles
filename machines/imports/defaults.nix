@@ -61,7 +61,7 @@
 
   services.emacs.defaultEditor = true;
   services.emacs.install = true;
-  services.emacs.package = pkgs.basicEmacs;
+  services.emacs.package = lib.mkDefault pkgs.basicEmacs;
 
   # environment.variables.PAGER = "eless";
 
