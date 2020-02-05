@@ -294,4 +294,20 @@ let secrets = import ./secrets.nix; in
 
   ];
 
+  containers.minecraft = {
+    config = import ./minecraft-container.nix;
+    autoStart = true;
+    bindMounts = {
+      "/var/lib/minecraft" = {
+        hostPath = "/var/lib/minecraft";
+        isReadOnly = false;
+      };
+    };
+    forwardPorts = [ { containerPort = 25565; hostPort = 25565; protocol = "tcp"; } ];
+  };
+
+  environment.systemPackages = with pkgs; [
+    mcrcon
+  ];
+
 }
