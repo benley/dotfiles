@@ -82,8 +82,6 @@
   programs.gnupg.agent.enableSSHSupport = true;
 
   services.avahi.publish.enable = false;
-  services.avahi.publish.workstation = false;
-  services.avahi.publish.userServices = false;
 
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;

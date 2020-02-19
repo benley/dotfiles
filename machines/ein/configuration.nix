@@ -78,10 +78,6 @@
     # xkbOptions = "altwin:swap_alt_win";
   };
 
-  services.avahi.publish.enable = true;
-  services.avahi.publish.workstation = true;
-  services.avahi.publish.userServices = true;
-
   systemd.mounts = [{
     where = "/var/lib/docker";
     what = "pool0/docker";

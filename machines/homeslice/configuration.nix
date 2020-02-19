@@ -18,9 +18,6 @@
 
   networking.hostName = "homeslice";
 
-  services.avahi.publish.enable = true;
-  services.avahi.publish.addresses = true;
-
   networking.firewall = {
     # logRefusedConnections = true;
     # logRefusedPackets = true;
