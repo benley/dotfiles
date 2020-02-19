@@ -19,9 +19,15 @@
   ];
 
   boot.loader.grub = {
-    device = "/dev/sdb";
+    device = "nodev";
     enable = true;
     efiSupport = true;
+    # This motherboard's UEFI behaves badly and ignores BootOrder if
+    # /EFI/Boot/bootx64.efi exists.  If that path doesn't exist, Windows
+    # updates will eventually put a copy of the Windows bootloader there, so to
+    # prevent Windows from taking over the boot process we'll have to install
+    # Grub at that location.
+    efiInstallAsRemovable = true;
     gfxmodeEfi = "1024x768x32";
     zfsSupport = true;
     splashImage = null;
@@ -29,7 +35,6 @@
   };
 
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  boot.loader.efi.canTouchEfiVariables = true;
 
   boot.supportedFilesystems = [ "zfs" "ntfs-3g" ];
 
