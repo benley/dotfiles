@@ -112,7 +112,7 @@
   ];
 
   i18n.defaultLocale = "en_US.UTF-8";
-  i18n.consoleUseXkbConfig = true;
+  console.useXkbConfig = true;
 
   # Populate /etc/X11 since you're going to look there anyway
   services.xserver.exportConfiguration = true;

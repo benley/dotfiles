@@ -9,10 +9,9 @@
     ../imports/graphical.nix
     ../imports/redshift.nix
     ../imports/wacom.nix
-    ../imports/workstuff.nix
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_5_2;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -47,7 +46,7 @@
   services.zfs.autoSnapshot.enable = true;
 
   # Make the cryptsetup password prompt readable
-  boot.earlyVconsoleSetup = true;
+  console.earlySetup = true;
 
   networking.hostName = "mintaka";
   networking.hostId = "8425e349";
@@ -62,8 +61,8 @@
 
   networking.networkmanager.enable = true;
 
-  i18n.consoleFont = "ter-132b";
-  i18n.consolePackages = [ pkgs.terminus_font ];
+  console.font = "ter-132b";
+  console.packages = [ pkgs.terminus_font ];
   i18n.inputMethod.enabled = "ibus";
   i18n.inputMethod.ibus.engines = with pkgs.ibus-engines; [ uniemoji ];
 
