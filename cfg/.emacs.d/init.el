@@ -284,12 +284,14 @@
   (haskell-mode . prettify-symbols-mode)
   (haskell-mode . add-pragmatapro-prettify-symbols-alist))
 
-(ido-mode 1)
-(ido-everywhere 1)
-(setq ido-enable-flex-matching t)
-(setq ido-use-faces nil)
-(setq ido-ignore-directories '("\\`CVS/" "\\`\\.\\./" "\\`\\./" "bazel-.*/"))
-(setq ido-auto-merge-work-directories-length -1)
+(use-package ido
+  :custom
+  (ido-mode 'both)
+  (ido-everywhere 1)
+  (ido-enable-flex-matching t)
+  (ido-use-faces nil)  ; let flx-ido handle faces
+  (ido-ignore-directories '("\\`CVS/" "\\`\\.\\./" "\\`\\./" "bazel-.*/"))
+  (ido-auto-merge-work-directories-length -1))
 
 (use-package flx-ido
   :custom
