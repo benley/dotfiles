@@ -45,10 +45,15 @@
 [http]
 	cookiefile = ~/.gitcookies
 [filter "lfs"]
-	smudge = git-lfs smudge %f
+	smudge = git-lfs smudge -- %f
 	required = true
-	clean = git-lfs clean %f
+	clean = git-lfs clean -- %f
+	process = git-lfs filter-process
 [credential]
         helper = libsecret
 [url "https://github.com/"]
 	insteadOf = git@github.com:
+[url "https://code.xkrd.net/"]
+	insteadOf = git@git.xkrd.net:
+[gitlab "code.xkrd.net/api/v4"]
+	user = benley
