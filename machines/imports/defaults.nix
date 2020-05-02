@@ -50,7 +50,7 @@
     enable = true;
     terminal = "screen-256color";
     keyMode = "emacs";
-    extraTmuxConf = builtins.readFile ../../cfg/.tmux.conf;
+    extraConfig = builtins.readFile ../../cfg/.tmux.conf;
   };
 
   # this can go in my homedir
