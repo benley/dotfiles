@@ -1,0 +1,11 @@
+groups:
+  - name: node
+    rules:
+      - record: job_instance:node_memory_used_bytes:sum
+        expr: |
+          sum by (instance, job) (
+            node_memory_MemTotal_bytes -
+            node_memory_MemFree_bytes -
+            node_memory_Buffers_bytes -
+            node_memory_Cached_bytes
+          )

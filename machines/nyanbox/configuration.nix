@@ -91,7 +91,44 @@ let secrets = import ./secrets.nix; in
 
   services.prometheus = {
     enable = true;
-    configText = builtins.readFile ./prometheus.yml;
+    globalConfig = {
+      scrape_interval = "15s";
+      evaluation_interval = "15s";
+      scrape_timeout = "10s";
+    };
+    scrapeConfigs = [
+      {
+        job_name = "prometheus";
+        static_configs = [{
+          targets = ["localhost:9090"];
+        }];
+      }
+      {
+        job_name = "node";
+        static_configs = [{
+          targets = [
+            "localhost:9100"
+            "homeslice.zoiks.net:9100"
+          ];
+        }];
+      }
+      {
+        job_name = "grafana";
+        static_configs = [{
+          targets = ["localhost:3000"];
+        }];
+      }
+      {
+        job_name = "hass";
+        scrape_interval = "15s";
+        metrics_path = "/api/prometheus";
+        bearer_token = secrets.hass_bearer_token;
+        static_configs = [{
+          targets = ["homeslice.zoiks.net:8123"];
+        }];
+      }
+    ];
+    ruleFiles = [ ./prometheus-node-rules.yml ];
     extraFlags = [
       "--storage.tsdb.retention=30d"
       "--web.route-prefix=/"
@@ -143,8 +180,11 @@ let secrets = import ./secrets.nix; in
       AUTH_GOOGLE_ALLOWED_DOMAINS = "zoiks.net";
     };
     rootUrl = "https://nyanbox.zoiks.net/grafana";
-    security.adminPassword = secrets.grafana.admin_password;
+    #security.adminPassword = secrets.grafana.admin_password;
   };
+
+  security.acme.email = "benley@zoiks.net";
+  security.acme.acceptTerms = true;
 
   services.nginx = {
     enable = true;
@@ -152,7 +192,7 @@ let secrets = import ./secrets.nix; in
       prometheus.servers = { "127.0.0.1:9090" = {}; };
       grafana.servers = { "127.0.0.1:3000" = {}; };
       transmission.servers = { "127.0.0.1:9091" = {}; };
-      home-assistant.servers = { "192.168.7.146:8123" = {}; };
+      home-assistant.servers = { "homeslice.zoiks.net:8123" = {}; };
     };
     recommendedProxySettings = true;
 
@@ -257,10 +297,7 @@ let secrets = import ./secrets.nix; in
     '';
   };
 
-  system.autoUpgrade = {
-    channel = "https://nixos.org/channels/nixos-19.09";
-    enable = true;
-  };
+  system.autoUpgrade.enable = true;
 
   nix.gc.automatic = true;
   nix.gc.options = "--delete-older-than 14d";
