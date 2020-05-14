@@ -65,7 +65,7 @@
   virtualisation.docker.enable = true;
 
   docker-containers.home-assistant = {
-    image = "homeassistant/raspberrypi3-homeassistant:0.105.0";
+    image = "homeassistant/raspberrypi3-homeassistant:0.109.2";
     volumes = ["/var/lib/hass:/config"];
     # ports = ["8123:8123"];
     extraDockerOptions = [
@@ -86,4 +86,20 @@
     })
 
   ];
+
+  system.autoUpgrade = {
+    enable = true;
+  };
+
+  services.prometheus.exporters.node = {
+    enable = true;
+    extraFlags = [
+      # "--collector.textfile.directory=/var/lib/node-exporter/textfile"
+      "--collector.filesystem.ignored-fs-types=^(sysfs|procfs|autofs|cgroup|devpts|nsfs|aufs|tmpfs|overlay|fuse|fuse\.lxc|mqueue)$"
+      "--collector.filesystem.ignored-mount-points=^(/rootfs|/host)?/(sys|proc|dev|host|etc)($|/)"
+    ];
+    disabledCollectors = [ "timex" ];
+    openFirewall = true;  # allow port 9100
+  };
+
 }
