@@ -86,7 +86,18 @@ let secrets = import ./secrets.nix; in
       hass = {
         acl = ["topic readwrite #"];
       };
+      prometheus = {
+        acl = [
+          "topic read #"
+          "topic read $SYS/#"
+        ];
+      };
     };
+  };
+
+  services.mosquitto-exporter = {
+    enable = true;
+    extraFlags = ["--user prometheus"];
   };
 
   services.prometheus = {
@@ -125,6 +136,12 @@ let secrets = import ./secrets.nix; in
         bearer_token = secrets.hass_bearer_token;
         static_configs = [{
           targets = ["homeslice.zoiks.net:8123"];
+        }];
+      }
+      {
+        job_name = "mosquitto";
+        static_configs = [{
+          targets = ["localhost:9234"];
         }];
       }
     ];

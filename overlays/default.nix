@@ -24,6 +24,8 @@ with { callPackage = super.callPackage; };
 
   kupfer-plugin-google-search = callPackage ../pkgs/kupfer-plugin-google-search { };
 
+  mosquitto-exporter = callPackage ../pkgs/mosquitto-exporter { };
+
   nix-home = callPackage ../pkgs/nix-home { };
 
   nixhomeLib = callPackage (import "${self.nix-home}/nix/lib/nixhome") {};
