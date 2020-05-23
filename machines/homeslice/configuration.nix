@@ -60,9 +60,10 @@
   system.stateVersion = "19.09";
 
   virtualisation.docker.enable = true;
+  virtualisation.docker.autoPrune.enable = true;
 
   docker-containers.home-assistant = {
-    image = "homeassistant/raspberrypi3-homeassistant:0.109.2";
+    image = "homeassistant/raspberrypi3-homeassistant:0.110.1";
     volumes = ["/var/lib/hass:/config"];
     # ports = ["8123:8123"];
     extraDockerOptions = [
