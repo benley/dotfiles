@@ -139,6 +139,63 @@ let secrets = import ./secrets.nix; in
         }];
       }
       {
+        job_name = "blackbox-http";
+        metrics_path = "/probe";
+        params = {
+          module = ["http_2xx"];
+        };
+        static_configs = [{
+          targets = [
+            "http://google.com"
+            "https://hass.zoiks.net/"
+          ];
+        }];
+        relabel_configs = [
+          {
+            source_labels = ["__address__"];
+            target_label = "__param_target";
+          }
+          {
+            source_labels = ["__param_target"];
+            target_label = "instance";
+          }
+          {
+            target_label = "__address__";
+            replacement = "nyanbox.zoiks.net:9115";
+          }
+        ];
+      }
+      {
+        job_name = "blackbox-ping";
+        metrics_path = "/probe";
+        params = {
+          module = ["icmp"];
+        };
+        static_configs = [{
+          targets = [
+            "hass.zoiks.net"
+            "osric.zoiks.net"
+            "8.8.8.8"
+            "2001:4860:4860::8888"
+          ];
+        }];
+        relabel_configs = [
+          {
+            source_labels = ["__address__"];
+            target_label = "__param_target";
+          }
+          {
+            source_labels = ["__param_target"];
+            target_label = "instance";
+          }
+          {
+            target_label = "__address__";
+            replacement = "nyanbox.zoiks.net:9115";
+          }
+        ];
+      }
+
+      {
         job_name = "mosquitto";
         static_configs = [{
           targets = ["localhost:9234"];
@@ -163,6 +220,11 @@ let secrets = import ./secrets.nix; in
     ];
     disabledCollectors = [ "timex" ];
     openFirewall = true;  # allow port 9100
+  };
+
+  services.prometheus.exporters.blackbox = {
+    enable = true;
+    configFile = ./blackbox-exporter.yml;
   };
 
   services.cron.systemCronJobs = [
