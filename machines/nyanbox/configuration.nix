@@ -42,7 +42,27 @@ let secrets = import ./secrets.nix; in
     ];
   };
 
-  services.zfs.autoSnapshot.enable = true;
+  services.zfs.autoSnapshot.enable = false;
+  services.znapzend = {
+    enable = true;
+    zetup = {
+      "nyanbox/software" = {
+        plan = "1w=>1d,1m=>1w,1y=>1m";
+      };
+      "nyanbox/media" = {
+        plan = "1w=>1d,1m=>1w,1y=>1m";
+      };
+      "nyanbox/photos" = {
+        plan = "1w=>1d,1m=>1w,1y=>1m";
+      };
+      "nyanbox/downloads" = {
+        plan = "1w=>1d,1m=>1w,1y=>1m";
+      };
+      "nyanbox/books" = {
+        plan = "1w=>1d,1m=>1w,1y=>1m";
+      };
+    };
+  };
 
   services.openssh.enable = true;
 
@@ -424,6 +444,7 @@ let secrets = import ./secrets.nix; in
 
   environment.systemPackages = with pkgs; [
     mcrcon
+    mbuffer
   ];
 
 }
