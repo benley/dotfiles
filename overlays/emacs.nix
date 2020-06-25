@@ -41,6 +41,10 @@ with rec {
 };
 
 {
+  texlive-for-orgmode = super.texlive.combine {
+    inherit (super.texlive) scheme-small wrapfig capt-of cm-super dvipng;
+  };
+
   basicEmacs = super.emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
     json-mode
     nix-mode

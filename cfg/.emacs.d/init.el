@@ -354,8 +354,7 @@
 
   (org-agenda-files
    '("~/benley@gmail.com/org"
-     "~/benley@gmail.com/org/journal"
-     "~/benley@gmail.com/evernote_export"))
+     "~/p/xkrd/benley/notes"))
 
   (org-capture-templates
    '(("n" "Note" entry (file+headline "" "unfiled")
@@ -741,6 +740,7 @@ Default face is fixed so we only need to have the exceptions."
    (jq . t)
    (ruby . t)
    (dot . t)
+   (latex . t)
    (haskell . t)))
 
 (defun benley/org-confirm-babel-evaluate (lang body)
