@@ -4,10 +4,18 @@
 
 # Blacklist Adafruit USB CDC boards from being manipulated by ModemManager.
 # Fixes issue with hanging references to /dev/ttyACM* devices on Ubuntu 15.04.
-# ATTRS{idVendor}=="239a", ENV{ID_MM_DEVICE_IGNORE}="1"
+ATTRS{idVendor}=="239a", ENV{ID_MM_TTY_BLACKLIST}="1"
 
-# Adafruit feather 32u4
+# Adafruit feather 32u4 (000c looks like recovery mode, maybe?)
 SUBSYSTEM=="tty", ATTRS{idVendor}=="239a", ATTRS{idProduct}=="800c", TAG+="uaccess"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="239a", ATTRS{idProduct}=="000c", TAG+="uaccess"
 
 # Adafruit feather32 usb-serial interface (Silicon Labs CP2104)
 SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", TAG+="uaccess"
+
+# Teensy 2.0 (derived from https://www.pjrc.com/teensy/49-teensy.rules)
+ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", ENV{ID_MM_TTY_BLACKLIST}="1", ENV{ID_MM_PORT_IGNORE}="1"
+ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789A]?", ENV{MTP_NO_PROBE}="1"
+
+SUBSYSTEM=="usb", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789ABCD]?", TAG+="uaccess"
+KERNEL=="ttyACM*", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="04[789B]?", TAG+="uaccess"
