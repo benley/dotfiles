@@ -79,6 +79,7 @@ with rec {
     erlang
     flx-ido
     flycheck
+    flycheck-package
     flycheck-pos-tip
     flycheck-color-mode-line
     flycheck-status-emoji
@@ -119,6 +120,7 @@ with rec {
     ox-asciidoc
     ox-gfm
     ox-rst
+    package-lint
     paredit
     powerline
     projectile
@@ -171,6 +173,7 @@ with rec {
 
     (epkgs.melpaBuild my-jsonnet-mode)
     (epkgs.melpaBuild ox-ipynb)
+    (epkgs.melpaBuild udev-mode)
 
   ])
 

@@ -195,6 +195,10 @@
   :config
   (global-flycheck-mode 1))
 
+(use-package flycheck-package
+  :after flycheck
+  :config (flycheck-package-setup))
+
 (use-package flycheck-pos-tip
   :after flycheck
   :config (flycheck-pos-tip-mode))
