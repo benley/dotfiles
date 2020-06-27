@@ -10,6 +10,21 @@ with rec {
 
   emacsWithPackages = (self.emacsPackagesNgGen myEmacs).emacsWithPackages;
 
+  udev-mode = {
+    pname = "udev-mode";
+    version = "20200626.0";
+    src = super.fetchFromGitHub {
+      owner = "benley";
+      repo = "emacs-udev-mode";
+      rev = "e939a83712e9d5b95f7315945806dbfa0ef36244";
+      sha256 = "1jqsn0f6qf7znna62z20ynzawc1v9nxlb6krwp371n51x367c2bj";
+    };
+    recipe = super.writeText "recipe" ''
+      (udev-mode :fetcher github :repo "benley/emacs-udev-mode")
+    '';
+    packageRequires = [];
+  };
+
   my-jsonnet-mode = {
     pname = "jsonnet-mode";
     version = "20190322.0";
