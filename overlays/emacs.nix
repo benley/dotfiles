@@ -78,7 +78,9 @@ with rec {
     bazel-mode
     centaur-tabs
     company
+    company-box
     # company-emoji
+    company-nixos-options
     company-posframe
     company-terraform
     cython-mode
@@ -111,13 +113,17 @@ with rec {
     highlight-indent-guides
     htmlize
     idle-highlight-mode
-    ido-completing-read-plus
+    epkgs.melpaPackages."ido-completing-read+"
     ido-grid-mode
     imenu-list
     json-mode
     # jsonnet-mode  # local copy
     jq-mode
     # kubernetes  # build broken?
+    lsp-mode
+    lsp-haskell
+    lsp-ui
+    lsp-treemacs
     magit
     # magit-gh-pulls  # build broken?
     magit-popup
@@ -130,7 +136,7 @@ with rec {
     org-jira
     org-journal
     org-make-toc
-    org-pdfview
+    # org-pdfview  # abandoned
     org-sticky-header
     ox-asciidoc
     ox-gfm
@@ -182,7 +188,7 @@ with rec {
     org
 
   ]) ++ (with epkgs; [
-    emacs-libvterm
+    vterm
     pdf-tools
   ] ++ [
 

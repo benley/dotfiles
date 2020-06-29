@@ -1,10 +1,15 @@
-;;; init.el --- emacs init
+;;; init.el --- emacs init   -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
-;; -*- lexical-binding: t; -*-
 
-;; Remember what I had open when I quit
-;; (desktop-save-mode t)
+;; Use a hook so the message doesn't get clobbered by other messages.
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "Emacs ready in %s with %d garbage collections."
+                     (format "%.2f seconds"
+                             (float-time
+                              (time-subtract after-init-time before-init-time)))
+                     gcs-done)))
 
 ;; Crank up GC parameters during startup
 (setq gc-cons-threshold 402653184
@@ -117,9 +122,7 @@
   :bind
   ("C-<prior>" . centaur-tabs-backward)
   ("C-<next>" . centaur-tabs-forward)
-  :config
-  (centaur-tabs-group-by-projectile-project)
-
+  :preface
   (defun benley/centaur-tabs-hide-tab-wrapper (orig-fn &rest args)
     "Wrapper for the default centaur-tabs-hide-tab function."
     (let ((name (format "%s" (car args))))
@@ -127,9 +130,9 @@
           (string-prefix-p "*Completions*" name)
           (string-equal "TAGS" name)
           (apply orig-fn args))))
-
+  :config
+  (centaur-tabs-group-by-projectile-project)
   (advice-add 'centaur-tabs-hide-tab :around #'benley/centaur-tabs-hide-tab-wrapper)
-
   :hook
   (imenu-list-major-mode . centaur-tabs-local-mode)
   (server-create-window-system-frame . centaur-tabs-headline-match))
@@ -156,8 +159,8 @@
 
 (use-package doom-modeline
   :after all-the-icons doom-themes
-  :hook
-  (server-create-window-system-frame . doom-modeline-mode))
+  :custom
+  (doom-modeline-mode t))
 
 
 ;; Enable mouse input in terminals
@@ -168,21 +171,38 @@
 
 (use-package company
   :diminish company-mode
-  ;; Use company-mode in all buffers (more completion)
-  :hook (after-init . global-company-mode))
-
-(use-package company-posframe
-  :diminish company-posframe-mode
+  :defer t
+  :custom
+  (company-tooltip-align-annotations t)
   :hook
-  (server-create-window-system-frame . company-posframe-mode))
+  (after-init . global-company-mode))
+
+(use-package company-box
+  :hook (company-mode . company-box-mode)
+  :custom
+  (company-box-icons-alist 'company-box-icons-all-the-icons))
+
+(use-package company-nixos-options
+  ;; :defer 5
+  :after nix-mode
+  :config
+  ;; patch in https://github.com/travisbhartwell/nix-emacs/pull/46
+  ;; which is apparently never going to be merged
+  (defun company-nixos--in-nix-context-p ()
+    (or (derived-mode-p 'nix-mode 'nix-repl-mode)
+        (let ((file-name (buffer-file-name (current-buffer))))
+          (and file-name (equal "nix" (file-name-extension file-name))))))
+  (add-to-list 'company-backends 'company-nixos-options))
 
 (use-package company-terraform
+  :after terraform-mode
   :config
-  (company-terraform-init))
+  (add-to-list 'company-backends 'company-terraform))
 
 (diminish 'eldoc-mode)
 
-(use-package arduino-mode)
+(use-package arduino-mode
+  :mode "\\.pde\\'" "\\.ino\\'")
 
 (use-package dockerfile-mode
   :mode "Dockerfile\\'")
@@ -192,16 +212,18 @@
   ;; (flycheck-ghc-stack-use-nix t)
   (flycheck-python-flake8-executable "flake8")
   (flycheck-python-pylint-executable "pylint")
-  :config
-  (global-flycheck-mode 1))
+  :hook
+  (after-init . global-flycheck-mode))
 
 (use-package flycheck-package
   :after flycheck
-  :config (flycheck-package-setup))
+  :hook
+  (emacs-lisp-mode . flycheck-package-setup))
 
 (use-package flycheck-pos-tip
   :after flycheck
-  :config (flycheck-pos-tip-mode))
+  :hook
+  (flycheck-mode . flycheck-pos-tip-mode))
 
 (use-package flycheck-color-mode-line
   :after flycheck
@@ -213,7 +235,8 @@
   (flycheck-status-emoji-indicator-finished-error ?💀)
   (flycheck-status-emoji-indicator-finished-ok ?👍)
   (flycheck-status-emoji-indicator-finished-warning ?👎)
-  (flycheck-status-emoji-mode t))
+  :hook
+  (flycheck-mode . flycheck-status-emoji-mode))
 
 (use-package git-gutter
   :diminish git-gutter-mode
@@ -223,7 +246,10 @@
 (use-package gitconfig-mode)
 (use-package gitignore-mode)
 
-(use-package go-mode)
+(use-package go-mode
+  :mode
+  ("\\.go\\'" . go-mode)
+  ("go\\.mod\\'" . go-dot-mod-mode))
 
 (use-package graphviz-dot-mode
   :after org
@@ -232,14 +258,15 @@
   :custom
   (graphviz-dot-view-command "dotty %s"))
 
-(load "pragmatapro-prettify-symbols-v0.827")
-
 (use-package haskell-mode
   :custom
   (haskell-tags-on-save t)
   (haskell-interactive-popup-errors nil)
   (haskell-process-show-overlays nil)
   (haskell-process-use-presentation-mode nil)
+  :config
+  (require 'w3m-haddock)
+  (load "pragmatapro-prettify-symbols-v0.827")
   :hook
   (haskell-mode . interactive-haskell-mode)
   (haskell-mode . prettify-symbols-mode)
@@ -283,10 +310,14 @@
 (use-package jq-mode
   :mode "\\.jq\\'")
 
-(defun benley/set-left-fringe-width ()
-  (setq left-fringe-width 20))
+(use-package lilypond-mode
+  :mode (("\\.ly\\'" . LilyPond-mode)
+         ("\\.ily\\'" . LilyPond-mode)))
 
 (use-package magit
+  :preface
+  (defun benley/set-left-fringe-width ()
+    (setq left-fringe-width 20))
   :bind ("C-x g" . magit-status)
   :custom
   (magit-completing-read-function #'magit-ido-completing-read)
@@ -301,6 +332,7 @@
   :hook (gfm-mode . turn-on-visual-line-mode))
 
 (use-package nix-mode
+  :defer t
   :custom
   (nix-indent-function #'nix-indent-line)
   :mode
@@ -381,7 +413,9 @@
   (org-mode . org-bullets-mode))
 
 (use-package org-journal
-  :after org
+  :defer t
+  :bind (("C-c j" . org-journal-new-entry))
+
   :custom
   ;; I think you have to set org-journal-dir before loading
   ;; org-journal for it to work correctly (if so, change this back to :init with (setq ...))
@@ -424,7 +458,8 @@
 
 
 
-(use-package protobuf-mode)
+(use-package protobuf-mode
+  :mode ("\\.proto\\'" . protobuf-mode))
 
 (use-package rainbow-delimiters
   :commands rainbow-delimiters-mode
@@ -522,6 +557,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 
 (use-package vterm
+  :commands (vterm vterm-other-window)
   :custom
   (vterm-keymap-exceptions '("C-x" "M-x" "C-c"))
   (vterm-max-scrollback 10000)
@@ -632,12 +668,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 ;; replace buffer-menu with ibuffer
 (global-set-key (kbd "C-x C-b") #'ibuffer)
 
-;; keybindings for org mode
-(global-set-key (kbd "C-c l") #'org-store-link)
-(global-set-key (kbd "C-c a") #'org-agenda)
-(global-set-key (kbd "C-c c") #'org-capture)
-(global-set-key (kbd "C-c j") #'org-journal-new-entry)
-
 ;; Scrolling
 (global-set-key (kbd "M-p") (lambda () (interactive) (scroll-down 2)))
 (global-set-key (kbd "M-n") (lambda () (interactive) (scroll-up 2)))
@@ -737,15 +767,43 @@ Default face is fixed so we only need to have the exceptions."
 
 
 ;;; Enable some languages that I want to use with org-babel
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (shell . t)
-   (jq . t)
-   (ruby . t)
-   (dot . t)
-   (latex . t)
-   (haskell . t)))
+
+(use-package ob-emacs-lisp
+  :defer t
+  :commands (org-babel-execute:emacs-lisp
+             org-babel-expand-body:emacs-lisp))
+
+(use-package ob-shell
+  :defer t
+  :commands (org-babel-execute:sh
+             org-babel-expand-body:sh
+             org-babel-execute:bash
+             org-babel-expand-body:bash))
+
+(use-package ob-jq
+  :defer t
+  :commands (org-babel-execute:jq
+             org-babel-expand-body:jq))
+
+(use-package ob-dot
+  :defer t
+  :commands (org-babel-execute:dot
+             org-babel-expand-body:dot))
+
+(use-package ob-haskell
+  :defer t
+  :commands (org-babel-execute:haskell
+             org-babel-expand-body:haskell))
+
+;; (org-babel-do-load-languages
+;;  'org-babel-load-languages
+;;  '((emacs-lisp . t)
+;;    (shell . t)
+;;    (jq . t)
+;;    (ruby . t)
+;;    (dot . t)
+;;    (latex . t)
+;;    (haskell . t)))
 
 (defun benley/org-confirm-babel-evaluate (lang body)
   "Don't prompt before evaluating yaml or dot blocks."
@@ -757,23 +815,41 @@ Default face is fixed so we only need to have the exceptions."
 ;; as input to other code blocks
 (defun org-babel-execute:yaml (body params) body)
 
-;; make org bullets clickable, etc (part of org-mode)
-(add-to-list 'org-modules 'org-mouse)
-
-;; add github:... links to org mode (my local stuff)
-(add-to-list 'org-modules 'org-github-links)
 
 ;; ox-gfm: Export to github-flavored markdown
-(use-package ox-gfm)
-(use-package ox-asciidoc)
-(use-package ox-rst)
-(use-package ox-ipynb)
+(use-package ox-gfm
+  :after org)
 
-(add-to-list 'org-link-abbrev-alist '("gmap" . "https://maps.google.com/maps?q=%s"))
+(use-package ox-asciidoc
+  :after org)
+
+(use-package ox-rst
+  :after org)
+
+(use-package ox-ipynb
+  :after org)
+
+(use-package org
+  :mode ("\\.org\\'" . org-mode)
+
+  :bind
+  (("C-c l" . org-store-link)
+   ("C-c c" . org-capture)
+   ("C-c a" . org-agenda))
+
+  :config
+  (add-to-list 'org-link-abbrev-alist '("gmap" . "https://maps.google.com/maps?q=%s"))
+  ;; make org bullets clickable, etc (part of org-mode)
+  (add-to-list 'org-modules 'org-mouse)
+
+  ;; add github:... links to org mode (my local stuff)
+  (add-to-list 'org-modules 'org-github-links))
 
 ;; https://emacs.stackexchange.com/questions/18404/can-i-display-org-mode-attachments-as-inline-images-in-my-document
-(require 'org-attach)
-(add-to-list 'org-link-abbrev-alist '("att" . org-attach-expand-link))
+(use-package org-attach
+  :after org
+  :config
+  (add-to-list 'org-link-abbrev-alist '("att" . org-attach-expand-link)))
 
 
 (setq sh-basic-offset 2)
@@ -884,11 +960,12 @@ This is what makes 256-color output work in shell-mode."
 
 
 (use-package projectile
+  :defer 1
   :custom
-  (projectile-project-search-path '("~/p/" "~/pm/"))
-  (projectile-mode t)
+  (projectile-project-search-path '("~/p/"))
   :config
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode t)
   :delight
   '(:eval (concat "[" (projectile-project-name) "]")))
 
@@ -912,6 +989,7 @@ This is what makes 256-color output work in shell-mode."
 ;; (load "~/.emacs.d/exwm.el")
 
 (use-package atomic-chrome
+  :defer 1
   :custom
   (atomic-chrome-buffer-open-style 'frame)
   (atomic-chrome-url-major-mode-alist
@@ -934,6 +1012,43 @@ This is what makes 256-color output work in shell-mode."
 ;; After startup, restore file-name-handler-alist
 (add-hook 'emacs-startup-hook
           (lambda () (setq file-name-handler-alist benley--file-name-handler-alist)))
+
+(use-package 2048-game
+  :ensure t)
+
+(use-package udev-mode)
+
+(use-package lsp-mode
+  :hook ((sh-mode . lsp-deferred)
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands (lsp lsp-deferred)
+  :custom
+  (lsp-keymap-prefix "C-c o")
+  (lsp-prefer-capf t))
+
+(use-package lsp-haskell
+  :defer t
+  :hook (haskell-mode . lsp-deferred)
+  :config
+  (setq lsp-haskell-process-wrapper-function (lambda (cmd)
+                                               (apply #'nix-shell-command (nix-current-sandbox) cmd))))
+
+(use-package lsp-ui
+  :commands lsp-ui-mode
+  :custom
+  (lsp-ui-doc-position 'top)
+  (lsp-ui-doc-alignment 'window))
+
+(use-package lsp-treemacs
+  :after lsp-mode)
+
+(use-package esup
+  :ensure t
+  ;; ;; To use MELPA Stable use ":pin mepla-stable",
+  ;; :pin melpa
+  :commands (esup)
+  :custom
+  (esup-depth 0))
 
 (message "Finished with init.el")
 (provide 'init)
