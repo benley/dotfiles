@@ -1,8 +1,10 @@
 ;;; init.el --- emacs init   -*- lexical-binding: t; -*-
 ;;; Commentary:
+
+;; https://blog.d46.us/advanced-emacs-startup/
+
 ;;; Code:
 
-;; Use a hook so the message doesn't get clobbered by other messages.
 (add-hook 'emacs-startup-hook
           (lambda ()
             (message "Emacs ready in %s with %d garbage collections."
@@ -15,9 +17,20 @@
 (setq gc-cons-threshold 402653184
       gc-cons-percentage 0.6)
 
+;; After startup, set more conservative GC options
+(add-hook 'emacs-startup-hook
+          (lambda () (setq gc-cons-threshold 16777216
+                           gc-cons-percentage 0.1)))
+
 ;; During startup, clear file-name-handler-alist (we'll put it back later)
 (defvar benley--file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
+
+;; After startup, restore file-name-handler-alist
+(add-hook 'emacs-startup-hook
+          (lambda () (setq file-name-handler-alist benley--file-name-handler-alist)))
+
+
 
 (prefer-coding-system 'utf-8)
 (set-language-environment "UTF-8")
@@ -38,16 +51,15 @@
 ; overwrite selected text on insert
 (delete-selection-mode 1)
 
-(require 'package)
-
 ;;; nix takes care of package installation for me now
-(setq package-archives
-      '(("gnu"   . "https://elpa.gnu.org/packages/")
-        ("melpa" . "https://melpa.org/packages/")
-        ("org"   . "https://orgmode.org/elpa/")))
-;; (setq package-archives nil)
+;; (require 'package)
+;; (setq package-archives
+;;       '(("gnu"   . "https://elpa.gnu.org/packages/")
+;;         ("melpa" . "https://melpa.org/packages/")
+;;         ("org"   . "https://orgmode.org/elpa/")))
+(setq package-archives nil)
 (setq package-enable-at-startup nil)
-(package-initialize)
+;; (package-initialize)
 
 ;; this has to be set before loading use-package in order to work
 (setq use-package-enable-imenu-support t)
@@ -63,9 +75,10 @@
 
 ;; (setq use-package-always-ensure t)
 
+
+
 (require 'ansi-view)
 
-
 ;; Define a new hook to be run after changing themes:
 (defvar after-load-theme-hook nil
   "Hook run after a color theme is loaded using `load-theme'.")
@@ -99,7 +112,6 @@
             (lambda (&rest r)
               "Run `server-create-window-system-frame-hook'."
               (run-hooks 'server-create-window-system-frame-hook)))
-
 
 
 ;;; THEMES
@@ -152,7 +164,7 @@
   :config
   (load-theme 'doom-palenight t)
   (require 'doom-themes-ext-treemacs)
-  (doom-themes-org-config)
+  (require 'doom-themes-ext-org)
   :custom
   (doom-themes-treemacs-enable-variable-pitch nil)
   (doom-themes-treemacs-theme "doom-colors"))
@@ -1004,17 +1016,7 @@ This is what makes 256-color output work in shell-mode."
 (setq auth-sources
       '((:source "~/.authinfo.gpg")))
 
-;; After startup, set more conservative GC options
-(add-hook 'emacs-startup-hook
-          (lambda () (setq gc-cons-threshold 16777216
-                           gc-cons-percentage 0.1)))
-
-;; After startup, restore file-name-handler-alist
-(add-hook 'emacs-startup-hook
-          (lambda () (setq file-name-handler-alist benley--file-name-handler-alist)))
-
-(use-package 2048-game
-  :ensure t)
+;; (use-package 2048-game)
 
 (use-package udev-mode)
 
@@ -1043,7 +1045,6 @@ This is what makes 256-color output work in shell-mode."
   :after lsp-mode)
 
 (use-package esup
-  :ensure t
   ;; ;; To use MELPA Stable use ":pin mepla-stable",
   ;; :pin melpa
   :commands (esup)
