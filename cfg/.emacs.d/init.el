@@ -576,10 +576,8 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :custom
   (vterm-keymap-exceptions '("C-x" "M-x" "C-c"))
   (vterm-max-scrollback 10000)
-  :config
-  (defun vterm--rename-buffer-as-title (title)
-    (rename-buffer (format "%s" title) t))
-  (add-hook 'vterm-set-title-functions 'vterm--rename-buffer-as-title))
+  (vterm-kill-buffer-on-exit t)
+  (vterm-buffer-name-string "vterm %s"))
 
 
 
