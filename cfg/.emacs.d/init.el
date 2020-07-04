@@ -51,7 +51,7 @@
 ;;         ("org"   . "https://orgmode.org/elpa/")))
 (setq package-archives nil)
 (setq package-enable-at-startup nil)
-;; (package-initialize)
+(package-initialize) ;; seemingly necessary for flycheck-verify-setup to work
 
 ;; this has to be set before loading use-package in order to work
 (setq use-package-enable-imenu-support t)
