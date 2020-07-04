@@ -109,6 +109,7 @@ with rec {
     go-mode
     graphviz-dot-mode
     haskell-mode
+    hide-mode-line
     # highlight-indentation
     highlight-indent-guides
     htmlize

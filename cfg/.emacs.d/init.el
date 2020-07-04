@@ -595,7 +595,8 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (vterm-keymap-exceptions '("C-x" "M-x" "C-c"))
   (vterm-max-scrollback 10000)
   (vterm-kill-buffer-on-exit t)
-  (vterm-buffer-name-string "vterm %s"))
+  (vterm-buffer-name-string "vterm %s")
+  :hook (vterm-mode . hide-mode-line-mode))
 
 
 
@@ -1081,6 +1082,8 @@ This is what makes 256-color output work in shell-mode."
   :commands (esup)
   :custom
   (esup-depth 0))
+
+(use-package hide-mode-line)
 
 (message "Finished with init.el")
 (provide 'init)
