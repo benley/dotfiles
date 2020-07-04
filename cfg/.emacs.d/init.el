@@ -35,11 +35,6 @@
 (prefer-coding-system 'utf-8)
 (set-language-environment "UTF-8")
 
-;; Do these early to make interactive startup seem faster
-(tool-bar-mode 0)
-(menu-bar-mode 0)
-(scroll-bar-mode 0)
-
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 
@@ -47,9 +42,6 @@
 
 (global-unset-key (kbd "C-z"))     ;; ctrl-z should *not* freeze a gui app
 (global-unset-key (kbd "C-x C-z")) ;; why the heck would I ever want to suspend-frame
-
-; overwrite selected text on insert
-(delete-selection-mode 1)
 
 ;;; nix takes care of package installation for me now
 ;; (require 'package)
@@ -77,8 +69,26 @@
 
 
 
+(use-package scroll-bar
+  :custom
+  (scroll-bar-mode nil))
+
+(use-package menu-bar
+  :custom
+  (menu-bar-mode nil))
+
+(use-package tool-bar
+  :custom
+  (tool-bar-mode nil))
+
+(use-package delsel
+  :custom
+  ;; overwrite selected text on insert
+  (delete-selection-mode t))
+
 (require 'ansi-view)
 
+
 ;; Define a new hook to be run after changing themes:
 (defvar after-load-theme-hook nil
   "Hook run after a color theme is loaded using `load-theme'.")
@@ -117,10 +127,7 @@
 
 ;;; THEMES
 
-(use-package all-the-icons
-  :config
-  (add-to-list 'all-the-icons-mode-icon-alist
-               '(vterm-mode all-the-icons-octicon "terminal" :v-adjust 0.2)))
+(use-package all-the-icons)
 
 (use-package centaur-tabs
   :after all-the-icons
@@ -148,6 +155,9 @@
   (advice-add 'centaur-tabs-hide-tab :around #'benley/centaur-tabs-hide-tab-wrapper)
   :hook
   (imenu-list-major-mode . centaur-tabs-local-mode)
+  ;; for non-daemon mode:
+  (after-init . centaur-tabs-headline-match)
+  ;; this apparently needs to happen when a frame exists, so do it again for daemon mode
   (server-create-window-system-frame . centaur-tabs-headline-match))
 
 (use-package solaire-mode
@@ -171,13 +181,15 @@
   (doom-themes-treemacs-theme "doom-colors"))
 
 (use-package doom-modeline
-  :after all-the-icons doom-themes
+  :after all-the-icons
   :custom
+  (doom-modeline-icon t)
   (doom-modeline-mode t))
 
 
-;; Enable mouse input in terminals
-(xterm-mouse-mode t)
+(use-package xt-mouse
+  :custom
+  (xterm-mouse-mode t))
 
 (use-package bazel-mode
   :mode "BUILD\\'" "WORKSPACE\\'" "\\.bzl\\'")
@@ -207,18 +219,22 @@
           (and file-name (equal "nix" (file-name-extension file-name))))))
   (add-to-list 'company-backends 'company-nixos-options))
 
+(use-package terraform-mode
+  :mode "\\.tf\\(vars\\)?\\'")
+
 (use-package company-terraform
   :after terraform-mode
   :config
   (add-to-list 'company-backends 'company-terraform))
 
-(diminish 'eldoc-mode)
+(use-package eldoc
+  :diminish eldoc-mode)
 
 (use-package arduino-mode
   :mode "\\.pde\\'" "\\.ino\\'")
 
 (use-package dockerfile-mode
-  :mode "Dockerfile\\'")
+  :mode "Dockerfile\\(?:\\..*\\)?\\'")
 
 (use-package flycheck
   :custom
@@ -278,7 +294,7 @@
   (haskell-process-show-overlays nil)
   (haskell-process-use-presentation-mode nil)
   :config
-  (require 'w3m-haddock)
+  ;; (require 'w3m-haddock)
   (load "pragmatapro-prettify-symbols-v0.827")
   :hook
   (haskell-mode . interactive-haskell-mode)
@@ -288,9 +304,9 @@
 (use-package ido
   :custom
   (ido-mode 'both)
-  (ido-everywhere 1)
+  (ido-everywhere t)
   (ido-enable-flex-matching t)
-  (ido-use-faces nil)  ; let flx-ido handle faces
+  (ido-use-faces nil)
   (ido-ignore-directories '("\\`CVS/" "\\`\\.\\./" "\\`\\./" "bazel-.*/"))
   (ido-auto-merge-work-directories-length -1))
 
@@ -480,7 +496,9 @@
   :commands rainbow-delimiters-mode
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(save-place-mode t)
+(use-package saveplace
+  :custom
+  (save-place-mode t))
 
 (use-package smex
   ;; Put frequently-used commands at the front of ido completion list
@@ -488,8 +506,7 @@
   (smex-initialize)
   :bind
   ("M-x" . smex)
-  ("M-X" . smex-major-mode-commands)
-  ("C-c C-c M-x" . execute-extended-command))
+  ("M-X" . smex-major-mode-commands))
 
 (use-package ido-grid-mode
   :custom
@@ -566,8 +583,9 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 
 
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
+(use-package uniquify
+  :custom
+  (uniquify-buffer-name-style 'forward))
 
 
 
@@ -580,6 +598,10 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (vterm-buffer-name-string "vterm %s"))
 
 
+
+(use-package ws-butler
+  :custom
+  (ws-butler-global-mode t))
 
 (use-package web-mode
   :custom
@@ -600,7 +622,8 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 ;;    (setq weechat-return-always-replace-input nil)
 ;;    (setq weechat-time-format "%H:%M"))
 
-(use-package yaml-mode)
+(use-package yaml-mode
+  :mode "\\.\\(e?ya?\\|ra\\)ml\\'")
 
 
 ;;; emoji stuff?
@@ -619,14 +642,21 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 
 
-(column-number-mode 1)                  ;; show column position in modeline
-(show-paren-mode 1)                     ;; highlight matching parens
+(use-package simple
+  :custom
+  (column-number-mode 1))                  ;; show column position in modeline
+
+(use-package paren
+  :custom
+  (show-paren-mode 1))                     ;; highlight matching parens
 
 ;;; I think this happens automatically now - default is "Use --direct only if ls supports it"
 ;; (when (eq system-type 'darwin)
 ;;   (setq dired-use-ls-dired nil))        ;; ls doesn't have --dired on darwin
 
-(add-hook 'before-save-hook #'delete-trailing-whitespace)
+;;; replaced by ws-butler
+;; (add-hook 'before-save-hook #'delete-trailing-whitespace)
+
 ;; (add-hook 'text-mode-hook #'turn-on-auto-fill)
 
 
