@@ -90,8 +90,8 @@ with rec {
     doom-modeline
     doom-themes
     edit-indirect
-    # elscreen
     # emojify
+    esup
     evil
     erlang
     flx-ido
@@ -119,13 +119,11 @@ with rec {
     json-mode
     # jsonnet-mode  # local copy
     jq-mode
-    # kubernetes  # build broken?
     lsp-mode
     lsp-haskell
     lsp-ui
     lsp-treemacs
     magit
-    # magit-gh-pulls  # build broken?
     magit-popup
     markdown-mode
     # material-theme
@@ -150,13 +148,11 @@ with rec {
     rainbow-delimiters
     solaire-mode
     ssh-config-mode
-    # slack
-    # smart-mode-line
     smex
     smooth-scrolling
     # spaceline-all-the-icons
     # spaceline
-    spacemacs-theme
+    # spacemacs-theme
     # slime
     # stumpwm-mode
     systemd
@@ -175,6 +171,7 @@ with rec {
     web-mode
     # weechat  # someday I'll start using this probably
     which-key
+    ws-butler
     xterm-color
     yaml-mode
 
