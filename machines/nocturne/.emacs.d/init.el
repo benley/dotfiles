@@ -1,9 +1,14 @@
 (setq gc-cons-threshold 20000000)
 
 (when (< emacs-major-version 27)
+  ;; Work around the color emoji Xft bug (possibly fixed in 26.3? Probably fixed in 27.)
+  (add-to-list 'face-ignored-fonts "Noto Color Emoji"))
+
+(when (< emacs-major-version 27)
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
 (require 'package)
+
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                     (not (gnutls-available-p))))
        (proto (if no-ssl "http" "https")))
@@ -13,16 +18,15 @@ which is unsafe because it allows man-in-the-middle attacks.
 There are two things you can do about this warning:
 1. Install an Emacs version that does support SSL and be safe.
 2. Remove this warning from your init file so you won't see it again."))
-  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
-  ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
-  ;; and `package-pinned-packages`. Most users will not need or want to do this.
-  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
-  )
-(package-initialize)
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t))
 
-;; This is only needed once, near the top of the file
+(when (< emacs-major-version 27)
+  (package-initialize))
+
 (eval-when-compile
-  (require 'use-package))
+  (unless (require 'use-package nil t)
+    (package-refresh-contents)
+    (package-install 'use-package)))
 
 (menu-bar-mode 0)
 (tool-bar-mode 0)
@@ -32,12 +36,12 @@ There are two things you can do about this warning:
 (setq load-prefer-newer t)
 
 (use-package delsel
-  :init
+  :custom
   ;; overwrite selected text on insert
   (delete-selection-mode 1))
 
 (use-package xt-mouse
-  :init
+  :custom
   ;; Enable mouse input in terminals
   (xterm-mouse-mode t))
 
@@ -108,15 +112,15 @@ There are two things you can do about this warning:
 
 (use-package doom-themes
   :ensure t
-  :after solaire-mode ;;centaur-tabs
+  :after solaire-mode centaur-tabs
   :config
-  (load-theme 'doom-one t)
-  ;; (require 'doom-themes-ext-treemacs)
+  (load-theme 'doom-palenight t)
+  (require 'doom-themes-ext-treemacs)
   (doom-themes-org-config)
-  ;; :custom
-  ;; (doom-themes-treemacs-enable-variable-pitch nil)
-  ;; (doom-themes-treemacs-theme "doom-colors")
-  )
+  ;; (solaire-mode-swap-bg)
+  :custom
+  (doom-themes-treemacs-enable-variable-pitch nil)
+  (doom-themes-treemacs-theme "doom-colors"))
 
 (use-package doom-modeline
   :ensure t
@@ -146,7 +150,6 @@ There are two things you can do about this warning:
   ("\\.drv\\'" . #'nix-drv-mode))
 
 (use-package flycheck
-  :disabled t
   :ensure t
   :hook (after-init . global-flycheck-mode))
 
@@ -162,9 +165,8 @@ There are two things you can do about this warning:
   :hook (flycheck-mode . flycheck-posframe-mode)
   :custom
   (flycheck-posframe-warning-prefix "\u26a0 ")
+  (flycheck-posframe-error-prefix "\u274c ")
   (flycheck-posframe-border-width 2)
-  ;; holy hell, this crashes emacs somehow
-  ;; (flycheck-posframe-error-prefix "\u274c ")
   :config
   (set-face-attribute 'flycheck-posframe-warning-face nil :inherit 'warning)
   (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error)
@@ -178,13 +180,48 @@ There are two things you can do about this warning:
 
 (use-package gitattributes-mode
   :ensure t)
+
 (use-package gitconfig-mode
   :ensure t)
+
 (use-package gitignore-mode
   :ensure t)
 
 (use-package all-the-icons
   :ensure t)
+
+(use-package centaur-tabs
+  :ensure t
+  :after all-the-icons
+  :demand
+  :custom
+  (centaur-tabs-set-icons t)
+  (centaur-tabs-style "bar")
+  (centaur-tabs-set-bar 'over)
+  (centaur-tabs-height 45)
+  (centaur-tabs-set-modified-marker t)
+  (centaur-tabs-mode t)
+  :bind
+  ("C-<prior>" . centaur-tabs-backward)
+  ("C-<next>" . centaur-tabs-forward)
+  ("C-<tab>" . centaur-tabs-forward)
+  ("C-S-<iso-lefttab>" . centaur-tabs-backward)
+  :config
+  (centaur-tabs-group-by-projectile-project)
+
+  (defun benley/centaur-tabs-hide-tab-wrapper (orig-fn &rest args)
+    "Wrapper for the default centaur-tabs-hide-tab function."
+    (let ((name (format "%s" (car args))))
+      (or (string-prefix-p "*Ilist*" name)
+          (string-prefix-p "*Completions*" name)
+          (string-equal "TAGS" name)
+          (apply orig-fn args))))
+
+  (advice-add 'centaur-tabs-hide-tab :around #'benley/centaur-tabs-hide-tab-wrapper)
+
+  :hook
+  (imenu-list-major-mode . centaur-tabs-local-mode)
+  (server-create-window-system-frame . centaur-tabs-headline-match))
 
 (use-package company
   :ensure t
@@ -235,16 +272,16 @@ There are two things you can do about this warning:
    '(magit-fringe-bitmap-bold> . magit-fringe-bitmap-boldv))
   :hook (magit-mode . benley/set-left-fringe-width))
 
-;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-(setq lsp-keymap-prefix "C-c l")
-
 (use-package lsp-mode
   :ensure t
   :hook ((elm-mode . lsp)
+	 (sh-mode . lsp)
+	 (haskell-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
-  :custom (lsp-prefer-capf t)
-  )
+  :custom
+  (lsp-prefer-capf t)
+  (lsp-keymap-prefix "C-c l"))
 
 (use-package lsp-ui
   :ensure t
@@ -253,6 +290,10 @@ There are two things you can do about this warning:
   (lsp-ui-sideline-show-diagnostics nil)
   :config
   (define-key lsp-ui-mode-map (kbd "C-'") 'lsp-ui-imenu))
+
+(use-package lsp-haskell
+  :ensure t
+  :after lsp-mode lsp-ui)
 
 (use-package company-lsp
   :disabled t
@@ -364,12 +405,15 @@ There are two things you can do about this warning:
   (ssh-config-mode . turn-on-font-lock))  ; is this even necessary?
 
 (use-package prog-mode
-  :config
+  :preface
   (defun benley/prog-mode-hook ()
     "Setup stuff for `prog-mode' derivatives."
     (if window-system (hl-line-mode t))
-    (setq-local show-trailing-whitespace t)
-    (setq-local display-line-numbers t))
+    (setq show-trailing-whitespace t)
+    (setq display-line-numbers t)
+    (when (>= emacs-major-version 27)
+	  ;; (setq display-fill-column-indicator t)
+	  (setq display-fill-column-indicator-character ?\u2502)))
 
   :hook
   (prog-mode . benley/prog-mode-hook))
@@ -377,6 +421,13 @@ There are two things you can do about this warning:
 (use-package js
   :custom
   (js-indent-level 2))
+
+(use-package form-feed
+  :ensure t
+  :hook
+  (emacs-lisp-mode . form-feed-mode)
+  (help-mode . form-feed-mode)
+  :diminish form-feed-mode)
 
 ;; replace buffer-menu with ibuffer
 (global-set-key (kbd "C-x C-b") #'ibuffer)

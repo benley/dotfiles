@@ -104,8 +104,9 @@
 (add-hook 'after-load-theme-hook #'ansi-term-reset-color-vector)
 
 
-;; ;; Define a new hook to be run after creating a new frame
+;; Define a new hook to be run after creating a new frame
 (defvar server-create-window-system-frame-hook nil
+  ;; TODO: emacs 27 has server-after-make-frame-hook which might replace this
   "Hook run after Emacs server creates a GUI frame.")
 
 (advice-add 'server-create-window-system-frame :after
