@@ -6,7 +6,6 @@
     ../imports/defaults.nix
     ../imports/graphical.nix
     ../imports/redshift.nix
-    ../imports/virtualbox.nix
     ../imports/wacom.nix
   ];
 
@@ -32,6 +31,7 @@
     zfsSupport = true;
     splashImage = null;
     useOSProber = true;
+    default = 2;  # boot windows by default for now
   };
 
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
@@ -42,12 +42,6 @@
   networking.hostId = "40ec1be4";
 
   networking.firewall.enable = false;
-
-  services.nix-serve = {
-    enable = true;
-    port = 5150;
-    secretKeyFile = "/etc/nix/signing-key.sec";
-  };
 
   services.zfs.autoSnapshot.enable = true;
 
@@ -90,17 +84,16 @@
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "zfs";
 
-  # The NixOS release to be compatible with for stateful data such as databases.
   system.stateVersion = "17.03";
-
-  # services.synergy.server.enable = true;
-  # services.synergy.server.enableCrypto = true;
-  # services.synergy.server.configFile = ./synergy.conf;
 
   hardware.opengl = {
      extraPackages = with pkgs; [ vaapiVdpau ];
      extraPackages32 = with pkgs.pkgsi686Linux; [ vaapiVdpau ];
   };
+
+  hardware.pulseaudio.extraConfig = ''
+    unload-module module-suspend-on-idle
+  '';
 
   environment.variables = {
     VDPAU_DRIVER = "nvidia";
