@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e -x
-here=$(dirname "${BASH_SOURCE[0]}")
+here=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-echo "(import <dotfiles>).homedir" > "$HOME/default.nix"
+echo "(import ${here}).homedir" > "$HOME/default.nix"
 
-"$(nix-build "$here" -I "dotfiles=$here" -A nix-home --no-out-link)"/bin/nix-home
+"$(nix-build "$here" -A nix-home --no-out-link)"/bin/nix-home
