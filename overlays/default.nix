@@ -15,14 +15,16 @@ with { callPackage = super.callPackage; };
 
   eless = super.writeScriptBin "eless" (builtins.readFile ../eless.sh);
 
-
   insync = callPackage ../pkgs/insync { };
 
-  insync-v3 = callPackage ../pkgs/insync/insync-v3.nix { };
+  insync-v3 = self.libsForQt5.callPackage ../pkgs/insync/insync-v3.nix { };
 
   kubernetes-client = callPackage ../pkgs/kubernetes-client { };
 
   kupfer-plugin-google-search = callPackage ../pkgs/kupfer-plugin-google-search { };
+
+  libdatrie = callPackage ../pkgs/libdatrie { };
+  libthai = callPackage ../pkgs/libthai { };
 
   mosquitto-exporter = callPackage ../pkgs/mosquitto-exporter { };
 

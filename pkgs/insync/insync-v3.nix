@@ -5,80 +5,51 @@
 , dpkg
 , glibc
 , glib
-, libglvnd
 , libxcb
-, libxkbcommon
-, libXcomposite
-, libXcursor
-, libXi
-, libXrandr
-, libXtst
-, libX11
-, libXrender
-, alsaLib
+, libGL
 , nss
-, nspr
+, libthai
+, wayland
+, alsaLib
 , qt5
-, xdg_utils
-, zlib
-, fontconfig
+, autoPatchelfHook
 }:
 
-let rpath = lib.makeLibraryPath [
-  alsaLib
-  fontconfig
-  glibc
-  glib
-  libxkbcommon
-  libX11
-  libxcb
-  libXrender
-  libXcomposite
-  libXi
-  libXrandr
-  libXtst
-  libglvnd
-  nss
-  nspr
-  xdg_utils
-  zlib
-  qt5.qtbase
-  qt5.qtlocation
-  qt5.qtdeclarative
-  qt5.qtwebengine
-  qt5.qtserialport
-  qt5.qtwebchannel
-];
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "insync";
-  version = "3.0.19.40421";
+  version = "3.2.4.40856";
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
-        url = "http://s.insynchq.com/builds/${name}_${version}-bionic_amd64.deb";
-        sha256 = "06yia565ad10b7wblj2av09wixhz0hqvyagi3hc3xz1s20vqyslh";
+        url = "http://s.insynchq.com/builds/${name}_${version}-focal_amd64.deb";
+        sha256 = "1bvqbbrfn5784nmb2qaflm1rzczqhvghhb6y5zaxrapyhygxbcis";
       }
-    else
-      throw "${name} is not supported on ${stdenv.hostPlatform.system}";
+    else throw "${name} is not supported on ${stdenv.hostPlatform.system}";
 
+  buildInputs = [
+    libxcb
+    libGL
+    nss libthai wayland alsaLib
+    qt5.qtvirtualkeyboard
+    qt5.qtwebchannel
+    qt5.qtwebsockets
+    qt5.qtlocation
+    qt5.qtwebengine
+  ];
 
-  buildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper qt5.wrapQtAppsHook ];
 
-  unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
+  unpackPhase = ''
+    dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner
+  '';
 
   installPhase = ''
-    mkdir -p $out/usr
-    cp -R usr/ $out/
-    ln -s $out/usr/share $out/share
-    # chmod a-x $out/usr/lib/insync/library.zip # do not match in the next loop
-
-    for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
-      patchelf --set-rpath ${rpath}:$out/usr/lib/insync/ $file || true
-    done
-
-    makeWrapper $out/usr/lib/insync/insync $out/bin/insync --set LC_TIME C
+    mkdir -p $out/bin $out/lib $out/share
+    cp -R usr/* $out/
+    rm $out/lib/insync/libGLX.so.0
+    rm $out/lib/insync/libQt5*
+    sed -i 's|/usr/lib/insync|/lib/insync|' "$out/bin/insync"
+    wrapQtApp "$out/lib/insync/insync"
   '';
 
   postPatch = ''

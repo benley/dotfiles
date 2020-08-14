@@ -35,7 +35,7 @@
     google-chrome
     graphviz
     inkscape
-    insync
+    insync-v3
     keybase
     keybase-gui
     minecraft
