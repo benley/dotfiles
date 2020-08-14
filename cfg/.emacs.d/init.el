@@ -351,8 +351,8 @@
   :custom
   (nix-indent-function #'nix-indent-line)
   :mode
-  ("\\.nix\\'" . #'nix-mode)
-  ("\\.drv\\'" . #'nix-drv-mode))
+  ("\\.nix\\'" . nix-mode)
+  ("\\.drv\\'" . nix-drv-mode))
 
 
 
