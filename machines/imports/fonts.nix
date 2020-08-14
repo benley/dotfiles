@@ -11,7 +11,7 @@ let localFonts = pkgs.callPackage "/home/benley/benley@gmail.com/Fonts" {}; in
     bakoma_ttf
     cantarell_fonts
     crimson
-    dejavu_fonts
+    # dejavu_fonts
     dina-font
     dosemu_fonts
     emacs-all-the-icons-fonts
@@ -34,9 +34,9 @@ let localFonts = pkgs.callPackage "/home/benley/benley@gmail.com/Fonts" {}; in
     montserrat
     # nerdfonts  # This is like 6,000 fonts and 3+ gigabytes, seriously
     noto-fonts
-    noto-fonts-emoji  # Build broken?
+    noto-fonts-emoji
     oxygenfonts
-    powerline-fonts
+    # powerline-fonts
     profont
     # proggyfonts  # bitmapped, too small on modern screens
     roboto
@@ -56,8 +56,10 @@ let localFonts = pkgs.callPackage "/home/benley/benley@gmail.com/Fonts" {}; in
   # https://github.com/NixOS/nixpkgs/issues/53139
   fonts.fontconfig.penultimate.enable = false;
   fonts.fontconfig.defaultFonts = {
-    monospace = [ "Cousine" "Noto Color Emoji" ];
-    sansSerif = [ "Noto Sans" "Noto Color Emoji" ];
-    serif = [ "Noto Serif" "Noto Color Emoji" ];
+    monospace = [ "Cousine" ];
+    sansSerif = [ "Noto Sans" ];
+    serif = [ "Noto Serif" ];
   };
+
+  fonts.fontconfig.localConf = builtins.readFile ./local-fontconfig.conf;
 }
