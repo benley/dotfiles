@@ -125,8 +125,8 @@
     ipv4 = true;
     ipv6 = true;
     nssmdns = true;
-    publish.enable = true;
-    publish.addresses = true;
+    publish.enable = lib.mkDefault true;
+    publish.addresses = lib.mkDefault true;
   };
 
   services.irqbalance.enable = true;
