@@ -153,29 +153,23 @@
   (advice-add 'centaur-tabs-hide-tab :around #'benley/centaur-tabs-hide-tab-wrapper)
   :hook
   (imenu-list-major-mode . centaur-tabs-local-mode)
-  ;; for non-daemon mode:
-  (after-init . centaur-tabs-headline-match)
-  ;; this apparently needs to happen when a frame exists, so do it again for daemon mode
-  (server-after-make-frame . centaur-tabs-headline-match))
+  (after-load-theme . centaur-tabs-headline-match))
 
 (use-package solaire-mode
-  :hook
-  (after-init . solaire-global-mode)
+  :ensure t
   ;; I'm not sure if this first set of hooks is necessary, or if
   ;; solaire-global-mode takes care of it
-  ;; (change-major-mode . turn-on-solaire-mode)
-  ;; (after-revert . turn-on-solaire-mode)
-  ;; (ediff-prepare-buffer solaire-mode)
+  ;; :hook
+  ;; ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
   ;; (minibuffer-setup . solaire-mode-in-minibuffer)
-  ;; :config
-  ;; (setq solaire-mode-auto-swap-bg nil)
-  ;; (solaire-global-mode +1)
-  )
+  ;; (after-load-theme . solaire-global-mode)
+  :config
+  (setq solaire-mode-auto-swap-bg t)
+  (solaire-global-mode t))
 
 (use-package doom-themes
-  :after solaire-mode centaur-tabs
+  :ensure t
   :config
-  ;; (load-theme 'doom-palenight t)
   (require 'doom-themes-ext-treemacs)
   (require 'doom-themes-ext-org)
   (customize-set-variable 'doom-themes-treemacs-enable-variable-pitch nil)
@@ -183,7 +177,25 @@
   ;; (customize-set-variable 'custom-enabled-themes '(doom-palenight))
   )
 
+(setq benley--theme-loaded nil)
+(setq benley--theme 'doom-palenight)
+
+(load-theme benley--theme t)
+
+(defun benley--load-theme ()
+  "Load my chosen them, but only do it once.
+
+When using server mode, we want to (re)load the theme exactly
+once while creating the first frame, so solaire-mode can do its
+thing properly."
+  (when (null benley--theme-loaded)
+    (load-theme benley--theme t)
+    (message "LOADED MY THEME HRURR")
+    (setq benley--theme-loaded t)))
+(add-hook 'server-create-window-system-frame-hook #'benley--load-theme)
+
 (use-package doom-modeline
+  :ensure t
   :after all-the-icons
   :config
   (customize-set-variable 'doom-modeline-icon t)
