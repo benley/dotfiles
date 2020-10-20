@@ -57,3 +57,7 @@
 	insteadOf = git@git.xkrd.net:
 [gitlab "code.xkrd.net/api/v4"]
 	user = benley
+[github]
+	user = benley
+[pull]
+	rebase = true
