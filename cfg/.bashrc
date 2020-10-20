@@ -170,7 +170,7 @@ __prompt_command() {
 
   before=""
   case $TERM in
-    xterm*)
+    xterm*|alacritty)
       # Set the title bar to include the current directory.
       before+="\[\033]0;\u@\h: \w\007\]"
       ;;

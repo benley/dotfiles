@@ -123,6 +123,8 @@
     ddccontrol
     # udiskie
     powertop
+
+    alacritty
   ];
 
   environment.sessionVariables = {
