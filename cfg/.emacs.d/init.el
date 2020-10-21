@@ -1140,7 +1140,7 @@ This is what makes 256-color output work in shell-mode."
 
 (use-package hide-mode-line)
 
-;; (use-package pydoc)
+(use-package memsql-dev-setup)
 
 (load-theme 'doom-palenight t)
 
