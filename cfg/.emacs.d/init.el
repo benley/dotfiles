@@ -5,6 +5,13 @@
 
 ;;; Code:
 
+;; (setq debug-on-error t)
+
+;; Workaround obnoxious TLS thing in Debian stable
+(require 'gnutls)
+(when (version< emacs-version "27")
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
+
 (add-hook 'emacs-startup-hook
           (lambda ()
             (message "Emacs ready in %s with %d garbage collections."
@@ -1073,9 +1080,6 @@ This is what makes 256-color output work in shell-mode."
   (imenu-list-mode-line-format nil)
   :bind
   ("C-'" . imenu-list-smart-toggle))
-
-;; (server-start)
-;; (load "~/.emacs.d/exwm.el")
 
 (use-package atomic-chrome
   :defer 1
