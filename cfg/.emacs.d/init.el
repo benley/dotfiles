@@ -67,26 +67,24 @@
 
 ;; (setq use-package-always-ensure t)
 
-
-
 (use-package scroll-bar
-  :custom
-  (scroll-bar-mode nil))
+  :config
+  (customize-set-variable 'scroll-bar-mode nil))
 
 (use-package menu-bar
-  :custom
-  (menu-bar-mode nil))
+  :config
+  (customize-set-variable 'menu-bar-mode nil))
 
 (use-package tool-bar
-  :custom
-  (tool-bar-mode nil))
+  :config
+  (customize-set-variable 'tool-bar-mode nil))
 
 (use-package delsel
-  :custom
+  :config
   ;; overwrite selected text on insert
-  (delete-selection-mode t))
+  (customize-set-variable 'delete-selection-mode t))
 
-(require 'ansi-view)
+;; (require 'ansi-view)
 
 
 ;; Define a new hook to be run after changing themes:
@@ -115,14 +113,14 @@
 
 
 ;; Define a new hook to be run after creating a new frame
-(defvar server-create-window-system-frame-hook nil
-  ;; TODO: emacs 27 has server-after-make-frame-hook which might replace this
-  "Hook run after Emacs server creates a GUI frame.")
+;; (defvar server-create-window-system-frame-hook nil
+;;   ;; TODO: emacs 27 has server-after-make-frame-hook which might replace this
+;;   "Hook run after Emacs server creates a GUI frame.")
 
-(advice-add 'server-create-window-system-frame :after
-            (lambda (&rest r)
-              "Run `server-create-window-system-frame-hook'."
-              (run-hooks 'server-create-window-system-frame-hook)))
+;; (advice-add 'server-create-window-system-frame :after
+;;             (lambda (&rest r)
+;;               "Run `server-create-window-system-frame-hook'."
+;;               (run-hooks 'server-create-window-system-frame-hook)))
 
 
 ;;; THEMES
@@ -132,13 +130,6 @@
 (use-package centaur-tabs
   :after all-the-icons
   :demand
-  :custom
-  (centaur-tabs-set-icons t)
-  (centaur-tabs-style "bar")
-  (centaur-tabs-set-bar 'over)
-  (centaur-tabs-height 45)
-  (centaur-tabs-set-modified-marker t)
-  (centaur-tabs-mode t)
   :bind
   ("C-<prior>" . centaur-tabs-backward)
   ("C-<next>" . centaur-tabs-forward)
@@ -151,6 +142,13 @@
           (string-equal "TAGS" name)
           (apply orig-fn args))))
   :config
+  (customize-set-variable 'centaur-tabs-set-icons t)
+  (customize-set-variable 'centaur-tabs-style "bar")
+  (customize-set-variable 'centaur-tabs-set-bar 'over)
+  (customize-set-variable 'centaur-tabs-height 45)
+  (customize-set-variable 'centaur-tabs-set-modified-marker t)
+  (customize-set-variable 'centaur-tabs-mode t)
+
   (centaur-tabs-group-by-projectile-project)
   (advice-add 'centaur-tabs-hide-tab :around #'benley/centaur-tabs-hide-tab-wrapper)
   :hook
@@ -158,54 +156,63 @@
   ;; for non-daemon mode:
   (after-init . centaur-tabs-headline-match)
   ;; this apparently needs to happen when a frame exists, so do it again for daemon mode
-  (server-create-window-system-frame . centaur-tabs-headline-match))
+  (server-after-make-frame . centaur-tabs-headline-match))
 
 (use-package solaire-mode
   :hook
+  (after-init . solaire-global-mode)
   ;; I'm not sure if this first set of hooks is necessary, or if
   ;; solaire-global-mode takes care of it
-  ((change-major-mode after-revert ediff-prepare-buffer) . turn-on-solaire-mode)
-  (minibuffer-setup . solaire-mode-in-minibuffer)
-  :custom
-  (solaire-mode-auto-swap-bg t)
-  (solaire-global-mode t))
+  ;; (change-major-mode . turn-on-solaire-mode)
+  ;; (after-revert . turn-on-solaire-mode)
+  ;; (ediff-prepare-buffer solaire-mode)
+  ;; (minibuffer-setup . solaire-mode-in-minibuffer)
+  ;; :config
+  ;; (setq solaire-mode-auto-swap-bg nil)
+  ;; (solaire-global-mode +1)
+  )
 
 (use-package doom-themes
   :after solaire-mode centaur-tabs
   :config
-  (load-theme 'doom-palenight t)
+  ;; (load-theme 'doom-palenight t)
   (require 'doom-themes-ext-treemacs)
   (require 'doom-themes-ext-org)
-  :custom
-  (doom-themes-treemacs-enable-variable-pitch nil)
-  (doom-themes-treemacs-theme "doom-colors"))
+  (customize-set-variable 'doom-themes-treemacs-enable-variable-pitch nil)
+  (customize-set-variable 'doom-themes-treemacs-theme "doom-colors")
+  ;; (customize-set-variable 'custom-enabled-themes '(doom-palenight))
+  )
 
 (use-package doom-modeline
   :after all-the-icons
-  :custom
-  (doom-modeline-icon t)
-  (doom-modeline-mode t))
-
+  :config
+  (customize-set-variable 'doom-modeline-icon t)
+  (customize-set-variable 'doom-modeline-mode t))
 
 (use-package xt-mouse
-  :custom
-  (xterm-mouse-mode t))
+  :config
+  (customize-set-variable 'xterm-mouse-mode t))
 
 (use-package bazel-mode
-  :mode "BUILD\\'" "WORKSPACE\\'" "\\.bzl\\'")
+  :mode
+  ((rx ?/ (or "BUILD" "BUILD.bazel") eos) . #'bazel-build-mode)
+  ((rx ?/ (or "WORKSPACE" "WORKSPACE.bazel") eos) . #'bazel-workspace-mode)
+  ((rx ?/ (+ nonl) (or ".starlark" ".bzl") eos) . #'bazel-starlark-mode)
+  ((rx ?/ "Tiltfile" eos) . #'bazel-starlark-mode)
+  ((rx 47 (or "bazel.bazelrc" ".bazelrc") eos) . #'bazelrc-mode))
 
 (use-package company
   :diminish company-mode
   :defer t
-  :custom
-  (company-tooltip-align-annotations t)
+  :config
+  (customize-set-variable 'company-tooltip-align-annotations t)
   :hook
   (after-init . global-company-mode))
 
 (use-package company-box
   :hook (company-mode . company-box-mode)
-  :custom
-  (company-box-icons-alist 'company-box-icons-all-the-icons))
+  :config
+  (customize-set-variable 'company-box-icons-alist 'company-box-icons-all-the-icons))
 
 (use-package company-nixos-options
   ;; :defer 5
@@ -249,23 +256,26 @@
   :hook
   (emacs-lisp-mode . flycheck-package-setup))
 
-(use-package flycheck-pos-tip
-  :after flycheck
-  :hook
-  (flycheck-mode . flycheck-pos-tip-mode))
+;;;; annoying with lsp-mode's config
+;; (use-package flycheck-pos-tip
+;;   :after flycheck
+;;   :hook
+;;   (flycheck-mode . flycheck-pos-tip-mode))
 
-(use-package flycheck-color-mode-line
-  :after flycheck
-  :hook (flycheck-mode . flycheck-color-mode-line-mode))
+;;;; Not needed with doom-modeline
+;; (use-package flycheck-color-mode-line
+;;   :after flycheck
+;;   :hook (flycheck-mode . flycheck-color-mode-line-mode))
 
-(use-package flycheck-status-emoji
-  :after flycheck
-  :custom
-  (flycheck-status-emoji-indicator-finished-error ?💀)
-  (flycheck-status-emoji-indicator-finished-ok ?👍)
-  (flycheck-status-emoji-indicator-finished-warning ?👎)
-  :hook
-  (flycheck-mode . flycheck-status-emoji-mode))
+;;;; Not needed with doom-modeline
+;; (use-package flycheck-status-emoji
+;;   :after flycheck
+;;   :custom
+;;   (flycheck-status-emoji-indicator-finished-error ?💀)
+;;   (flycheck-status-emoji-indicator-finished-ok ?👍)
+;;   (flycheck-status-emoji-indicator-finished-warning ?👎)
+;;   :hook
+;;   (flycheck-mode . flycheck-status-emoji-mode))
 
 (use-package git-gutter
   :diminish git-gutter-mode
@@ -295,30 +305,31 @@
   (haskell-process-use-presentation-mode nil)
   :config
   ;; (require 'w3m-haddock)
-  (load "pragmatapro-prettify-symbols-v0.827")
+  (load "pragmatapro-prettify-symbols-v0.828")
   :hook
   (haskell-mode . interactive-haskell-mode)
   (haskell-mode . prettify-symbols-mode)
-  (haskell-mode . add-pragmatapro-prettify-symbols-alist))
+  (prog-mode . prettify-hook)
+  )
 
 (use-package ido
-  :custom
-  (ido-mode 'both)
-  (ido-everywhere t)
-  (ido-enable-flex-matching t)
-  (ido-use-faces nil)
-  (ido-ignore-directories '("\\`CVS/" "\\`\\.\\./" "\\`\\./" "bazel-.*/"))
-  (ido-auto-merge-work-directories-length -1))
+  :config
+  (customize-set-variable 'ido-mode 'both)
+  (customize-set-variable 'ido-everywhere t)
+  (customize-set-variable 'ido-enable-flex-matching t)
+  (customize-set-variable 'ido-use-faces nil)
+  (customize-set-variable 'ido-ignore-directories '("\\`CVS/" "\\`\\.\\./" "\\`\\./" "bazel-.*/"))
+  (customize-set-variable 'ido-auto-merge-work-directories-length -1))
 
 (use-package flx-ido
-  :custom
-  (flx-ido-mode 1))
+  :config
+  (customize-set-variable 'flx-ido-mode 1))
 
 (use-package highlight-indent-guides
   :diminish highlight-indent-guides-mode
-  :custom
-  (highlight-indent-guides-responsive 'stack)
-  (highlight-indent-guides-method 'character)
+  :config
+  (customize-set-variable 'highlight-indent-guides-responsive 'stack)
+  (customize-set-variable 'highlight-indent-guides-method 'character)
   :hook
   (prog-mode . highlight-indent-guides-mode)
   (yaml-mode . highlight-indent-guides-mode))
@@ -350,27 +361,26 @@
   (defun benley/set-left-fringe-width ()
     (setq left-fringe-width 20))
   :bind ("C-x g" . magit-status)
-  :custom
-  (magit-completing-read-function #'magit-ido-completing-read)
-  (magit-section-visibility-indicator
-   '(magit-fringe-bitmap-bold> . magit-fringe-bitmap-boldv))
+  :config
+  (customize-set-variable 'magit-completing-read-function #'magit-ido-completing-read)
+  (customize-set-variable 'magit-section-visibility-indicator
+			  '(magit-fringe-bitmap-bold> . magit-fringe-bitmap-boldv))
   :hook (magit-mode . benley/set-left-fringe-width))
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
   :mode ("\\.md\\'" . gfm-mode)
-  :custom (markdown-command "pandoc")
+  :config
+  (customize-set-variable 'markdown-command "pandoc")
   :hook (gfm-mode . turn-on-visual-line-mode))
 
 (use-package nix-mode
   :defer t
-  :custom
-  (nix-indent-function #'nix-indent-line)
+  :config
+  (customize-set-variable 'nix-indent-function #'nix-indent-line)
   :mode
   ("\\.nix\\'" . nix-mode)
   ("\\.drv\\'" . nix-drv-mode))
-
-
 
 (use-package nix-sandbox
   :config
@@ -381,12 +391,20 @@
                               (mapconcat 'shell-quote-argument args " "))))
   (defalias 'nix-shell-command #'benley/nix-shell-command)
 
-  :custom
-  (haskell-process-wrapper-function  (lambda (cmd) (apply #'nix-shell-command (nix-current-sandbox) cmd)))
-  (flycheck-command-wrapper-function (lambda (cmd) (apply #'nix-shell-command (nix-current-sandbox) cmd)))
-  (flycheck-executable-find          (lambda (cmd) (nix-executable-find       (nix-current-sandbox) cmd))))
+  (defun benley--set-python-interpreter ()
+    (setq-local python-shell-interpreter
+                ;; (format "nix-shell %s --run python" (nix-current-sandbox))))
+                (nix-executable-find (nix-current-sandbox) "python")))
+  (add-hook 'python-mode-hook #'benley--set-python-interpreter)
 
-
+  :config
+  (customize-set-variable 'haskell-process-wrapper-function
+			  (lambda (cmd) (apply #'nix-shell-command (nix-current-sandbox) cmd)))
+  (customize-set-variable 'flycheck-command-wrapper-function
+			  (lambda (cmd) (apply #'nix-shell-command (nix-current-sandbox) cmd)))
+  (customize-set-variable 'flycheck-executable-find
+			  (lambda (cmd) (nix-executable-find       (nix-current-sandbox) cmd))))
+
 (use-package org
   :init
   (defun benley/org-mode-setup ()
@@ -436,7 +454,11 @@
       "* EVENT %?\n  %U" :empty-lines 1)))
 
   (org-refile-targets '((org-agenda-files :maxlevel . 3)))
-  (org-refile-use-outline-path 'file))
+  (org-refile-use-outline-path 'file)
+  :bind (:map org-mode-map
+              ("C-a" . org-beginning-of-line)
+              ("C-e" . org-end-of-line)
+              ("C-k" . org-kill-line)))
 
 (use-package org-bullets
   :after org
@@ -497,8 +519,8 @@
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package saveplace
-  :custom
-  (save-place-mode t))
+  :config
+  (customize-set-variable 'save-place-mode t))
 
 (use-package smex
   ;; Put frequently-used commands at the front of ido completion list
@@ -509,9 +531,9 @@
   ("M-X" . smex-major-mode-commands))
 
 (use-package ido-grid-mode
-  :custom
-  (ido-grid-mode-keys '(tab backtab up down left right C-n C-p C-s C-r))
-  (ido-grid-mode t))
+  :config
+  (customize-set-variable 'ido-grid-mode-keys '(tab backtab up down left right C-n C-p C-s C-r))
+  (customize-set-variable 'ido-grid-mode t))
 
 ;; from https://github.com/alphapapa/unpackaged.el#smerge-mode
 (use-package smerge-mode
@@ -601,8 +623,8 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 
 (use-package ws-butler
-  :custom
-  (ws-butler-global-mode t))
+  :config
+  (customize-set-variable 'ws-butler-global-mode t))
 
 (use-package web-mode
   :custom
@@ -629,27 +651,27 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 ;;; emoji stuff?
 
-(defun --set-emoji-font (frame)
-  "Adjust the font settings of FRAME so Emacs can display emoji properly."
-  (if (eq system-type 'darwin)
-      ;; For NS/Cocoa
-      (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") frame 'prepend)
-    ;; For Linux
-    (set-fontset-font t 'symbol (font-spec :family "Noto Color Emoji") frame 'prepend)))
+;; (defun --set-emoji-font (frame)
+;;   "Adjust the font settings of FRAME so Emacs can display emoji properly."
+;;   (if (eq system-type 'darwin)
+;;       ;; For NS/Cocoa
+;;       (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") frame 'prepend)
+;;     ;; For Linux
+;;     (set-fontset-font t 'symbol (font-spec :family "Noto Color Emoji") frame 'prepend)))
 
-(--set-emoji-font nil)
+;; (--set-emoji-font nil)
 
-(add-hook 'after-make-frame-functions #'--set-emoji-font)
+;; (add-hook 'after-make-frame-functions #'--set-emoji-font)
 
 
 
 (use-package simple
-  :custom
-  (column-number-mode 1))                  ;; show column position in modeline
+  :config
+  (customize-set-variable 'column-number-mode 1))                  ;; show column position in modeline
 
 (use-package paren
-  :custom
-  (show-paren-mode 1))                     ;; highlight matching parens
+  :config
+  (customize-set-variable 'show-paren-mode 1))                     ;; highlight matching parens
 
 ;;; I think this happens automatically now - default is "Use --direct only if ls supports it"
 ;; (when (eq system-type 'darwin)
@@ -665,28 +687,33 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 (use-package flyspell
   :hook
-  (prog-mode . flyspell-prog-mode)
+  ;;;; this is really annoying
+  ;; (prog-mode . flyspell-prog-mode)
   (text-mode . turn-on-flyspell)
   (pdf-outline . turn-off-flyspell)
-  ;; unfortunately this makes a variety of things _extremely slow_
+  ;;;; unfortunately this makes a variety of things _extremely slow_
   ;; (text-mode flyspell-buffer)
-  :custom
-  (flyspell-issue-message-flag nil))
+  :config
+  (customize-set-variable 'flyspell-issue-message-flag nil))
 
 
 
 ;; Stop littering everywhere with save files, put them somewhere
-(setq backup-directory-alist `(("." . "~/.emacs-backups")))
+(setq backup-directory-alist `(("." . "~/.emacs.d/.backups")))
 
 ;; do not want
 (setq-default indent-tabs-mode nil)
 
-(setq vc-follow-symlinks t)
+(use-package vc-hooks
+  :custom
+  (vc-follow-symlinks t))
 
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
-(setq mouse-wheel-progressive-speed nil)
-(setq mouse-wheel-tilt-scroll t)
-(setq mouse-wheel-flip-direction t)
+(use-package mwheel
+  :custom
+  (mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+  (mouse-wheel-progressive-speed nil)
+  (mouse-wheel-tilt-scroll t)
+  (mouse-wheel-flip-direction t))
 
 ;; Save clipboard strings into kill ring before replacing them
 (setq save-interprogram-paste-before-kill 1)
@@ -757,10 +784,15 @@ Default face is fixed so we only need to have the exceptions."
 ;; (add-hook 'markdown-mode-hook #'set-buffer-variable-pitch)
 ;; (add-hook 'Info-mode-hook #'set-buffer-variable-pitch)
 
-;; (require 'ox-latex)
-;; (setq org-latex-listings nil)
-;; (add-to-list 'org-latex-packages-alist '("" "listings"))
-;; (add-to-list 'org-latex-packages-alist '("" "color"))
+(use-package ox-latex
+  :custom
+  ;; (org-latex-listings 'minted)
+  (org-latex-listings t)
+  :config
+  (add-to-list 'org-latex-packages-alist '("" "listings"))
+  (add-to-list 'org-latex-packages-alist '("" "color"))
+  ;; (add-to-list 'org-latex-packages-alist '("newfloat" "minted"))
+  )
 
 (defun rename-current-buffer-file ()
   "Rename the current buffer and the file it is visiting."
@@ -871,6 +903,7 @@ Default face is fixed so we only need to have the exceptions."
   :after org)
 
 (use-package ox-ipynb
+  :disabled t
   :after org)
 
 (use-package org
@@ -1053,7 +1086,13 @@ This is what makes 256-color output work in shell-mode."
 (use-package udev-mode)
 
 (use-package lsp-mode
+  :init
+  (defun benley--pyls-setup ()
+    (setq lsp-pyls-server-command (nix-executable-find (nix-current-sandbox) "pyls"))
+    (lsp-deferred))
+
   :hook ((sh-mode . lsp-deferred)
+         (python-mode . benley--pyls-setup)
          (lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-deferred)
   :custom
@@ -1063,9 +1102,9 @@ This is what makes 256-color output work in shell-mode."
 (use-package lsp-haskell
   :defer t
   :hook (haskell-mode . lsp-deferred)
-  :config
-  (setq lsp-haskell-process-wrapper-function (lambda (cmd)
-                                               (apply #'nix-shell-command (nix-current-sandbox) cmd))))
+  :custom
+  (lsp-haskell-process-wrapper-function
+        (lambda (cmd) (apply #'nix-shell-command (nix-current-sandbox) cmd))))
 
 (use-package lsp-ui
   :commands lsp-ui-mode
@@ -1084,6 +1123,10 @@ This is what makes 256-color output work in shell-mode."
   (esup-depth 0))
 
 (use-package hide-mode-line)
+
+;; (use-package pydoc)
+
+(load-theme 'doom-palenight t)
 
 (message "Finished with init.el")
 (provide 'init)

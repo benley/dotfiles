@@ -57,7 +57,10 @@ with rec {
 
 {
   texlive-for-orgmode = super.texlive.combine {
-    inherit (super.texlive) scheme-small wrapfig capt-of cm-super dvipng;
+    inherit (super.texlive) scheme-small wrapfig capt-of cm-super dvipng
+    beamertheme-metropolis pgfopts minted fvextra catchfile xstring framed
+    # pygmentex
+    ;
   };
 
   basicEmacs = super.emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
@@ -68,7 +71,7 @@ with rec {
     yaml-mode
   ]));
 
-  fancyEmacs = emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
+  fancyEmacs = super.emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
 
   ]) ++ (with epkgs.melpaPackages; [
     all-the-icons
@@ -98,8 +101,8 @@ with rec {
     flycheck
     flycheck-package
     flycheck-pos-tip
-    flycheck-color-mode-line
-    flycheck-status-emoji
+    # flycheck-color-mode-line  # not needed with doom-modeline
+    # flycheck-status-emoji  # not needed with doom-modeline
     forge
     form-feed
     git-gutter
@@ -134,7 +137,7 @@ with rec {
     org-bullets
     org-jira
     org-journal
-    org-make-toc
+    # org-make-toc
     # org-pdfview  # abandoned
     org-sticky-header
     ox-asciidoc
@@ -157,15 +160,16 @@ with rec {
     # slime
     # stumpwm-mode
     systemd
-    tabbar
+    # tabbar
     terminal-here
     terraform-mode
     treemacs
     treemacs-magit
     treemacs-projectile
+    udev-mode
     use-package
-    vdiff
-    vdiff-magit
+    # vdiff
+    # vdiff-magit
     vimrc-mode
     visual-fill-column
     w3m
@@ -179,7 +183,7 @@ with rec {
   ]) ++ (with epkgs.elpaPackages; [
 
     delight
-    exwm
+    # exwm
 
   ]) ++ (with epkgs.orgPackages; [
 
