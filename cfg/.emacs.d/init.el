@@ -637,7 +637,11 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (vterm-max-scrollback 10000)
   (vterm-kill-buffer-on-exit t)
   (vterm-buffer-name-string "vterm %s")
-  :hook (vterm-mode . hide-mode-line-mode))
+  :hook (vterm-mode . hide-mode-line-mode)
+  :bind (:map vterm-mode-map
+              ;; make shift-pgup/pgdn work like in a typical terminal
+              ("<S-prior>" . scroll-down-command)
+              ("<S-next>" . scroll-up-command)))
 
 
 
