@@ -18,21 +18,22 @@ import XMonad.Hooks.Place (placeHook, simpleSmart)
 import XMonad.Layout.BoringWindows
 import XMonad.Layout.Fullscreen (fullscreenFull, fullscreenManageHook)
 import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.ThreeColumns
 import qualified XMonad.Prompt as P
 import qualified XMonad.Prompt.Window as PW
 import qualified XMonad.StackSet as W
-import qualified XMonad.Util.Cursor as C
+-- import qualified XMonad.Util.Cursor as C
 import XMonad.Util.EZConfig (checkKeymap, mkKeymap, removeKeysP)
 import XMonad.Util.Run (runProcessWithInput, safeSpawn)
 import qualified XMonad.Util.Dmenu as Dmenu
 import XMonad.Hooks.DynamicProperty (dynamicPropertyChange)
 
--- XMonad.Actions.CopyWindow.copyToAll as a ManageHook
+-- | XMonad.Actions.CopyWindow.copyToAll as a ManageHook
 -- derived from https://mail.haskell.org/pipermail/xmonad/2009-September/008643.html
 doCopyToAll :: ManageHook
 doCopyToAll = ask >>= doF . \w ws -> foldr (copyWindow w) ws (workspaces myConfig)
 
--- (currently unused, but...)
+-- | The opposite of doFloat (currently unused)
 unfloat :: ManageHook
 unfloat = ask >>= doF . W.sink
 
@@ -41,10 +42,10 @@ myManageHook = composeAll
   , isDialog  --> doCenterFloat
   , className =? "Gimp"           --> doFloat
   , className =? "Pavucontrol"    --> doCenterFloat
-  , className =? "plasmashell"    --> doIgnore
   , title     =? "Bluetooth Devices" --> doFloat
   , className =? "pinentry"       --> doCenterFloat  -- matches for pinentry-qt
   , resource  =? "pinentry"       --> doCenterFloat  -- matches for pinentry-gtk (wtf?)
+  , className =? "Gcr-prompter"   --> doCenterFloat  -- yet another pinentry variant
   , className =? "krunner"        --> doIgnore >> doCenterFloat
   , className =? "Nm-connection-editor" --> doFloat
   , className =? "Kupfer.py"      --> doCenterFloat
@@ -53,22 +54,31 @@ myManageHook = composeAll
   , title     =? "Steam Keyboard" --> doIgnore
   -- I honestly don't know what the swapMaster part accomplishes here
   , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> (doCenterFloat <+> doF W.swapMaster)
-  -- Don't manage splash windows (e.g. the ones krita and gimp show at startup)
   , isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_SPLASH" --> doIgnore
-  -- Don't manage notification overlays
   , isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_NOTIFICATION" --> doIgnore
+  -- found this at https://bitbucket.org/f1u77y/xmonad-config/src/aa82413576cc8d6713d26ed7682e542f19752800/lib/XMonad/Config/Plasma/Layers.hs
+  , isInProperty "_NET_WM_WINDOW_TYPE" "_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY" --> doIgnore
+  -- , isInProperty "_NET_WM_WINDOW_TYPE" "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE" --> doFloat
+
+  -- Facebook Messenger
+  , appName =? "crx_hlmjgdhfhcgjmdnimnjlomhklloejdbi" --> doF (W.shift "7")
+  -- Google Hangouts
+  , appName =? "crx_nckgahadagoaajjgafhacjanaoiihapd" --> doF (W.shift "7")
   , placeHook simpleSmart
   ]
 
--- Dynamic property change hook: catches Chrome apps, whose titles are
--- not set until after the window is created
+-- | Dynamic property change hook: useful for Chrome apps, whose titles are
+-- | not set until after the window is created
 myDynHook = composeAll
-  [ title =? "Google Hangouts - benley@gmail.com" --> doF (W.shift "7")
-  , title =? "Signal" <&&> className =? "Google-chrome" --> doF (W.shift "7")
+  [
+    -- title =? "Google Hangouts - benley@gmail.com" --> doF (W.shift "7"),
+    -- title =? "Signal" <&&> className =? "Google-chrome" --> doF (W.shift "7"),
   ]
 
 myLayoutHook =
-    boringWindows $ desktopLayoutModifiers $ smartBorders $ Tall 1 (3/100) (1/2)
+    -- boringWindows $
+    desktopLayoutModifiers $ smartBorders $
+    (Tall 1 (3/100) (1/2) ||| ThreeCol 1 (3/100) (1/2))
 
 defaultFont = "PragmataPro"
 
@@ -97,18 +107,22 @@ dmenuArgs = ["-i", "-l", "10", "-fn", defaultFont]
 
 wbConfig = def { WB.menuArgs = dmenuArgs }
 
-myKeys =
-  -- keymap reference: http://hackage.haskell.org/package/xmonad-contrib-0.14/docs/XMonad-Util-EZConfig.html#v:mkKeymap
-    [
-    -- ("<XF86AudioLowerVolume>", safeSpawn "amixer" ["--quiet", "set", "Master", "5%-", "unmute"])
-    -- , ("<XF86AudioRaiseVolume>", safeSpawn "amixer" ["--quiet", "set", "Master", "5%+", "unmute"])
-    -- , ("<XF86AudioMute>",        safeSpawn "amixer" ["--quiet", "set", "Master", "toggle"])
-    -- , ("<XF86AudioMicMute>",     safeSpawn "amixer" ["--quiet", "set", "Capture", "toggle"])
-    -- , ("<XF86MonBrightnessUp>",   doBrightnessUp)
-    -- , ("<XF86MonBrightnessDown>", doBrightnessDown)
-    -- , ("<XF86PowerOff>", quitWithWarning)
+-- | currently unused: Keys for volume, brightness, etc.
+-- | Useful when not running a desktop manager.
+-- | keymap reference: http://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Util-EZConfig.html#v:mkKeymap
+mediaKeys =
+    [ ("<XF86AudioLowerVolume>", safeSpawn "amixer" ["--quiet", "set", "Master", "5%-", "unmute"])
+    , ("<XF86AudioRaiseVolume>", safeSpawn "amixer" ["--quiet", "set", "Master", "5%+", "unmute"])
+    , ("<XF86AudioMute>",        safeSpawn "amixer" ["--quiet", "set", "Master", "toggle"])
+    , ("<XF86AudioMicMute>",     safeSpawn "amixer" ["--quiet", "set", "Capture", "toggle"])
+    , ("<XF86MonBrightnessUp>",   doBrightnessUp)
+    , ("<XF86MonBrightnessDown>", doBrightnessDown)
+    , ("<XF86PowerOff>", quitWithWarning)
     -- , ("<XF86Display>", doXrandrThing)
-      ("M-g", WB.gotoMenuConfig wbConfig)
+    ]
+
+myKeys =
+    [ ("M-g", WB.gotoMenuConfig wbConfig)
     , ("M-S-g", WB.bringMenuConfig wbConfig)
     , ("M-p", safeSpawn "dmenu_run" (["-p", "cmdline:"] ++ dmenuArgs))
     , ("M-S-p", safeSpawn "j4-dmenu-desktop" ["--dmenu=dmenu -p app: " ++ unwords dmenuArgs])
@@ -147,7 +161,7 @@ myConfig =
     , startupHook = do
         return ()  -- (see checkKeymap docs for why this is here)
         checkKeymap myConfig myKeys
-        C.setDefaultCursor C.xC_left_ptr
+        -- C.setDefaultCursor C.xC_left_ptr
         startupHook desktopConfig
     , keys = flip mkKeymap myKeys <+> keys desktopConfig
     -- , normalBorderColor = "#263238"
