@@ -43,7 +43,14 @@
       fsType = "zfs";
     };
 
-  swapDevices = [ ];
+  fileSystems."/var/lib/docker" =
+    { device = "rpool/docker";
+      fsType = "zfs";
+    };
+
+  swapDevices = [
+    { device = "/dev/zvol/rpool/swap"; }
+  ];
 
   nix.maxJobs = lib.mkDefault 4;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
