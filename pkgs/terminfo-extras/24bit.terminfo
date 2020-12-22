@@ -1,35 +1,25 @@
-# Use colon separators.
-xterm-24bit|xterm with true-color and italics (r;g;b),
+# Tc capability is for tmux
+
+xterm-24bit|xterm with true-color (r;g;b),
   use=xterm-256color,
+  Tc,
   setb24=\E[48;2;%p1%{65536}%/%d;%p1%{256}%/%{255}%&%d;%p1%{255}%&%dm,
   setf24=\E[38;2;%p1%{65536}%/%d;%p1%{256}%/%{255}%&%d;%p1%{255}%&%dm,
-  # Italics
-  sitm=\E[3m,
-  ritm=\E[23m,
 
-# Use semicolon separators.
-xterm-24bits|xterm with true-color and italics (r:g:b),
+xterm-24bits|xterm with true-color (r:g:b),
   use=xterm-256color,
+  Tc,
   setb24=\E[48:2:%p1%{65536}%/%d:%p1%{256}%/%{255}%&%d:%p1%{255}%&%dm,
   setf24=\E[38:2:%p1%{65536}%/%d:%p1%{256}%/%{255}%&%d:%p1%{255}%&%dm,
-  # Italics
-  sitm=\E[3m,
-  ritm=\E[23m,
 
-# Use colon separators.
-screen-24bit|screen with true-color and italics (r;g;b),
-  use=screen-256color,
+tmux-24bit|tmux with true-color (r;g;b),
+  use=tmux-256color,
+  Tc,
   setb24=\E[48;2;%p1%{65536}%/%d;%p1%{256}%/%{255}%&%d;%p1%{255}%&%dm,
   setf24=\E[38;2;%p1%{65536}%/%d;%p1%{256}%/%{255}%&%d;%p1%{255}%&%dm,
-  # Italics
-  sitm=\E[3m,
-  ritm=\E[23m,
 
-# Use semicolon separators.
-screen-24bits|screen with true-color and italics (r:g:b),
-  use=screen-256color,
+tmux-24bits|screen with true-color (r:g:b),
+  use=tmux-256color,
+  Tc,
   setb24=\E[48:2:%p1%{65536}%/%d:%p1%{256}%/%{255}%&%d:%p1%{255}%&%dm,
   setf24=\E[38:2:%p1%{65536}%/%d:%p1%{256}%/%{255}%&%d:%p1%{255}%&%dm,
-  # Italics
-  sitm=\E[3m,
-  ritm=\E[23m,
