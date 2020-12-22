@@ -1,0 +1,29 @@
+name: benley-xmonad-config
+version: 0.1
+cabal-version: >= 1.10
+-- license: OtherLicense
+-- license-file: COPYING
+author: benley
+synopsis: benley's xmonad config
+stability: unstable
+build-type: Simple
+
+executable xmonad-benley
+        build-depends: base >= 4.8,
+                       xmonad >= 0.15,
+                       xmonad-contrib >= 0.16,
+                       containers
+                       -- filepath >= 1.4,
+                       -- process
+        main-is: xmonad.hs
+        hs-source-dirs: ., src
+        default-language: Haskell2010
+        other-modules:
+                      XMonad.Config.DesktopCommon
+                      XMonad.Config.Plasma
+                      XMonad.Config.Plasma.Util
+                      XMonad.Config.Plasma.Layers
+                      XMonad.Hooks.StateHook
+                      XMonad.Layout.BorderConfiguration
+                      XMonad.Layout.Fullscreen.NoBorders
+                      XMonad.Util

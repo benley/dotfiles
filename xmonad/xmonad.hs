@@ -12,6 +12,7 @@ import qualified XMonad.Actions.CycleWS as CycleWS
 import XMonad.Actions.UpdatePointer (updatePointer)
 import qualified XMonad.Actions.WindowBringer as WB
 import XMonad.Config.Desktop (desktopConfig, desktopLayoutModifiers)
+import XMonad.Config.Plasma (kde5Config)
 import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
 import XMonad.Hooks.ManageHelpers (doCenterFloat, isDialog, isInProperty, doFullFloat)
 import XMonad.Hooks.Place (placeHook, simpleSmart)
@@ -39,26 +40,26 @@ unfloat = ask >>= doF . W.sink
 
 myManageHook = composeAll
   [ fullscreenManageHook
-  , isDialog  --> doCenterFloat
+  -- , isDialog  --> doCenterFloat
   , className =? "Gimp"           --> doFloat
   , className =? "Pavucontrol"    --> doCenterFloat
   , title     =? "Bluetooth Devices" --> doFloat
   , className =? "pinentry"       --> doCenterFloat  -- matches for pinentry-qt
   , resource  =? "pinentry"       --> doCenterFloat  -- matches for pinentry-gtk (wtf?)
   , className =? "Gcr-prompter"   --> doCenterFloat  -- yet another pinentry variant
-  , className =? "krunner"        --> doIgnore >> doCenterFloat
+  -- , className =? "krunner"        --> doIgnore >> doCenterFloat
   , className =? "Nm-connection-editor" --> doFloat
   , className =? "Kupfer.py"      --> doCenterFloat
   , title     =? "PlayOnLinux"    --> doFloat
   , title     =? "Slack Call Minipanel" --> (doFloat <+> doCopyToAll)
   , title     =? "Steam Keyboard" --> doIgnore
-  -- I honestly don't know what the swapMaster part accomplishes here
-  , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> (doCenterFloat <+> doF W.swapMaster)
-  , isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_SPLASH" --> doIgnore
-  , isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_NOTIFICATION" --> doIgnore
+  , title     =? "Picture in picture" --> doFloat    -- youtube PiP
+  -- I have no idea what this next line accomplishes or why I added it
+  -- , stringProperty "WM_WINDOW_ROLE" =? "GtkFileChooserDialog" --> (doCenterFloat <+> doF W.swapMaster)
+  -- , isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_SPLASH" --> doIgnore
+  -- , isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_NOTIFICATION" --> doIgnore
   -- found this at https://bitbucket.org/f1u77y/xmonad-config/src/aa82413576cc8d6713d26ed7682e542f19752800/lib/XMonad/Config/Plasma/Layers.hs
-  , isInProperty "_NET_WM_WINDOW_TYPE" "_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY" --> doIgnore
-  -- , isInProperty "_NET_WM_WINDOW_TYPE" "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE" --> doFloat
+  -- , isInProperty "_NET_WM_WINDOW_TYPE" "_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY" --> doIgnore
 
   -- Facebook Messenger
   , appName =? "crx_hlmjgdhfhcgjmdnimnjlomhklloejdbi" --> doF (W.shift "7")
@@ -78,7 +79,9 @@ myDynHook = composeAll
 myLayoutHook =
     -- boringWindows $
     desktopLayoutModifiers $ smartBorders $
-    (Tall 1 (3/100) (1/2) ||| ThreeCol 1 (3/100) (1/2))
+    (Tall 1 (3/100) (1/2) |||
+     ThreeCol 1 (3/100) (1/2) |||
+     ThreeColMid 1 (3/100) (1/2))
 
 defaultFont = "PragmataPro"
 
@@ -169,4 +172,4 @@ myConfig =
     , terminal = "konsole"
     }
 
-main = xmonad myConfig
+main = launch (kde5Config myConfig)
