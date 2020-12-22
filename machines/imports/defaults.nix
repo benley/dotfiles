@@ -49,8 +49,9 @@
 
   programs.tmux = {
     enable = true;
+    aggressiveResize = true;
     terminal = "screen-256color";
-    keyMode = "emacs";
+    historyLimit = 50000;
     extraConfig = builtins.readFile ../../cfg/.tmux.conf;
   };
 
