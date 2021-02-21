@@ -199,7 +199,8 @@ thing properly."
     (load-theme benley--theme t)
     (message "LOADED MY THEME HRURR")
     (setq benley--theme-loaded t)))
-(add-hook 'server-create-window-system-frame-hook #'benley--load-theme)
+
+(add-hook 'server-after-make-frame-hook #'benley--load-theme)
 
 (use-package doom-modeline
   :ensure t
