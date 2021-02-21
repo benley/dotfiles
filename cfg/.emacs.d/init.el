@@ -1167,7 +1167,6 @@ This is what makes 256-color output work in shell-mode."
 
 (use-package memsql-dev-setup)
 
-(load-theme 'doom-palenight t)
 
 (message "Finished with init.el")
 (provide 'init)
