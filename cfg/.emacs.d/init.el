@@ -380,9 +380,10 @@ thing properly."
 (use-package jq-mode
   :mode "\\.jq\\'")
 
-(use-package lilypond-mode
-  :mode (("\\.ly\\'" . LilyPond-mode)
-         ("\\.ily\\'" . LilyPond-mode)))
+;; (use-package lilypond-mode
+;;   :ensure t
+;;   :mode (("\\.ly\\'" . LilyPond-mode)
+;;          ("\\.ily\\'" . LilyPond-mode)))
 
 (use-package magit
   :preface
