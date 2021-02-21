@@ -1144,7 +1144,7 @@ This is what makes 256-color output work in shell-mode."
   :defer t
   :hook (haskell-mode . lsp-deferred)
   :custom
-  (lsp-haskell-process-wrapper-function
+  (lsp-haskell-server-wrapper-function
         (lambda (cmd) (apply #'nix-shell-command (nix-current-sandbox) cmd))))
 
 (use-package lsp-ui
