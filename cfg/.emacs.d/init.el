@@ -332,6 +332,9 @@ thing properly."
   (prog-mode . prettify-hook)
   )
 
+(use-package ido-completing-read+  ;; used by magit
+  :ensure t)
+
 (use-package ido
   :config
   (customize-set-variable 'ido-mode 'both)
