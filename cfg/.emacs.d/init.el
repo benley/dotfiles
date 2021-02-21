@@ -518,6 +518,7 @@ thing properly."
 ;;   :hook (org-mode . org-make-toc-mode))
 
 (use-package org-sticky-header
+  :disabled t
   :hook
   (org-mode . org-sticky-header-mode)
   :custom
