@@ -1133,7 +1133,8 @@ This is what makes 256-color output work in shell-mode."
 
   :hook ((sh-mode . lsp-deferred)
          (python-mode . benley--pyls-setup)
-         (lsp-mode . lsp-enable-which-key-integration))
+         (lsp-mode . lsp-enable-which-key-integration)
+         (go-mode . lsp-deferred))
   :commands (lsp lsp-deferred)
   :custom
   (lsp-keymap-prefix "C-c o")
