@@ -909,6 +909,11 @@ Default face is fixed so we only need to have the exceptions."
   :commands (org-babel-execute:haskell
              org-babel-expand-body:haskell))
 
+(use-package ob-python
+  :defer t
+  :commands (org-babel-execute:python
+             org-babel-expand-body:python))
+
 ;; (org-babel-do-load-languages
 ;;  'org-babel-load-languages
 ;;  '((emacs-lisp . t)
