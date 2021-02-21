@@ -727,6 +727,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   ;;;; this is really annoying
   ;; (prog-mode . flyspell-prog-mode)
   (text-mode . turn-on-flyspell)
+  (yaml-mode . turn-off-flyspell)
   (pdf-outline . turn-off-flyspell)
   ;;;; unfortunately this makes a variety of things _extremely slow_
   ;; (text-mode flyspell-buffer)
