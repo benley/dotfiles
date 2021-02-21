@@ -23,9 +23,6 @@ with { callPackage = super.callPackage; };
 
   kupfer-plugin-google-search = callPackage ../pkgs/kupfer-plugin-google-search { };
 
-  libdatrie = callPackage ../pkgs/libdatrie { };
-  libthai = callPackage ../pkgs/libthai { };
-
   mosquitto-exporter = callPackage ../pkgs/mosquitto-exporter { };
 
   nix-home = callPackage ../pkgs/nix-home { };
