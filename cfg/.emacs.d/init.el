@@ -389,6 +389,9 @@ thing properly."
   (defun benley/set-left-fringe-width ()
     (setq left-fringe-width 20))
   :bind ("C-x g" . magit-status)
+  :custom
+  (magit-branch-prefer-remote-upstream '("master" "main"))
+
   :config
   (customize-set-variable 'magit-completing-read-function #'magit-ido-completing-read)
   (customize-set-variable 'magit-section-visibility-indicator
