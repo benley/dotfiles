@@ -360,6 +360,10 @@ thing properly."
 (use-package idle-highlight-mode
   :hook (prog-mode . idle-highlight-mode))
 
+(use-package json-mode
+  :custom
+  (json-reformat:indent-width 2))
+
 (use-package jsonnet-mode
   :mode "\\.jsonnet\\'" "\\.libsonnet\\'"
   :config
@@ -367,9 +371,10 @@ thing properly."
     "Reformat entire buffer using the Jsonnet format utility."
     (interactive)
     (call-process-region (point-min) (point-max)
-                         jsonnet-command t t nil "fmt"
+                         jsonnet-fmt-command t t nil
                          "--string-style" "l"
                          "--comment-style" "l"
+                         "--no-sort-imports"
                          "-")))
 
 (use-package jq-mode
