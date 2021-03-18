@@ -2,43 +2,13 @@ self: super:
 
 with rec {
   myEmacs = super.emacs.override {
-    withGTK3 = false;  # fucking X11 disconnect crash bug...
-    withGTK2 = false;
+    # withGTK3 = false;  # fucking X11 disconnect crash bug...
+    # withGTK2 = false;
     imagemagick = self.imagemagick;  # why isn't this enabled by default?
     # withXwidgets = true;  # Cool, but I haven't found much of a use for it
   };
 
   emacsWithPackages = (self.emacsPackagesNgGen myEmacs).emacsWithPackages;
-
-  udev-mode = {
-    pname = "udev-mode";
-    version = "20200626.0";
-    src = super.fetchFromGitHub {
-      owner = "benley";
-      repo = "emacs-udev-mode";
-      rev = "e939a83712e9d5b95f7315945806dbfa0ef36244";
-      sha256 = "1jqsn0f6qf7znna62z20ynzawc1v9nxlb6krwp371n51x367c2bj";
-    };
-    recipe = super.writeText "recipe" ''
-      (udev-mode :fetcher github :repo "benley/emacs-udev-mode")
-    '';
-    packageRequires = [];
-  };
-
-  my-jsonnet-mode = {
-    pname = "jsonnet-mode";
-    version = "20190322.0";
-    src = super.fetchFromGitHub {
-      owner = "benley";
-      repo = "jsonnet-mode";
-      rev = "03fb75f63b33b3a69ac35a189d9dca93c0a01871";
-      sha256 = "1wr6wyq31dwr518yfhfa0f5z8qzx27lmm16gf9jm3vz5d5pqi22j";
-    };
-    recipe = super.writeText "recipe" ''
-      (jsonnet-mode :fetcher github :repo "mgyucht/jsonnet-mode")
-    '';
-    packageRequires = [];
-  };
 
   ox-ipynb = {
     pname = "ox-ipynb";
@@ -116,12 +86,13 @@ with rec {
     # highlight-indentation
     highlight-indent-guides
     htmlize
+    ibuffer-vc
     idle-highlight-mode
     epkgs.melpaPackages."ido-completing-read+"
     ido-grid-mode
     imenu-list
     json-mode
-    # jsonnet-mode  # local copy
+    jsonnet-mode
     jq-mode
     lsp-mode
     lsp-haskell
@@ -187,16 +158,14 @@ with rec {
 
   ]) ++ (with epkgs.orgPackages; [
 
-    org
+    org-plus-contrib
 
   ]) ++ (with epkgs; [
     vterm
     pdf-tools
   ] ++ [
 
-    (epkgs.melpaBuild my-jsonnet-mode)
     (epkgs.melpaBuild ox-ipynb)
-    (epkgs.melpaBuild udev-mode)
 
   ])
 

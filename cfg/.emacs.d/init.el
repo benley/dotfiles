@@ -43,7 +43,10 @@
 (set-language-environment "UTF-8")
 
 (setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
+;; (load custom-file)
+
+(set-face-attribute 'default nil :family "PragmataPro" :height 120)
+(set-face-attribute 'fixed-pitch-serif nil :family "Go Mono")
 
 (add-to-list 'load-path "~/.emacs.d/elisp/")
 
@@ -149,6 +152,7 @@
           (string-equal "TAGS" name)
           (apply orig-fn args))))
   :config
+  (customize-set-variable 'centaur-tabs-gray-out-icons 'buffer)
   (customize-set-variable 'centaur-tabs-set-icons t)
   (customize-set-variable 'centaur-tabs-style "bar")
   (customize-set-variable 'centaur-tabs-set-bar 'over)
@@ -203,7 +207,6 @@ thing properly."
 (add-hook 'server-after-make-frame-hook #'benley--load-theme)
 
 (use-package doom-modeline
-  :ensure t
   :after all-the-icons
   :config
   (customize-set-variable 'doom-modeline-icon t)
@@ -332,8 +335,7 @@ thing properly."
   (prog-mode . prettify-hook)
   )
 
-(use-package ido-completing-read+  ;; used by magit
-  :ensure t)
+(use-package ido-completing-read+)  ;; used by magit
 
 (use-package ido
   :config
@@ -774,8 +776,29 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (save-some-buffers)
   (kill-emacs))
 
-;; replace buffer-menu with ibuffer
-(global-set-key (kbd "C-x C-b") #'ibuffer)
+(use-package ibuffer
+  :bind ("C-x C-b" . ibuffer))
+
+(use-package ibuffer-vc
+  :init
+  (defun benley/ibuffer-vc-hook ()
+    (ibuffer-vc-set-filter-groups-by-vc-root)
+    (unless (eq ibuffer-sorting-mode 'alphabetic)
+      (ibuffer-do-sort-by-alphabetic)))
+  ;; :config
+  ;; (add-to-list 'ibuffer-formats
+  ;;              '(mark modified read-only vc-status-mini " "
+  ;;                      (name 18 18 :left :elide)
+  ;;                      " "
+  ;;                      (size 9 -1 :right)
+  ;;                      " "
+  ;;                      (mode 16 16 :left :elide)
+  ;;                      " "
+  ;;                      (vc-status 16 16 :left)
+  ;;                      " "
+  ;;                      vc-relative-file))
+  :hook
+  (ibuffer . benley/ibuffer-vc-hook))
 
 ;; Scrolling
 (global-set-key (kbd "M-p") (lambda () (interactive) (scroll-down 2)))
@@ -790,6 +813,12 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 ;; mouse back/fwd buttons
 (global-set-key [mouse-8] #'previous-buffer)
 (global-set-key [mouse-9] #'next-buffer)
+
+(use-package info
+  :bind
+  (:map Info-mode-map
+        ("<mouse-8>" . Info-history-back)
+        ("<mouse-9>" . Info-history-forward)))
 
 ;; FONTS
 ;; -----
@@ -1090,8 +1119,6 @@ This is what makes 256-color output work in shell-mode."
   '(:eval (concat "[" (projectile-project-name) "]")))
 
 (use-package visual-fill-column
-  ;; :hook
-  ;; (visual-line-mode . visual-fill-column-mode)
   :config
   (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust))
 
@@ -1120,8 +1147,6 @@ This is what makes 256-color output work in shell-mode."
 
 (setq auth-sources
       '((:source "~/.authinfo.gpg")))
-
-;; (use-package 2048-game)
 
 (use-package udev-mode)
 
@@ -1157,8 +1182,6 @@ This is what makes 256-color output work in shell-mode."
   :after lsp-mode)
 
 (use-package esup
-  ;; ;; To use MELPA Stable use ":pin mepla-stable",
-  ;; :pin melpa
   :commands (esup)
   :custom
   (esup-depth 0))
@@ -1167,6 +1190,7 @@ This is what makes 256-color output work in shell-mode."
 
 (use-package memsql-dev-setup)
 
+(use-package phabricator)  ;; do I actually use this?
 
 (message "Finished with init.el")
 (provide 'init)
