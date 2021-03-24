@@ -1,37 +1,38 @@
-# Valve USB devices
-SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", TAG+="uaccess"
+# Docs! https://www.freedesktop.org/software/systemd/man/udev.html
 
-# This rule is necessary for gamepad emulation
-#KERNEL=="uinput", MODE="0660", GROUP="wheel" OPTIONS+="static_node=uinput"
-
-KERNEL=="uinput", OPTIONS+="static_node=uinput", TAG+="uaccess"
-
-# Steam Controller udev write access
+# Gamepad emulation for remote streaming
+# see https://steamcommunity.com/app/221410/discussions/0/523897277912430760/
+# and https://www.kernel.org/doc/html/v5.4/input/uinput.html
 KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess"
 
-# Valve HID devices over USB hidraw
+# Valve USB devices
+SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", TAG+="uaccess"
+# Valve HID devices (USB hidraw)
 KERNEL=="hidraw*", ATTRS{idVendor}=="28de", TAG+="uaccess"
-
-# Valve HID devices over bluetooth hidraw
+# Valve HID devices (bluetooth hidraw)
 KERNEL=="hidraw*", ATTRS{idVendor}=="*28DE:*", TAG+="uaccess"
 
-# DualShock 4 over USB hidraw
+# DualShock 4 (USB hidraw)
 KERNEL=="hidraw*", ATTRS{idVendor}=="054c", ATTRS{idProduct}=="05c4", TAG+="uaccess"
-
-# DualShock 4 wireless adapter over USB hidraw
+# DualShock 4 wireless adapter (USB hidraw)
 KERNEL=="hidraw*", ATTRS{idVendor}=="054c", ATTRS{idProduct}=="0ba0", TAG+="uaccess"
-
-# DualShock 4 Slim over USB hidraw
+# DualShock 4 Slim (USB hidraw)
 KERNEL=="hidraw*", ATTRS{idVendor}=="054c", ATTRS{idProduct}=="09cc", TAG+="uaccess"
-
-# DualShock 4 over bluetooth hidraw
+# DualShock 4 (bluetooth hidraw)
 KERNEL=="hidraw*", KERNELS=="*054C:05C4*", TAG+="uaccess"
-
-# DualShock 4 Slim over bluetooth hidraw
+# DualShock 4 Slim (bluetooth hidraw)
 KERNEL=="hidraw*", KERNELS=="*054C:09CC*", TAG+="uaccess"
 
-# Nintendo Switch Pro controller over USB hidraw
+# Nintendo Switch Pro controller (USB hidraw)
 KERNEL=="hidraw*", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="2009", TAG+="uaccess"
-
-# Nintendo Switch Pro controller over bluetooth hidraw
+# Nintendo Switch Pro controller (bluetooth hidraw)
 KERNEL=="hidraw*", KERNELS=="*057E:2009*", TAG+="uaccess"
+# Switch Joy-con (L) (Bluetooth)
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:057E:2006.*", TAG+="uaccess"
+# Switch Joy-con (R) (Bluetooth)
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:057E:2007.*", TAG+="uaccess"
+# Switch Joy-con charging grip (USB only)
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="200e", TAG+="uaccess"
+
+# Google Stadia controller (USB)
+KERNEL=="hidraw*", ATTRS{idVendor}=="18d1", ATTRS{idProduct}=="9400", TAG+="uaccess"
