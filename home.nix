@@ -57,10 +57,20 @@
       "execfail"      # don't exit an interactive shell if "exec blah" fails
     ];
     sessionVariables = {
+      # Fancy timestamps in .bash_history
       HISTTIMEFORMAT = "%Y-%m-%d %T ";
+      # less: extended status prompt, display ANSI colors, case-insensitive search.
       LESS = "-M -R -i";
-      PYTHONSTARTUP="$HOME/.pythonrc.py";
+      # nix: don't automatically pipe output to $PAGER, it's too distracting
+      NIX_PAGER = "";
     };
+    initExtra = ''
+      source ${pkgs.gitAndTools.gitFull}/share/git/contrib/completion/git-prompt.sh
+      for file in ${./bashrc.d}/*; do
+        source "$file"
+      done
+      export PYTHONSTARTUP=${builtins.path {path=./cfg/.pythonrc.py; name="pythonrc.py";}};
+    '';
   };
 
   programs.direnv = {
