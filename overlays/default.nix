@@ -9,15 +9,15 @@ with { callPackage = super.callPackage; };
 
   battery-monitor = super.pythonPackages.callPackage ../pkgs/battery-monitor { };
 
-  dunst = super.dunst.override {
-    dunstify = true;
-  };
+  # dunst = super.dunst.override {
+  #   dunstify = true;
+  # };
 
   eless = super.writeScriptBin "eless" (builtins.readFile ../eless.sh);
 
-  insync = callPackage ../pkgs/insync { };
+  # insync = callPackage ../pkgs/insync { };
 
-  insync-v3 = self.libsForQt5.callPackage ../pkgs/insync/insync-v3.nix { };
+  # insync-v3 = self.libsForQt5.callPackage ../pkgs/insync/insync-v3.nix { };
 
   kubernetes-client = callPackage ../pkgs/kubernetes-client { };
 

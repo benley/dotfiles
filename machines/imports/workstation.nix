@@ -10,18 +10,18 @@
     cabal-install
     cabal2nix
     ctags
-    dropbox-cli
-    exercism
+    # dropbox-cli
+    # exercism
     gdb
     gitFull
     go
     google-cloud-sdk
     gotags
-    haskellPackages.ghc
+    # haskellPackages.ghc
     # haskellPackages.ghc-mod  # broken?
     # haskellPackages.hdevtools # broken?
-    haskellPackages.hindent
-    haskellPackages.hlint
+    # haskellPackages.hindent
+    # haskellPackages.hlint
     haskellPackages.ShellCheck
     html-tidy
     jsonnet
@@ -29,14 +29,15 @@
     nodePackages.js-yaml
     nodePackages.jshint
     pandoc
-    python27Full
+    # python27Full
     python3Full
-    pythonPackages.autopep8
-    pythonPackages.flake8
-    pythonPackages.pep8
+    python3Packages.autopep8
+    python3Packages.flake8
+    python3Packages.pep8
     python3Packages.pylint
-    pythonPackages.virtualenv
-    pythonPackages.virtualenvwrapper
+    python3Packages.python-language-server
+    python3Packages.virtualenv
+    python3Packages.virtualenvwrapper
     stack
     imagemagick  # so emacs can resize images
     lastpass-cli

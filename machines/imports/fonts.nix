@@ -54,7 +54,7 @@ let localFonts = pkgs.callPackage "/home/benley/benley@gmail.com/Fonts" {}; in
 
   # Seems like penultimate.enable may break emoji support somehow?
   # https://github.com/NixOS/nixpkgs/issues/53139
-  fonts.fontconfig.penultimate.enable = false;
+  # fonts.fontconfig.penultimate.enable = false;
   fonts.fontconfig.defaultFonts = {
     monospace = [ "Cousine" ];
     sansSerif = [ "Noto Sans" ];

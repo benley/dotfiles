@@ -52,6 +52,6 @@ set enable-bracketed-paste on
 "\C-\M-k": menu-complete-backward
 TAB: complete
 
-# Holy fucking shit
+# Spacebar triggers in-place history expansion, which is SUPER COOL
 Space: magic-space
 $endif

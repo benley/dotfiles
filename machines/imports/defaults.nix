@@ -5,7 +5,6 @@
 
   imports = [
     ./nix.nix
-    ./package-overrides.nix
     ./users.nix
 
     # These have on/off toggles, so including them does not
@@ -29,16 +28,8 @@
     monthly = 12;
   };
 
-  nixpkgs.overlays = [
-    (import ../../overlays/default.nix)
-    (import ../../overlays/emacs.nix)
-  ];
-
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.oraclejdk.accept_license = true;
-
-  # http://nicknovitski.com/vim-nix-syntax wtf
-  nixpkgs.config.vim.ftNix = false;
+  nixpkgs.overlays = import ../../nixpkgs-overlays.nix;
+  nixpkgs.config = import ../../nixpkgs-config.nix;
 
   documentation.dev.enable = true;
 
@@ -125,7 +116,7 @@
     enable = true;
     ipv4 = true;
     ipv6 = true;
-    nssmdns = true;
+    nssmdns = lib.mkDefault true;
     publish.enable = lib.mkDefault true;
     publish.addresses = lib.mkDefault true;
   };

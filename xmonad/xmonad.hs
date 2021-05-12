@@ -20,6 +20,7 @@ import XMonad.Layout.BoringWindows
 import XMonad.Layout.Fullscreen (fullscreenFull, fullscreenManageHook)
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.ThreeColumns
+import XMonad.Layout.Tabbed
 import qualified XMonad.Prompt as P
 import qualified XMonad.Prompt.Window as PW
 import qualified XMonad.StackSet as W
@@ -41,7 +42,7 @@ unfloat = ask >>= doF . W.sink
 myManageHook = composeAll
   [ fullscreenManageHook
   -- , isDialog  --> doCenterFloat
-  , className =? "Gimp"           --> doFloat
+  -- , className =? "Gimp"           --> doFloat
   , className =? "Pavucontrol"    --> doCenterFloat
   , title     =? "Bluetooth Devices" --> doFloat
   , className =? "pinentry"       --> doCenterFloat  -- matches for pinentry-qt
@@ -81,7 +82,9 @@ myLayoutHook =
     desktopLayoutModifiers $ smartBorders $
     (Tall 1 (3/100) (1/2) |||
      ThreeCol 1 (3/100) (1/2) |||
-     ThreeColMid 1 (3/100) (1/2))
+     ThreeColMid 1 (3/100) (1/2) |||
+     (tabbed shrinkText def)
+    )
 
 defaultFont = "PragmataPro"
 
@@ -173,3 +176,4 @@ myConfig =
     }
 
 main = launch (kde5Config myConfig)
+-- main = launch myConfig

@@ -1,13 +1,15 @@
+# Alnilam: Thinkpad T490 (intel graphics)
+
 { config, pkgs, lib, ... }:
 
 {
   imports = [
+    <nixos-hardware/lenovo/thinkpad/t490>
     <home-manager/nixos>
     ./hardware-configuration.nix
     ../imports/defaults.nix
     ../imports/graphical.nix
     ../imports/redshift.nix
-    ../imports/wacom.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -22,6 +24,13 @@
 
   networking.useDHCP = false;
   networking.networkmanager.enable = true;
+
+  services.resolved.enable = true;
+  services.resolved.extraConfig = ''
+    MulticastDNS=true
+  '';
+
+  services.avahi.nssmdns = false;
 
   services.xserver = {
     enable = true;
@@ -91,5 +100,11 @@
   home-manager.useUserPackages = true;
   home-manager.users.bstaffin = import ../../home.nix;
 
-  programs.sway.enable = true;
+  # programs.sway.enable = true;
+
+  # https://github.com/NixOS/nixpkgs/issues/111835
+  # https://github.com/rancher/k3d/issues/493
+  systemd.enableUnifiedCgroupHierarchy = false;
+
+  services.fprintd.enable = true;
 }

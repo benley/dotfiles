@@ -1,8 +1,13 @@
 { config, pkgs, lib, ... }:
 
 {
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
+  nixpkgs.config = import ./nixpkgs-config.nix;
+  xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
+  nixpkgs.overlays = import ./nixpkgs-overlays.nix;
+
+  # Let Home Manager install and manage itself
+  # (not needed when using home-manager as a nixos system module)
+  # programs.home-manager.enable = true;
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -20,7 +25,9 @@
   home.stateVersion = "20.09";
 
   home.packages = with pkgs; [
+    arcanist
     azure-cli
+    cachix
     mu
     kops_1_18
     kubectl
@@ -39,11 +46,8 @@
     dmenu
     j4-dmenu-desktop
     gopls
+    zoom-us
   ];
-
-  home.sessionVariables = {
-    XDG_DATA_DIRS = "$HOME/.nix-profile/share:$XDG_DATA_DIRS";
-  };
 
   programs.bash = {
     enable = true;
@@ -79,18 +83,19 @@
     enableNixDirenvIntegration = true;
   };
 
-  fonts.fontconfig.enable = true;
+  # fonts.fontconfig.enable = true;
 
   # finish this later
-  programs.emacs = {
-    enable = true;
-    extraPackages = epkgs: [
-      epkgs.use-package
-      epkgs.magit
-      epkgs.org-plus-contrib
-      epkgs.vterm
-    ];
-  };
+  # programs.emacs = {
+  #   enable = true;
+  #   extraPackages = epkgs: [
+  #     epkgs.use-package
+  #     epkgs.magit
+  #     epkgs.org-plus-contrib
+  #     epkgs.vterm
+  #     epkgs.json-mode
+  #   ];
+  # };
 
   programs.git = {
     enable = true;
@@ -106,6 +111,10 @@
     lfs.enable = true;
 
     signing.key = "FDBA38EE781A69D439A870A5A490C0134E09AF4A";
+
+    ignores = [
+      ''\#*\#''  # emacs turds
+    ];
 
     extraConfig = {
       merge.dpkg-changelogs = {
@@ -142,24 +151,34 @@
         extraConfig = "set -g @tmux_power_theme 'sky'";
       }
     ];
-    extraConfig = builtins.readFile /home/bstaffin/p/dotfiles/cfg/.tmux.conf;
+    extraConfig = builtins.readFile ./cfg/.tmux.conf;
   };
 
-  services.emacs = {
-    enable = true;
-    client.enable = true;
+  # services.emacs = {
+  #   enable = true;
+  #   client.enable = true;
+  # };
+
+  xresources.properties = {
+    "Xft.dpi" = 144;
   };
 
-  xsession.enable = true;
-  xsession.preferStatusNotifierItems = true;
-  # xsession.windowManager.command = lib.mkForce ''
-  #   export KDEWM=xmonad
-  #   xterm&
-  #   /usr/bin/startkde
-  # '';
+  # xsession.enable = true;
+  # xsession.preferStatusNotifierItems = true;
 
-  xsession.windowManager.xmonad = {
+  # xsession.windowManager.xmonad = {
+  #   enable = true;
+  #   enableContribAndExtras = true;
+  # };
+
+  # services.taffybar.enable = true;
+
+  programs.readline = {
     enable = true;
-    enableContribAndExtras = true;
+    # There are some other options here (bindings, variables) but they
+    # don't seem to be better than just using extraConfig at this
+    # point, so I'll just include my existing inpurc file
+    extraConfig = builtins.readFile ./cfg/.inputrc;
+    includeSystemConfig = true;
   };
 }
