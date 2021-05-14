@@ -3,6 +3,7 @@
 {
   imports = [
     ./fonts.nix
+    ./wacom.nix
     ./workstation.nix
   ];
 
@@ -28,16 +29,14 @@
     # battery-monitor
     # blueman
     discord
-    dropbox-cli
-    firefox
+    # dropbox-cli
+    firefox-wayland
     fritzing
     glxinfo
     google-chrome
     graphviz
     inkscape
     insync-v3
-    keybase
-    keybase-gui
     minecraft
     # nixnote2  # evernote client
     pinta
@@ -55,13 +54,8 @@
     gnome3.gnome-tweaks
     gnome3.dconf-editor
     gnomeExtensions.appindicator
-    gnomeExtensions.dash-to-dock
-    gnomeExtensions.dash-to-panel
-    # gnomeExtensions.icon-hider
-    # gnomeExtensions.no-title-bar
-    # gnomeExtensions.system-monitor
-    gnomeExtensions.topicons-plus
-    # gnomeExtensions.tilingnome
+    gnomeExtensions.material-shell
+    gnomeExtensions.sound-output-device-chooser
     # vscode
     xlibs.xdpyinfo
     xlibs.xev
@@ -69,27 +63,24 @@
     xsel
     zathura       # keyboard-driven PDF viewer
     # xsettingsd  # for dump_xsettings
-    # vdpauinfo
-    # libva       # for the vainfo command
-
-    # sddm-theme-breeze-custom
+    vdpauinfo
+    libva-utils       # for the vainfo command
 
     alsaUtils         # amixer, used in .xmonad.hs
     # dmenu             # For xmonad
-    rofi              # maybe replace dmenu?
-    #dzen2
-    #haskellPackages.xmobar
-    feh               # For scaling / setting background image
+    # rofi              # maybe replace dmenu?
+    # dzen2
+    # feh               # For scaling / setting background image
     # taffybar
     # j4-dmenu-desktop  # dmenu .desktop app launcher
     # libnotify         # includes notify-send
-    networkmanager_dmenu
+    # networkmanager_dmenu
     # networkmanagerapplet
     # pasystray
     # lxqt.pavucontrol-qt  # This is nicer, but pasystray wants to launch regular pavucontrol
     # pavucontrol
     # xautolock         # so I can xautolock -locknow
-    xorg.xbacklight
+    # xorg.xbacklight
     xorg.xmodmap
 
     gimp
@@ -125,6 +116,7 @@
     powertop
 
     alacritty
+
   ];
 
   environment.sessionVariables = {
@@ -137,11 +129,6 @@
   environment.variables = {
     XCURSOR_SIZE = "64";
     XCURSOR_THEME = "breeze_cursors";
-
-    # make gtk3 apps shut the hell up about the gnome accessibility bus
-    # https://github.com/NixOS/nixpkgs/issues/16327
-    #NO_AT_BRIDGE = "1";
-    # ^^^^ not needed if sesrvices.gnome3.at-spi2-core.enable == true
 
     # Enable GTK applications to load SVG icons
     GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
@@ -161,8 +148,6 @@
   };
 
   services.gnome3.at-spi2-core.enable = true;
-  # services.gnome3.gnome-keyring.enable = true;
-  # security.pam.services.gdm.enableGnomeKeyring = true;
 
   networking.networkmanager.enable = true;
   networking.networkmanager.unmanaged = [
@@ -176,18 +161,17 @@
   services.xserver = {
     enable = true;
     updateDbusEnvironment = true;
-    desktopManager.gnome3.enable = true;
-    displayManager.gdm.enable = true;
-    # displayManager.lightdm.enable = true;
-    # displayManager.lightdm.background = "${/home/benley/Downloads/Clean-Desktop-Wallpaper-12.jpg}";
 
-    windowManager.session = [{
-      name = "exwm";
-      start = ''
-        emacs -mm &
-        waitPID=$!
+    desktopManager.gnome3 = {
+      enable = true;
+      extraGSettingsOverridePackages = [ pkgs.gnome3.mutter ];
+      extraGSettingsOverrides = ''
+        [org.gnome.mutter]
+        experimental-features=['scale-monitor-framebuffer']
       '';
-    }];
+    };
+
+    displayManager.gdm.enable = true;
 
     # Commands to run just before starting my window manager:
     displayManager.sessionCommands = lib.concatStringsSep "\n" [
@@ -196,7 +180,7 @@
       # "${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher &"
       # "${pkgs.plasma5.polkit-kde-agent}/lib/libexec/polkit-kde-authentication-agent-1 &"
       # "xsetroot -cursor_name left_ptr"
-      "${pkgs.insync}/bin/insync start &"
+      # "${pkgs.insync}/bin/insync start &"
       # "${pkgs.dropbox-cli}/bin/dropbox start &"
       # "${pkgs.taffybar}/bin/taffybar &"
       # "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator &"
@@ -229,78 +213,14 @@
     enable = true;
     enableSSHSupport = true;
     enableExtraSocket = true;
-    # enableBrowserSocket = true;  # What is this for?
   };
-
-  # programs.light.enable = true;  # backlight control helper
-  # programs.qt5ct.enable = true;  # Qt theme/font/icon config for non-kde envs
-
-  #services.compton.enable = true;  # X11 compositor
 
   services.upower.enable = true;
 
   services.dbus.packages = with pkgs; [ gnome3.dconf blueman ];
 
-  services.dbus.socketActivated = true;
-
-  # systemd.user.services.xautolock = {
-  #   description = "xautolock";
-  #   wantedBy = [ "graphical-session.target" ];
-  #   partOf = [ "graphical-session.target" ];
-  #   serviceConfig = {
-  #     ExecStart = ''
-  #       ${pkgs.xautolock}/bin/xautolock \
-  #         -time 10 \
-  #         -locker '${pkgs.i3lock}/bin/i3lock -n -e -f -c "#263238" -i $HOME/.background-image' \
-  #         -notify 15 \
-  #         -notifier "${pkgs.libnotify}/bin/notify-send -u critical -t 14000 -- 'Locking screen in 15 seconds'" \
-  #         -detectsleep
-  #     '';
-  #     RestartSec = 3;
-  #     Restart = "always";
-  #   };
-  # };
-
-  # systemd.user.services.xss-lock = {
-  #   description = "xss-lock";
-  #   wantedBy = [ "graphical-session.target" ];
-  #   partOf = [ "graphical-session.target" ];
-  #   serviceConfig = {
-  #     ExecStart = ''
-  #       ${pkgs.xss-lock}/bin/xss-lock \
-  #         -- ${pkgs.xautolock}/bin/xautolock -locknow
-  #     '';
-  #     RestartSec = 3;
-  #     Restart = "always";
-  #   };
-  # };
-
-  # systemd.user.services.taffybar = {
-  #   description = "taffybar";
-  #   wantedBy = [ "graphical-session.target" ];
-  #   wants = [ "status-notifier-watcher.service" ];
-  #   after = [ "status-notifier-watcher.service" ];
-  #   partOf = [ "graphical-session.target" ];
-  #   # environment.GTK_THEME = "Breeze-Dark:dark";
-  #   # path = config.environment.profiles;
-  #   path = [ pkgs.upower ];
-  #   serviceConfig = {
-  #     ExecStart = "${pkgs.taffybar}/bin/taffybar";
-  #     RestartSec = 3;
-  #     Restart = "always";
-  #     MemoryLimit = "512M";
-  #   };
-  # };
-
-  # systemd.user.services.status-notifier-watcher = {
-  #   description = "status-notifier-watcher";
-  #   wantedBy = [ "graphical-session.target" ];
-  #   partOf = [ "graphical-session.target" ];
-  #   serviceConfig.ExecStart =
-  #       "${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher";
-  # };
-
-  # programs.ssh.askPassword = "${pkgs.plasma5.ksshaskpass.out}/bin/ksshaskpass";
+  # Removed in the next release after 20.09
+  # services.dbus.socketActivated = true;
 
   # Probably don't want this on headless machines, but workstations/laptops
   # sure. This makes sure that things like my user dbus session don't persist
@@ -308,9 +228,4 @@
   services.logind.extraConfig = ''
     KillUserProcesses=yes
   '';
-
-  services.keybase.enable = true;
-  services.kbfs.enable = true;
-
-
 }

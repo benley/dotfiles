@@ -38,13 +38,8 @@
   programs.iftop.enable = true;
   programs.mtr.enable = true;
 
-  programs.tmux = {
-    enable = true;
-    aggressiveResize = true;
-    terminal = "screen-256color";
-    historyLimit = 50000;
-    extraConfig = builtins.readFile ../../cfg/.tmux.conf;
-  };
+  # Most of my tmux config is in home.nix
+  programs.tmux.enable = true;
 
   # this can go in my homedir
   #programs.ssh.extraConfig = readFile ../../cfg/.ssh/config;

@@ -148,7 +148,12 @@
     plugins = [
       {
         plugin = pkgs.tmuxPlugins.power-theme;
-        extraConfig = "set -g @tmux_power_theme 'sky'";
+        extraConfig = ''
+          set -g @tmux_power_theme 'sky'
+          set -g @tmux_power_user_icon ''
+          set -g @tmux_power_time_icon ''
+          set -g @tmux_power_session_icon ''
+        '';
       }
     ];
     extraConfig = builtins.readFile ./cfg/.tmux.conf;

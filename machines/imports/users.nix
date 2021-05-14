@@ -26,75 +26,76 @@
   };
 
   home-manager.useUserPackages = true;
-  home-manager.users.benley = { pkgs, ... }: {
+  home-manager.users.benley = import ../../home.nix;
+  # home-manager.users.benley = { pkgs, ... }: {
     # services.emacs.enable = true;
 
-    xresources.extraConfig = builtins.readFile ../../cfg/.Xresources;
+    # xresources.extraConfig = builtins.readFile ../../cfg/.Xresources;
 
-    dconf.settings = {
+    # dconf.settings = {
 
-      "org/gnome/desktop/interface" = {
-        "scaling-factor" = 1;
-        "text-scaling-factor" = 1.5;
-      };
+    #   "org/gnome/desktop/interface" = {
+    #     "scaling-factor" = 1;
+    #     "text-scaling-factor" = 1.5;
+    #   };
 
-      "org/gnome/desktop/wm/keybindings" = {
-        close = [ "<Super>W" "<Alt>F4" ];
-        cycle-group = [ "<Alt>Above_Tab" ];
-        cycle-group-backward = [ "<Shift><Alt>Above_Tab" ];
-        show-desktop = [ "<Super><Shift>H" ];
-        # Ideally these two would be empty lists but home-manager doesn't know
-        # how to add GVariant type annotations. In the dconf.ini file it would
-        # need to come out as:
-        #    switch-group=@as []
-        #    switch-group-backward=@as []
-        switch-group = [""];
-        switch-group-backward = [""];
-        toggle-fullscreen = [ "F11" ];
-      };
+    #   "org/gnome/desktop/wm/keybindings" = {
+    #     close = [ "<Super>W" "<Alt>F4" ];
+    #     cycle-group = [ "<Alt>Above_Tab" ];
+    #     cycle-group-backward = [ "<Shift><Alt>Above_Tab" ];
+    #     show-desktop = [ "<Super><Shift>H" ];
+    #     # Ideally these two would be empty lists but home-manager doesn't know
+    #     # how to add GVariant type annotations. In the dconf.ini file it would
+    #     # need to come out as:
+    #     #    switch-group=@as []
+    #     #    switch-group-backward=@as []
+    #     switch-group = [""];
+    #     switch-group-backward = [""];
+    #     toggle-fullscreen = [ "F11" ];
+    #   };
 
-      "org/gnome/desktop/wm/preferences" = {
-        "button-layout" = "close,minimize,maximize:appmenu";
-        "focus-mode" = "click";
-        "resize-with-right-button" = true;
-        "titlebar-font" = "Cantarell Italic 11";  # does this actually do anything?
-      };
+    #   "org/gnome/desktop/wm/preferences" = {
+    #     "button-layout" = "close,minimize,maximize:appmenu";
+    #     "focus-mode" = "click";
+    #     "resize-with-right-button" = true;
+    #     "titlebar-font" = "Cantarell Italic 11";  # does this actually do anything?
+    #   };
 
-      "org/gnome/desktop/datetime" = {
-        automatic-timezone = true;
-      };
+    #   "org/gnome/desktop/datetime" = {
+    #     automatic-timezone = true;
+    #   };
 
-      "org/gnome/settings-daemon/plugins/media-keys" = {
+    #   "org/gnome/settings-daemon/plugins/media-keys" = {
 
-        "custom-keybindings" = [
-          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
-          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
-          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
-        ];
+    #     "custom-keybindings" = [
+    #       "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+    #       "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
+    #       "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
+    #     ];
 
-        "logout" = "<Shift><Super>Q";
-        "screenshot" = "<Shift><Super>numbersign";
-        "area-screenshot" = "<Shift><Super>dollar";
-        "window-screenshot" = "<Shift><Super>percent";
-      };
+    #     "logout" = "<Shift><Super>Q";
+    #     "screenshot" = "<Shift><Super>numbersign";
+    #     "area-screenshot" = "<Shift><Super>dollar";
+    #     "window-screenshot" = "<Shift><Super>percent";
+    #   };
 
-      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
-        binding = "<Shift><Super>Return";
-        command = "gnome-terminal";
-        name = "Open Terminal";
-      };
+    #   "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+    #     binding = "<Shift><Super>Return";
+    #     command = "gnome-terminal";
+    #     name = "Open Terminal";
+    #   };
 
-      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
-        binding = "<Shift><Super>E";
-        command = "emacsclient -n -c";
-        name = "New emacsclient frame";
-      };
+    #   "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+    #     binding = "<Shift><Super>E";
+    #     command = "emacsclient -n -c";
+    #     name = "New emacsclient frame";
+    #   };
 
-      "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
-        binding = "<Shift><Super>N";
-        command = "networkmanager_dmenu";
-        name = "networkmanager_dmenu";
-      };
-    };
-  };
+    #   "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
+    #     binding = "<Shift><Super>N";
+    #     command = "networkmanager_dmenu";
+    #     name = "networkmanager_dmenu";
+    #   };
+    # };
+  # };
 }

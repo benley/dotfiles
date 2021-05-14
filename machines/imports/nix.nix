@@ -15,11 +15,9 @@
     trustedBinaryCaches = [
       https://cache.nixos.org
       https://hydra.nixos.org
-      http://ein.local:5150
     ];
     binaryCachePublicKeys = [
       "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
-      "ein:HHuyPwBPbAKcBKmyMsqHMWVLjFxE71MZCTZWxPWRtck="
     ];
   };
 }

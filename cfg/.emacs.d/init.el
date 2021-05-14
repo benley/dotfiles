@@ -159,6 +159,8 @@
   (customize-set-variable 'centaur-tabs-height 45)
   (customize-set-variable 'centaur-tabs-set-modified-marker t)
   (customize-set-variable 'centaur-tabs-mode t)
+  (customize-set-variable 'centaur-tabs-cycle-scope 'tabs)
+  (customize-set-variable 'centaur-tabs-show-navigation-buttons t)
 
   (centaur-tabs-group-by-projectile-project)
   (advice-add 'centaur-tabs-hide-tab :around #'benley/centaur-tabs-hide-tab-wrapper)
@@ -184,11 +186,8 @@
   (require 'doom-themes-ext-treemacs)
   (require 'doom-themes-ext-org)
   (customize-set-variable 'doom-themes-treemacs-enable-variable-pitch nil)
-  (customize-set-variable 'doom-themes-treemacs-theme "doom-colors")
-  ;; (customize-set-variable 'custom-enabled-themes '(doom-palenight))
-  )
+  (customize-set-variable 'doom-themes-treemacs-theme "doom-colors"))
 
-(setq benley--theme-loaded nil)
 (setq benley--theme 'doom-palenight)
 
 (load-theme benley--theme t)
@@ -199,10 +198,8 @@
 When using server mode, we want to (re)load the theme exactly
 once while creating the first frame, so solaire-mode can do its
 thing properly."
-  (when (null benley--theme-loaded)
-    (load-theme benley--theme t)
-    (message "LOADED MY THEME HRURR")
-    (setq benley--theme-loaded t)))
+  (load-theme benley--theme t)
+  (remove-hook 'server-after-make-frame-hook #'benley--load-theme))
 
 (add-hook 'server-after-make-frame-hook #'benley--load-theme)
 
@@ -653,6 +650,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   (vterm-max-scrollback 10000)
   (vterm-kill-buffer-on-exit t)
   (vterm-buffer-name-string "vterm %s")
+  (vterm-enable-manipulate-selection-data-by-osc52 t)
   :hook (vterm-mode . hide-mode-line-mode)
   :bind (:map vterm-mode-map
               ;; make shift-pgup/pgdn work like in a typical terminal
@@ -1001,9 +999,11 @@ Default face is fixed so we only need to have the exceptions."
   (add-to-list 'org-link-abbrev-alist '("att" . org-attach-expand-link)))
 
 
-(setq sh-basic-offset 2)
-(setq sh-indentation 2)
-(setq sh-learn-basic-offset 'usually)
+(use-package sh-script
+  :config
+  (setq sh-basic-offset 2)
+  (setq sh-indentation 2)
+  (setq sh-learn-basic-offset 'usually))
 
 (defun benley/prog-mode-hook ()
   "Setup stuff for `prog-mode' derivatives."
@@ -1191,6 +1191,27 @@ This is what makes 256-color output work in shell-mode."
 (use-package memsql-dev-setup)
 
 (use-package phabricator)  ;; do I actually use this?
+
+;; buffer-local flycheck next-checker workaround
+;; found in https://github.com/flycheck/flycheck/issues/1762
+(defvar-local my/flycheck-local-cache nil)
+
+(defun my/flycheck-checker-get (fn checker property)
+  "blah blah blah"
+  (or (alist-get property (alist-get checker my/flycheck-local-cache))
+      (funcall fn checker property)))
+
+(advice-add 'flycheck-checker-get :around 'my/flycheck-checker-get)
+
+(add-hook 'lsp-managed-mode-hook
+          (lambda ()
+            (when (derived-mode-p 'sh-mode)
+              (when (eq sh-shell 'bash)
+                (setq my/flycheck-local-cache '((lsp . ((next-checkers . (sh-bash)))))))
+              (when (eq sh-shell 'sh)
+                (setq my/flycheck-local-cache '((lsp . ((next-checkers . (sh-posix-bash))))))))))
+;; end flycheck next-checker workaround
+
 
 (message "Finished with init.el")
 (provide 'init)
