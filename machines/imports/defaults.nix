@@ -123,4 +123,15 @@
   services.logind.extraConfig = ''
     HandlePowerKey=suspend
   '';
+
+  # https://yulistic.gitlab.io/2017/12/linux-keymapping-with-udev-hwdb/
+  # https://unix.stackexchange.com/a/587975
+  services.udev.extraHwdb = ''
+    # Swap left/right buttons on the external mouse
+    evdev:name:Logitech Wireless Mouse:*
+      ID_INPUT_KEY=1
+      KEYBOARD_KEY_90001=btn_right
+      KEYBOARD_KEY_90002=btn_left
+  '';
+
 }
