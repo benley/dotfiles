@@ -5,14 +5,12 @@
   xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs-config.nix;
   nixpkgs.overlays = import ./nixpkgs-overlays.nix;
 
-  # Let Home Manager install and manage itself
-  # (not needed when using home-manager as a nixos system module)
+  ###
+  # Set these if _not_ using home-manager as a nixos system module:
   # programs.home-manager.enable = true;
-
-  # Home Manager needs a bit of information about you and the
-  # paths it should manage.
-  home.username = "bstaffin";
-  home.homeDirectory = "/home/bstaffin";
+  # home.username = "benley";
+  # home.homeDirectory = "/home/benley";
+  ###
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
