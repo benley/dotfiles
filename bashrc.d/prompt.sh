@@ -51,7 +51,8 @@ __prompt_command() {
   local git_status_fmt="─( %s )"
 
   # End of the first line: show my current kubernetes context, if any
-  if [[ $PWD =~ ~/[pm].* ]] && kube_context=$(kubectl config current-context 2>/dev/null); then
+  # if [[ $PWD =~ ~/[pm].* ]] && ...
+  if kube_context=$(kubectl config current-context 2>/dev/null); then
     after="─(${colors[blue]}☸️${colors[normal]} ${kube_context})"
   fi
 
