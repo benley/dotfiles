@@ -1005,6 +1005,11 @@ Default face is fixed so we only need to have the exceptions."
   (setq sh-indentation 2)
   (setq sh-learn-basic-offset 'usually))
 
+(use-package goto-addr  ;; make URLs clickable
+  :hook
+  (prog-mode . goto-address-prog-mode)
+  (term-mode . goto-address-mode))
+
 (defun benley/prog-mode-hook ()
   "Setup stuff for `prog-mode' derivatives."
   (if window-system (hl-line-mode t))
@@ -1015,7 +1020,6 @@ Default face is fixed so we only need to have the exceptions."
 
 (defun benley/term-mode-hook ()
   "My `term-mode' hook."
-  (goto-address-mode)  ;; Make URLs clickable
   (setq-local display-line-numbers nil))      ;; No line numbers in terminals
 
 (add-hook 'term-mode-hook #'benley/term-mode-hook)
