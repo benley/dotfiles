@@ -11,3 +11,7 @@
 /.cache/
 /transient/
 /projectile-bookmarks.eld
+.lsp-session-v1
+.org-id-locations
+/eshell/
+/tramp
