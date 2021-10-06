@@ -384,6 +384,10 @@ thing properly."
 ;;   :mode (("\\.ly\\'" . LilyPond-mode)
 ;;          ("\\.ily\\'" . LilyPond-mode)))
 
+(use-package ediff
+  :custom
+  (ediff-window-setup-function 'ediff-setup-windows-plain))
+
 (use-package magit
   :preface
   (defun benley/set-left-fringe-width ()
