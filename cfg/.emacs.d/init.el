@@ -428,13 +428,6 @@ thing properly."
 
 (use-package nix-sandbox
   :config
-  ;; Should be obsolete after https://github.com/travisbhartwell/nix-emacs/pull/45 is merged:
-  (defun benley/nix-shell-command (sandbox &rest args)
-    "Assemble a command to be executed in SANDBOX from ARGS."
-    (list "bash" "-c" (format "source %s; %s" (nix-sandbox-rc sandbox)
-                              (mapconcat 'shell-quote-argument args " "))))
-  (defalias 'nix-shell-command #'benley/nix-shell-command)
-
   (defun benley--set-python-interpreter ()
     (setq-local python-shell-interpreter
                 ;; (format "nix-shell %s --run python" (nix-current-sandbox))))
