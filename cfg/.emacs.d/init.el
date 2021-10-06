@@ -409,6 +409,15 @@ thing properly."
   (customize-set-variable 'markdown-command "pandoc")
   :hook (gfm-mode . turn-on-visual-line-mode))
 
+(use-package nginx-mode
+  :commands
+  (nginx-mode)
+  :mode
+  ("/nginx/.+\\.conf\\'" . nginx-mode)
+  ("nginx\\.conf\\'" . nginx-mode)
+  :custom
+  (nginx-indent-level 2))
+
 (use-package nix-mode
   :defer t
   :config

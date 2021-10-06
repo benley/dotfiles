@@ -102,6 +102,7 @@ with rec {
     magit-popup
     markdown-mode
     # material-theme
+    nginx-mode
     nix-mode
     nix-sandbox
     # nyan-mode
