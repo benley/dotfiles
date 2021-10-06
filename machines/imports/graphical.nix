@@ -23,6 +23,8 @@
     };
   };
 
+  programs.steam.enable = true;
+
   environment.systemPackages = with pkgs; [
     (hunspellWithDicts [pkgs.hunspellDicts.en-us])
     # arandr
@@ -43,8 +45,6 @@
     remmina  # RDP/VNC/NX/Spice client
     signal-desktop
     slack
-    steam
-    # linux-steam-integration  # build broken?
     # texlive
     transmission_gtk
     # vivaldi
