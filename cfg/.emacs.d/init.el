@@ -309,9 +309,7 @@ thing properly."
   :diminish git-gutter-mode
   :config (global-git-gutter-mode +1))
 
-(use-package gitattributes-mode)
-(use-package gitconfig-mode)
-(use-package gitignore-mode)
+(use-package git-modes)
 
 (use-package go-mode
   :mode
@@ -1207,8 +1205,6 @@ This is what makes 256-color output work in shell-mode."
 (use-package hide-mode-line)
 
 (use-package memsql-dev-setup)
-
-(use-package phabricator)  ;; do I actually use this?
 
 ;; buffer-local flycheck next-checker workaround
 ;; found in https://github.com/flycheck/flycheck/issues/1762

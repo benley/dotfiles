@@ -62,9 +62,7 @@ with rec {
     forge
     form-feed
     git-gutter
-    gitattributes-mode
-    gitconfig-mode
-    gitignore-mode
+    git-modes
     go-mode
     graphviz-dot-mode
     haskell-mode

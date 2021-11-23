@@ -24,7 +24,7 @@
 
   home.packages = with pkgs; [
     arcanist
-    azure-cli
+    # azure-cli
     cachix
     element-desktop
     # mu  # maildir thing to use with emacs mh maybe?

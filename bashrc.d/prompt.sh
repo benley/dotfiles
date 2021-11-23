@@ -41,6 +41,9 @@ __prompt_command() {
       ;;
   esac
 
+  # TODO: use tput method for rprompt?
+  # https://wiki.archlinux.org/title/Bash/Prompt_customization#Right-justified_text
+
   # first line:  right-aligned HH:MM:SS, then put the cursor back at column 0
   before+="$(printf "%$((COLUMNS - 8))s")\t\r"
   # ... then left-aligned half of the first line
