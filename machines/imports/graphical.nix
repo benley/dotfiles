@@ -10,8 +10,8 @@
   # services.dunst.enable = true;
   # services.dunst.config = pkgs.callPackage ../../dunstrc.nix {};
 
-  # TODO: did this (or equivlent) get merged upstream for sddm?
-  environment.pathsToLink = [ "/share" ];
+  # https://github.com/NixOS/nixpkgs/issues/47173
+  # environment.pathsToLink = [ "/share" ];
 
   environment.etc = {
     "opt/chrome/policies/managed/test_policy.json" = {
@@ -50,11 +50,12 @@
     # vivaldi
     # libsForQt5.vlc
     gnome_mplayer
+    nordic  # GTK theme
     gnome3.gnome_themes_standard  # I think this fixes some "can't find theme engine adwaita" erorrs
     gnome3.gnome-tweaks
     gnome3.dconf-editor
     gnomeExtensions.appindicator
-    gnomeExtensions.material-shell
+    # gnomeExtensions.material-shell
     gnomeExtensions.sound-output-device-chooser
     # vscode
     xlibs.xdpyinfo
@@ -84,12 +85,12 @@
     xorg.xmodmap
 
     gimp
-    gnome3.cheese     # KDE seems to lack a webcam app?
+    # gnome3.cheese     # KDE seems to lack a webcam app?
     # gwenview          # photo viewer
     # ark               # archive thinger
     # kate
     # kgpg
-    krita             # gimp-alike
+    # krita             # breaks update-desktop-database until https://invent.kde.org/graphics/krita/-/merge_requests/663 is backported
     # konsole
     # kupfer            # task launcher a la QuickSilver
     # kupfer-plugin-google-search
@@ -108,14 +109,14 @@
     # pinentry_qt5
     pinentry_gnome
     # kwalletcli      # includes pinentry-kwallet
-    gnome3.seahorse   # gnome-wallet manager gui
+    # gnome3.seahorse   # gnome-wallet manager gui
 
     # stumpish
     ddccontrol
     # udiskie
     powertop
 
-    alacritty
+    # alacritty
 
   ];
 
@@ -147,7 +148,8 @@
     # GDK_DPI_SCALE = "0.5";
   };
 
-  services.gnome3.at-spi2-core.enable = true;
+  # Redundant I think?  Enabled with gnome by default.
+  # services.gnome.at-spi2-core.enable = true;
 
   networking.networkmanager.enable = true;
   networking.networkmanager.unmanaged = [
@@ -162,12 +164,15 @@
     enable = true;
     updateDbusEnvironment = true;
 
-    desktopManager.gnome3 = {
+    desktopManager.gnome = {
       enable = true;
       extraGSettingsOverridePackages = [ pkgs.gnome3.mutter ];
       extraGSettingsOverrides = ''
         [org.gnome.mutter]
         experimental-features=['scale-monitor-framebuffer']
+
+        [org.gnome.desktop.interface]
+        text-scaling-factor='1.37'
       '';
     };
 
@@ -217,7 +222,10 @@
 
   services.upower.enable = true;
 
-  services.dbus.packages = with pkgs; [ gnome3.dconf blueman ];
+  services.dbus.packages = with pkgs; [
+    # gnome3.dconf  # redundant
+    # blueman       # I don't think I'm using this (gnome has its own bluetooth applet and stuff)
+  ];
 
   # Removed in the next release after 20.09
   # services.dbus.socketActivated = true;

@@ -16,6 +16,7 @@
     gitFull
     go
     google-cloud-sdk
+    google-drive-ocamlfuse
     gotags
     # haskellPackages.ghc
     # haskellPackages.ghc-mod  # broken?
@@ -35,7 +36,7 @@
     python3Packages.flake8
     python3Packages.pep8
     python3Packages.pylint
-    python3Packages.python-language-server
+    # python3Packages.python-language-server
     python3Packages.virtualenv
     python3Packages.virtualenvwrapper
     stack

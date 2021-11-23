@@ -26,25 +26,26 @@
     arcanist
     azure-cli
     cachix
-    mu
-    kops_1_18
+    element-desktop
+    # mu  # maildir thing to use with emacs mh maybe?
     kubectl
     stern
-    (aws-google-auth.override { withU2F = true; })
     nodePackages.bash-language-server
+    haskell-language-server
     jsonnet
     shellcheck
     yq
     kubernetes-helm
-    kubecfg
-    sshuttle
-    minikube
+    # kubecfg
+    # sshuttle
+    # minikube
     whois
     curlie
-    dmenu
-    j4-dmenu-desktop
+    # dmenu
+    # j4-dmenu-desktop
     gopls
     zoom-us
+    nix-top
   ];
 
   programs.bash = {
@@ -78,7 +79,7 @@
   programs.direnv = {
     enable = true;
     enableBashIntegration = true;
-    enableNixDirenvIntegration = true;
+    nix-direnv.enable = true;
   };
 
   # fonts.fontconfig.enable = true;
@@ -175,6 +176,22 @@
   # };
 
   # services.taffybar.enable = true;
+
+  systemd.user.sockets.emacs = {
+    Unit = {
+      Description = "Emacs: the extensible, self-documenting text editor";
+      Documentation = "info:emacs man:emacs(1) https://gnu.org/software/emacs/";
+    };
+    Socket = {
+      ListenStream = "%t/emacs/server";
+      FileDescriptorName = "server";
+      SocketMode = "0600";
+      DirectoryMode = "0700";
+    };
+    Install = {
+      WantedBy = ["sockets.target"];
+    };
+  };
 
   programs.readline = {
     enable = true;

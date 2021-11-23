@@ -54,13 +54,13 @@
 (global-unset-key (kbd "C-x C-z")) ;; why the heck would I ever want to suspend-frame
 
 ;;; nix takes care of package installation for me now
-;; (require 'package)
-;; (setq package-archives
-;;       '(("gnu"   . "https://elpa.gnu.org/packages/")
-;;         ("melpa" . "https://melpa.org/packages/")
-;;         ("org"   . "https://orgmode.org/elpa/")))
-(setq package-archives nil)
-(setq package-enable-at-startup nil)
+(require 'package)
+(setq package-archives
+      '(("gnu"   . "https://elpa.gnu.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")
+        ("org"   . "https://orgmode.org/elpa/")))
+;; (setq package-archives nil)
+;; (setq package-enable-at-startup nil)
 (package-initialize) ;; seemingly necessary for flycheck-verify-setup to work
 
 ;; this has to be set before loading use-package in order to work
@@ -74,6 +74,13 @@
   (require 'use-package))
 (use-package diminish)
 (use-package delight)
+
+;; Uncomment if nix isn't installing quelpa:
+;; (quelpa
+;;  '(quelpa-use-package
+;;    :fetcher git
+;;    :url "https://github.com/quelpa/quelpa-use-package.git"))
+(require 'quelpa-use-package)
 
 ;; (setq use-package-always-ensure t)
 
@@ -479,8 +486,23 @@ thing properly."
    '("~/benley@gmail.com/org"
      "~/p/xkrd/benley/notes"))
 
+  (org-refile-targets '((org-agenda-files :maxlevel . 3)))
+  (org-refile-use-outline-path 'file))
+
+(use-package org-capture
+  :after org
+  :preface
+  (defvar benley--org-contacts-template
+    "* %(org-contacts-template-name)
+:PROPERTIES:
+:ADDRESS: %^{289 Cleveland St. Brooklyn, 11206 NY, USA}
+:BIRTHDAY: %^{yyyy-mm-dd}
+:EMAIL: %(org-contacts-template-email)
+:NOTE: %^{NOTE}
+:END:" "Template for org-contacts.")
+  :custom
   (org-capture-templates
-   '(("n" "Note" entry (file+headline "" "unfiled")
+   `(("n" "Note" entry (file+headline "" "unfiled")
       "* NOTE %?\n  %U" :empty-lines 1)
      ("N" "Note+paste" entry (file+headline "" "unfiled")
       "* NOTE %?\n  %U\n  %c" :empty-lines 1)
@@ -489,8 +511,10 @@ thing properly."
      ("T" "Task+paste" entry (file+headline "" "Tasks")
       "* TODO %?\n  %U\n  %c" :empty-lines 1)
      ("e" "Event" entry (file+headline "" "Events")
-      "* EVENT %?\n  %U" :empty-lines 1)))
-
+      "* EVENT %?\n  %U" :empty-lines 1)
+     ("c" "Contact" entry (file+headline "~/Documents/contacts.org" "People"),
+      benley--org-contacts-template
+      :empty-lines 1)))
   (org-refile-targets '((org-agenda-files :maxlevel . 3)))
   (org-refile-use-outline-path 'file)
   :bind (:map org-mode-map
@@ -502,6 +526,12 @@ thing properly."
   :after org
   :hook
   (org-mode . org-bullets-mode))
+
+(use-package org-contacts
+  ;; Consider: https://emacs.stackexchange.com/questions/12120/insert-entries-and-link-to-entries-from-org-contacts
+  :after org
+  :custom
+  (org-contacts-files '("~/Documents/contacts.org")))
 
 (use-package org-journal
   :defer t
@@ -522,6 +552,10 @@ thing properly."
 ;;   ;; :init
 ;;   ;; (defalias 'second #'cadr)
 ;;   :hook (org-mode . org-make-toc-mode))
+
+(use-package org-roam
+  :init
+  (setq org-roam-v2-ack t))
 
 (use-package org-sticky-header
   :disabled t
@@ -576,41 +610,7 @@ thing properly."
 
 ;; from https://github.com/alphapapa/unpackaged.el#smerge-mode
 (use-package smerge-mode
-  :after hydra
-  :config
-  (defhydra unpackaged/smerge-hydra
-    (:color pink :hint nil :post (smerge-auto-leave))
-    "
-^Move^       ^Keep^               ^Diff^                 ^Other^
-^^-----------^^-------------------^^---------------------^^-------
-_n_ext       _b_ase               _<_: upper/base        _C_ombine
-_p_rev       _u_pper              _=_: upper/lower       _r_esolve
-^^           _l_ower              _>_: base/lower        _k_ill current
-^^           _a_ll                _R_efine
-^^           _RET_: current       _E_diff
-"
-    ("n" smerge-next)
-    ("p" smerge-prev)
-    ("b" smerge-keep-base)
-    ("u" smerge-keep-upper)
-    ("l" smerge-keep-lower)
-    ("a" smerge-keep-all)
-    ("RET" smerge-keep-current)
-    ("\C-m" smerge-keep-current)
-    ("<" smerge-diff-base-upper)
-    ("=" smerge-diff-upper-lower)
-    (">" smerge-diff-base-lower)
-    ("R" smerge-refine)
-    ("E" smerge-ediff)
-    ("C" smerge-combine-with-next)
-    ("r" smerge-resolve)
-    ("k" smerge-kill-current)
-    ("ZZ" (lambda ()
-            (interactive)
-            (save-buffer)
-            (bury-buffer))
-     "Save and bury buffer" :color blue)
-    ("q" nil "cancel" :color blue))
+  :after (hydra unpackaged)
   :hook (magit-diff-visit-file . (lambda ()
                                    (when smerge-mode
                                      (unpackaged/smerge-hydra/body)))))
@@ -648,6 +648,13 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :custom
   (uniquify-buffer-name-style 'forward))
 
+
+(use-package general :quelpa)
+(use-package ts :quelpa)
+(use-package esxml :quelpa)
+(use-package unpackaged
+  :after (general ts esxml)
+  :quelpa (unpackaged :fetcher github :repo "alphapapa/unpackaged.el"))
 
 
 (use-package vterm
@@ -1122,7 +1129,7 @@ This is what makes 256-color output work in shell-mode."
 (use-package projectile
   :defer 1
   :custom
-  (projectile-project-search-path '("~/p/"))
+  (projectile-project-search-path '("~/p/" "~/m/"))
   :config
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode t)

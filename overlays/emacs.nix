@@ -9,20 +9,6 @@ with rec {
   };
 
   emacsWithPackages = (self.emacsPackagesNgGen myEmacs).emacsWithPackages;
-
-  ox-ipynb = {
-    pname = "ox-ipynb";
-    version = "20190104.0";
-    src = super.fetchFromGitHub {
-      owner = "jkitchin";
-      repo = "ox-ipynb";
-      rev = "1aa8f28cedc7c328ddf47798c2628a1cbdbeffe8";
-      sha256 = "1wf72y1d3q3fwxhmbjdfdy4yh6lx5jv37cfiwr7j6r8fv5cwbvl7";
-    };
-    recipe = super.writeText "recipe" ''
-      (ox-ipynb :fetcher github :repo "jkitchin/ox-ipynb")
-    '';
-  };
 };
 
 {
@@ -48,7 +34,7 @@ with rec {
     arduino-mode
     atomic-chrome
     # base16-theme
-    bazel-mode
+    # bazel-mode  # No longer in nixpkgs?
     centaur-tabs
     company
     company-box
@@ -66,7 +52,7 @@ with rec {
     # emojify
     esup
     evil
-    erlang
+    # erlang  # fails to build? (2021-05-26)
     flx-ido
     flycheck
     flycheck-package
@@ -111,6 +97,7 @@ with rec {
     org-journal
     # org-make-toc
     # org-pdfview  # abandoned
+    org-roam
     org-sticky-header
     ox-asciidoc
     ox-gfm
@@ -164,10 +151,6 @@ with rec {
   ]) ++ (with epkgs; [
     vterm
     pdf-tools
-  ] ++ [
-
-    (epkgs.melpaBuild ox-ipynb)
-
   ])
 
   );

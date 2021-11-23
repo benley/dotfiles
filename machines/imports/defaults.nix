@@ -34,6 +34,7 @@
   documentation.dev.enable = true;
 
   programs.bash.enableCompletion = true;
+  programs.bash.vteIntegration = lib.mkForce false;  # I let home-manager handle this
 
   programs.iftop.enable = true;
   programs.mtr.enable = true;
@@ -54,8 +55,8 @@
   # environment.variables.PAGER = "eless";
 
   environment.systemPackages = with pkgs; [
-    eless
-    nix-home
+    # eless
+    # nix-home
     acpi
     binutils # strings, strip, ar, as, ...
     bc
