@@ -235,6 +235,7 @@ thing properly."
   (customize-set-variable 'company-box-icons-alist 'company-box-icons-all-the-icons))
 
 (use-package company-nixos-options
+  :disabled t  ;; I guess this is what makes nix-mode take forever to load?
   ;; :defer 5
   :after nix-mode
   :config
