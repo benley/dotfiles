@@ -24,6 +24,7 @@
 
   home.packages = with pkgs; [
     arcanist
+    awscli
     # azure-cli
     cachix
     element-desktop
@@ -33,6 +34,8 @@
     nodePackages.bash-language-server
     haskell-language-server
     jsonnet
+    moonlight-qt
+    ripgrep
     shellcheck
     yq
     kubernetes-helm
@@ -62,10 +65,10 @@
     sessionVariables = {
       # Fancy timestamps in .bash_history
       HISTTIMEFORMAT = "%Y-%m-%d %T ";
-      # less: extended status prompt, display ANSI colors, case-insensitive search.
-      LESS = "-M -R -i";
+      # less: extended status prompt, display ANSI colors, case-insensitive search, colorful status bar
+      LESS = "-M -R -i --use-color";
       # nix: don't automatically pipe output to $PAGER, it's too distracting
-      NIX_PAGER = "";
+      # NIX_PAGER = "";
     };
     initExtra = ''
       source ${pkgs.gitAndTools.gitFull}/share/git/contrib/completion/git-prompt.sh
@@ -73,6 +76,10 @@
         source "$file"
       done
       export PYTHONSTARTUP=${builtins.path {path=./cfg/.pythonrc.py; name="pythonrc.py";}};
+
+      # https://felipec.wordpress.com/2021/06/05/adventures-with-man-color/
+      export MANPAGER="less -M -R -i --use-color -Dd+R -Du+B -DHkC --header 1 -j5"
+      export MANROFFOPT="-c"  # unclear if this does anything on nixos
     '';
   };
 
@@ -103,7 +110,7 @@
 
     aliases = {
       st = "status";
-	    lg = ''log --graph --pretty=format:'%Cblue%h%Creset %Cgreen%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative'';
+      lg = ''log --graph --pretty=format:'%Cblue%h%Creset %Cgreen%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative'';
       uplog = "lg ..@{u}";
     };
 

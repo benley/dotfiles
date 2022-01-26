@@ -7,8 +7,7 @@
       "nixos-config=/home/benley/p/dotfiles/machines/${config.networking.hostName}/configuration.nix"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
-    daemonIONiceLevel = 7;
-    daemonNiceLevel = 10;
+    daemonIOSchedClass = "idle";
     useSandbox = true;
     autoOptimiseStore = true;
     trustedBinaryCaches = [

@@ -3,6 +3,7 @@ alias getenv='source "$HOME"/.ssh/.getenv'
 alias grep='grep --color'
 alias wat='type -a'
 alias uptig='tig ..@{u}'
+alias ip='ip -color=auto'
 
 ssh-keyrm() {
   if [[ $# -eq 1 ]]; then

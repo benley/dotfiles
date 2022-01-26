@@ -51,7 +51,7 @@
     # libsForQt5.vlc
     gnome_mplayer
     nordic  # GTK theme
-    gnome3.gnome_themes_standard  # I think this fixes some "can't find theme engine adwaita" erorrs
+    gnome3.gnome-themes-extra  # I think this fixes some "can't find theme engine adwaita" erorrs
     gnome3.gnome-tweaks
     gnome3.dconf-editor
     gnomeExtensions.appindicator
