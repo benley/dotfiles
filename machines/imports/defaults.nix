@@ -48,9 +48,9 @@
   services.openssh.forwardX11 = true;
   services.openssh.passwordAuthentication = false;
 
-  services.emacs.defaultEditor = true;
-  services.emacs.install = true;
-  services.emacs.package = lib.mkDefault pkgs.basicEmacs;
+  # services.emacs.defaultEditor = true;
+  # services.emacs.install = true;
+  # services.emacs.package = lib.mkDefault pkgs.basicEmacs;
 
   # environment.variables.PAGER = "eless";
 

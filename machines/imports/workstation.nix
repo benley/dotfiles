@@ -44,5 +44,5 @@
     lastpass-cli
   ];
 
-  services.emacs.package = pkgs.fancyEmacs;
+  #services.emacs.package = pkgs.fancyEmacs;
 }

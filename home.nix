@@ -91,17 +91,31 @@
 
   # fonts.fontconfig.enable = true;
 
-  # finish this later
-  # programs.emacs = {
-  #   enable = true;
-  #   extraPackages = epkgs: [
-  #     epkgs.use-package
-  #     epkgs.magit
-  #     epkgs.org-plus-contrib
-  #     epkgs.vterm
-  #     epkgs.json-mode
-  #   ];
-  # };
+  programs.emacs = {
+    enable = true;
+    extraPackages = epkgs: [
+      # TODO: Does including these accomplish anything if I'm using doom emacs?
+      epkgs.use-package
+      epkgs.magit
+      # epkgs.org-plus-contrib
+      epkgs.vterm
+      epkgs.json-mode
+    ];
+  };
+
+  services.emacs = {
+    enable = true;
+    client.enable = true;
+    defaultEditor = true;
+    socketActivation.enable = true;
+  };
+
+  home.file = {
+    ".doom.d" = {
+      recursive = true;
+      source = ./cfg/.doom.d;
+    };
+  };
 
   programs.git = {
     enable = true;
@@ -165,11 +179,6 @@
     extraConfig = builtins.readFile ./cfg/.tmux.conf;
   };
 
-  # services.emacs = {
-  #   enable = true;
-  #   client.enable = true;
-  # };
-
   xresources.properties = {
     "Xft.dpi" = 144;
   };
@@ -183,22 +192,6 @@
   # };
 
   # services.taffybar.enable = true;
-
-  systemd.user.sockets.emacs = {
-    Unit = {
-      Description = "Emacs: the extensible, self-documenting text editor";
-      Documentation = "info:emacs man:emacs(1) https://gnu.org/software/emacs/";
-    };
-    Socket = {
-      ListenStream = "%t/emacs/server";
-      FileDescriptorName = "server";
-      SocketMode = "0600";
-      DirectoryMode = "0700";
-    };
-    Install = {
-      WantedBy = ["sockets.target"];
-    };
-  };
 
   programs.readline = {
     enable = true;
