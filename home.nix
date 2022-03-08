@@ -78,7 +78,7 @@
       export PYTHONSTARTUP=${builtins.path {path=./cfg/.pythonrc.py; name="pythonrc.py";}};
 
       # https://felipec.wordpress.com/2021/06/05/adventures-with-man-color/
-      export MANPAGER="less -M -R -i --use-color -Dd+R -Du+B -DHkC --header 1 -j5"
+      export MANPAGER="less -M -R -i --use-color -Dd+R -Du+B -DHkC -j5"
       export MANROFFOPT="-c"  # unclear if this does anything on nixos
     '';
   };
