@@ -51,3 +51,4 @@
 
 (package! jsonnet-mode)
 (package! nginx-mode)
+(package! puppet-mode)
