@@ -70,7 +70,7 @@ with { callPackage = super.callPackage; };
   slim-themes = callPackage ../pkgs/slim-themes { };
 
   steam = super.steam.override {
-    nativeOnly = false;
+    # nativeOnly = false;
     withJava = true;
     extraPkgs = p: with p; [
       xorg.libXrender libgdiplus pango harfbuzz libthai glxinfo

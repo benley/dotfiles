@@ -9,9 +9,9 @@ let localFonts = pkgs.callPackage "/home/benley/benley@gmail.com/Fonts" {}; in
     anonymousPro
     aurulent-sans
     bakoma_ttf
-    cantarell_fonts
+    cantarell-fonts
     crimson
-    # dejavu_fonts
+    dejavu_fonts
     dina-font
     dosemu_fonts
     emacs-all-the-icons-fonts
@@ -20,7 +20,7 @@ let localFonts = pkgs.callPackage "/home/benley/benley@gmail.com/Fonts" {}; in
     fira-code
     fira-mono
     freefont_ttf
-    font-awesome-ttf
+    font-awesome
     go-font
     #google-fonts  # Like 1800 fonts. Whoa.
     hack-font

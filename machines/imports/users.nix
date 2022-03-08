@@ -9,7 +9,7 @@
     isNormalUser = true;
     uid = 1000;
     description = "Benjamin Staffin";
-    extraGroups = [ "docker" "wheel" "vboxusers" "systemd-journal" "networkmanager" ];
+    extraGroups = [ "docker" "wheel" "vboxusers" "systemd-journal" "networkmanager" "libvirtd" ];
 
     # Just a bootstrapping password, not one I actually use for anything:
     initialHashedPassword =

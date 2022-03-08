@@ -46,7 +46,7 @@
     signal-desktop
     slack
     # texlive
-    transmission_gtk
+    transmission-gtk
     # vivaldi
     # libsForQt5.vlc
     gnome_mplayer
@@ -58,8 +58,8 @@
     # gnomeExtensions.material-shell
     gnomeExtensions.sound-output-device-chooser
     # vscode
-    xlibs.xdpyinfo
-    xlibs.xev
+    xorg.xdpyinfo
+    xorg.xev
     xlsfonts
     xsel
     zathura       # keyboard-driven PDF viewer
@@ -100,7 +100,7 @@
     # kdeApplications.dolphin-plugins
 
     breeze-icons
-    hicolor_icon_theme
+    hicolor-icon-theme
     breeze-gtk
     breeze-qt5
     # breeze-qt4  # gone, I think

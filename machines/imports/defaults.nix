@@ -73,6 +73,7 @@
     lsof
     mosh
     nethogs
+    nixos-option
     nix-prefetch-scripts
     nmap
     openssl
@@ -82,7 +83,7 @@
     socat
     sysstat
     tcpdump
-    telnet
+    inetutils
     terminfo-extras  # my custom stuff
     tig
     tree
