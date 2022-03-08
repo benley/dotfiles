@@ -52,6 +52,7 @@ with rec {
     # emojify
     esup
     evil
+    evil-collection
     # erlang  # fails to build? (2021-05-26)
     flx-ido
     flycheck
@@ -121,9 +122,11 @@ with rec {
     terminal-here
     terraform-mode
     treemacs
+    treemacs-evil
     treemacs-magit
     treemacs-projectile
     udev-mode
+    undo-fu
     use-package
     # vdiff
     # vdiff-magit
@@ -144,11 +147,13 @@ with rec {
 
   ]) ++ (with epkgs.orgPackages; [
 
-    org-plus-contrib
+    # org-plus-contrib
 
   ]) ++ (with epkgs; [
     vterm
     pdf-tools
+    org
+    org-contrib
   ])
 
   );

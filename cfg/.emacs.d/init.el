@@ -262,6 +262,21 @@ thing properly."
   :config
   (add-to-list 'company-backends 'company-terraform))
 
+(use-package evil
+  :init
+  (setq evil-want-keybinding nil)
+  :custom
+  (evil-undo-system 'undo-fu)
+  (evil-move-beyond-eol t)
+  :config
+  (customize-set-variable 'evil-mode t))
+
+(use-package evil-collection
+  :config
+  (evil-collection-init))
+
+(use-package treemacs-evil)
+
 (use-package eldoc
   :diminish eldoc-mode)
 
@@ -481,8 +496,8 @@ thing properly."
   (org-todo-keywords '((sequence "TODO" "WIP" "|" "DONE" "NOPE")))
 
   (org-agenda-files
-   '("~/benley@gmail.com/org"
-     "~/p/xkrd/benley/notes"))
+   '(;; "~/benley@gmail.com/org"
+     "~/Documents"))
 
   (org-refile-targets '((org-agenda-files :maxlevel . 3)))
   (org-refile-use-outline-path 'file))
@@ -645,6 +660,10 @@ thing properly."
 (use-package uniquify
   :custom
   (uniquify-buffer-name-style 'forward))
+
+
+
+(use-package undo-fu)
 
 
 (use-package general :quelpa)
@@ -1026,7 +1045,7 @@ Default face is fixed so we only need to have the exceptions."
   "Setup stuff for `prog-mode' derivatives."
   (if window-system (hl-line-mode t))
   (setq-local show-trailing-whitespace t)
-  (setq-local display-line-numbers t))
+  (setq-local display-line-numbers 'relative))
 
 (add-hook 'prog-mode-hook #'benley/prog-mode-hook)
 
