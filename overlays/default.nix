@@ -33,8 +33,6 @@ with { callPackage = super.callPackage; };
 
   homedir = callPackage ../homedir.nix { mkHome = self.nixhomeLib.mkHome; };
 
-  oauth2_proxy = callPackage ../pkgs/oauth2_proxy { };
-
   # Based on stuff from:
   #  https://beyermatthias.de/blog/2015/11/25/how-to-setup-neovim-on-nixos/
   #  http://nerditya.com/code/guide-to-neovim/

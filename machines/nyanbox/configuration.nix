@@ -6,7 +6,7 @@ let secrets = import ./secrets.nix; in
   imports = [
     ./hardware-configuration.nix
     ../imports/defaults.nix
-    ../imports/workstation.nix
+    # ../imports/workstation.nix
   ];
 
   boot.loader.grub = {
@@ -20,12 +20,17 @@ let secrets = import ./secrets.nix; in
   networking.hostName = "nyanbox";
   networking.hostId = "007f0101";
 
+  # Use a consistent ipv6 source address.  This way nginx can use ipv6
+  # when reverse proxying to home-assistant on stumpy, which needs a
+  # known source address to trust the X-Forwarded-For header.
+  networking.interfaces.enp3s0.tempAddress = "disabled";
+
   # services.fancontrol.enable = true;
   # services.fancontrol.configFile = ./fancontrol.conf;
 
   services.hddfancontrol = {
     enable = true;
-    disks = ["/dev/sdb" "/dev/sdc" "/dev/sdd" "/dev/sde"];
+    disks = ["/dev/sda" "/dev/sdb" "/dev/sdc" "/dev/sdd" "/dev/sde"];
     pwm_paths = ["/sys/class/hwmon/hwmon0/pwm1"];
     use_smartctl = true;
     extra_args = lib.concatStringsSep " " [
@@ -35,7 +40,8 @@ let secrets = import ./secrets.nix; in
       "--max-temp 45"
       "--cpu-sensor /sys/devices/platform/nct6775.656/hwmon/hwmon0/temp2_input"
       "--cpu-temp-range 30 75"
-      # " -v debug";
+      "-v debug"
+      "--smartctl"
     ];
   };
 
@@ -95,26 +101,32 @@ let secrets = import ./secrets.nix; in
 
   services.mosquitto = {
     enable = true;
-    host = "0.0.0.0";  # non-ssl host
-    users = {
-      esphome = {
-        acl = ["topic readwrite #"];
-      };
-      hass = {
-        acl = ["topic readwrite #"];
-      };
-      prometheus = {
-        acl = [
-          "topic read #"
-          "topic read $SYS/#"
-        ];
-      };
-    };
+    listeners = [
+      {
+        users = {
+          esphome = {
+            acl = ["readwrite #"];
+            password = "herp";
+          };
+          hass = {
+            acl = ["readwrite #"];
+            password = "derp";
+          };
+          prometheus = {
+            acl = [
+              "read #"
+              "read $SYS/#"
+            ];
+            password = "herpderp";
+          };
+        };
+      }
+    ];
   };
 
   services.mosquitto-exporter = {
     enable = true;
-    extraFlags = ["--user prometheus"];
+    extraFlags = ["--user prometheus" "--pass herpderp"];
   };
 
   services.prometheus = {
@@ -136,7 +148,8 @@ let secrets = import ./secrets.nix; in
         static_configs = [{
           targets = [
             "localhost:9100"
-            "homeslice.zoiks.net:9100"
+            # "homeslice.zoiks.net:9100"
+            "stumpy.zoiks.net:9100"
           ];
         }];
       }
@@ -152,7 +165,7 @@ let secrets = import ./secrets.nix; in
         metrics_path = "/api/prometheus";
         bearer_token = secrets.hass_bearer_token;
         static_configs = [{
-          targets = ["homeslice.zoiks.net:8123"];
+          targets = ["stumpy.zoiks.net:8123"];
         }];
       }
       {
@@ -190,7 +203,8 @@ let secrets = import ./secrets.nix; in
         };
         static_configs = [{
           targets = [
-            "hass.zoiks.net"
+            # "homeslice.zoiks.net"
+            "stumpy.zoiks.net"
             "osric.zoiks.net"
             "8.8.8.8"
             "2001:4860:4860::8888"
@@ -215,7 +229,10 @@ let secrets = import ./secrets.nix; in
       {
         job_name = "mosquitto";
         static_configs = [{
-          targets = ["localhost:9234"];
+          targets = [
+            "localhost:9234"
+            "stumpy.zoiks.net:9234"
+          ];
         }];
       }
     ];
@@ -282,13 +299,21 @@ let secrets = import ./secrets.nix; in
   security.acme.email = "benley@zoiks.net";
   security.acme.acceptTerms = true;
 
+  services.dnsmasq.enable = true;
+  services.dnsmasq.servers = [
+    "2001:4860:4860::8888" "2001:4860:4860::8844"
+    "8.8.8.8" "8.8.4.4"
+  ];
+
   services.nginx = {
     enable = true;
+    resolver.addresses = [ "127.0.0.1" ];
+    # proxyResolveWhileRunning = true;
     upstreams = {
       prometheus.servers = { "127.0.0.1:9090" = {}; };
       grafana.servers = { "127.0.0.1:3000" = {}; };
       transmission.servers = { "127.0.0.1:9091" = {}; };
-      home-assistant.servers = { "homeslice.zoiks.net:8123" = {}; };
+      home-assistant.servers = { "stumpy.zoiks.net:8123" = {}; };
     };
     recommendedProxySettings = true;
 
@@ -382,8 +407,37 @@ let secrets = import ./secrets.nix; in
     # Broken?
     # syncPasswordsByPam = true;
 
+    shares.scratch = {
+      path = "/zfs/nyanbox/scratch";
+      "read only" = false;
+    };
+
     shares.downloads = {
       path = "/zfs/nyanbox/downloads";
+      "read only" = false;
+    };
+
+    shares.software = {
+      path = "/zfs/nyanbox/software";
+      "read only" = false;
+    };
+
+    shares.photos = {
+      path = "/zfs/nyanbox/photos";
+    };
+
+    shares.media = {
+      path = "/zfs/nyanbox/media";
+      "read only" = false;
+    };
+
+    shares.archives = {
+      path = "/zfs/nyanbox/archives";
+    };
+
+    shares.backup = {
+      path = "/zfs/nyanbox/backup";
+      "read only" = false;
     };
 
     extraConfig = ''
@@ -415,6 +469,8 @@ let secrets = import ./secrets.nix; in
     };
     scope = "openid email profile";
   };
+  users.users.oauth2_proxy.group = "oauth2_proxy";
+  users.groups.oauth2_proxy = {};
 
   services.udev.packages = [
 
@@ -429,7 +485,7 @@ let secrets = import ./secrets.nix; in
 
   containers.minecraft = {
     config = import ./minecraft-container.nix;
-    autoStart = true;
+    autoStart = false;
     bindMounts = {
       "/var/lib/minecraft" = {
         hostPath = "/var/lib/minecraft";
@@ -444,4 +500,9 @@ let secrets = import ./secrets.nix; in
     mbuffer
   ];
 
+  services.tailscale.enable = true;
+  boot.kernel.sysctl = {
+    "net.ipv4.ip_forward" = 1;
+    "net.ipv6.conf.all.forwarding" = 1;
+  };
 }

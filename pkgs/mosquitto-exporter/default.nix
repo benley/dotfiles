@@ -3,18 +3,16 @@
 
 buildGoPackage rec {
   name = "mosquitto-exporter-unstable-${version}";
-  version = "2019-05-21";
-  rev = "0ac92b543dc5af5dc9f63280fd64eb7d958055e4";
+  version = "0.5.0";
+  rev = "v${version}";
 
   goPackagePath = "github.com/sapcc/mosquitto-exporter";
 
   src = fetchgit {
     inherit rev;
     url = "https://github.com/sapcc/mosquitto-exporter";
-    sha256 = "1n4k60y50x3b0m2lgghcr027m44xrlg25hnaxj9mv2lzsmwaag13";
+    sha256 = "0hg0vdsn3h3giary1mwd6n4hafmc9kwjs7lvn58w7p587rq8qa3m";
   };
-
-  goDeps = ./deps.nix;
 
   # TODO: add metadata https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes
   meta = {

@@ -6,13 +6,13 @@ with { inherit (pythonPackages) buildPythonPackage; };
 
 buildPythonPackage rec {
   pname = "hddfancontrol";
-  version = "1.3.1";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = pname;
     rev = version;
-    sha256 = "0h2cazi9as6q7bx88zv6mh26kmn2nwcyzxsnwg1bqvm0i2qzkkkx";
+    sha256 = "0hn0qxwqvbvifzrmyxsr979s67bq1v8m0dvdr6lvsz22ggz85kj6";
   };
 
   checkInputs = [
