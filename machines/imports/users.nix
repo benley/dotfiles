@@ -5,6 +5,12 @@
     <home-manager/nixos>
   ];
 
+  users.users.richard = {
+    isNormalUser = true;
+    uid = 2556411426;
+    description = "Richard Senneville";
+  };
+
   users.users.benley = {
     isNormalUser = true;
     uid = 1000;
