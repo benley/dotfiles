@@ -32,6 +32,7 @@
     # blueman
     discord
     # dropbox-cli
+    element-desktop
     firefox-wayland
     fritzing
     glxinfo
@@ -40,6 +41,7 @@
     inkscape
     insync-v3
     minecraft
+    moonlight-qt
     # nixnote2  # evernote client
     pinta
     remmina  # RDP/VNC/NX/Spice client
@@ -63,6 +65,7 @@
     xlsfonts
     xsel
     zathura       # keyboard-driven PDF viewer
+    zoom-us
     # xsettingsd  # for dump_xsettings
     vdpauinfo
     libva-utils       # for the vainfo command

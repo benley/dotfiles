@@ -27,14 +27,12 @@
     awscli
     # azure-cli
     cachix
-    element-desktop
     # mu  # maildir thing to use with emacs mh maybe?
     kubectl
     stern
     nodePackages.bash-language-server
     haskell-language-server
     jsonnet
-    moonlight-qt
     ripgrep
     shellcheck
     yq
@@ -47,7 +45,6 @@
     # dmenu
     # j4-dmenu-desktop
     gopls
-    zoom-us
     nix-top
   ];
 
