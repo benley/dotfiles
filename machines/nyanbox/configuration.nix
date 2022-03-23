@@ -40,7 +40,7 @@ let secrets = import ./secrets.nix; in
       "--max-temp 45"
       "--cpu-sensor /sys/devices/platform/nct6775.656/hwmon/hwmon0/temp2_input"
       "--cpu-temp-range 30 75"
-      "-v debug"
+      # "-v debug"
       "--smartctl"
     ];
   };
@@ -73,19 +73,16 @@ let secrets = import ./secrets.nix; in
     enable = true;
     allowedTCPPorts = [
       1883 # mqtt
-      8989 # WeMo device callback
+      9234 # mosquitto-exporter
       9090 # Prometheus
-      3000 # Grafana
       80 443
       54191 # Transmission peering
       139 445 # Samba
-      6052 # esphome dashboard
       25565 # minecraft
     ];
     allowedUDPPorts = [
       67 68 # bootp
       137 138 # Samba
-      # 3084  # WeMo?
     ];
     allowedUDPPortRanges = [
       # Allow all the upnp nonsense that's impossible to handle correctly
@@ -285,15 +282,21 @@ let secrets = import ./secrets.nix; in
   services.grafana = {
     enable = true;
     extraOptions = {
-      AUTH_GOOGLE_CLIENT_ID = secrets.grafana.google_client_id;
-      AUTH_GOOGLE_CLIENT_SECRET = secrets.grafana.google_client_secret;
       AUTH_DISABLE_LOGIN_FORM = "true";
-      AUTH_GOOGLE_ENABLED = "true";
-      AUTH_GOOGLE_ALLOW_SIGN_UP = "true";
-      AUTH_GOOGLE_ALLOWED_DOMAINS = "zoiks.net";
+      AUTH_OAUTH_AUTO_LOGIN = "true";
+      AUTH_SIGNOUT_REDIRECT_URL = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/logout?redirect_uri=https%%3A%%2F%%2Fnyanbox.zoiks.net%%2Fgrafana";
+      AUTH_GENERIC_OAUTH_ENABLED = "true";
+      AUTH_GENERIC_OAUTH_NAME = "Keycloak";
+      AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP = "true";
+      AUTH_GENERIC_OAUTH_CLIENT_ID = secrets.grafana.oauth_client_id;
+      AUTH_GENERIC_OAUTH_CLIENT_SECRET = secrets.grafana.oauth_client_secret;
+      AUTH_GENERIC_OAUTH_SCOPES = "profile";
+      AUTH_GENERIC_OAUTH_AUTH_URL = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/auth";
+      AUTH_GENERIC_OAUTH_TOKEN_URL = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/token";
+      AUTH_GENERIC_OAUTH_API_URL = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/userinfo";
+      AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH = "contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'editor') && 'Editor' || 'Viewer'";
     };
     rootUrl = "https://nyanbox.zoiks.net/grafana";
-    #security.adminPassword = secrets.grafana.admin_password;
   };
 
   security.acme.email = "benley@zoiks.net";
@@ -314,6 +317,7 @@ let secrets = import ./secrets.nix; in
       grafana.servers = { "127.0.0.1:3000" = {}; };
       transmission.servers = { "127.0.0.1:9091" = {}; };
       home-assistant.servers = { "stumpy.zoiks.net:8123" = {}; };
+      keycloak.servers = { "127.0.0.1:8078" = {}; };
     };
     recommendedProxySettings = true;
 
@@ -341,8 +345,16 @@ let secrets = import ./secrets.nix; in
         enableACME = true;
         forceSSL = true;
 
+        extraConfig = ''
+          proxy_buffer_size 8k;
+        '';
+
         locations."/" = {
           tryFiles = "$uri $uri/ =404";
+        };
+
+        locations."/auth/" = {
+          proxyPass = "http://keycloak/auth/";
         };
 
         locations."/prometheus/" = {
@@ -454,9 +466,9 @@ let secrets = import ./secrets.nix; in
 
   services.oauth2_proxy = {
     enable = true;
-    email.domains = [ "zoiks.net" ];
+    email.domains = [ "*" ];
     nginx.virtualHosts = [ "nyanbox.zoiks.net" ];
-    provider = "google";
+    provider = "keycloak-oidc";
     clientID = secrets.oauth2_proxy.clientID;
     clientSecret = secrets.oauth2_proxy.clientSecret;
     cookie.secret = secrets.oauth2_proxy.cookie.secret;
@@ -466,22 +478,18 @@ let secrets = import ./secrets.nix; in
       skip-provider-button = true;
       whitelist-domain = ".zoiks.net";
       set-authorization-header = true;
+      oidc-issuer-url = "https://nyanbox.zoiks.net/auth/realms/master";
+      #allowed-role = "foo";
+      allowed-group = "/proxy";
     };
     scope = "openid email profile";
   };
   users.users.oauth2_proxy.group = "oauth2_proxy";
   users.groups.oauth2_proxy = {};
 
-  services.udev.packages = [
-
-    # I think this could go in 99-local.rules but I'm not entirely sure
-    (pkgs.writeTextFile {
-      name = "hubZ-udev-rules";
-      text = builtins.readFile ./zigbee-zwave-udev.rules;
-      destination = "/etc/udev/rules.d/70-hubZ.rules";
-    })
-
-  ];
+  # oauth2_proxy won't start until keycloak is running
+  systemd.services.oauth2_proxy.after = ["keycloak.service"];
+  systemd.services.oauth2_proxy.wants = ["keycloak.service"];
 
   containers.minecraft = {
     config = import ./minecraft-container.nix;
@@ -504,5 +512,15 @@ let secrets = import ./secrets.nix; in
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
     "net.ipv6.conf.all.forwarding" = 1;
+  };
+
+  services.keycloak = {
+    enable = true;
+    database.type = "mysql";
+    database.createLocally = true;
+    database.username = "keycloak";
+    database.passwordFile = "/var/lib/mysql/.keycloak_db_passwd.txt";
+    frontendUrl = "https://nyanbox.zoiks.net/auth";
+    httpPort = "8078";
   };
 }
