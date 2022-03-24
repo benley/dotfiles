@@ -115,7 +115,6 @@
     VDPAU_DRIVER = "va_gl";
   };
 
-  hardware.bluetooth.enable = true;
   hardware.cpu.intel.updateMicrocode = true;
 
   virtualisation.docker.enable = true;
@@ -133,15 +132,6 @@
       KEYBOARD_KEY_49=prog1
       KEYBOARD_KEY_45=prog2
   '';
-
-  services.powermate.enable = true;
-
-  services.udev.packages = [
-    # pkgs.thunderbolt
-  ];
-  environment.systemPackages = [
-    # pkgs.thunderbolt
-  ];
 
   # Temporary fix for cpu throttling issues visible in the kernel log
   # (journalctl -k) by setting the same temperature limits used by
@@ -181,11 +171,5 @@
     # gutenprint = true;
   };
 
-
   services.fwupd.enable = true;
-
-  services.logind.extraConfig = ''
-    KillUserProcesses=yes
-  '';
-
 }

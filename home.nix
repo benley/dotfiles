@@ -23,10 +23,10 @@
   home.stateVersion = "20.09";
 
   home.packages = with pkgs; [
-    arcanist
     awscli
     # azure-cli
     cachix
+    gh
     # mu  # maildir thing to use with emacs mh maybe?
     kubectl
     stern
@@ -46,6 +46,7 @@
     # j4-dmenu-desktop
     gopls
     nix-top
+    sshfs
   ];
 
   programs.bash = {

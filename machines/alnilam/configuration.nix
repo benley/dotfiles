@@ -77,8 +77,6 @@
       KEYBOARD_KEY_45=prog2
   '';
 
-  services.powermate.enable = true;
-
   services.fwupd.enable = true;
 
   system.stateVersion = "20.09"; # Don't change this post-install
@@ -88,10 +86,11 @@
     uid = 185476231;
     group = "bstaffin";
     description = "Benjamin Staffin";
-    extraGroups = [ "docker" "wheel" "vboxusers" "systemd-journal" "networkmanager" ];
+    extraGroups = [ "docker" "wheel" "vboxusers" "systemd-journal" "networkmanager" "sshuttle" "libvirtd" ];
 
     openssh.authorizedKeys.keys = [
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCcswZFgoqkYR6RUpsQCH8hczzzCIQHzDPTzR3G2PcvtMBeCrArSGI1/ZKaqmxNBSwNvQiBM1ze3xGDV0tye7qRDJZPMzJE6dYw4fcaz7yBXfj67jmCPhPtgKkRNcxmWbyw48TyeQG4pqLZlAgaPQBPr8zhGX/NMlDM7tqKuGwRswAOj2kUdJIoAKus+iYvgUjgpKBsZWCNhq+gydPIJq78cz1H3HPbmtIoVyiN8b/jihbsY7v/4oy75zOWPG6WHGcZPNnzVKr8LFdAWva86K6ZL2//gkSRvceOFwFmAUnRF7zdtu+55+gjXkcLDzrNPUDhnGOKRfCaf9gZL38IbHrxG67tYRC9LdSlj0kwgBWo8ChtTVe2f8VrUoy/phKs9YSweYEjXzgVmp+OIgdy4204crDKmD+pUfDi8G8QAP4IUj/IiKML+UJmLfqKlOxsLgYMKLEwynaLTv5PuOLC0Y2k5/icdB5ubk7wL+XcLMYI0c9NzZOTwkiPL8v+QTYil81pXj1HY9gxv2AYGiD2aW0pds72BcI101JG+t45UXAksSXsET51eyMyQYVH+hkO15X/FFL0AZMRJxPgW0uVI1S2njvJ3VuKeoww4plGSzDz+hxi94MShPYP6oa5zokgl+pJjwia5kTzh9nM2Ks8REuI+ugzWPOaK+HdMCRenBLq9w== openpgp:0x7FB34A50"
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC/eeM61Woa0ilIFJ64DibnjKObxMBGz2sY0YvlxgepymsPaIqKpZm1YUhV8YAN1R3GWzmQBts+z/Z/IJ4y/fGzd9IjuVHb25g6ECsqratjYvvvLAQZe7YwXW8XICK8/5FpPruHGJUvvelkjSBVrKOleuLuu0DJnLN9v+zcU8lOSCx4ucMeIDuBK6IbRNgxk4iuGmGTjXVxg5uQGUC9QutWzqrC9+zXQnm0LYCOyUIxyIq4IQR+dtsM40nBUv6hWj+60xYmmrr0q3gWVfWEDux0hLAGDkQWYqvfkQBZ0Fh43ULlhKp9RLiNj2r8Cppkm4SPLjXx+vCIX7zWEgSHRVxt/B/StRWaHWFqB9UXE0BrmEzQ9OA6DJ++5Ok24Zh1k3BFRTJ0M/+a7if/RnB2EFvO+Zg0j3zJmXKfhOkCQlWEWk0j5wQ0D6bzUVEmbPLnxMzsMHgzJtf5FcKk+QytPQXtWzhs3+KjP1zuOGzB60YuMI9vSZfbF5ti/a97a0sZPyfuKGu4HtFfhs/yWR8BKjxbT6gXxEEmqsXxvJ/il/FwqV9jc8tC90WqK/aOJRJHujE5hfISkAGs77NcoTTE9shZfdb99CaUzRO/YdkCzP/CFf8fdXd/bc+G8lAWdNnbN1KADRr+v2h1CAV4Is2VUemJSKAhWvZ9SFJhT8NycEfVWw== bstaffin@singlestore.com"
     ];
   };
 
@@ -107,5 +106,18 @@
   # https://github.com/rancher/k3d/issues/493
   # systemd.enableUnifiedCgroupHierarchy = false;
 
-  services.fprintd.enable = true;
+  # services.fprintd.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    arcanist
+    openldap
+    virt-manager
+    (pkgs.callPackage /home/bstaffin/m/provisioning {})
+  ];
+
+  services.openssh.enable = true;
+
+  services.tailscale.enable = true;
+
+  virtualisation.libvirtd.enable = true;
 }

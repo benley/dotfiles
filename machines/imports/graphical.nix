@@ -82,7 +82,7 @@
     # networkmanagerapplet
     # pasystray
     # lxqt.pavucontrol-qt  # This is nicer, but pasystray wants to launch regular pavucontrol
-    # pavucontrol
+    pavucontrol
     # xautolock         # so I can xautolock -locknow
     # xorg.xbacklight
     xorg.xmodmap
@@ -120,8 +120,11 @@
     powertop
 
     # alacritty
-
+    razergenie
   ];
+
+  hardware.openrazer.enable = true;
+  hardware.openrazer.users = [ "bstaffin" "benley" ];
 
   environment.sessionVariables = {
     # This is probably a terrible idea but there doesn't seem to be a
@@ -215,6 +218,8 @@
   hardware.pulseaudio.support32Bit = true;
   hardware.pulseaudio.package = pkgs.pulseaudioFull;  # With bluetooth support
 
+  hardware.bluetooth.enable = true;
+
   programs.adb.enable = true;
 
   programs.gnupg.agent = {
@@ -239,4 +244,6 @@
   services.logind.extraConfig = ''
     KillUserProcesses=yes
   '';
+
+  services.powermate.enable = true;
 }
