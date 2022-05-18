@@ -25,13 +25,7 @@ with { callPackage = super.callPackage; };
 
   mosquitto-exporter = callPackage ../pkgs/mosquitto-exporter { };
 
-  nix-home = callPackage ../pkgs/nix-home { };
-
-  nixhomeLib = callPackage (import "${self.nix-home}/nix/lib/nixhome") {};
-
   hddfancontrol = callPackage ../pkgs/hddfancontrol { };
-
-  homedir = callPackage ../homedir.nix { mkHome = self.nixhomeLib.mkHome; };
 
   # Based on stuff from:
   #  https://beyermatthias.de/blog/2015/11/25/how-to-setup-neovim-on-nixos/
