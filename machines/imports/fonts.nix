@@ -28,8 +28,9 @@ let localFonts = pkgs.callPackage "/home/benley/benley@gmail.com/Fonts" {}; in
     ibm-plex
     inconsolata
     iosevka
-    liberation_ttf
+    # liberation_ttf  # default
     meslo-lg
+    # monoid  # broken?
     mononoki
     montserrat
     # nerdfonts  # This is like 6,000 fonts and 3+ gigabytes, seriously
@@ -48,7 +49,7 @@ let localFonts = pkgs.callPackage "/home/benley/benley@gmail.com/Fonts" {}; in
     tewi-font
     ttf_bitstream_vera
     ubuntu_font_family
-    unifont
+    # unifont  # default
     # vistafonts  # broken?
   ];
 

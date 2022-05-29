@@ -52,8 +52,6 @@
   # services.emacs.install = true;
   # services.emacs.package = lib.mkDefault pkgs.basicEmacs;
 
-  # environment.variables.PAGER = "eless";
-
   environment.systemPackages = with pkgs; [
     # eless
     # nix-home
@@ -75,6 +73,7 @@
     nethogs
     nixos-option
     nix-prefetch-scripts
+    nixos-option
     nmap
     openssl
     pciutils

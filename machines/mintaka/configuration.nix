@@ -88,7 +88,7 @@
 
   services.xserver = {
     libinput.enable = true;
-    libinput.naturalScrolling = true;
+    libinput.touchpad.naturalScrolling = true;
 
     videoDrivers = [ "intel" ];
 
@@ -133,43 +133,36 @@
       KEYBOARD_KEY_45=prog2
   '';
 
-  # Temporary fix for cpu throttling issues visible in the kernel log
-  # (journalctl -k) by setting the same temperature limits used by
-  # Windows
-  # See https://wiki.archlinux.org/index.php/Lenovo_ThinkPad_X1_Carbon_(Gen_6)#Power_management.2FThrottling_issues
-  systemd.services.cpu-throttling = {
-    enable = true;
-    description = "Set temp offset to 3°C, so the new trip point is 97°C";
-    documentation = [
-      "https://wiki.archlinux.org/index.php/Lenovo_ThinkPad_X1_Carbon_(Gen_6)#Power_management.2FThrottling_issues"
-    ];
-    path = [ pkgs.msr-tools ];
-    script = "wrmsr -a 0x1a2 0x3000000";
-    serviceConfig = {
-      Type = "oneshot";
-    };
-    wantedBy = [ "timers.target" ];
-  };
-
-  systemd.timers.cpu-throttling = {
-    enable = true;
-    description = "Set cpu throttling threshold to 97°C";
-    documentation = [
-      "https://wiki.archlinux.org/index.php/Lenovo_ThinkPad_X1_Carbon_(Gen_6)#Power_management.2FThrottling_issues"
-    ];
-    timerConfig = {
-      OnActiveSec = 60;
-      OnUnitActiveSec = 60;
-      Unit = "cpu-throttling.service";
-    };
-    wantedBy = [ "timers.target" ];
-  };
-
-  services.printing = {
-    enable = true;
-    drivers = [ pkgs.hplipWithPlugin ];
-    # gutenprint = true;
-  };
-
   services.fwupd.enable = true;
+
+  services.logind.extraConfig = ''
+    KillUserProcesses=yes
+  '';
+
+  services.flatpak.enable = true;
+
+  services.znapzend = {
+    enable = true;
+    autoCreation = true;
+    features.recvu = true;
+    features.compressed = true;
+    zetup = {
+      "rpool/home" = {
+        plan = "1h=>15min,1d=>1h,1w=>1d,1m=>1w,6m=>1m";
+        destinations.nyanbox = {
+          host = "benley@nyanbox.zoiks.net";
+          dataset = "nyanbox/backup/mintaka/home";
+          plan = "1d=>1h,1w=>1d,1m=>1w,1y=>1m";
+        };
+        mbuffer.enable = true;
+      };
+    };
+  };
+
+  services.tailscale.enable = true;
+
+  services.printing.enable = true;
+  services.printing.drivers = with pkgs; [ hplipWithPlugin ];
+
+  virtualisation.libvirtd.enable = true;
 }
