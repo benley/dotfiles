@@ -221,6 +221,7 @@ thing properly."
   (customize-set-variable 'xterm-mouse-mode t))
 
 (use-package bazel-mode
+  :disabled t
   :mode
   ((rx ?/ (or "BUILD" "BUILD.bazel") eos) . #'bazel-build-mode)
   ((rx ?/ (or "WORKSPACE" "WORKSPACE.bazel") eos) . #'bazel-workspace-mode)
@@ -338,6 +339,43 @@ thing properly."
   :custom
   (graphviz-dot-view-command "dotty %s"))
 
+(use-package ligature
+  :disabled t
+  :config
+  (ligature-set-ligatures t '("[ERROR]" "[DEBUG]" "[INFO]" "[WARN]" "[WARNING]"
+                              "[ERR]" "[FATAL]" "[TRACE]" "[FIXME]" "[TODO]"
+                              "[BUG]" "[NOTE]" "[HACK]" "[MARK]"
+                              "# ERROR" "# DEBUG" "# INFO" "# WARN" "# WARNING"
+                              "# ERR" "# FATAL" "# TRACE" "# FIXME" "# TODO"
+                              "# BUG" "# NOTE" "# HACK" "# MARK"
+                              "// ERROR" "// DEBUG" "// INFO" "// WARN" "// WARNING"
+                              "// ERR" "// FATAL" "// TRACE" "// FIXME" "// TODO"
+                              "// BUG" "// NOTE" "// HACK" "// MARK"
+                              "!!" "!=" "!==" "!!!" "!≡" "!≡≡" "!>" "!=<" "#("
+                              "#_" "#{" "#?" "#>" "##" "#_(" "%=" "%>" "%>%" "%<%"
+                              "&%" "&&" "&*" "&+" "&-" "&/" "&=" "&&&" "&>" "$>"
+                              "***" "*=" "*/" "*>" "++" "+++" "+=" "+>" "++=" "--"
+                              "-<" "-<<" "-=" "->" "->>" "---" "-->" "-+-" "-\\/"
+                              "-|>" "-<|" ".." "..." "..<" ".>" ".~" ".=" "/*" "//"
+                              "/>" "/=" "/==" "///" "/**" ":::" "::" ":=" ":≡" ":>"
+                              ":=>" ":(" ":-(" ":)" ":-)" ":/" ":\\"
+			      ;; ":3"
+			      ":D" ":P"
+                              ":>:" ":<:" "<$>" "<*" "<*>" "<+>" "<-" "<<" "<<<" "<<="
+                              "<=" "<=>" "<>" "<|>" "<<-" "<|" "<=<" "<~" "<~~" "<<~"
+                              "<$" "<+" "<!>" "<@>" "<#>" "<%>" "<^>" "<&>" "<?>" "<.>"
+                              "</>" "<\\>" "<\">" "<:>" "<~>" "<**>" "<<^" "<!" "<@"
+                              "<#" "<%" "<^" "<&" "<?" "<." "</" "<\\" "<\"" "<:" "<->"
+                              "<!--" "<--" "<~<" "<==>" "<|-" "<<|" "<-<" "<-->" "<<=="
+                              "<==" "=<<" "==" "===" "==>" "=>" "=~" "=>>" "=/=" "=~="
+                              "==>>" "≡≡" "≡≡≡" "≡:≡" ">-" ">=" ">>" ">>-" ">>=" ">>>"
+                              ">=>" ">>^" ">>|" ">!=" ">->" "??" "?~" "?=" "?>" "???"
+                              "?." "^=" "^." "^?" "^.." "^<<" "^>>" "^>" "\\\\" "\\>"
+                              "\\/-" "@>" "|=" "||" "|>" "|||" "|+|" "|->" "|-->" "|=>"
+                              "|==>" "|>-" "|<<" "||>" "|>>" "|-" "||-" "~=" "~>" "~~>"
+                              "~>>" "[[" "]]" "\">" "_|_"))
+  (global-ligature-mode t))
+
 (use-package haskell-mode
   :custom
   (haskell-tags-on-save t)
@@ -377,8 +415,8 @@ thing properly."
   (prog-mode . highlight-indent-guides-mode)
   (yaml-mode . highlight-indent-guides-mode))
 
-(use-package idle-highlight-mode
-  :hook (prog-mode . idle-highlight-mode))
+;; (use-package idle-highlight-mode
+;;   :hook (prog-mode . idle-highlight-mode))
 
 (use-package json-mode
   :custom

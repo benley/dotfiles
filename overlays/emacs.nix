@@ -1,14 +1,14 @@
 self: super:
 
 with rec {
-  myEmacs = super.emacs.override {
-    # withGTK3 = false;  # fucking X11 disconnect crash bug...
-    # withGTK2 = false;
-    imagemagick = self.imagemagick;  # why isn't this enabled by default?
-    # withXwidgets = true;  # Cool, but I haven't found much of a use for it
-  };
+  # myEmacs = super.emacs.override {
+  #   # withGTK3 = false;  # fucking X11 disconnect crash bug...
+  #   # withGTK2 = false;
+  #   imagemagick = self.imagemagick;  # why isn't this enabled by default?
+  #   # withXwidgets = true;  # Cool, but I haven't found much of a use for it
+  # };
 
-  emacsWithPackages = (self.emacsPackagesNgGen myEmacs).emacsWithPackages;
+  emacsWithPackages = (self.emacsPackagesFor super.emacs).emacsWithPackages;
 };
 
 {
@@ -19,7 +19,7 @@ with rec {
     ;
   };
 
-  basicEmacs = super.emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
+  basicEmacs = emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
     json-mode
     nix-mode
     smex
@@ -27,7 +27,7 @@ with rec {
     yaml-mode
   ]));
 
-  fancyEmacs = super.emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
+  fancyEmacs = emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
 
   ]) ++ (with epkgs.melpaPackages; [
     all-the-icons
@@ -72,7 +72,7 @@ with rec {
     highlight-indent-guides
     htmlize
     ibuffer-vc
-    idle-highlight-mode
+    # idle-highlight-mode
     epkgs.melpaPackages."ido-completing-read+"
     ido-grid-mode
     imenu-list
@@ -106,6 +106,7 @@ with rec {
     powerline
     projectile
     protobuf-mode
+    pydoc
     quelpa-use-package
     rainbow-delimiters
     solaire-mode
@@ -145,7 +146,7 @@ with rec {
     delight
     # exwm
 
-  ]) ++ (with epkgs.orgPackages; [
+  # ]) ++ (with epkgs.orgPackages; [
 
     # org-plus-contrib
 
