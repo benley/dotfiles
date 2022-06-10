@@ -24,6 +24,8 @@
   };
 
   programs.steam.enable = true;
+  programs.steam.remotePlay.openFirewall = true;
+  programs.steam.dedicatedServer.openFirewall = true;
 
   environment.systemPackages = with pkgs; [
     (hunspellWithDicts [pkgs.hunspellDicts.en-us])
@@ -227,6 +229,8 @@
     enableSSHSupport = true;
     enableExtraSocket = true;
   };
+
+  programs.gnome-terminal.enable = true;  # omfg how is this not the default with gnome
 
   services.upower.enable = true;
 

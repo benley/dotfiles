@@ -99,6 +99,8 @@
   home-manager.useUserPackages = true;
   home-manager.users.bstaffin = import ../../home.nix;
 
+  nix.trustedUsers = [ "bstaffin" ];
+
   # programs.sway.enable = true;
 
   # I think this is now fixed in k3d ≥ 4.4.3

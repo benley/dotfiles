@@ -139,4 +139,5 @@
       KEYBOARD_KEY_90002=btn_left
   '';
 
+  networking.firewall.checkReversePath = lib.mkIf config.services.tailscale.enable "loose";
 }
