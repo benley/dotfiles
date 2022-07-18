@@ -52,3 +52,7 @@
 (package! jsonnet-mode)
 (package! nginx-mode)
 (package! puppet-mode)
+(package! jsonnet-language-server
+  :recipe (:host github :repo "grafana/jsonnet-language-server"
+           :files ("jsonnet-language-server.el" "editor/emacs/*.el")))
+(package! adoc-mode)
