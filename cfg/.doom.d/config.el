@@ -65,10 +65,12 @@
 (use-package! puppet-mode
   :mode "\\.pp\\'")
 
-(use-package! lsp-python-ms
-  :config
-  (setq lsp-python-ms-executable (executable-find "python-language-server")))
+;; (use-package! lsp-python-ms
+;;   :config
+;;   (setq lsp-python-ms-executable (executable-find "python-language-server")))
 
 (use-package! jsonnet-language-server)
 
 (use-package! adoc-mode)
+
+(setq undo-fu-ignore-keyboard-quit t)

@@ -7,7 +7,7 @@
     yubikey-manager
     yubikey-manager-qt
     # yubikey-neo-manager
-    yubioath-desktop
+    yubioath-flutter
     yubico-piv-tool
   ];
 
