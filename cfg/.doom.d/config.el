@@ -73,4 +73,28 @@
 
 (use-package! adoc-mode)
 
-(setq undo-fu-ignore-keyboard-quit t)
+(use-package! undo-fu
+  (setq undo-fu-ignore-keyboard-quit t))
+
+(use-package! atomic-chrome
+  :defer 1
+
+  :hook
+  (atomic-chrome-edit-mode . +my/atomic-chrome-mode-setup)
+
+  :custom
+  (atomic-chrome-buffer-open-style 'frame)
+  (atomic-chrome-url-major-mode-alist
+   '(("github\\.com" . gfm-mode)
+     ("reddit\\.com" . markdown-mode)
+     ("snippets\\.internal\\.memcompute\\.com" . markdown-mode)))
+  (atomic-chrome-extention-type-list '(atomic-chrome))
+  (atomic-chrome-buffer-frame-height 40)
+  (atomic-chrome-buffer-frame-width 100)
+
+  :config
+  (defun +my/atomic-chrome-mode-setup ()
+    (setq header-line-format
+          (substitute-command-keys
+           "Editing Chrome test area. Finish with `\\[atomic-chrome-close-current-buffer]'.")))
+  (atomic-chrome-start-server))

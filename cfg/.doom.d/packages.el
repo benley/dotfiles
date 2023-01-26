@@ -49,6 +49,7 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
+(package! atomic-chrome)
 (package! jsonnet-mode)
 (package! nginx-mode)
 (package! puppet-mode)
