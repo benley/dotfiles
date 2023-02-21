@@ -359,8 +359,8 @@ thing properly."
                               "-|>" "-<|" ".." "..." "..<" ".>" ".~" ".=" "/*" "//"
                               "/>" "/=" "/==" "///" "/**" ":::" "::" ":=" ":≡" ":>"
                               ":=>" ":(" ":-(" ":)" ":-)" ":/" ":\\"
-			      ;; ":3"
-			      ":D" ":P"
+                              ;; ":3"
+                              ":D" ":P"
                               ":>:" ":<:" "<$>" "<*" "<*>" "<+>" "<-" "<<" "<<<" "<<="
                               "<=" "<=>" "<>" "<|>" "<<-" "<|" "<=<" "<~" "<~~" "<<~"
                               "<$" "<+" "<!>" "<@>" "<#>" "<%>" "<^>" "<&>" "<?>" "<.>"
@@ -458,7 +458,7 @@ thing properly."
   :config
   (customize-set-variable 'magit-completing-read-function #'magit-ido-completing-read)
   (customize-set-variable 'magit-section-visibility-indicator
-			  '(magit-fringe-bitmap-bold> . magit-fringe-bitmap-boldv))
+                          '(magit-fringe-bitmap-bold> . magit-fringe-bitmap-boldv))
   :hook (magit-mode . benley/set-left-fringe-width))
 
 (use-package markdown-mode
@@ -495,11 +495,11 @@ thing properly."
 
   :config
   (customize-set-variable 'haskell-process-wrapper-function
-			  (lambda (cmd) (apply #'nix-shell-command (nix-current-sandbox) cmd)))
+                          (lambda (cmd) (apply #'nix-shell-command (nix-current-sandbox) cmd)))
   (customize-set-variable 'flycheck-command-wrapper-function
-			  (lambda (cmd) (apply #'nix-shell-command (nix-current-sandbox) cmd)))
+                          (lambda (cmd) (apply #'nix-shell-command (nix-current-sandbox) cmd)))
   (customize-set-variable 'flycheck-executable-find
-			  (lambda (cmd) (nix-executable-find       (nix-current-sandbox) cmd))))
+                          (lambda (cmd) (nix-executable-find       (nix-current-sandbox) cmd))))
 
 (use-package org
   :init
