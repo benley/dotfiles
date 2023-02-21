@@ -50,6 +50,7 @@
 ;(unpin! t)
 
 (package! atomic-chrome)
+(package! form-feed)
 (package! jsonnet-mode)
 (package! nginx-mode)
 (package! puppet-mode)

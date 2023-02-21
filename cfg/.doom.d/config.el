@@ -74,6 +74,7 @@
 (use-package! adoc-mode)
 
 (use-package! undo-fu
+  :config
   (setq undo-fu-ignore-keyboard-quit t))
 
 (use-package! atomic-chrome
@@ -98,3 +99,30 @@
           (substitute-command-keys
            "Editing Chrome test area. Finish with `\\[atomic-chrome-close-current-buffer]'.")))
   (atomic-chrome-start-server))
+
+(use-package! form-feed
+  :hook
+  (emacs-lisp-mode . form-feed-mode))
+
+(use-package! vterm
+  :bind (:map vterm-mode-map
+         ;; make shift-pgup/pgdn work like in a typical terminal
+         ("<S-prior>" . scroll-down-command)
+         ("<S-next>" . scroll-up-command)))
+
+(use-package! info
+  :bind
+  (:map Info-mode-map
+        ("<mouse-8>" . Info-history-back)
+        ("<mouse-9>" . Info-history-forward)))
+
+(use-package! comint
+  :config
+  (setq comint-scroll-to-bottom-on-input 'this))  ;; scroll only _this_ window
+
+(use-package! lsp-mode
+  :config
+  (setq lsp-auto-execute-action nil))
+
+(use-package! web-mode
+  :mode "\\.ftl\\'")
