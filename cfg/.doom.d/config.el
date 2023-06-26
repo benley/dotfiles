@@ -22,6 +22,7 @@
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 (setq doom-font (font-spec :family "PragmataPro" :height 120))
+(setq doom-variable-pitch-font (font-spec :family "IBM Plex Sans" :height 120))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -30,7 +31,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+(setq org-directory "~/Documents/org/")
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -64,10 +65,6 @@
 
 (use-package! puppet-mode
   :mode "\\.pp\\'")
-
-;; (use-package! lsp-python-ms
-;;   :config
-;;   (setq lsp-python-ms-executable (executable-find "python-language-server")))
 
 (use-package! jsonnet-language-server)
 
@@ -126,3 +123,15 @@
 
 (use-package! web-mode
   :mode "\\.ftl\\'")
+
+(after! org
+  (setq org-roam-directory "~/Documents/org/roam/")
+  (setq org-roam-index-file "~/Documents/org/roam/index.org"))
+
+(use-package! org-roam-ui
+  :after org-roam
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))

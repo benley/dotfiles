@@ -49,12 +49,19 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
+(package! adoc-mode)
 (package! atomic-chrome)
+(package! emacsql :built-in 'prefer)
+(package! emacsql-sqlite :built-in 'prefer)
+
+(package! evil-snipe :disable t)
+
 (package! form-feed)
+(package! jsonnet-language-server
+  :recipe (:host github
+           :repo "grafana/jsonnet-language-server"
+           :files ("jsonnet-language-server.el" "editor/emacs/*.el")))
 (package! jsonnet-mode)
 (package! nginx-mode)
+(package! org-roam-ui)
 (package! puppet-mode)
-(package! jsonnet-language-server
-  :recipe (:host github :repo "grafana/jsonnet-language-server"
-           :files ("jsonnet-language-server.el" "editor/emacs/*.el")))
-(package! adoc-mode)
