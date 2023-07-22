@@ -51,24 +51,7 @@ with { callPackage = super.callPackage; };
 
   sddm-theme-breeze-custom = callPackage ../pkgs/sddm-theme-breeze-custom { };
 
-  slack = super.slack.overrideAttrs (x: {
-    postInstall = ''
-      set -x
-      sed -i -e 's%^\(Exec=.*/bin/slack\)%\1 --silent%' $out/share/applications/slack.desktop
-      set +x
-    '';
-  });
-
   slim-themes = callPackage ../pkgs/slim-themes { };
-
-  steam = super.steam.override {
-    # nativeOnly = false;
-    withJava = true;
-    extraPkgs = p: with p; [
-      xorg.libXrender libgdiplus pango harfbuzz libthai glxinfo
-      gnutls glib-networking
-    ];
-  };
 
   steamcontroller-udev-rules = callPackage ../pkgs/steamcontroller-udev-rules { };
 

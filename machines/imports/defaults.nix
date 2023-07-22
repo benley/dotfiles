@@ -45,8 +45,8 @@
   # this can go in my homedir
   #programs.ssh.extraConfig = readFile ../../cfg/.ssh/config;
 
-  services.openssh.forwardX11 = true;
-  services.openssh.passwordAuthentication = false;
+  services.openssh.settings.X11Forwarding = true;
+  services.openssh.settings.PasswordAuthentication = false;
 
   # services.emacs.defaultEditor = true;
   # services.emacs.install = true;
