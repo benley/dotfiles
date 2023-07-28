@@ -23,30 +23,52 @@
   home.stateVersion = "20.09";
 
   home.packages = with pkgs; [
-    awscli
+    authy
     # azure-cli
-    cachix
-    gh
     # mu  # maildir thing to use with emacs mh maybe?
-    kubectl
-    stern
-    nodePackages.bash-language-server
+    # sshuttle
+    # yq  # build broken 2022-04-08
+    awscli2
+    blackbox
+    cabal-install
+    cabal2nix
+    cachix
+    ctags
+    curlie
+    diffstat  # tanka wants this (TODO: fix upstream)
+    fd  # emacs projectile uses this
+    gh
+    go
+    google-cloud-sdk
+    google-drive-ocamlfuse
+    gopls
     haskell-language-server
+    html-tidy
+    imagemagick  # so emacs can resize images
     jsonnet
+    jsonnet-language-server
+    krew
+    kube3d
+    kubectl
+    kubelogin-oidc
+    # kubernetes-helm
+    lastpass-cli
+    nixfmt
+    nix-top
+    nodePackages.bash-language-server
+    nodePackages.js-yaml
+    nodePackages.jshint
+    nodePackages.pyright
+    pandoc
+    # python-language-server  # unmaintained??
     ripgrep
     shellcheck
-    yq
-    kubernetes-helm
-    # kubecfg
-    # sshuttle
-    # minikube
-    whois
-    curlie
-    # dmenu
-    # j4-dmenu-desktop
-    gopls
-    nix-top
+    sqlite  # org-roam uses this
     sshfs
+    stack
+    stern
+    tanka
+    whois
   ];
 
   programs.bash = {
@@ -80,6 +102,10 @@
       export MANROFFOPT="-c"  # unclear if this does anything on nixos
     '';
   };
+
+  home.sessionPath = [
+    "$HOME/.krew/bin"
+  ];
 
   programs.direnv = {
     enable = true;
@@ -153,6 +179,8 @@
 
       http.cookieFile = "~/.config/git/cookies";
       # http.saveCookies = true;
+
+      diff.blackbox.textconv = "gpg --use-agent -q --batch --decrypt";
     };
 
     includes = [{path = "~/.config/git/secret-stuff.config";}];
