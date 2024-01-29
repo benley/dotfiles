@@ -11,7 +11,6 @@
     # automatically enable anything
     ../../modules/dunst.nix
     ../../modules/fancontrol.nix
-    ../../modules/hddfancontrol.nix
     ../../modules/powermate.nix
     ../../modules/mosquitto-exporter.nix
   ];

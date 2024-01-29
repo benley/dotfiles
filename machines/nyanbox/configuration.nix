@@ -28,22 +28,25 @@ let secrets = import ./secrets.nix; in
   # services.fancontrol.enable = true;
   # services.fancontrol.configFile = ./fancontrol.conf;
 
-  services.hddfancontrol = {
-    enable = true;
-    disks = ["/dev/sda" "/dev/sdb" "/dev/sdc" "/dev/sdd" "/dev/sde"];
-    pwm_paths = ["/sys/class/hwmon/hwmon0/pwm1"];
-    use_smartctl = true;
-    extra_args = lib.concatStringsSep " " [
-      "--pwm-start-value 32"
-      "--pwm-stop-value 0"
-      "--spin-down-time 900"
-      "--max-temp 45"
-      "--cpu-sensor /sys/devices/platform/nct6775.656/hwmon/hwmon0/temp2_input"
-      "--cpu-temp-range 30 75"
-      # "-v debug"
-      "--smartctl"
-    ];
-  };
+  # services.hddfancontrol = {
+  #   enable = false;
+  #   disks = ["/dev/sda" "/dev/sdb" "/dev/sdc" "/dev/sdd" "/dev/sde"];
+  #   pwm_paths = [
+  #     "/sys/class/hwmon/hwmon1/pwm1"
+  #     "/sys/class/hwmon/hwmon1/pwm2"
+  #   ];
+  #   use_smartctl = true;
+  #   extra_args = lib.concatStringsSep " " [
+  #     "--pwm-start-value 32"
+  #     "--pwm-stop-value 0"
+  #     "--spin-down-time 900"
+  #     "--max-temp 45"
+  #     "--cpu-sensor /sys/class/hwmon/hwmon2/temp1_input"
+  #     "--cpu-temp-range 30 75"
+  #     # "-v debug"
+  #     "--smartctl"
+  #   ];
+  # };
 
   services.zfs.autoSnapshot.enable = false;
   services.znapzend = {
