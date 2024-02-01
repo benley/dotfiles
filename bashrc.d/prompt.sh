@@ -81,4 +81,6 @@ __prompt_command() {
   GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWCOLORHINTS=1 GIT_PS1_DESCRIBE_STYLE=branch \
     __git_ps1 "$before" "$after" "$git_status_fmt"
 }
-PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND%;};}__prompt_command"
+
+# avoid breaking things like emacs tramp mode
+[[ $TERM != "dumb" ]] && PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND%;};}__prompt_command"

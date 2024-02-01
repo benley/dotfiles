@@ -61,6 +61,7 @@
     dstat
     ethtool
     file
+    git
     gnupg
     htop
     httpie
