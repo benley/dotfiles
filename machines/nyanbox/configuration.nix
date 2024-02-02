@@ -2,17 +2,52 @@
 
 let secrets = import ./secrets.nix; in
 
+with rec {
+  quarkus-systemd-notify = pkgs.fetchMavenArtifact {
+    groupId = "io.quarkiverse.systemd.notify";
+    artifactId = "quarkus-systemd-notify";
+    version = "1.0.1";
+    hash = "sha256-3I4j22jyIpokU4kdobkt6cDsALtxYFclA+DV+BqtmLY=";
+  };
+
+  quarkus-systemd-notify-deployment = pkgs.fetchMavenArtifact {
+    groupId = "io.quarkiverse.systemd.notify";
+    artifactId = "quarkus-systemd-notify-deployment";
+    version = "1.0.1";
+    hash = "sha256-xHxzBxriSd/OU8gEcDG00VRkJYPYJDfAfPh/FkQe+zg=";
+  };
+
+  keycloak-plugins = pkgs.runCommand "keycloak-plugins" {} ''
+      mkdir -p $out
+      cp ${quarkus-systemd-notify}/share/java/*.jar $out/
+      cp ${quarkus-systemd-notify-deployment}/share/java/*.jar $out/
+    '';
+
+  node-exporter-textfile-collector-scripts = pkgs.fetchFromGitHub {
+    owner = "prometheus-community";
+    repo = "node-exporter-textfile-collector-scripts";
+    rev = "34dd42ee2cf5bf1ffcfdea5a3599130f146b88fc";
+    sha256 = "1vwhj6n4sh2ggigmhac8qzsai3mm020dpp5phwixvifi6jv57sid";
+  };
+};
+
 {
   imports = [
     ./hardware-configuration.nix
     ../imports/defaults.nix
-    # ../imports/workstation.nix
+    ./modules/nyanbox-backups.nix
+    ./modules/netbox.nix
   ];
 
+  my.netbox.enable = true;
+
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot/efis/nvme0n1p2";
   boot.loader.grub = {
-    device = "/dev/sda";
+    devices = [ "nodev" ];
     enable = true;
-    version = 2;
+    zfsSupport = true;
+    efiSupport = true;
   };
 
   boot.kernelModules = ["nct6775"]; # make /sys/class/hwmon/hwmon2 exist
@@ -20,33 +55,17 @@ let secrets = import ./secrets.nix; in
   networking.hostName = "nyanbox";
   networking.hostId = "007f0101";
 
+  networking.hosts = {
+    # This is the stupidest workaround
+    # See https://github.com/transmission/transmission/issues/407
+    "87.98.162.88" = ["portcheck.transmissionbt.com"];
+  };
+
   # Use a consistent ipv6 source address.  This way nginx can use ipv6
-  # when reverse proxying to home-assistant on stumpy, which needs a
+  # when reverse proxying to home-assistant, which needs a
   # known source address to trust the X-Forwarded-For header.
-  networking.interfaces.enp3s0.tempAddress = "disabled";
-
-  # services.fancontrol.enable = true;
-  # services.fancontrol.configFile = ./fancontrol.conf;
-
-  # services.hddfancontrol = {
-  #   enable = false;
-  #   disks = ["/dev/sda" "/dev/sdb" "/dev/sdc" "/dev/sdd" "/dev/sde"];
-  #   pwm_paths = [
-  #     "/sys/class/hwmon/hwmon1/pwm1"
-  #     "/sys/class/hwmon/hwmon1/pwm2"
-  #   ];
-  #   use_smartctl = true;
-  #   extra_args = lib.concatStringsSep " " [
-  #     "--pwm-start-value 32"
-  #     "--pwm-stop-value 0"
-  #     "--spin-down-time 900"
-  #     "--max-temp 45"
-  #     "--cpu-sensor /sys/class/hwmon/hwmon2/temp1_input"
-  #     "--cpu-temp-range 30 75"
-  #     # "-v debug"
-  #     "--smartctl"
-  #   ];
-  # };
+  # also I need a static IP for DNS
+  networking.interfaces.enp3s0f0.tempAddress = "disabled";
 
   services.zfs.autoSnapshot.enable = false;
   services.znapzend = {
@@ -67,6 +86,13 @@ let secrets = import ./secrets.nix; in
       "nyanbox/books" = {
         plan = "1w=>1d,1m=>1w,1y=>1m";
       };
+      "nyanbox/paperless" = {
+        plan = "1w=>1d,1m=>1w,1y=>1m";
+      };
+      "nyanbox/home" = {
+        plan = "1d=>1h,1w=>1d,1m=>1w,1y=>1m";
+        recursive = true;
+      };
     };
   };
 
@@ -82,10 +108,13 @@ let secrets = import ./secrets.nix; in
       54191 # Transmission peering
       139 445 # Samba
       25565 # minecraft
+      27015 # factorio
     ];
     allowedUDPPorts = [
       67 68 # bootp
       137 138 # Samba
+      34197 # Factorio
+      54191 # Transmission (does it actually use UDP here???)
     ];
     allowedUDPPortRanges = [
       # Allow all the upnp nonsense that's impossible to handle correctly
@@ -94,40 +123,31 @@ let secrets = import ./secrets.nix; in
   };
 
   programs.mosh.enable = true;  # this opens UDP 60000 to 61000 in the firewall
+  programs.wireshark.enable = true;
 
   system.stateVersion = "18.03";
 
   virtualisation.docker.enable = true;
 
-  services.mosquitto = {
-    enable = true;
-    listeners = [
-      {
-        users = {
-          esphome = {
-            acl = ["readwrite #"];
-            password = "herp";
-          };
-          hass = {
-            acl = ["readwrite #"];
-            password = "derp";
-          };
-          prometheus = {
-            acl = [
-              "read #"
-              "read $SYS/#"
-            ];
-            password = "herpderp";
-          };
-        };
-      }
-    ];
+  virtualisation.oci-containers.containers.hyperion = {
+    image = "hyperion:2.0.12";
+    volumes = ["hyperion-data:/var/lib/hyperion"];
+    ports = ["8090:8090" "8092:8092" "19444:19444" "19400:19400" "19445:19445"];
+    cmd = ["hyperiond" "-u" "/var/lib/hyperion" "-v"];
   };
 
-  services.mosquitto-exporter = {
-    enable = true;
-    extraFlags = ["--user prometheus" "--pass herpderp"];
-  };
+  # virtualisation.oci-containers.containers.factorio = {
+  #   image = "factoriotools/factorio:1.1.76";
+  #   volumes = ["/var/lib/factorio:/factorio"];
+  #   ports = ["34197:34197/udp" "27015:27015/tcp"];
+  #   environment = {
+  #     SAVE_NAME = "space exploration 0.6";
+  #     LOAD_LATEST_SAVE = "false";
+  #     USERNAME = "benley";
+  #     TOKEN = builtins.readFile ./factorio-token.txt;
+  #     UPDATE_MODS_ON_START = "false";
+  #   };
+  # };
 
   services.prometheus = {
     enable = true;
@@ -147,9 +167,9 @@ let secrets = import ./secrets.nix; in
         job_name = "node";
         static_configs = [{
           targets = [
-            "localhost:9100"
-            # "homeslice.zoiks.net:9100"
-            "stumpy.zoiks.net:9100"
+            "192.168.7.24:9100"  # nyanbox
+            "192.168.7.36:9100"  # ditto / homeassistant
+            "pve0.zoiks.net:9100"
           ];
         }];
       }
@@ -165,7 +185,7 @@ let secrets = import ./secrets.nix; in
         metrics_path = "/api/prometheus";
         bearer_token = secrets.hass_bearer_token;
         static_configs = [{
-          targets = ["stumpy.zoiks.net:8123"];
+          targets = ["192.168.7.36:8123"];
         }];
       }
       {
@@ -203,8 +223,6 @@ let secrets = import ./secrets.nix; in
         };
         static_configs = [{
           targets = [
-            # "homeslice.zoiks.net"
-            "stumpy.zoiks.net"
             "osric.zoiks.net"
             "8.8.8.8"
             "2001:4860:4860::8888"
@@ -225,18 +243,11 @@ let secrets = import ./secrets.nix; in
           }
         ];
       }
-
-      {
-        job_name = "mosquitto";
-        static_configs = [{
-          targets = [
-            "localhost:9234"
-            "stumpy.zoiks.net:9234"
-          ];
-        }];
-      }
     ];
-    ruleFiles = [ ./prometheus-node-rules.yml ];
+    ruleFiles = [
+      ./prometheus-node-rules.yml
+      ./hass-rules.yml
+    ];
     extraFlags = [
       "--storage.tsdb.retention=30d"
       "--web.route-prefix=/"
@@ -264,6 +275,7 @@ let secrets = import ./secrets.nix; in
   services.cron.systemCronJobs = [
     ''
       * * * * * root mkdir -p /var/lib/node-exporter/textfile; cd /var/lib/node-exporter/textfile; PATH=${pkgs.smartmontools}/bin:$PATH ${./smartmon-textfile.sh} | ${pkgs.moreutils}/bin/sponge smartmon.prom
+      * * * * * root mkdir -p /var/lib/node-exporter/textfile; ${pkgs.ipmitool}/bin/ipmitool sensor | ${pkgs.gawk}/bin/awk -f ${node-exporter-textfile-collector-scripts}/ipmitool | ${pkgs.moreutils}/bin/sponge /var/lib/node-exporter/textfile/ipmitool.prom
     ''
   ];
 
@@ -278,37 +290,51 @@ let secrets = import ./secrets.nix; in
       { device = "/dev/sdb"; options = "-d sat"; }
       { device = "/dev/sdc"; options = "-d sat"; }
       { device = "/dev/sdd"; options = "-d sat"; }
-      { device = "/dev/sde"; options = "-d sat"; }
     ];
   };
 
+  # services.code-server.enable = true;
+
   services.grafana = {
     enable = true;
-    extraOptions = {
-      AUTH_DISABLE_LOGIN_FORM = "true";
-      AUTH_OAUTH_AUTO_LOGIN = "true";
-      AUTH_SIGNOUT_REDIRECT_URL = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/logout?redirect_uri=https%%3A%%2F%%2Fnyanbox.zoiks.net%%2Fgrafana";
-      AUTH_GENERIC_OAUTH_ENABLED = "true";
-      AUTH_GENERIC_OAUTH_NAME = "Keycloak";
-      AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP = "true";
-      AUTH_GENERIC_OAUTH_CLIENT_ID = secrets.grafana.oauth_client_id;
-      AUTH_GENERIC_OAUTH_CLIENT_SECRET = secrets.grafana.oauth_client_secret;
-      AUTH_GENERIC_OAUTH_SCOPES = "profile";
-      AUTH_GENERIC_OAUTH_AUTH_URL = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/auth";
-      AUTH_GENERIC_OAUTH_TOKEN_URL = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/token";
-      AUTH_GENERIC_OAUTH_API_URL = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/userinfo";
-      AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH = "contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'editor') && 'Editor' || 'Viewer'";
+    settings = {
+      auth = {
+        disable_login_form = true;
+        signout_redirect_url = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/logout?redirect_uri=https%%3A%%2F%%2Fnyanbox.zoiks.net%%2Fgrafana";
+      };
+      "auth" = {
+        # Disable this after upgrading to grafana 10, I think?
+        oauth_allow_insecure_email_lookup = true;
+      };
+      "auth.generic_oauth" = {
+        auto_login = true;
+        enabled = true;
+        name = "Keycloak";
+        allow_sign_up = true;
+        client_id = secrets.grafana.oauth_client_id;
+        client_secret = secrets.grafana.oauth_client_secret;
+        scopes = "openid email profile offline_access roles";
+        auth_url = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/auth";
+        token_url = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/token";
+        api_url = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/userinfo";
+        role_attribute_path = "contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'editor') && 'Editor' || 'Viewer'";
+        email_attribute_path = "email";
+        login_attribute_path = "preferred_username";
+        name_attribute_path = "name";
+      };
+      server.root_url = "https://nyanbox.zoiks.net/grafana";
     };
-    rootUrl = "https://nyanbox.zoiks.net/grafana";
   };
 
-  security.acme.email = "benley@zoiks.net";
+  security.acme.defaults.email = "benley@zoiks.net";
   security.acme.acceptTerms = true;
 
   services.dnsmasq.enable = true;
-  services.dnsmasq.servers = [
-    "2001:4860:4860::8888" "2001:4860:4860::8844"
-    "8.8.8.8" "8.8.4.4"
+  services.dnsmasq.settings.server = [
+    "2001:4860:4860::8888"
+    "2001:4860:4860::8844"
+    "8.8.8.8"
+    "8.8.4.4"
   ];
 
   services.nginx = {
@@ -319,8 +345,14 @@ let secrets = import ./secrets.nix; in
       prometheus.servers = { "127.0.0.1:9090" = {}; };
       grafana.servers = { "127.0.0.1:3000" = {}; };
       transmission.servers = { "127.0.0.1:9091" = {}; };
-      home-assistant.servers = { "stumpy.zoiks.net:8123" = {}; };
+      home-assistant.servers = { "192.168.7.36:8123" = {}; };
+      netbox-wsgi.servers = { "192.168.99.2:8001" = {}; };
+      netbox-static.servers = { "192.168.99.2:80" = {}; };
+      nextcloud.servers = { "192.168.7.181:9001" = {}; };
+      paperless.servers = { "127.0.0.1:${toString config.services.paperless.port}" = {}; };
       keycloak.servers = { "127.0.0.1:8078" = {}; };
+      vaultwarden.servers = { "127.0.0.1:8066" = {}; };
+      vaultwarden-ws.servers = { "127.0.0.1:3012" = {}; };
     };
     recommendedProxySettings = true;
 
@@ -336,10 +368,76 @@ let secrets = import ./secrets.nix; in
         forceSSL = true;
         locations."/" = {
           proxyPass = "http://home-assistant";
-        };
-        locations."/api/websocket" = {
-          proxyPass = "http://home-assistant/api/websocket";
           proxyWebsockets = true;
+        };
+      };
+
+      "paperless.zoiks.net" = {
+        enableACME = true;
+        forceSSL = true;
+
+        extraConfig = ''
+          proxy_buffer_size 8k;
+          client_max_body_size 100M;
+        '';
+
+        locations."/" = {
+          proxyPass = "http://paperless/";
+          proxyWebsockets = true;
+          extraConfig = ''
+            # according to https://github.com/paperless-ngx/paperless-ngx/wiki/Using-a-Reverse-Proxy-with-Paperless-ngx#nginx
+            proxy_redirect off;
+            add_header Referrer-Policy "strict-origin-when-cross-origin";
+            proxy_set_header _oauth2_proxy_0 "";
+
+            auth_request_set $username $upstream_http_x_auth_request_preferred_username;
+            proxy_set_header X-Username $username;
+          '';
+        };
+      };
+
+      "netbox.zoiks.net" = {
+        enableACME = true;
+        forceSSL = true;
+        extraConfig = ''
+          proxy_buffer_size 8k;
+        '';
+
+        locations."/" = {
+          proxyPass = "http://netbox-wsgi/";
+          proxyWebsockets = true;
+          extraConfig = ''
+            auth_request_set $username $upstream_http_x_auth_request_preferred_username;
+            proxy_set_header X-Username $username;
+          '';
+        };
+
+        locations."/static/" = {
+          proxyPass = "http://netbox-static/static/";
+        };
+      };
+
+      "nextcloud.zoiks.net" = {
+        enableACME = true;
+        forceSSL = true;
+
+        extraConfig = ''
+          proxy_buffer_size 8k;
+        '';
+
+        locations."/" = {
+          proxyPass = "http://nextcloud/";
+          proxyWebsockets = true;
+          extraConfig = ''
+          '';
+        };
+
+        locations."/.well-known/carddav" = {
+          return = "301 $scheme://$host/remote.php/dav";
+        };
+
+        locations."/.well-known/caldav" = {
+          return = "301 $scheme://$host/remote.php/dav";
         };
       };
 
@@ -389,6 +487,24 @@ let secrets = import ./secrets.nix; in
             }
           '';
         };
+
+        locations."/vault/" = {
+          proxyPass = "http://vaultwarden/vault/";
+          proxyWebsockets = true;
+        };
+        locations."/vault/admin" = {
+          proxyPass = "http://vaultwarden/vault/admin";
+          proxyWebsockets = true;
+          extraConfig = rootExtraConfig;
+        };
+        locations."/vault/notifications/hub/negotiate" = {
+          proxyPass = "http://vaultwarden-ws/vault/";
+          proxyWebsockets = true;
+        };
+        locations."/vault/notifications/hub" = {
+          proxyPass = "http://vaultwarden-ws/vault/";
+          proxyWebsockets = true;
+        };
       };
     };
   };
@@ -399,15 +515,17 @@ let secrets = import ./secrets.nix; in
       blocklist-enabled = true;
       blocklist-url = "https://list.iblocklist.com/?list=bt_level1&fileformat=p2p&archiveformat=gz";
       download-dir = "/z/downloads";
+      encryption = 2;  # Require encryption
       incomplete-dir = "/z/downloads/incomplete";
       peer-port = 54191;
       peer-port-random-on-start = false;
-      ratio-limit = "0.0010";
+      port-forwarding-enabled = false;
+      ratio-limit = "1";
       ratio-limit-enabled = true;
       rpc-bind-address = "127.0.0.1";
       rpc-host-whitelist-enabled = true;
       rpc-host-whitelist = "nyanbox.zoiks.net";
-      speed-limit-up = 40;
+      speed-limit-up = 256;
       speed-limit-up-enabled = true;
     };
   };
@@ -455,6 +573,18 @@ let secrets = import ./secrets.nix; in
       "read only" = false;
     };
 
+    shares.hass_backup = {
+      path = "/zfs/nyanbox/backup/hass";
+      "read only" = false;
+    };
+
+    shares.paperless_consume = {
+      path = "/var/lib/paperless/consume";
+      "read only" = false;
+      "force create mode" = 660;
+      "force directory mode" = 770;
+    };
+
     extraConfig = ''
       [homes]
       read only = no
@@ -467,10 +597,11 @@ let secrets = import ./secrets.nix; in
   nix.gc.automatic = true;
   nix.gc.options = "--delete-older-than 14d";
 
+  # TODO: consider separate proxy instances per service, in containers?
   services.oauth2_proxy = {
     enable = true;
     email.domains = [ "*" ];
-    nginx.virtualHosts = [ "nyanbox.zoiks.net" ];
+    nginx.virtualHosts = [ "nyanbox.zoiks.net" "paperless.zoiks.net" "netbox.zoiks.net" ];
     provider = "keycloak-oidc";
     clientID = secrets.oauth2_proxy.clientID;
     clientSecret = secrets.oauth2_proxy.clientSecret;
@@ -484,15 +615,33 @@ let secrets = import ./secrets.nix; in
       oidc-issuer-url = "https://nyanbox.zoiks.net/auth/realms/master";
       #allowed-role = "foo";
       allowed-group = "/proxy";
+      code-challenge-method = "S256";
+      # This should be covered by setXauthrequest (look up a level)
+      # set-xauthrequest = true;
+      # I don't think anything uses this, probably safe to disable:
+      pass-access-token = true;
     };
     scope = "openid email profile";
   };
-  users.users.oauth2_proxy.group = "oauth2_proxy";
-  users.groups.oauth2_proxy = {};
 
-  # oauth2_proxy won't start until keycloak is running
-  systemd.services.oauth2_proxy.after = ["keycloak.service"];
-  systemd.services.oauth2_proxy.wants = ["keycloak.service"];
+  systemd.services.keycloak = {
+    serviceConfig = {
+      Type = "notify";
+      NotifyAccess = "all";
+    };
+  };
+
+  # https://gist.github.com/Clownfused/1144a4547fc428f7f690cd81b912ac74
+  systemd.services.oauth2_proxy = {
+    # oauth2_proxy won't start until keycloak is running
+    after = ["keycloak.service"];
+    wants = ["keycloak.service"];
+    # Don't give up trying to start oauth2_proxy, even if keycloak isn't up yet
+    startLimitIntervalSec = 0;
+    serviceConfig = {
+      RestartSec = 1;
+    };
+  };
 
   containers.minecraft = {
     config = import ./minecraft-container.nix;
@@ -506,10 +655,78 @@ let secrets = import ./secrets.nix; in
     forwardPorts = [ { containerPort = 25565; hostPort = 25565; protocol = "tcp"; } ];
   };
 
+  networking.nat = {
+    enable = true;
+    internalInterfaces = ["ve-+"];
+    # Apparently this can be left blank for outbound NAT?
+    # externalInterface = "enp3s0f0";
+  };
+
+  containers.photoprism = {
+    autoStart = false;
+    privateNetwork = true;
+    hostAddress = "192.168.99.3";
+    localAddress = "192.168.99.4";
+    bindMounts = {
+      "/data/photos" = {
+        hostPath = "/zfs/nyanbox/photos";
+        isReadOnly = false;
+      };
+    };
+    config = { config, pkgs, ... }: {
+      system.stateVersion = "23.11";
+      services.mysql = {
+        enable = true;
+        dataDir = "/var/lib/mysql";
+        package = pkgs.mariadb;
+        ensureDatabases = [ "photoprism" ];
+        ensureUsers = [{
+          name = "photoprism";
+          ensurePermissions = {
+            "photoprism.*" = "ALL PRIVILEGES";
+          };
+        }];
+      };
+      services.photoprism = {
+        enable = true;
+        address = "0.0.0.0";
+        port = 2342;
+        originalsPath = "/data/photos";
+        importPath = "import";  # relative to originalsPath
+        passwordFile = "/var/lib/photoprism/._admin_password.txt";
+        storagePath = "/var/lib/photoprism";
+        settings = {
+          PHOTOPRISM_DATABASE_DRIVER = "mysql";
+          PHOTOPRISM_DATABASE_NAME = "photoprism";
+          PHOTOPRISM_DATABASE_SERVER = "/run/mysqld/mysqld.sock";
+          PHOTOPRISM_DATABASE_USER = "photoprism";
+          PHOTOPRISM_SITE_URL = "https://photoprism.zoiks.net";
+          # PHOTOPRISM_SITE_TITLE = "My PhotoPrism";
+        };
+      };
+    };
+  };
+
   environment.systemPackages = with pkgs; [
     mcrcon
     mbuffer
   ];
+
+  # services.factorio = {
+  #   enable = true;
+  #   mods = [];
+  #   saveName = "IndustrialRevolution";
+  #   game-password = "...";
+  # };
+
+  # services.kubernetes = {
+  #   roles = [ "master" "node" ];
+  #   masterAddress = "nyanbox";
+  #   kubelet.extraOpts = "--fail-swap-on=false";
+  #   apiserver.allowPrivileged = true;
+  #   apiserver.serviceClusterIpRange = "10.2.2.0/23";
+  #   controllerManager.extraOpts = "--terminated-pod-gc-threshold=200";
+  # };
 
   services.tailscale.enable = true;
   boot.kernel.sysctl = {
@@ -517,13 +734,71 @@ let secrets = import ./secrets.nix; in
     "net.ipv6.conf.all.forwarding" = 1;
   };
 
+  # TODO: put keycloak and its mysql instance into a nixos container
   services.keycloak = {
     enable = true;
-    database.type = "mysql";
+    database.type = "mariadb";
     database.createLocally = true;
     database.username = "keycloak";
     database.passwordFile = "/var/lib/mysql/.keycloak_db_passwd.txt";
-    frontendUrl = "https://nyanbox.zoiks.net/auth";
-    httpPort = "8078";
+    settings.hostname = "nyanbox.zoiks.net";
+    settings.http-relative-path = "/auth";
+    settings.http-port = 8078;
+    settings.http-enabled = true;
+    settings.proxy = "reencrypt";
+    plugins = [ keycloak-plugins ];
+  };
+
+  services.mysql.enable = true;  # for keycloak
+  services.mysql.package = pkgs.mariadb;
+  
+  users.users.paperless-scanner = {
+    group = "paperless";
+    isSystemUser = true;
+  };
+
+  users.groups.hass = {};
+  users.users.hass = {
+    isSystemUser = true;
+    group = "hass";
+  };
+
+  # TODO: maybe give vaultwarden its own zfs dataset?
+  # TODO: sqlite -> postgres/mysql?
+  services.vaultwarden = {
+    enable = true;
+    # dbBackend = "mysql";
+    environmentFile = "/var/lib/bitwarden_rs/vaultwarden.env";
+    config = {
+      SIGNUPS_ALLOWED = false;
+      ROCKET_PORT = 8066;
+      DOMAIN = "https://nyanbox.zoiks.net/vault";
+      WEBSOCKET_ENABLED = true;
+    };
+  };
+
+  services.paperless = {
+    enable = true;
+    dataDir = "/var/lib/paperless";
+    extraConfig = {
+      # Hopefully tell OCR that dates are MM/DD/YYYY, not DD/MM/YYYY
+      PAPERLESS_DATE_ORDER = "MDY";
+      PAPERLESS_URL = "https://paperless.zoiks.net";
+      PAPERLESS_ALLOWED_HOSTS = "paperless.zoiks.net,nyanbox.zoiks.net,localhost";
+      # PAPERLESS_CORS_ALLOWED_HOSTS = "https://paperless.zoiks.net,https://nyanbox.zoiks.net";
+      PAPERLESS_SECRET_KEY = secrets.paperless.secret_key;
+      PAPERLESS_TRUSTED_PROXIES = "127.0.0.1,192.168.7.24";
+      PAPERLESS_ENABLE_HTTP_REMOTE_USER = true;
+      PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME = "HTTP_X_USERNAME";
+      PAPERLESS_USE_X_FORWARD_HOST = true;
+      # PAPERLESS_USE_X_FORWARD_PORT = "true";
+      PAPERLESS_FILENAME_FORMAT = "{created_year}/{correspondent}/{title}";
+      PAPERLESS_OCR_USER_ARGS = builtins.toJSON {
+        # I don't care about preserving signatures in OCR'd copies of documents
+        invalidate_digital_signatures = true;
+      };
+      # https://github.com/NixOS/nixpkgs/issues/240591
+      LD_LIBRARY_PATH="${lib.getLib pkgs.mkl}/lib";
+    };
   };
 }
