@@ -51,6 +51,8 @@
   # services.emacs.install = true;
   # services.emacs.package = lib.mkDefault pkgs.basicEmacs;
 
+  programs.nano.enable = false;
+
   environment.systemPackages = with pkgs; [
     # eless
     # nix-home
