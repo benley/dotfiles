@@ -82,5 +82,12 @@ __prompt_command() {
     __git_ps1 "$before" "$after" "$git_status_fmt"
 }
 
-# avoid breaking things like emacs tramp mode
-[[ $TERM != "dumb" ]] && PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND%;};}__prompt_command"
+case $TERM in
+  xterm*)
+    PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND%;};}__prompt_command"
+    ;;
+  *)
+    # avoid breaking things like emacs tramp mode (TERM=dumb)
+    PS1='\u@\h:\w\$ '
+    ;;
+esac
