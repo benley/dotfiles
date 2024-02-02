@@ -1,27 +1,7 @@
 { config, pkgs, lib, ... }:
 
-let secrets = import ./secrets.nix; in
-
 with rec {
-  quarkus-systemd-notify = pkgs.fetchMavenArtifact {
-    groupId = "io.quarkiverse.systemd.notify";
-    artifactId = "quarkus-systemd-notify";
-    version = "1.0.1";
-    hash = "sha256-3I4j22jyIpokU4kdobkt6cDsALtxYFclA+DV+BqtmLY=";
-  };
-
-  quarkus-systemd-notify-deployment = pkgs.fetchMavenArtifact {
-    groupId = "io.quarkiverse.systemd.notify";
-    artifactId = "quarkus-systemd-notify-deployment";
-    version = "1.0.1";
-    hash = "sha256-xHxzBxriSd/OU8gEcDG00VRkJYPYJDfAfPh/FkQe+zg=";
-  };
-
-  keycloak-plugins = pkgs.runCommand "keycloak-plugins" {} ''
-      mkdir -p $out
-      cp ${quarkus-systemd-notify}/share/java/*.jar $out/
-      cp ${quarkus-systemd-notify-deployment}/share/java/*.jar $out/
-    '';
+  secrets = import ./secrets.nix;
 
   node-exporter-textfile-collector-scripts = pkgs.fetchFromGitHub {
     owner = "prometheus-community";
@@ -35,11 +15,13 @@ with rec {
   imports = [
     ./hardware-configuration.nix
     ../imports/defaults.nix
+    ./modules/keycloak.nix
     ./modules/nyanbox-backups.nix
     ./modules/netbox.nix
     ./modules/paperless.nix
   ];
 
+  my.keycloak.enable = true;
   my.netbox.enable = true;
   my.paperless.enable = true;
 
@@ -349,7 +331,6 @@ with rec {
       transmission.servers = { "127.0.0.1:9091" = {}; };
       home-assistant.servers = { "192.168.7.36:8123" = {}; };
       nextcloud.servers = { "192.168.7.181:9001" = {}; };
-      keycloak.servers = { "127.0.0.1:8078" = {}; };
       vaultwarden.servers = { "127.0.0.1:8066" = {}; };
       vaultwarden-ws.servers = { "127.0.0.1:3012" = {}; };
     };
@@ -406,10 +387,6 @@ with rec {
 
         locations."/" = {
           tryFiles = "$uri $uri/ =404";
-        };
-
-        locations."/auth/" = {
-          proxyPass = "http://keycloak/auth/";
         };
 
         locations."/prometheus/" = {
@@ -578,13 +555,6 @@ with rec {
     scope = "openid email profile";
   };
 
-  systemd.services.keycloak = {
-    serviceConfig = {
-      Type = "notify";
-      NotifyAccess = "all";
-    };
-  };
-
   # https://gist.github.com/Clownfused/1144a4547fc428f7f690cd81b912ac74
   systemd.services.oauth2_proxy = {
     # oauth2_proxy won't start until keycloak is running
@@ -687,24 +657,6 @@ with rec {
     "net.ipv4.ip_forward" = 1;
     "net.ipv6.conf.all.forwarding" = 1;
   };
-
-  # TODO: put keycloak and its mysql instance into a nixos container
-  services.keycloak = {
-    enable = true;
-    database.type = "mariadb";
-    database.createLocally = true;
-    database.username = "keycloak";
-    database.passwordFile = "/var/lib/mysql/.keycloak_db_passwd.txt";
-    settings.hostname = "nyanbox.zoiks.net";
-    settings.http-relative-path = "/auth";
-    settings.http-port = 8078;
-    settings.http-enabled = true;
-    settings.proxy = "reencrypt";
-    plugins = [ keycloak-plugins ];
-  };
-
-  services.mysql.enable = true;  # for keycloak
-  services.mysql.package = pkgs.mariadb;
 
   users.groups.hass = {};
   users.users.hass = {
