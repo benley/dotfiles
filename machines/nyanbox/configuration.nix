@@ -346,8 +346,6 @@ with rec {
       grafana.servers = { "127.0.0.1:3000" = {}; };
       transmission.servers = { "127.0.0.1:9091" = {}; };
       home-assistant.servers = { "192.168.7.36:8123" = {}; };
-      netbox-wsgi.servers = { "192.168.99.2:8001" = {}; };
-      netbox-static.servers = { "192.168.99.2:80" = {}; };
       nextcloud.servers = { "192.168.7.181:9001" = {}; };
       paperless.servers = { "127.0.0.1:${toString config.services.paperless.port}" = {}; };
       keycloak.servers = { "127.0.0.1:8078" = {}; };
@@ -393,27 +391,6 @@ with rec {
             auth_request_set $username $upstream_http_x_auth_request_preferred_username;
             proxy_set_header X-Username $username;
           '';
-        };
-      };
-
-      "netbox.zoiks.net" = {
-        enableACME = true;
-        forceSSL = true;
-        extraConfig = ''
-          proxy_buffer_size 8k;
-        '';
-
-        locations."/" = {
-          proxyPass = "http://netbox-wsgi/";
-          proxyWebsockets = true;
-          extraConfig = ''
-            auth_request_set $username $upstream_http_x_auth_request_preferred_username;
-            proxy_set_header X-Username $username;
-          '';
-        };
-
-        locations."/static/" = {
-          proxyPass = "http://netbox-static/static/";
         };
       };
 
@@ -601,7 +578,7 @@ with rec {
   services.oauth2_proxy = {
     enable = true;
     email.domains = [ "*" ];
-    nginx.virtualHosts = [ "nyanbox.zoiks.net" "paperless.zoiks.net" "netbox.zoiks.net" ];
+    nginx.virtualHosts = [ "nyanbox.zoiks.net" "paperless.zoiks.net" ];
     provider = "keycloak-oidc";
     clientID = secrets.oauth2_proxy.clientID;
     clientSecret = secrets.oauth2_proxy.clientSecret;
