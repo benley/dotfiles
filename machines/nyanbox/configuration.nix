@@ -37,9 +37,11 @@ with rec {
     ../imports/defaults.nix
     ./modules/nyanbox-backups.nix
     ./modules/netbox.nix
+    ./modules/paperless.nix
   ];
 
   my.netbox.enable = true;
+  my.paperless.enable = true;
 
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efis/nvme0n1p2";
@@ -347,7 +349,6 @@ with rec {
       transmission.servers = { "127.0.0.1:9091" = {}; };
       home-assistant.servers = { "192.168.7.36:8123" = {}; };
       nextcloud.servers = { "192.168.7.181:9001" = {}; };
-      paperless.servers = { "127.0.0.1:${toString config.services.paperless.port}" = {}; };
       keycloak.servers = { "127.0.0.1:8078" = {}; };
       vaultwarden.servers = { "127.0.0.1:8066" = {}; };
       vaultwarden-ws.servers = { "127.0.0.1:3012" = {}; };
@@ -367,30 +368,6 @@ with rec {
         locations."/" = {
           proxyPass = "http://home-assistant";
           proxyWebsockets = true;
-        };
-      };
-
-      "paperless.zoiks.net" = {
-        enableACME = true;
-        forceSSL = true;
-
-        extraConfig = ''
-          proxy_buffer_size 8k;
-          client_max_body_size 100M;
-        '';
-
-        locations."/" = {
-          proxyPass = "http://paperless/";
-          proxyWebsockets = true;
-          extraConfig = ''
-            # according to https://github.com/paperless-ngx/paperless-ngx/wiki/Using-a-Reverse-Proxy-with-Paperless-ngx#nginx
-            proxy_redirect off;
-            add_header Referrer-Policy "strict-origin-when-cross-origin";
-            proxy_set_header _oauth2_proxy_0 "";
-
-            auth_request_set $username $upstream_http_x_auth_request_preferred_username;
-            proxy_set_header X-Username $username;
-          '';
         };
       };
 
@@ -578,7 +555,7 @@ with rec {
   services.oauth2_proxy = {
     enable = true;
     email.domains = [ "*" ];
-    nginx.virtualHosts = [ "nyanbox.zoiks.net" "paperless.zoiks.net" ];
+    nginx.virtualHosts = [ "nyanbox.zoiks.net" ];
     provider = "keycloak-oidc";
     clientID = secrets.oauth2_proxy.clientID;
     clientSecret = secrets.oauth2_proxy.clientSecret;
@@ -728,11 +705,6 @@ with rec {
 
   services.mysql.enable = true;  # for keycloak
   services.mysql.package = pkgs.mariadb;
-  
-  users.users.paperless-scanner = {
-    group = "paperless";
-    isSystemUser = true;
-  };
 
   users.groups.hass = {};
   users.users.hass = {
@@ -751,31 +723,6 @@ with rec {
       ROCKET_PORT = 8066;
       DOMAIN = "https://nyanbox.zoiks.net/vault";
       WEBSOCKET_ENABLED = true;
-    };
-  };
-
-  services.paperless = {
-    enable = true;
-    dataDir = "/var/lib/paperless";
-    extraConfig = {
-      # Hopefully tell OCR that dates are MM/DD/YYYY, not DD/MM/YYYY
-      PAPERLESS_DATE_ORDER = "MDY";
-      PAPERLESS_URL = "https://paperless.zoiks.net";
-      PAPERLESS_ALLOWED_HOSTS = "paperless.zoiks.net,nyanbox.zoiks.net,localhost";
-      # PAPERLESS_CORS_ALLOWED_HOSTS = "https://paperless.zoiks.net,https://nyanbox.zoiks.net";
-      PAPERLESS_SECRET_KEY = secrets.paperless.secret_key;
-      PAPERLESS_TRUSTED_PROXIES = "127.0.0.1,192.168.7.24";
-      PAPERLESS_ENABLE_HTTP_REMOTE_USER = true;
-      PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME = "HTTP_X_USERNAME";
-      PAPERLESS_USE_X_FORWARD_HOST = true;
-      # PAPERLESS_USE_X_FORWARD_PORT = "true";
-      PAPERLESS_FILENAME_FORMAT = "{created_year}/{correspondent}/{title}";
-      PAPERLESS_OCR_USER_ARGS = builtins.toJSON {
-        # I don't care about preserving signatures in OCR'd copies of documents
-        invalidate_digital_signatures = true;
-      };
-      # https://github.com/NixOS/nixpkgs/issues/240591
-      LD_LIBRARY_PATH="${lib.getLib pkgs.mkl}/lib";
     };
   };
 }
