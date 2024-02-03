@@ -284,7 +284,7 @@ with rec {
     settings = {
       auth = {
         disable_login_form = true;
-        signout_redirect_url = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/logout?redirect_uri=https%%3A%%2F%%2Fnyanbox.zoiks.net%%2Fgrafana";
+        signout_redirect_url = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/logout";
       };
       "auth" = {
         # Disable this after upgrading to grafana 10, I think?
