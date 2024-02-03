@@ -8,10 +8,10 @@
     ./modules/grafana.nix
     ./modules/home-assistant.nix
     ./modules/keycloak.nix
-    ./modules/nextcloud.nix
-    ./modules/nyanbox-backups.nix
     ./modules/netbox.nix
+    ./modules/nextcloud.nix
     ./modules/node-exporter.nix
+    ./modules/nyanbox-backups.nix
     ./modules/oauth2_proxy.nix
     ./modules/paperless.nix
     ./modules/photoprism.nix
@@ -55,7 +55,6 @@
   # also I need a static IP for DNS
   networking.interfaces.enp3s0f0.tempAddress = "disabled";
 
-  services.zfs.autoSnapshot.enable = false;
   services.znapzend = {
     enable = true;
     zetup = {
@@ -151,8 +150,6 @@
     enable = true;
     resolver.addresses = [ "127.0.0.1" ];
     # proxyResolveWhileRunning = true;
-    upstreams = {
-    };
     recommendedProxySettings = true;
 
     # TODO: in theory the stuff that oauth2_proxy puts in the root extraConfig
@@ -255,8 +252,8 @@
   };
 
   environment.systemPackages = with pkgs; [
-    mcrcon
-    mbuffer
+    mcrcon   # minecraft server admin tool
+    mbuffer  # for remote znapzend senders
   ];
 
   services.tailscale.enable = true;
