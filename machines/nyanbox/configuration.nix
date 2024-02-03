@@ -249,7 +249,8 @@ with rec {
     # Broken?
     # syncPasswordsByPam = true;
 
-    # reminder: shares can be defined in other modules, like home-assistant.nix
+    # reminder: Shares can be defined in other modules,
+    #           like home-assistant.nix and paperless.nix
 
     shares.scratch = {
       path = "/zfs/nyanbox/scratch";
@@ -282,13 +283,6 @@ with rec {
     shares.backup = {
       path = "/zfs/nyanbox/backup";
       "read only" = false;
-    };
-
-    shares.paperless_consume = {
-      path = "/var/lib/paperless/consume";
-      "read only" = false;
-      "force create mode" = 660;
-      "force directory mode" = 770;
     };
 
     extraConfig = ''
