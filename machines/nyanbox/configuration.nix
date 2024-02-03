@@ -16,6 +16,7 @@ with rec {
     ./modules/grafana.nix
     ./modules/home-assistant.nix
     ./modules/keycloak.nix
+    ./modules/nextcloud.nix
     ./modules/nyanbox-backups.nix
     ./modules/netbox.nix
     ./modules/oauth2_proxy.nix
@@ -30,9 +31,11 @@ with rec {
   my.home-assistant.enable = true;
   my.keycloak.enable = true;
   my.netbox.enable = true;
+  my.nextcloud.enable = false;        # OFF
+  my.nyanbox-backups.enable = false;  # OFF
   my.oauth2_proxy.enable = true;
   my.paperless.enable = true;
-  my.photoprism.enable = false;
+  my.photoprism.enable = false;       # OFF
   my.prometheus.enable = true;
   my.transmission.enable = true;
   my.vaultwarden.enable = true;
@@ -188,7 +191,6 @@ with rec {
     resolver.addresses = [ "127.0.0.1" ];
     # proxyResolveWhileRunning = true;
     upstreams = {
-      nextcloud.servers = { "192.168.7.181:9001" = {}; };
     };
     recommendedProxySettings = true;
 
@@ -198,32 +200,7 @@ with rec {
     # it would just require adding "auth_request off" to the the location block
     # for /.well-known/acme-challenge to keep ACME stuff working.
     virtualHosts = {
-
-      "nextcloud.zoiks.net" = {
-        enableACME = true;
-        forceSSL = true;
-
-        extraConfig = ''
-          proxy_buffer_size 8k;
-        '';
-
-        locations."/" = {
-          proxyPass = "http://nextcloud/";
-          proxyWebsockets = true;
-          extraConfig = ''
-          '';
-        };
-
-        locations."/.well-known/carddav" = {
-          return = "301 $scheme://$host/remote.php/dav";
-        };
-
-        locations."/.well-known/caldav" = {
-          return = "301 $scheme://$host/remote.php/dav";
-        };
-      };
-
-      "nyanbox.zoiks.net" = let rootExtraConfig = config.services.nginx.virtualHosts."nyanbox.zoiks.net".locations."/".extraConfig; in {
+      "nyanbox.zoiks.net" = {
         default = true;  # this is the default vhost
         enableACME = true;
         forceSSL = true;
