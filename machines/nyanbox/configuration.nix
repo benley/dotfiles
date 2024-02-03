@@ -19,6 +19,7 @@ with rec {
     ./modules/keycloak.nix
     ./modules/nyanbox-backups.nix
     ./modules/netbox.nix
+    ./modules/oauth2_proxy.nix
     ./modules/paperless.nix
     ./modules/photoprism.nix
     ./modules/prometheus.nix
@@ -29,6 +30,7 @@ with rec {
   my.grafana.enable = true;
   my.keycloak.enable = true;
   my.netbox.enable = true;
+  my.oauth2_proxy.enable = true;
   my.paperless.enable = true;
   my.photoprism.enable = false;
   my.prometheus.enable = true;
@@ -313,45 +315,6 @@ with rec {
 
   nix.gc.automatic = true;
   nix.gc.options = "--delete-older-than 14d";
-
-  # TODO: consider separate proxy instances per service, in containers?
-  services.oauth2_proxy = {
-    enable = true;
-    email.domains = [ "*" ];
-    nginx.virtualHosts = [ "nyanbox.zoiks.net" ];
-    provider = "keycloak-oidc";
-    clientID = secrets.oauth2_proxy.clientID;
-    clientSecret = secrets.oauth2_proxy.clientSecret;
-    cookie.secret = secrets.oauth2_proxy.cookie.secret;
-    setXauthrequest = true;
-    extraConfig = {
-      cookie-domain = ".zoiks.net";
-      skip-provider-button = true;
-      whitelist-domain = ".zoiks.net";
-      set-authorization-header = true;
-      oidc-issuer-url = "https://nyanbox.zoiks.net/auth/realms/master";
-      #allowed-role = "foo";
-      allowed-group = "/proxy";
-      code-challenge-method = "S256";
-      # This should be covered by setXauthrequest (look up a level)
-      # set-xauthrequest = true;
-      # I don't think anything uses this, probably safe to disable:
-      pass-access-token = true;
-    };
-    scope = "openid email profile";
-  };
-
-  # https://gist.github.com/Clownfused/1144a4547fc428f7f690cd81b912ac74
-  systemd.services.oauth2_proxy = {
-    # oauth2_proxy won't start until keycloak is running
-    after = ["keycloak.service"];
-    wants = ["keycloak.service"];
-    # Don't give up trying to start oauth2_proxy, even if keycloak isn't up yet
-    startLimitIntervalSec = 0;
-    serviceConfig = {
-      RestartSec = 1;
-    };
-  };
 
   containers.minecraft = {
     config = import ./minecraft-container.nix;
