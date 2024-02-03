@@ -1,14 +1,5 @@
 { config, pkgs, lib, ... }:
 
-with rec {
-  node-exporter-textfile-collector-scripts = pkgs.fetchFromGitHub {
-    owner = "prometheus-community";
-    repo = "node-exporter-textfile-collector-scripts";
-    rev = "34dd42ee2cf5bf1ffcfdea5a3599130f146b88fc";
-    sha256 = "1vwhj6n4sh2ggigmhac8qzsai3mm020dpp5phwixvifi6jv57sid";
-  };
-};
-
 {
   imports = [
     ./hardware-configuration.nix
@@ -19,6 +10,7 @@ with rec {
     ./modules/nextcloud.nix
     ./modules/nyanbox-backups.nix
     ./modules/netbox.nix
+    ./modules/node-exporter.nix
     ./modules/oauth2_proxy.nix
     ./modules/paperless.nix
     ./modules/photoprism.nix
@@ -32,6 +24,7 @@ with rec {
   my.keycloak.enable = true;
   my.netbox.enable = true;
   my.nextcloud.enable = false;        # OFF
+  my.node-exporter.enable = true;
   my.nyanbox-backups.enable = false;  # OFF
   my.oauth2_proxy.enable = true;
   my.paperless.enable = true;
@@ -137,29 +130,10 @@ with rec {
   #   };
   # };
 
-  services.prometheus.exporters.node = {
-    enable = true;
-    extraFlags = [
-      "--collector.textfile.directory=/var/lib/node-exporter/textfile"
-      "--collector.filesystem.ignored-fs-types=^(sysfs|procfs|autofs|cgroup|devpts|nsfs|aufs|tmpfs|overlay|fuse|fuse\.lxc|mqueue)$"
-      "--collector.filesystem.ignored-mount-points=^(/rootfs|/host)?/(sys|proc|dev|host|etc)($|/)"
-
-    ];
-    disabledCollectors = [ "timex" ];
-    openFirewall = true;  # allow port 9100
-  };
-
   services.prometheus.exporters.blackbox = {
     enable = true;
     configFile = ./blackbox-exporter.yml;
   };
-
-  services.cron.systemCronJobs = [
-    ''
-      * * * * * root mkdir -p /var/lib/node-exporter/textfile; cd /var/lib/node-exporter/textfile; PATH=${pkgs.smartmontools}/bin:$PATH ${./smartmon-textfile.sh} | ${pkgs.moreutils}/bin/sponge smartmon.prom
-      * * * * * root mkdir -p /var/lib/node-exporter/textfile; ${pkgs.ipmitool}/bin/ipmitool sensor | ${pkgs.gawk}/bin/awk -f ${node-exporter-textfile-collector-scripts}/ipmitool | ${pkgs.moreutils}/bin/sponge /var/lib/node-exporter/textfile/ipmitool.prom
-    ''
-  ];
 
   services.smartd = {
     enable = true;
