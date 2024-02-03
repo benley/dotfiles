@@ -1,15 +1,11 @@
 { config, lib, pkgs, ... }:
 
-let
-  cfg = config.my.paperless;
- # TODO: stop using this dumb secrets hack
- secrets = import ../secrets.nix;
-in
-
+with lib;
+let cfg = config.my.paperless; in
 {
-  options.my.paperless.enable = lib.mkEnableOption "paperless-ngx";
+  options.my.paperless.enable = mkEnableOption "paperless-ngx";
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
 
     users.users.paperless-scanner = {
       group = "paperless";
@@ -54,8 +50,7 @@ in
         PAPERLESS_DATE_ORDER = "MDY";
         PAPERLESS_URL = "https://paperless.zoiks.net";
         PAPERLESS_ALLOWED_HOSTS = "paperless.zoiks.net,nyanbox.zoiks.net,localhost";
-        # PAPERLESS_CORS_ALLOWED_HOSTS = "https://paperless.zoiks.net,https://nyanbox.zoiks.net";
-        PAPERLESS_SECRET_KEY = secrets.paperless.secret_key;
+        # PAPERLESS_SECRET_KEY moved to /var/lib/paperless/nixos-paperless-secret-key
         PAPERLESS_TRUSTED_PROXIES = "127.0.0.1,192.168.7.24";
         PAPERLESS_ENABLE_HTTP_REMOTE_USER = true;
         PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME = "HTTP_X_USERNAME";
@@ -67,7 +62,7 @@ in
           invalidate_digital_signatures = true;
         };
         # https://github.com/NixOS/nixpkgs/issues/240591
-        LD_LIBRARY_PATH="${lib.getLib pkgs.mkl}/lib";
+        LD_LIBRARY_PATH="${getLib pkgs.mkl}/lib";
       };
     };
 
