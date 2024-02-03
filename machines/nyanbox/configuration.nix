@@ -21,6 +21,7 @@ with rec {
     ./modules/netbox.nix
     ./modules/paperless.nix
     ./modules/prometheus.nix
+    ./modules/transmission.nix
     ./modules/vaultwarden.nix
   ];
 
@@ -29,6 +30,7 @@ with rec {
   my.netbox.enable = true;
   my.paperless.enable = true;
   my.prometheus.enable = true;
+  my.transmission.enable = true;
   my.vaultwarden.enable = true;
 
   boot.loader.efi.canTouchEfiVariables = true;
@@ -44,12 +46,6 @@ with rec {
 
   networking.hostName = "nyanbox";
   networking.hostId = "007f0101";
-
-  networking.hosts = {
-    # This is the stupidest workaround
-    # See https://github.com/transmission/transmission/issues/407
-    "87.98.162.88" = ["portcheck.transmissionbt.com"];
-  };
 
   # Use a consistent ipv6 source address.  This way nginx can use ipv6
   # when reverse proxying to home-assistant, which needs a
@@ -92,7 +88,6 @@ with rec {
     enable = true;
     allowedTCPPorts = [
       80 443
-      54191 # Transmission peering
       139 445 # Samba
       25565 # minecraft
       27015 # factorio
@@ -101,7 +96,6 @@ with rec {
       67 68 # bootp
       137 138 # Samba
       34197 # Factorio
-      54191 # Transmission (does it actually use UDP here???)
     ];
     allowedUDPPortRanges = [
       # Allow all the upnp nonsense that's impossible to handle correctly
@@ -192,7 +186,6 @@ with rec {
     resolver.addresses = [ "127.0.0.1" ];
     # proxyResolveWhileRunning = true;
     upstreams = {
-      transmission.servers = { "127.0.0.1:9091" = {}; };
       home-assistant.servers = { "192.168.7.36:8123" = {}; };
       nextcloud.servers = { "192.168.7.181:9001" = {}; };
     };
@@ -250,48 +243,7 @@ with rec {
         locations."/" = {
           tryFiles = "$uri $uri/ =404";
         };
-
-        locations."/transmission/" = {
-          proxyPass = "http://transmission";  # no trailing /! I don't remember why.
-          extraConfig = rootExtraConfig + ''
-            proxy_pass_header X-Transmission-Session-Id;
-
-            proxy_set_header X-NginX-Proxy true;
-            proxy_http_version 1.1;
-            proxy_set_header Connection "";
-            proxy_pass_header X-Transmission-Session-Id;
-            # add_header   Front-End-Https   on;
-
-            location = /transmission/ {
-              return 301 /transmission/web/;
-            }
-            location = /transmission/web {
-              return 301 /transmission/web/;
-            }
-          '';
-        };
       };
-    };
-  };
-
-  services.transmission = {
-    enable = true;
-    settings = {
-      blocklist-enabled = true;
-      blocklist-url = "https://list.iblocklist.com/?list=bt_level1&fileformat=p2p&archiveformat=gz";
-      download-dir = "/z/downloads";
-      encryption = 2;  # Require encryption
-      incomplete-dir = "/z/downloads/incomplete";
-      peer-port = 54191;
-      peer-port-random-on-start = false;
-      port-forwarding-enabled = false;
-      ratio-limit = "1";
-      ratio-limit-enabled = true;
-      rpc-bind-address = "127.0.0.1";
-      rpc-host-whitelist-enabled = true;
-      rpc-host-whitelist = "nyanbox.zoiks.net";
-      speed-limit-up = 256;
-      speed-limit-up-enabled = true;
     };
   };
 
