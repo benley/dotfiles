@@ -4,6 +4,7 @@
   imports = [
     ./hardware-configuration.nix
     ../imports/defaults.nix
+    ./modules/factorio-server
     ./modules/grafana.nix
     ./modules/home-assistant.nix
     ./modules/keycloak.nix
@@ -19,6 +20,7 @@
     ./modules/vaultwarden.nix
   ];
 
+  my.factorio-server.enable = false;  # OFF
   my.grafana.enable = true;
   my.home-assistant.enable = true;
   my.keycloak.enable = true;
@@ -90,12 +92,10 @@
       80 443
       139 445 # Samba
       25565 # minecraft
-      27015 # factorio
     ];
     allowedUDPPorts = [
       67 68 # bootp
       137 138 # Samba
-      34197 # Factorio
     ];
     allowedUDPPortRanges = [
       # Allow all the upnp nonsense that's impossible to handle correctly
@@ -115,19 +115,6 @@
   #   volumes = ["hyperion-data:/var/lib/hyperion"];
   #   ports = ["8090:8090" "8092:8092" "19444:19444" "19400:19400" "19445:19445"];
   #   cmd = ["hyperiond" "-u" "/var/lib/hyperion" "-v"];
-  # };
-
-  # virtualisation.oci-containers.containers.factorio = {
-  #   image = "factoriotools/factorio:1.1.76";
-  #   volumes = ["/var/lib/factorio:/factorio"];
-  #   ports = ["34197:34197/udp" "27015:27015/tcp"];
-  #   environment = {
-  #     SAVE_NAME = "space exploration 0.6";
-  #     LOAD_LATEST_SAVE = "false";
-  #     USERNAME = "benley";
-  #     TOKEN = builtins.readFile ./factorio-token.txt;
-  #     UPDATE_MODS_ON_START = "false";
-  #   };
   # };
 
   services.prometheus.exporters.blackbox = {
