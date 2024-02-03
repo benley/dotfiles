@@ -111,12 +111,12 @@ with rec {
 
   virtualisation.docker.enable = true;
 
-  virtualisation.oci-containers.containers.hyperion = {
-    image = "hyperion:2.0.12";
-    volumes = ["hyperion-data:/var/lib/hyperion"];
-    ports = ["8090:8090" "8092:8092" "19444:19444" "19400:19400" "19445:19445"];
-    cmd = ["hyperiond" "-u" "/var/lib/hyperion" "-v"];
-  };
+  # virtualisation.oci-containers.containers.hyperion = {
+  #   image = "hyperion:2.0.12";
+  #   volumes = ["hyperion-data:/var/lib/hyperion"];
+  #   ports = ["8090:8090" "8092:8092" "19444:19444" "19400:19400" "19445:19445"];
+  #   cmd = ["hyperiond" "-u" "/var/lib/hyperion" "-v"];
+  # };
 
   # virtualisation.oci-containers.containers.factorio = {
   #   image = "factoriotools/factorio:1.1.76";
