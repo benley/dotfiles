@@ -1,8 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with rec {
-  secrets = import ./secrets.nix;
-
   node-exporter-textfile-collector-scripts = pkgs.fetchFromGitHub {
     owner = "prometheus-community";
     repo = "node-exporter-textfile-collector-scripts";
@@ -16,6 +14,7 @@ with rec {
     ./hardware-configuration.nix
     ../imports/defaults.nix
     ./modules/grafana.nix
+    ./modules/home-assistant.nix
     ./modules/keycloak.nix
     ./modules/nyanbox-backups.nix
     ./modules/netbox.nix
@@ -28,6 +27,7 @@ with rec {
   ];
 
   my.grafana.enable = true;
+  my.home-assistant.enable = true;
   my.keycloak.enable = true;
   my.netbox.enable = true;
   my.oauth2_proxy.enable = true;
@@ -188,7 +188,6 @@ with rec {
     resolver.addresses = [ "127.0.0.1" ];
     # proxyResolveWhileRunning = true;
     upstreams = {
-      home-assistant.servers = { "192.168.7.36:8123" = {}; };
       nextcloud.servers = { "192.168.7.181:9001" = {}; };
     };
     recommendedProxySettings = true;
@@ -199,15 +198,6 @@ with rec {
     # it would just require adding "auth_request off" to the the location block
     # for /.well-known/acme-challenge to keep ACME stuff working.
     virtualHosts = {
-
-      "hass.zoiks.net" = {
-        enableACME = true;
-        forceSSL = true;
-        locations."/" = {
-          proxyPass = "http://home-assistant";
-          proxyWebsockets = true;
-        };
-      };
 
       "nextcloud.zoiks.net" = {
         enableACME = true;
@@ -259,6 +249,8 @@ with rec {
     # Broken?
     # syncPasswordsByPam = true;
 
+    # reminder: shares can be defined in other modules, like home-assistant.nix
+
     shares.scratch = {
       path = "/zfs/nyanbox/scratch";
       "read only" = false;
@@ -289,11 +281,6 @@ with rec {
 
     shares.backup = {
       path = "/zfs/nyanbox/backup";
-      "read only" = false;
-    };
-
-    shares.hass_backup = {
-      path = "/zfs/nyanbox/backup/hass";
       "read only" = false;
     };
 
@@ -344,11 +331,5 @@ with rec {
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
     "net.ipv6.conf.all.forwarding" = 1;
-  };
-
-  users.groups.hass = {};
-  users.users.hass = {
-    isSystemUser = true;
-    group = "hass";
   };
 }
