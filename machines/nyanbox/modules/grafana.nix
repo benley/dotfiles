@@ -1,13 +1,11 @@
 { config, lib, pkgs, ... }:
 
-let
-  cfg = config.my.grafana;
-  secrets = import ../secrets.nix;
-in
+with lib;
+let cfg = config.my.grafana; in
 {
-  options.my.grafana.enable = lib.mkEnableOption "grafana";
+  options.my.grafana.enable = mkEnableOption "grafana";
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
 
     services.nginx = {
       upstreams.grafana.servers = { "127.0.0.1:3000" = {}; };
@@ -36,8 +34,8 @@ in
           enabled = true;
           name = "Keycloak";
           allow_sign_up = true;
-          client_id = secrets.grafana.oauth_client_id;
-          client_secret = secrets.grafana.oauth_client_secret;
+          client_id = "grafana";
+          client_secret = "$__file{/var/lib/grafana/.secrets/oauth_client_secret}";
           scopes = "openid email profile offline_access roles";
           auth_url = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/auth";
           token_url = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/token";
