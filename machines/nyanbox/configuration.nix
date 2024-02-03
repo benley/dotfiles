@@ -85,8 +85,6 @@ with rec {
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [
-      1883 # mqtt
-      9234 # mosquitto-exporter
       9090 # Prometheus
       80 443
       54191 # Transmission peering
