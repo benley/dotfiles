@@ -8,6 +8,7 @@
     ./modules/grafana.nix
     ./modules/home-assistant.nix
     ./modules/keycloak.nix
+    ./modules/minecraft-server
     ./modules/netbox.nix
     ./modules/nextcloud.nix
     ./modules/node-exporter.nix
@@ -24,6 +25,7 @@
   my.grafana.enable = true;
   my.home-assistant.enable = true;
   my.keycloak.enable = true;
+  my.minecraft-server.enable = false; # OFF
   my.netbox.enable = true;
   my.nextcloud.enable = false;        # OFF
   my.node-exporter.enable = true;
@@ -90,7 +92,6 @@
     allowedTCPPorts = [
       80 443
       139 445 # Samba
-      25565 # minecraft
     ];
     allowedUDPPorts = [
       67 68 # bootp
@@ -232,18 +233,7 @@
   nix.gc.automatic = true;
   nix.gc.options = "--delete-older-than 14d";
 
-  containers.minecraft = {
-    config = import ./minecraft-container.nix;
-    autoStart = false;
-    bindMounts = {
-      "/var/lib/minecraft" = {
-        hostPath = "/var/lib/minecraft";
-        isReadOnly = false;
-      };
-    };
-    forwardPorts = [ { containerPort = 25565; hostPort = 25565; protocol = "tcp"; } ];
-  };
-
+  # Enable outbound NAT from nixos containers
   networking.nat = {
     enable = true;
     internalInterfaces = ["ve-+"];
@@ -252,7 +242,6 @@
   };
 
   environment.systemPackages = with pkgs; [
-    mcrcon   # minecraft server admin tool
     mbuffer  # for remote znapzend senders
   ];
 
