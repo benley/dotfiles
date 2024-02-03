@@ -15,6 +15,7 @@ with rec {
   imports = [
     ./hardware-configuration.nix
     ../imports/defaults.nix
+    ./modules/grafana.nix
     ./modules/keycloak.nix
     ./modules/nyanbox-backups.nix
     ./modules/netbox.nix
@@ -22,6 +23,7 @@ with rec {
     ./modules/vaultwarden.nix
   ];
 
+  my.grafana.enable = true;
   my.keycloak.enable = true;
   my.netbox.enable = true;
   my.paperless.enable = true;
@@ -279,37 +281,6 @@ with rec {
 
   # services.code-server.enable = true;
 
-  services.grafana = {
-    enable = true;
-    settings = {
-      auth = {
-        disable_login_form = true;
-        signout_redirect_url = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/logout";
-      };
-      "auth" = {
-        # Disable this after upgrading to grafana 10, I think?
-        oauth_allow_insecure_email_lookup = true;
-      };
-      "auth.generic_oauth" = {
-        auto_login = true;
-        enabled = true;
-        name = "Keycloak";
-        allow_sign_up = true;
-        client_id = secrets.grafana.oauth_client_id;
-        client_secret = secrets.grafana.oauth_client_secret;
-        scopes = "openid email profile offline_access roles";
-        auth_url = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/auth";
-        token_url = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/token";
-        api_url = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/userinfo";
-        role_attribute_path = "contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'editor') && 'Editor' || 'Viewer'";
-        email_attribute_path = "email";
-        login_attribute_path = "preferred_username";
-        name_attribute_path = "name";
-      };
-      server.root_url = "https://nyanbox.zoiks.net/grafana";
-    };
-  };
-
   security.acme.defaults.email = "benley@zoiks.net";
   security.acme.acceptTerms = true;
 
@@ -327,7 +298,6 @@ with rec {
     # proxyResolveWhileRunning = true;
     upstreams = {
       prometheus.servers = { "127.0.0.1:9090" = {}; };
-      grafana.servers = { "127.0.0.1:3000" = {}; };
       transmission.servers = { "127.0.0.1:9091" = {}; };
       home-assistant.servers = { "192.168.7.36:8123" = {}; };
       nextcloud.servers = { "192.168.7.181:9001" = {}; };
@@ -389,11 +359,6 @@ with rec {
 
         locations."/prometheus/" = {
           proxyPass = "http://prometheus/";
-          extraConfig = rootExtraConfig;
-        };
-
-        locations."/grafana/" = {
-          proxyPass = "http://grafana/";
           extraConfig = rootExtraConfig;
         };
 
