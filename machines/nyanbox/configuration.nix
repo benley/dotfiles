@@ -170,8 +170,6 @@ with rec {
     ];
   };
 
-  # services.code-server.enable = true;
-
   security.acme.defaults.email = "benley@zoiks.net";
   security.acme.acceptTerms = true;
 
@@ -378,22 +376,6 @@ with rec {
     mcrcon
     mbuffer
   ];
-
-  # services.factorio = {
-  #   enable = true;
-  #   mods = [];
-  #   saveName = "IndustrialRevolution";
-  #   game-password = "...";
-  # };
-
-  # services.kubernetes = {
-  #   roles = [ "master" "node" ];
-  #   masterAddress = "nyanbox";
-  #   kubelet.extraOpts = "--fail-swap-on=false";
-  #   apiserver.allowPrivileged = true;
-  #   apiserver.serviceClusterIpRange = "10.2.2.0/23";
-  #   controllerManager.extraOpts = "--terminated-pod-gc-threshold=200";
-  # };
 
   services.tailscale.enable = true;
   boot.kernel.sysctl = {
