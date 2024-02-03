@@ -1,9 +1,6 @@
 { config, lib, pkgs, ... }:
 
-let
-  cfg = config.my.prometheus;
-  secrets = import ../secrets.nix;
-in
+let cfg = config.my.prometheus; in
 {
   options.my.prometheus.enable = lib.mkEnableOption "prometheus";
 
@@ -21,11 +18,15 @@ in
 
     services.prometheus = {
       enable = true;
+      # Can't set this to true while using external credential files
+      checkConfig = "syntax-only";
+
       globalConfig = {
         scrape_interval = "15s";
         evaluation_interval = "15s";
         scrape_timeout = "10s";
       };
+
       scrapeConfigs = [
         {
           job_name = "prometheus";
@@ -53,7 +54,7 @@ in
           job_name = "hass";
           scrape_interval = "15s";
           metrics_path = "/api/prometheus";
-          bearer_token = secrets.hass_bearer_token;
+          bearer_token_file = "/var/lib/prometheus2/.hass_bearer_token";
           static_configs = [{
             targets = ["192.168.7.36:8123"];
           }];
