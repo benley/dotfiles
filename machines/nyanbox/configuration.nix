@@ -19,11 +19,13 @@ with rec {
     ./modules/nyanbox-backups.nix
     ./modules/netbox.nix
     ./modules/paperless.nix
+    ./modules/vaultwarden.nix
   ];
 
   my.keycloak.enable = true;
   my.netbox.enable = true;
   my.paperless.enable = true;
+  my.vaultwarden.enable = true;
 
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efis/nvme0n1p2";
@@ -329,8 +331,6 @@ with rec {
       transmission.servers = { "127.0.0.1:9091" = {}; };
       home-assistant.servers = { "192.168.7.36:8123" = {}; };
       nextcloud.servers = { "192.168.7.181:9001" = {}; };
-      vaultwarden.servers = { "127.0.0.1:8066" = {}; };
-      vaultwarden-ws.servers = { "127.0.0.1:3012" = {}; };
     };
     recommendedProxySettings = true;
 
@@ -415,24 +415,6 @@ with rec {
               return 301 /transmission/web/;
             }
           '';
-        };
-
-        locations."/vault/" = {
-          proxyPass = "http://vaultwarden/vault/";
-          proxyWebsockets = true;
-        };
-        locations."/vault/admin" = {
-          proxyPass = "http://vaultwarden/vault/admin";
-          proxyWebsockets = true;
-          extraConfig = rootExtraConfig;
-        };
-        locations."/vault/notifications/hub/negotiate" = {
-          proxyPass = "http://vaultwarden-ws/vault/";
-          proxyWebsockets = true;
-        };
-        locations."/vault/notifications/hub" = {
-          proxyPass = "http://vaultwarden-ws/vault/";
-          proxyWebsockets = true;
         };
       };
     };
@@ -660,19 +642,5 @@ with rec {
   users.users.hass = {
     isSystemUser = true;
     group = "hass";
-  };
-
-  # TODO: maybe give vaultwarden its own zfs dataset?
-  # TODO: sqlite -> postgres/mysql?
-  services.vaultwarden = {
-    enable = true;
-    # dbBackend = "mysql";
-    environmentFile = "/var/lib/bitwarden_rs/vaultwarden.env";
-    config = {
-      SIGNUPS_ALLOWED = false;
-      ROCKET_PORT = 8066;
-      DOMAIN = "https://nyanbox.zoiks.net/vault";
-      WEBSOCKET_ENABLED = true;
-    };
   };
 }
