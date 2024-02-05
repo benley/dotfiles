@@ -14,11 +14,12 @@ let cfg = config.my.factorio-server; in
       image = "factoriotools/factorio:1.1.76";
       volumes = ["/var/lib/factorio:/factorio"];
       ports = ["34197:34197/udp" "27015:27015/tcp"];
+      environmentFiles = ["/var/lib/factorio/.factorio.env"];
       environment = {
         SAVE_NAME = "space exploration 0.6";
         LOAD_LATEST_SAVE = "false";
         USERNAME = "benley";
-        TOKEN = builtins.readFile ./factorio-token.txt;
+        # TOKEN = # moved to env file
         UPDATE_MODS_ON_START = "false";
       };
     };
