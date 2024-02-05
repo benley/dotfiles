@@ -5,7 +5,7 @@ let cfg = config.my.minecraft-server; in
 {
   options.my.minecraft-server.enable = mkEnableOption "Minecraft server";
 
-  config = mkIf cfg.enable; {
+  config = mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.mcrcon ];
 
