@@ -54,6 +54,10 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+(use-package! frame
+  :config
+  (setq window-divider-default-right-width 5))
+
 (use-package! evil
   :config
   ;; h, l, left/right and a few other things can cross line endings
