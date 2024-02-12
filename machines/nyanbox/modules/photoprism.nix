@@ -1,13 +1,13 @@
 { config, lib, pkgs, ... }:
 
-let
-  cfg = config.my.photoprism;
-in
 with lib;
+let cfg = config.my.photoprism; in
 {
   options.my.photoprism = {
     enable = mkEnableOption "photoprism";
   };
+
+  # This config is NOT IN USE YET and HAS NOT BEEN TESTED
 
   config = mkIf cfg.enable {
     containers.photoprism = {
@@ -21,8 +21,10 @@ with lib;
           isReadOnly = false;
         };
       };
+
       config = { config, pkgs, ... }: {
         system.stateVersion = "23.11";
+
         services.mysql = {
           enable = true;
           dataDir = "/var/lib/mysql";
@@ -35,6 +37,7 @@ with lib;
             };
           }];
         };
+
         services.photoprism = {
           enable = true;
           address = "0.0.0.0";
