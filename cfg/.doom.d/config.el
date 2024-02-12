@@ -74,6 +74,8 @@
   :config
   (setq undo-fu-ignore-keyboard-quit t))
 
+(use-package! udev-mode)
+
 (use-package! atomic-chrome
   :defer 1
 

@@ -65,3 +65,4 @@
 (package! nginx-mode)
 (package! org-roam-ui)
 (package! puppet-mode)
+(package! udev-mode)
