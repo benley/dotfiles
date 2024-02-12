@@ -136,28 +136,9 @@
   };
 
   environment.variables = {
-    XCURSOR_SIZE = "64";
-    XCURSOR_THEME = "breeze_cursors";
-
     # Enable GTK applications to load SVG icons
     GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
-
-    # Redundant when programs.qt5ct.enable == true
-    # QT_QPA_PLATFORMTHEME = "qt5ct";
-
-    # QT_FONT_DPI = toString (config.services.xserver.dpi / 2);
-    # QT_SCALE_FACTOR = "2.0";
-    # QT_AUTO_SCREEN_SCALE_FACTOR = "0";
-
-    # gtk3 is too dumb to notice the 240dpi display, so force it to scale
-    # GDK_SCALE = "2";
-
-    # ... but freetype sure as heck notices, so now we compensate for that
-    # GDK_DPI_SCALE = "0.5";
   };
-
-  # Redundant I think?  Enabled with gnome by default.
-  # services.gnome.at-spi2-core.enable = true;
 
   networking.networkmanager.enable = true;
   networking.networkmanager.unmanaged = [
@@ -165,51 +146,13 @@
     "interface-name:veth*"
   ];
 
-  # This would enable CUPS, which I don't seem to actually use
-  # services.printing.enable = true;
+  services.printing.enable = true;
 
   services.xserver = {
     enable = true;
     updateDbusEnvironment = true;
-
-    desktopManager.gnome = {
-      enable = true;
-      extraGSettingsOverridePackages = [ pkgs.gnome3.mutter ];
-      extraGSettingsOverrides = ''
-        [org.gnome.mutter]
-        experimental-features=['scale-monitor-framebuffer']
-
-        [org.gnome.desktop.interface]
-        text-scaling-factor='1.37'
-      '';
-    };
-
+    desktopManager.gnome.enable = true;
     displayManager.gdm.enable = true;
-
-    # Commands to run just before starting my window manager:
-    displayManager.sessionCommands = lib.concatStringsSep "\n" [
-      # status-notifier-watcher needs to be up and running before any
-      # apps try to create indicator icons, and before taffybar goes looking for it
-      # "${pkgs.haskellPackages.status-notifier-item}/bin/status-notifier-watcher &"
-      # "${pkgs.plasma5.polkit-kde-agent}/lib/libexec/polkit-kde-authentication-agent-1 &"
-      # "xsetroot -cursor_name left_ptr"
-      # "${pkgs.insync}/bin/insync start &"
-      # "${pkgs.dropbox-cli}/bin/dropbox start &"
-      # "${pkgs.taffybar}/bin/taffybar &"
-      # "${pkgs.networkmanagerapplet}/bin/nm-applet --indicator &"
-      # "${pkgs.networkmanagerapplet}/bin/nm-applet &"
-      # "${pkgs.pasystray}/bin/pasystray -a &"
-      # "${pkgs.blueman}/bin/blueman-applet &"
-      # "${pkgs.kupfer}/bin/kupfer --no-splash &"
-      # "${pkgs.battery-monitor}/bin/battery-monitor &"
-      # "${pkgs.udiskie}/bin/udiskie --tray --notify --no-automount &"
-      # "setxkbmap"  # is this still necessary?
-    ];
-    # windowManager.xmonad.enable = true;
-    # windowManager.xmonad.enableContribAndExtras = true;
-    # windowManager.xmonad.extraPackages = haskellPackages: [
-    #   haskellPackages.taffybar
-    # ];
   };
 
   hardware.opengl.enable = true;
@@ -231,16 +174,6 @@
   };
 
   programs.gnome-terminal.enable = true;  # omfg how is this not the default with gnome
-
-  services.upower.enable = true;
-
-  services.dbus.packages = with pkgs; [
-    # gnome3.dconf  # redundant
-    # blueman       # I don't think I'm using this (gnome has its own bluetooth applet and stuff)
-  ];
-
-  # Removed in the next release after 20.09
-  # services.dbus.socketActivated = true;
 
   # Probably don't want this on headless machines, but workstations/laptops
   # sure. This makes sure that things like my user dbus session don't persist
