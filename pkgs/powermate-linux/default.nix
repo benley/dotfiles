@@ -1,4 +1,4 @@
-{ stdenv, libpulseaudio, pkgconfig, libnotify, gdk-pixbuf, fetchFromGitHub }:
+{ stdenv, libpulseaudio, pkg-config, libnotify, gdk-pixbuf, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "powermate-linux-0.5+git2018-02-16";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libpulseaudio
-    pkgconfig
+    pkg-config
     libnotify
     gdk-pixbuf
   ];
