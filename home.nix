@@ -60,6 +60,7 @@
     nodePackages.jshint
     nodePackages.pyright
     pandoc
+    pdfarranger
     # python-language-server  # unmaintained??
     ripgrep
     shellcheck
@@ -69,6 +70,7 @@
     stern
     tanka
     whois
+    xournalpp
   ];
 
   programs.bash = {
