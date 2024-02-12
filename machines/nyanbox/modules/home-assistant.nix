@@ -29,5 +29,28 @@ let cfg = config.my.home-assistant; in
       isSystemUser = true;
       group = "hass";
     };
+
+    services.prometheus = {
+      rules = [
+        (builtins.toJSON {
+          groups = [{
+            name = "hass";
+            rules = [{
+              record = "entity:hass_sensor_energy_kwh:avg_over_time_10m";
+              expr = "avg_over_time(hass_sensor_energy_kwh[10m])";
+            }];
+          }];
+        })
+      ];
+      scrapeConfigs = [{
+        job_name = "hass";
+        scrape_interval = "15s";
+        metrics_path = "/api/prometheus";
+        bearer_token_file = "/var/lib/prometheus2/.hass_bearer_token";
+        static_configs = [{
+          targets = ["192.168.7.36:8123"];
+        }];
+      }];
+    };
   };
 }

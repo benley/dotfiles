@@ -40,7 +40,7 @@ let cfg = config.my.prometheus; in
             targets = [
               "192.168.7.24:9100"  # nyanbox
               "192.168.7.36:9100"  # ditto / homeassistant
-              "pve0.zoiks.net:9100"
+              # "pve0.zoiks.net:9100"
             ];
           }];
         }
@@ -48,15 +48,6 @@ let cfg = config.my.prometheus; in
           job_name = "grafana";
           static_configs = [{
             targets = ["localhost:3000"];
-          }];
-        }
-        {
-          job_name = "hass";
-          scrape_interval = "15s";
-          metrics_path = "/api/prometheus";
-          bearer_token_file = "/var/lib/prometheus2/.hass_bearer_token";
-          static_configs = [{
-            targets = ["192.168.7.36:8123"];
           }];
         }
         {
@@ -117,7 +108,6 @@ let cfg = config.my.prometheus; in
       ];
       ruleFiles = [
         ../prometheus-node-rules.yml
-        ../hass-rules.yml
       ];
       extraFlags = [
         "--storage.tsdb.retention=30d"
@@ -125,6 +115,5 @@ let cfg = config.my.prometheus; in
       ];
       webExternalUrl = "https://nyanbox.zoiks.net/prometheus";
     };
-
   };
 }

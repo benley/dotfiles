@@ -1,5 +1,0 @@
-groups:
-- name: hass
-  rules:
-  - record: entity:hass_sensor_energy_kwh:avg_over_time_10m
-    expr: avg_over_time(hass_sensor_energy_kwh[10m])
