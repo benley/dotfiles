@@ -10,7 +10,6 @@
     # These have on/off toggles, so including them does not
     # automatically enable anything
     ../../modules/dunst.nix
-    ../../modules/fancontrol.nix
     ../../modules/powermate.nix
     ../../modules/mosquitto-exporter.nix
   ];
