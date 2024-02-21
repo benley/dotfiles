@@ -43,6 +43,13 @@ let cfg = config.my.vaultwarden; in
         ROCKET_PORT = 8066;
         DOMAIN = "https://nyanbox.zoiks.net/vault";
         WEBSOCKET_ENABLED = true;
+
+        SMTP_HOST = "smtp.sendgrid.net";
+        SMTP_SECURITY = "starttls";
+        SMTP_SSL = true;
+        SMTP_FROM = "vaultwarden@zoiks.net";
+        SMTP_FROM_NAME = "zoiks.net Vaultwarden server";
+        SMTP_USERNAME = "apikey";
       };
     };
 
