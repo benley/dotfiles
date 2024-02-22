@@ -151,7 +151,12 @@
     enable = true;
     resolver.addresses = [ "127.0.0.1" ];
     # proxyResolveWhileRunning = true;
+    recommendedBrotliSettings = true;
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
     recommendedProxySettings = true;
+    recommendedTlsSettings = true;
+    recommendedZstdSettings = true;
 
     # TODO: in theory the stuff that oauth2_proxy puts in the root extraConfig
     # could actually go in the outer nginx "server" section, and then I
