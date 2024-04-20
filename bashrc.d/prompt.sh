@@ -73,17 +73,12 @@ __prompt_command() {
   # Current virtualenv name (if any), then the final $
   after+="${venvprompt}─> \\$ "
 
-  # Directory tracking for emacs-libvterm (needs to be at the end, after all visible parts)
-  if [[ $INSIDE_EMACS == "vterm" ]]; then
-    after+="\[\$(vterm_prompt_end)\]"
-  fi
-
   GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWCOLORHINTS=1 GIT_PS1_DESCRIBE_STYLE=branch \
     __git_ps1 "$before" "$after" "$git_status_fmt"
 }
 
 case $TERM in
-  xterm*)
+  xterm*|screen*)
     PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND%;};}__prompt_command"
     ;;
   *)
@@ -91,3 +86,9 @@ case $TERM in
     PS1='\u@\h:\w\$ '
     ;;
 esac
+
+if [[ "$INSIDE_EMACS" = 'vterm' ]] \
+    && [[ -n $EMACS_VTERM_PATH ]] \
+    && [[ -f $EMACS_VTERM_PATH/etc/emacs-vterm-bash.sh ]]; then
+  source "$EMACS_VTERM_PATH/etc/emacs-vterm-bash.sh"
+fi
