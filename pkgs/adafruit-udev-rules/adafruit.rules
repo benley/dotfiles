@@ -1,4 +1,7 @@
 
+# M5stack Atom Echo
+SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", TAG+="uaccess"
+
 # Make Trinket/Pro Trinket/Gemma/Flora programmable without running Arduino as root.
 # SUBSYSTEM=="usb", ATTRS{idProduct}=="0c9f", ATTRS{idVendor}=="1781", MODE="0660", GROUP="dialout"
 
