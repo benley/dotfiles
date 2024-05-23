@@ -61,18 +61,6 @@ with { callPackage = super.callPackage; };
 
   # yaml2json = callPackage ../pkgs/yaml2json { };
 
-  git-credential-libsecret = super.git.overrideAttrs (x: rec {
-    name = "git-credential-libsecret-${self.lib.getVersion super.git.name}";
-    buildInputs = with self; [ pkgconfig glib libsecret ];
-    buildPhase = ''
-      make -C contrib/credential/libsecret
-    '';
-    installPhase = ''
-      mkdir -p $out/bin
-      mv contrib/credential/libsecret/git-credential-libsecret $out/bin/
-    '';
-  });
-
   haskellPackages = let pkgs = super; in super.haskellPackages.override {
     overrides = self: super: {
       taffybar-plugins = self.callPackage ../pkgs/taffybar-plugins {};
