@@ -23,7 +23,6 @@
   home.stateVersion = "20.09";
 
   home.packages = with pkgs; [
-    authy
     # azure-cli
     # mu  # maildir thing to use with emacs mh maybe?
     # sshuttle
