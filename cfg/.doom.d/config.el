@@ -144,3 +144,6 @@
 
 (after! tramp-sh
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+
+;; font filename workaround https://github.com/doomemacs/doomemacs/issues/7431#issuecomment-1722663411
+(setq nerd-icons-font-names '("SymbolsNerdFontMono-Regular.ttf"))

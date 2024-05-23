@@ -3,7 +3,7 @@
 let localFonts = pkgs.callPackage "/home/benley/benley@gmail.com/Fonts" {}; in
 
 {
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     localFonts.pragmataPro
     corefonts
     anonymousPro
@@ -33,7 +33,7 @@ let localFonts = pkgs.callPackage "/home/benley/benley@gmail.com/Fonts" {}; in
     # monoid  # broken?
     mononoki
     montserrat
-    # nerdfonts  # This is like 6,000 fonts and 3+ gigabytes, seriously
+    (nerdfonts.override { fonts = ["NerdFontsSymbolsOnly"]; })
     noto-fonts
     noto-fonts-emoji
     oxygenfonts
@@ -53,9 +53,6 @@ let localFonts = pkgs.callPackage "/home/benley/benley@gmail.com/Fonts" {}; in
     # vistafonts  # broken?
   ];
 
-  # Seems like penultimate.enable may break emoji support somehow?
-  # https://github.com/NixOS/nixpkgs/issues/53139
-  # fonts.fontconfig.penultimate.enable = false;
   fonts.fontconfig.defaultFonts = {
     monospace = [ "Cousine" ];
     sansSerif = [ "Noto Sans" ];
