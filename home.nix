@@ -25,8 +25,6 @@
   home.packages = with pkgs; [
     # azure-cli
     # mu  # maildir thing to use with emacs mh maybe?
-    # sshuttle
-    # yq  # build broken 2022-04-08
     awscli2
     blackbox
     cabal-install
@@ -50,8 +48,6 @@
     kube3d
     kubectl
     kubelogin-oidc
-    # kubernetes-helm
-    lastpass-cli
     nixfmt
     nix-top
     nodePackages.bash-language-server
@@ -60,7 +56,7 @@
     nodePackages.pyright
     pandoc
     pdfarranger
-    # python-language-server  # unmaintained??
+    rbw
     ripgrep
     shellcheck
     sqlite  # org-roam uses this
@@ -70,6 +66,7 @@
     tanka
     whois
     xournalpp
+    yq
   ];
 
   gtk.enable = true;
