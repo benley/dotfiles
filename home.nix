@@ -72,6 +72,16 @@
     xournalpp
   ];
 
+  gtk.enable = true;
+  gtk.cursorTheme.name = "Nordic-cursors";
+  gtk.cursorTheme.package = pkgs.nordic;
+  gtk.iconTheme.name = "Nordic";
+  gtk.iconTheme.package = pkgs.nordic;
+  gtk.theme.name = "Nordic";
+  gtk.theme.package = pkgs.nordic;
+  # gtk.font.name = "Noto Sans Condensed";
+  # gtk.font.size = 10;
+
   programs.bash = {
     enable = true;
     enableVteIntegration = true;
