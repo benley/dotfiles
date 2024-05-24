@@ -30,9 +30,11 @@
     cabal-install
     cabal2nix
     cachix
+    fd  # used by doom emacs (project file search)
     ctags
     curlie
     diffstat  # tanka wants this (TODO: fix upstream)
+    editorconfig-core-c
     fd  # emacs projectile uses this
     gh
     go
@@ -152,7 +154,7 @@
   programs.git = {
     enable = true;
     userName = "Benjamin Staffin";
-    userEmail = "bstaffin@singlestore.com";
+    userEmail = "benley@gmail.com";
 
     aliases = {
       st = "status";
@@ -197,7 +199,6 @@
   programs.tmux = {
     enable = true;
     aggressiveResize = true;
-    # terminal = "tmux-24bit";
     historyLimit = 50000;
     keyMode = "vi";
     plugins = [
@@ -239,20 +240,6 @@
       set -ga terminal-overrides ',screen*:XT:Ms=\E]52;%p1%s;%p2%s\007'
     '';
   };
-
-  xresources.properties = {
-    "Xft.dpi" = 144;
-  };
-
-  # xsession.enable = true;
-  # xsession.preferStatusNotifierItems = true;
-
-  # xsession.windowManager.xmonad = {
-  #   enable = true;
-  #   enableContribAndExtras = true;
-  # };
-
-  # services.taffybar.enable = true;
 
   programs.readline = {
     enable = true;
