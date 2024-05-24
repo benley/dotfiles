@@ -15,6 +15,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot.loader.systemd-boot.configurationLimit = 10;
 
   networking.hostName = "alnilam";
   networking.hostId = "6a9e86d2";
@@ -30,8 +31,6 @@
     MulticastDNS=true
   '';
 
-  services.avahi.nssmdns = false;
-
   services.xserver = {
     enable = true;
     libinput.enable = true;
@@ -41,9 +40,7 @@
 
     dpi = 144;  # gnome3 seems to completely ignore this
 
-    xkbOptions = lib.concatStringsSep "," [
-      "ctrl:nocaps"
-    ];
+    xkb.options = "ctrl:nocaps";
   };
 
   hardware.opengl = {
@@ -63,6 +60,9 @@
   hardware.cpu.intel.updateMicrocode = true;
 
   virtualisation.docker.enable = true;
+  # live restore is incompatible with docker swarm, which I need for some weird
+  # test suites.
+  virtualisation.docker.liveRestore = false;
 
   # evdev:atkbd:... modalias string comes from `evemu-describe /dev/input/event0`
   # (it comes from DMI data, you can probably also find it with `cat /sys/class/dmi/id/modalias`)
@@ -99,7 +99,7 @@
   home-manager.useUserPackages = true;
   home-manager.users.bstaffin = import ../../home.nix;
 
-  nix.trustedUsers = [ "bstaffin" ];
+  nix.settings.trusted-users = [ "bstaffin" ];
 
   # programs.sway.enable = true;
 
@@ -113,8 +113,10 @@
   environment.systemPackages = with pkgs; [
     arcanist
     openldap
+    terraform-ls
     virt-manager
     (pkgs.callPackage /home/bstaffin/m/provisioning {})
+    virtiofsd
   ];
 
   services.openssh.enable = true;

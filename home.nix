@@ -71,6 +71,12 @@
     yq
   ];
 
+  dconf.settings = {
+    "org/gnome/mutter" = {
+      "experimental-features" = ["scale-monitor-framebuffer"];
+    };
+  };
+
   gtk.enable = true;
   gtk.cursorTheme.name = "Nordic-cursors";
   gtk.cursorTheme.package = pkgs.nordic;
@@ -191,6 +197,10 @@
       # http.saveCookies = true;
 
       diff.blackbox.textconv = "gpg --use-agent -q --batch --decrypt";
+
+      url."git@gitlab.com:" = {
+        insteadOf = "https://gitlab.com/";
+      };
     };
 
     includes = [{path = "~/.config/git/secret-stuff.config";}];

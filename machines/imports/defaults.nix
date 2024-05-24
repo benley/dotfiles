@@ -37,24 +37,12 @@
   programs.iftop.enable = true;
   programs.mtr.enable = true;
 
-  # Most of my tmux config is in home.nix
-  programs.tmux.enable = true;
-
-  # this can go in my homedir
-  #programs.ssh.extraConfig = readFile ../../cfg/.ssh/config;
-
   services.openssh.settings.X11Forwarding = true;
   services.openssh.settings.PasswordAuthentication = false;
-
-  # services.emacs.defaultEditor = true;
-  # services.emacs.install = true;
-  # services.emacs.package = lib.mkDefault pkgs.basicEmacs;
 
   programs.nano.enable = false;
 
   environment.systemPackages = with pkgs; [
-    # eless
-    # nix-home
     acpi
     binutils # strings, strip, ar, as, ...
     bc
@@ -65,7 +53,6 @@
     git
     gnupg
     htop
-    httpie
     iotop
     iw
     jq
@@ -108,15 +95,6 @@
   services.xserver.exportConfiguration = true;
   services.xserver.enableCtrlAltBackspace = false;
   services.xserver.xkb.layout = "us";
-
-  services.avahi = {
-    enable = true;
-    ipv4 = true;
-    ipv6 = true;
-    nssmdns4 = lib.mkDefault true;
-    publish.enable = lib.mkDefault true;
-    publish.addresses = lib.mkDefault true;
-  };
 
   services.irqbalance.enable = true;
 

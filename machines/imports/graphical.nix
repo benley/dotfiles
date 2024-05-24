@@ -30,6 +30,7 @@
   environment.systemPackages = with pkgs; [
     (hunspellWithDicts [pkgs.hunspellDicts.en-us])
     bitwarden
+    chrysalis  # keyboardio config editor (requires services.udev.packages entry also)
     discord
     firefox-wayland
     fritzing
@@ -44,7 +45,6 @@
     signal-desktop
     slack
     telegram-desktop
-    # texlive
     transmission-gtk
     gnome_mplayer
     nordic  # GTK theme
@@ -52,6 +52,7 @@
     gnome3.gnome-tweaks
     gnome3.dconf-editor
     gnomeExtensions.appindicator
+    gnomeExtensions.dash-to-panel
     gnomeExtensions.just-perfection
     gnomeExtensions.sound-output-device-chooser
     xorg.xdpyinfo
@@ -60,11 +61,11 @@
     xsel
     # zathura       # keyboard-driven PDF viewer
     zoom-us
-    pdfpc         # PDF viewer for presentations
+    pdfpc           # PDF viewer for presentations
     vdpauinfo
-    libva-utils       # for the vainfo command
+    libva-utils     # for the vainfo command
 
-    alsaUtils         # amixer, used in .xmonad.hs
+    alsaUtils       # amixer, used in .xmonad.hs
     pavucontrol
 
     gimp
@@ -73,6 +74,7 @@
     hicolor-icon-theme
     breeze-gtk
     breeze-qt5
+    pinentry-gnome3    # for rbw
 
     ddccontrol
     powertop
@@ -142,4 +144,5 @@
     KillUserProcesses=yes
   '';
 
+  services.udev.packages = [pkgs.chrysalis];
 }
