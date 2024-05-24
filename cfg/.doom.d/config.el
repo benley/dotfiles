@@ -54,6 +54,10 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+(use-package! auth-source
+  :config
+  (setq auth-sources '(default "secrets:Login")))
+
 (use-package! frame
   :config
   (setq window-divider-default-right-width 5))
