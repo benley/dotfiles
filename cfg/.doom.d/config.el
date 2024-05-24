@@ -22,6 +22,7 @@
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 (setq doom-font (font-spec :family "PragmataPro" :height 120))
+(setq doom-serif-font (font-spec :family "Go Mono" :size 12))
 (setq doom-variable-pitch-font (font-spec :family "IBM Plex Sans" :height 120))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
