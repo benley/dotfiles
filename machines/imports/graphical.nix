@@ -38,7 +38,9 @@
     firefox-wayland
     fritzing
     glxinfo
-    google-chrome
+    (google-chrome.override {
+      commandLineArgs = "--enable-features=TouchpadOverscrollHistoryNavigation";
+    })
     graphviz
     inkscape
     insync-v3
