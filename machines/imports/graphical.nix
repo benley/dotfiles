@@ -29,12 +29,8 @@
 
   environment.systemPackages = with pkgs; [
     (hunspellWithDicts [pkgs.hunspellDicts.en-us])
-    # arandr
-    # battery-monitor
-    # blueman
+    bitwarden
     discord
-    # dropbox-cli
-    element-desktop
     firefox-wayland
     fritzing
     glxinfo
@@ -42,89 +38,48 @@
       commandLineArgs = "--enable-features=TouchpadOverscrollHistoryNavigation";
     })
     graphviz
-    inkscape
-    insync-v3
-    minecraft
-    moonlight-qt
-    # nixnote2  # evernote client
-    pinta
+    pdfarranger
+    prismlauncher
     remmina  # RDP/VNC/NX/Spice client
     signal-desktop
     slack
+    telegram-desktop
     # texlive
     transmission-gtk
-    # vivaldi
-    # libsForQt5.vlc
     gnome_mplayer
     nordic  # GTK theme
     gnome3.gnome-themes-extra  # I think this fixes some "can't find theme engine adwaita" erorrs
     gnome3.gnome-tweaks
     gnome3.dconf-editor
     gnomeExtensions.appindicator
-    # gnomeExtensions.material-shell
+    gnomeExtensions.just-perfection
     gnomeExtensions.sound-output-device-chooser
-    # vscode
     xorg.xdpyinfo
     xorg.xev
     xlsfonts
     xsel
-    zathura       # keyboard-driven PDF viewer
+    # zathura       # keyboard-driven PDF viewer
     zoom-us
-    # xsettingsd  # for dump_xsettings
+    pdfpc         # PDF viewer for presentations
     vdpauinfo
     libva-utils       # for the vainfo command
 
     alsaUtils         # amixer, used in .xmonad.hs
-    # dmenu             # For xmonad
-    # rofi              # maybe replace dmenu?
-    # dzen2
-    # feh               # For scaling / setting background image
-    # taffybar
-    # j4-dmenu-desktop  # dmenu .desktop app launcher
-    # libnotify         # includes notify-send
-    # networkmanager_dmenu
-    # networkmanagerapplet
-    # pasystray
-    # lxqt.pavucontrol-qt  # This is nicer, but pasystray wants to launch regular pavucontrol
     pavucontrol
-    # xautolock         # so I can xautolock -locknow
-    # xorg.xbacklight
-    xorg.xmodmap
 
     gimp
-    # gnome3.cheese     # KDE seems to lack a webcam app?
-    # gwenview          # photo viewer
-    # ark               # archive thinger
-    # kate
-    # kgpg
-    # krita             # breaks update-desktop-database until https://invent.kde.org/graphics/krita/-/merge_requests/663 is backported
-    # konsole
-    # kupfer            # task launcher a la QuickSilver
-    # kupfer-plugin-google-search
-    # qt5.qttools       # includes qdbusviewer
-    # spectacle         # screenshot
-    # dolphin
-    # kdeApplications.dolphin-plugins
 
     breeze-icons
     hicolor-icon-theme
     breeze-gtk
     breeze-qt5
-    # breeze-qt4  # gone, I think
 
-    # ksshaskpass
-    # pinentry_qt5
-    pinentry_gnome
-    # kwalletcli      # includes pinentry-kwallet
-    # gnome3.seahorse   # gnome-wallet manager gui
-
-    # stumpish
     ddccontrol
-    # udiskie
     powertop
 
-    # alacritty
     razergenie
+    steam-run
+    appimage-run
   ];
 
   hardware.openrazer.enable = true;

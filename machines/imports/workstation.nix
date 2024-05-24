@@ -14,21 +14,20 @@
     # exercism
     gdb
     gitFull
+    git-lfs
     go
     google-cloud-sdk
     google-drive-ocamlfuse
-    gotags
     # haskellPackages.ghc
     # haskellPackages.ghc-mod  # broken?
     # haskellPackages.hdevtools # broken?
     # haskellPackages.hindent
     # haskellPackages.hlint
-    haskellPackages.ShellCheck
     html-tidy
-    jsonnet
     gnumake
     nodePackages.js-yaml
     nodePackages.jshint
+    p7zip
     pandoc
     # python27Full
     python3Full
@@ -41,7 +40,9 @@
     python3Packages.virtualenvwrapper
     stack
     imagemagick  # so emacs can resize images
+    python3Packages.pygments  # for LaTeX minted/pygmentex
     lastpass-cli
+    texlive-for-orgmode
   ];
 
   #services.emacs.package = pkgs.fancyEmacs;
