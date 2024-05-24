@@ -107,13 +107,13 @@
   # Populate /etc/X11 since you're going to look there anyway
   services.xserver.exportConfiguration = true;
   services.xserver.enableCtrlAltBackspace = false;
-  services.xserver.layout = "us";
+  services.xserver.xkb.layout = "us";
 
   services.avahi = {
     enable = true;
     ipv4 = true;
     ipv6 = true;
-    nssmdns = lib.mkDefault true;
+    nssmdns4 = lib.mkDefault true;
     publish.enable = lib.mkDefault true;
     publish.addresses = lib.mkDefault true;
   };

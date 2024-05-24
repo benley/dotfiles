@@ -12,8 +12,8 @@
   ];
 
   services.udev.packages = with pkgs; [
-    libu2f-host
-    yubikey-personalization
+    # libu2f-host
+    # yubikey-personalization
   ];
 
   services.pcscd.enable = true;

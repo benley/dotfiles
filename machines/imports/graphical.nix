@@ -89,7 +89,7 @@
     # This is probably a terrible idea but there doesn't seem to be a
     # great alternative if I want xcursor stuff to work in non-gtk
     # emacs, xterm, etc.
-    LD_LIBRARY_PATH = ["${pkgs.xorg.libXcursor}/lib"];
+    # LD_LIBRARY_PATH = ["${pkgs.xorg.libXcursor}/lib"];
   };
 
   environment.variables = {
@@ -116,6 +116,9 @@
   hardware.opengl.driSupport = true;
   hardware.opengl.driSupport32Bit = true;
 
+  # TODO: what was I doing with uinput?
+  hardware.uinput.enable = true;
+
   hardware.pulseaudio.enable = true;
   hardware.pulseaudio.support32Bit = true;
   hardware.pulseaudio.package = pkgs.pulseaudioFull;  # With bluetooth support
@@ -139,5 +142,4 @@
     KillUserProcesses=yes
   '';
 
-  services.powermate.enable = true;
 }

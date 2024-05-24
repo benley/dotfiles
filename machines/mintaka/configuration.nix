@@ -11,7 +11,13 @@
     ../imports/wacom.nix
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.extraModprobeConfig = ''
+    options snd-hda-intel model=nofixup
+    options v4l2loopback devices=1
+  '';
+
+  boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+  boot.kernelModules = [ "v4l2loopback" ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -41,9 +47,8 @@
   ];
 
   boot.supportedFilesystems = ["zfs"];
-  boot.zfs.enableUnstable = false;  # zfs 0.8.1 is stable now, yay!
 
-  services.zfs.autoSnapshot.enable = true;
+  services.zfs.autoSnapshot.enable = false;
 
   # Make the cryptsetup password prompt readable
   console.earlySetup = true;
@@ -51,12 +56,22 @@
   networking.hostName = "mintaka";
   networking.hostId = "8425e349";
 
+  networking.firewall.allowedUDPPorts = [
+    7236   # miracast
+  ];
+  networking.firewall.allowedTCPPorts = [
+    51413  # transmission
+    7236   # miracast
+    7250   # miracast
+  ];
+
   networking.networkmanager.enable = true;
 
   console.font = "ter-132b";
   console.packages = [ pkgs.terminus_font ];
-  i18n.inputMethod.enabled = "ibus";
-  i18n.inputMethod.ibus.engines = with pkgs.ibus-engines; [ uniemoji ];
+
+  # i18n.inputMethod.enabled = "ibus";
+  # i18n.inputMethod.ibus.engines = with pkgs.ibus-engines; [ uniemoji ];
 
   # Accommodate Windows nonsesnse
   time.hardwareClockInLocalTime = true;
@@ -73,32 +88,43 @@
   programs.gnupg.agent.enable = true;
   programs.gnupg.agent.enableSSHSupport = true;
 
+  programs.wireshark.enable = true;
+  programs.wireshark.package = pkgs.wireshark;
+
+  services.resolved.enable = true;
+  services.resolved.extraConfig = ''
+    MulticastDNS=true
+  '';
+
+  services.avahi.nssmdns4 = false;
+  services.avahi.publish.addresses = false;
   services.avahi.publish.enable = false;
 
   services.openssh.enable = true;
-  services.openssh.passwordAuthentication = false;
 
   services.xserver = {
     libinput.enable = true;
     libinput.touchpad.naturalScrolling = true;
 
-    videoDrivers = [ "intel" ];
-
     dpi = 144;
 
-    xkbOptions = lib.concatStringsSep "," [
+    xkb.options = lib.concatStringsSep "," [
       "ctrl:nocaps"
       #"altwin:swap_alt_win"
     ];
-  };
+ };
+
+  hardware.trackpoint.enable = true;
+  hardware.trackpoint.device = "TPPS/2 Elan TrackPoint";
+  hardware.trackpoint.emulateWheel = true;
+
+  # services.throttled.enable = true;
 
   hardware.opengl = {
     extraPackages = with pkgs;
-        [ vaapiIntel libvdpau libvdpau-va-gl vaapiVdpau ];
+        [ vaapiIntel libvdpau libvdpau-va-gl vaapiVdpau intel-media-driver ];
     extraPackages32 = with pkgs.pkgsi686Linux;
         [ vaapiIntel libvdpau libvdpau-va-gl vaapiVdpau ];
-
-    s3tcSupport = true;
   };
 
   environment.variables = {
@@ -107,10 +133,15 @@
     VDPAU_DRIVER = "va_gl";
   };
 
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+  };
+
   hardware.cpu.intel.updateMicrocode = true;
 
-  virtualisation.docker.enable = true;
-  virtualisation.docker.storageDriver = "zfs";
+  # virtualisation.docker.enable = true;
+  # virtualisation.docker.storageDriver = "zfs";
+  virtualisation.podman.enable = true;
 
   # evdev:atkbd:... modalias string comes from `evemu-describe /dev/input/event0`
   # (it comes from DMI data, you can probably also find it with `cat /sys/class/dmi/id/modalias`)
@@ -124,6 +155,29 @@
       KEYBOARD_KEY_49=prog1
       KEYBOARD_KEY_45=prog2
   '';
+
+  services.powermate.enable = false;
+
+  environment.systemPackages = [
+    pkgs.moonlight-qt
+    # pkgs.lutris
+    # pkgs.zoom-us
+    # pkgs.virtscreen
+    pkgs.virt-manager
+    pkgs.bespokesynth
+    pkgs.blender
+  ];
+
+  # services.nfs.server = {
+  #   enable = true;
+  #   # hostName = "172.17.0.1";
+  #   exports = ''
+  #     /export/next *(rw,no_root_squash,insecure)
+  #   '';
+  #   extraNfsdConfig = ''
+  #     vers2=on
+  #   '';
+  # };
 
   services.fwupd.enable = true;
 
@@ -142,7 +196,7 @@
       "rpool/home" = {
         plan = "1h=>15min,1d=>1h,1w=>1d,1m=>1w,6m=>1m";
         destinations.nyanbox = {
-          host = "benley@nyanbox.zoiks.net";
+          host = "benley@nyanbox";
           dataset = "nyanbox/backup/mintaka/home";
           plan = "1d=>1h,1w=>1d,1m=>1w,1y=>1m";
         };
@@ -151,10 +205,19 @@
     };
   };
 
+  # security.pam.u2f = {
+  #   enable = true;
+  #   cue = true;
+  #   authFile = ./u2f_keys;
+  #   control = "requisite";
+  #   appId = "pam://zoiks.net";
+  # };
+
   services.tailscale.enable = true;
 
   services.printing.enable = true;
-  services.printing.drivers = with pkgs; [ hplipWithPlugin ];
 
   virtualisation.libvirtd.enable = true;
+
+  zramSwap.enable = true;
 }
