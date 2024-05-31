@@ -9,41 +9,15 @@ with { callPackage = super.callPackage; };
 
   battery-monitor = super.pythonPackages.callPackage ../pkgs/battery-monitor { };
 
-  # dunst = super.dunst.override {
-  #   dunstify = true;
-  # };
-
-  eless = super.writeScriptBin "eless" (builtins.readFile ../eless.sh);
-
-  # insync = callPackage ../pkgs/insync { };
-
-  # insync-v3 = self.libsForQt5.callPackage ../pkgs/insync/insync-v3.nix { };
-
-  kubernetes-client = callPackage ../pkgs/kubernetes-client { };
 
   kupfer-plugin-google-search = callPackage ../pkgs/kupfer-plugin-google-search { };
+  ddccontrol-db = super.ddccontrol-db.overrideAttrs (x: rec {
+    postInstall = ''
+      cp ${../pkgs/ddccontrol-db/ACI32A4.xml} $out/share/ddccontrol-db/monitor/ACI32A4.xml
+    '';
+  });
 
   mosquitto-exporter = callPackage ../pkgs/mosquitto-exporter { };
-
-  # Based on stuff from:
-  #  https://beyermatthias.de/blog/2015/11/25/how-to-setup-neovim-on-nixos/
-  #  http://nerditya.com/code/guide-to-neovim/
-  # vim = super.lib.overrideDerivation (
-  #   super.vim_configurable.customize {
-  #     name = "vim";
-  #     vimrcConfig = (import ./vim/customization.nix { pkgs = super; });
-  #   }
-  # ) (_: { ftNixSupport = false; });
-
-  # neovim = self.neovim.override {
-  #   vimAlias = true;
-  #   configure = (import ./vim/customization.nix { pkgs = super; });
-  # };
-
-  # This causes a lot of rebuilds
-  # gnupg = super.gnupg.override (x: {
-  #   pinentry = self.pinentry_qt5;
-  # });
 
   powermate = callPackage ../pkgs/powermate-linux { };
 

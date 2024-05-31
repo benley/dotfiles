@@ -2,11 +2,6 @@
 
 {
   nix = {
-    nixPath = [
-      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-      "nixos-config=/home/benley/p/dotfiles/machines/${config.networking.hostName}/configuration.nix"
-      "/nix/var/nix/profiles/per-user/root/channels"
-    ];
     daemonIOSchedClass = "idle";
     settings = {
       extra-experimental-features = [ "nix-command" "flakes" ];

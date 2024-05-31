@@ -79,11 +79,7 @@
   # Allow changing timezone via dbus, so GeoIP location detection can work
   time.timeZone = null;
 
-  # This value determines the NixOS release with which your system is to be
-  # compatible, in order to avoid breaking some software such as database
-  # servers. You should change this only after NixOS release notes say you
-  # should.
-  system.stateVersion = "18.03"; # Did you read the comment?
+  system.stateVersion = "23.11";
 
   programs.gnupg.agent.enable = true;
   programs.gnupg.agent.enableSSHSupport = true;
@@ -102,10 +98,10 @@
 
   services.openssh.enable = true;
 
-  services.xserver = {
-    libinput.enable = true;
-    libinput.touchpad.naturalScrolling = true;
+  services.libinput.enable = true;
+  services.libinput.touchpad.naturalScrolling = true;
 
+  services.xserver = {
     dpi = 144;
 
     xkb.options = lib.concatStringsSep "," [

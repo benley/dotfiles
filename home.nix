@@ -77,15 +77,19 @@
     };
   };
 
-  gtk.enable = true;
-  gtk.cursorTheme.name = "Nordic-cursors";
-  gtk.cursorTheme.package = pkgs.nordic;
-  gtk.iconTheme.name = "Nordic";
-  gtk.iconTheme.package = pkgs.nordic;
-  gtk.theme.name = "Nordic";
-  gtk.theme.package = pkgs.nordic;
-  # gtk.font.name = "Noto Sans Condensed";
-  # gtk.font.size = 10;
+  gtk = {
+    enable = true;
+    cursorTheme.name = "Nordic-cursors";
+    cursorTheme.package = pkgs.nordic;
+    # cursorTheme.size = 16;
+    iconTheme.name = "Nordic-green";
+    iconTheme.package = pkgs.nordic;
+    theme.name = "Nordic";
+    theme.package = pkgs.nordic;
+    # font.name = "Noto Sans Condensed";
+    # font.size = 10;
+    # font.package = ...
+  };
 
   programs.bash = {
     enable = true;

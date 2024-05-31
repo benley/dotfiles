@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports = [
-    <home-manager/nixos>
+    inputs.home-manager.nixosModules.default
   ];
 
   users.users.richard = {

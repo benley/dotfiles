@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<monitor name="Asus PA328q" init="standard">
+  <!-- CAPS: (prot(monitor) type(LCD)model LCDPA328 cmds(01 02 03 07 0C F3) vcp(02 04 05 08 0B 0C 10 12 14(04 05 08) 16 18 1A 60(11 12 13 0F 10) 62 6C 6E 70 8D(01 02) A8 AC AE B6 C6 C8 C9 D6(01 04) DF) mccs_ver(2.1)asset_eep(32)mpu(01)mswhql(1)) -->
+  <caps add="(vcp(02 04 05 08 0b 0c 10 12 14 16 18 1a 60 62 6c 6e 70 8d a8 ac ae b6 c6 c8 c9 d6 df))"/>
+  <controls>
+    <control id="inputsource" type="list" address="0x60">
+      <value id="dp"       value="0x0f"/>
+      <value id="mdp"      value="0x10"/>
+      <value id="hdmi-mhl" value="0x11"/> <!-- actually HDMI-1/MHL -->
+      <value id="hdmi1"    value="0x12"/> <!-- actually HDMI-2     -->
+      <value id="hdmi2"    value="0x13"/> <!-- actually HDMI-3     -->
+    </control>
+    <control id="mute" type="list" address="0x8d">
+      <value id="mute"   value="0x01"/>
+      <value id="normal" value="0x02"/>
+    </control>
+    <control id="language" type="list" address="0x68">
+      <value id="english"       value="1"/>
+      <value id="persian"       value="2"/>
+      <value id="thai"          value="3"/>
+      <value id="indonesian"    value="4"/>
+      <value id="chinese_tw"    value="5"/>
+      <value id="chinese"       value="6"/>
+      <value id="japanese"      value="7"/>
+      <value id="german"        value="8"/>
+      <value id="italian"       value="9"/>
+      <value id="french"        value="10"/>
+      <value id="dutch"         value="11"/>
+      <value id="spanish"       value="12"/>
+      <value id="russian"       value="13"/>
+      <value id="polish"        value="14"/>
+      <value id="turkish"       value="15"/>
+      <value id="portuguese"    value="16"/>
+      <value id="czech"         value="17"/>
+      <value id="serbocroatian" value="18"/>
+      <value id="hungarian"     value="19"/>
+      <value id="romanian"      value="20"/>
+      <value id="korean"        value="21"/>
+    </control>
+
+    <control id="colorpreset" type="list" address="0x14">
+      <!-- yes, the order of these entries is odd -->
+      <value id="5000k" value="4"/>
+      <value id="6500k" value="5"/>
+      <value id="5500k" value="6"/>
+      <value id="9300k" value="8"/>
+    </control>
+    <!--
+        TODO: figure these out?
+
+        Control 0x0b: +/2100/65535 C [???]
+        Control 0x0c: +/5/11 C [???]
+        Control 0x14: +/5/8 C [???]  maybe colorpreset?
+        Control 0xa8: +/1/3 C [???] "sync type" ????
+        Control 0xac: +/2228/2 C [???] "horizontal freq" ???
+        Control 0xae: +/6000/65535 C [???] "vertical freq" ???
+        Control 0xb0: +/1/2   [???] "save current settings" ???
+        Control 0xb6: +/3/5 C [???] "monitor type" ???
+        Control 0xc6: +/90/255 C [???]
+        Control 0xc8: +/5/65302 C [???] "display controller type" ???
+        Control 0xc9: +/0/0 C [???] "display firmware level" ???
+        Control 0xdf: +/513/65535 C [???] "VCP version" ???
+        Control 0xfe: +/65535/16897   [???] gamma? autolevel?
+    -->
+  </controls>
+  <include file="VESA"/>
+</monitor>
