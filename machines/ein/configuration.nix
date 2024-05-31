@@ -9,31 +9,24 @@
     ../imports/wacom.nix
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelModules = [ "nct6775" "drivetemp" ];
 
-  boot.kernelParams = [
-    "zswap.enabled=1"
-    "zswap.compressor=lz4"
-    "zswap.max_pool_percent=25"
-  ];
+  # boot.extraModprobeConfig = ''
+  #   options nvidia_drm fbdev=1 modeset=1
+  # '';
 
   boot.loader.grub = {
     device = "nodev";
     enable = true;
     efiSupport = true;
-    # This motherboard's UEFI behaves badly and ignores BootOrder if
-    # /EFI/Boot/bootx64.efi exists.  If that path doesn't exist, Windows
-    # updates will eventually put a copy of the Windows bootloader there, so to
-    # prevent Windows from taking over the boot process we'll have to install
-    # Grub at that location.
-    efiInstallAsRemovable = true;
-    gfxmodeEfi = "1024x768x32";
     zfsSupport = true;
-    splashImage = null;
     useOSProber = true;
-    default = 2;  # boot windows by default for now
+    # default = 2;  # boot windows by default for now
+    memtest86.enable = true;
   };
 
+  boot.loader.systemd-boot.enable = false;
+  boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
   boot.supportedFilesystems = [ "zfs" "ntfs-3g" ];
@@ -49,7 +42,7 @@
 
   services.printing = {
     enable = true;
-    drivers = [ pkgs.hplipWithPlugin ];
+    drivers = [ pkgs.hplip ];
   };
 
   services.xserver = {
@@ -58,12 +51,12 @@
     videoDrivers = [ "nvidia" ];
 
     # nvidia driver doesn't support wayland.  sigh
-    displayManager.gdm.wayland = false;
+    # displayManager.gdm.wayland = false;
 
     # ForceCompositionPipeline supposedly reduces screen tearing
-    screenSection = ''
-      Option "metamodes" "nvidia-auto-select +0+0 {ForceCompositionPipeline=On}"
-    '';
+    # screenSection = ''
+    #   Option "metamodes" "nvidia-auto-select +0+0 {ForceCompositionPipeline=On}"
+    # '';
     # This is supposed to help with DDC but it doesn't seem to work:
     #deviceSection = ''
     #  Option "RegistryDwords" "RMUseSwI2c=0x01; RMI2cSpeed=100"
@@ -74,7 +67,7 @@
 
   systemd.mounts = [{
     where = "/var/lib/docker";
-    what = "pool0/docker";
+    what = "fastroot/docker";
     type = "zfs";
     requiredBy = [ "docker.service" ];
     before = ["docker.service"];
@@ -86,17 +79,44 @@
 
   system.stateVersion = "17.03";
 
-  hardware.opengl = {
-     extraPackages = with pkgs; [ vaapiVdpau ];
-     extraPackages32 = with pkgs.pkgsi686Linux; [ vaapiVdpau ];
-  };
-
   hardware.pulseaudio.extraConfig = ''
     unload-module module-suspend-on-idle
   '';
 
-  environment.variables = {
-    VDPAU_DRIVER = "nvidia";
-    LIBVA_DRIVER_NAME = "vdpau";
+  # environment.variables = {
+  #   VDPAU_DRIVER = "nvidia";
+  #   LIBVA_DRIVER_NAME = "vdpau";
+  # };
+
+  services.fwupd.enable = true;
+
+  services.tailscale.enable = true;
+
+  time.hardwareClockInLocalTime = true;  # accommodate windows bullshit
+
+  programs.alvr.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    mixxx
+    sidequest
+    qpwgraph
+    pulseaudio
+  ];
+
+  hardware.pulseaudio.enable = lib.mkForce false;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    jack.enable = true;
   };
+
+  services.prometheus.exporters.node = {
+    enable = true;
+    openFirewall = true;
+
+    disabledCollectors = ["arp"];
+  };
+
 }

@@ -55,6 +55,9 @@
     gnomeExtensions.dash-to-panel
     gnomeExtensions.just-perfection
     gnomeExtensions.sound-output-device-chooser
+    gnomeExtensions.vitals
+    gnomeExtensions.freon
+    lm_sensors  # for freon
     xorg.xdpyinfo
     xorg.xev
     xlsfonts
