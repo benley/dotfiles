@@ -1,11 +1,11 @@
 {
-  inputs.nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable;
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   inputs.home-manager = {
-    url = github:nix-community/home-manager;
+    url = "github:nix-community/home-manager";
     inputs.nixpkgs.follows = "nixpkgs";
   };
   inputs.my-fonts = {
-    url = "path:/home/benley/p/my-fonts";
+    url = "git+ssh://git@github.com/benley/my-fonts.git";
     inputs.nixpkgs.follows = "nixpkgs";
   };
 

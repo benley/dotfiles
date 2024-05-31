@@ -46,14 +46,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1716691189,
-        "narHash": "sha256-aKpQ3n2unFRt+EmvbxG3hB1lmu6LBaqAcFiq753s5RQ=",
-        "path": "/home/benley/p/my-fonts",
-        "type": "path"
+        "lastModified": 1716691185,
+        "narHash": "sha256-qYFJa/lSdTLsuAVjmr4uTAAs6gwxNxGbQmVgk17oQ3c=",
+        "ref": "refs/heads/master",
+        "rev": "9a6f637ce38a7ece79cdfde952cf4708960e6b33",
+        "revCount": 3,
+        "type": "git",
+        "url": "ssh://git@github.com/benley/my-fonts.git"
       },
       "original": {
-        "path": "/home/benley/p/my-fonts",
-        "type": "path"
+        "type": "git",
+        "url": "ssh://git@github.com/benley/my-fonts.git"
       }
     },
     "nixpkgs": {
