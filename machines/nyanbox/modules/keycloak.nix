@@ -63,5 +63,9 @@ let cfg = config.my.keycloak; in
     services.mysql.enable = true;
     services.mysql.package = pkgs.mariadb;
 
+    # remove after upgrading to nixos 24.05
+    nixpkgs.config.permittedInsecurePackages = [
+      "keycloak-23.0.6"
+    ];
   };
 }
