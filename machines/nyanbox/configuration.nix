@@ -237,7 +237,10 @@
     '';
   };
 
-  system.autoUpgrade.enable = true;
+  system.autoUpgrade = {
+    enable = true;
+    flake = "/home/benley/p/dotfiles/machines/nyanbox";
+  };
 
   nix.gc.automatic = true;
   nix.gc.options = "--delete-older-than 14d";
