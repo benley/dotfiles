@@ -12,6 +12,7 @@ let cfg = config.my.paperless; in
       isSystemUser = true;
     };
 
+    services.oauth2_proxy.enable = true;
     services.oauth2_proxy.nginx.virtualHosts = [ "paperless.zoiks.net" ];
 
     services.nginx = {

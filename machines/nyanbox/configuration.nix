@@ -82,6 +82,10 @@
         plan = "1d=>1h,1w=>1d,1m=>1w,1y=>1m";
         recursive = true;
       };
+      "rpool/nixos" = {
+        plan = "1d=>1h,1w=>1d,1m=>1w,1y=>1m";
+        recursive = true;
+      };
     };
   };
 

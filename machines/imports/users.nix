@@ -28,7 +28,7 @@
 
   users.groups.warez = {
     gid = 1002;
-    members = [ "benley" "transmission" ];
+    members = [ "benley" "richard" "transmission" ];
   };
 
   home-manager.useUserPackages = true;

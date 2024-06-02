@@ -40,6 +40,7 @@ let cfg = config.my.prometheus; in
             targets = [
               "192.168.7.24:9100"  # nyanbox
               "192.168.7.36:9100"  # ditto / homeassistant
+              "192.168.7.173:9100" # ein
               # "pve0.zoiks.net:9100"
             ];
           }];

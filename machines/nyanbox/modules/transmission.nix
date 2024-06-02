@@ -69,7 +69,7 @@ with lib;
         rpc-bind-address = "127.0.0.1";
         rpc-host-whitelist-enabled = true;
         rpc-host-whitelist = "nyanbox.zoiks.net";
-        speed-limit-up = 256;
+        speed-limit-up = 768;
         speed-limit-up-enabled = true;
       };
     };
