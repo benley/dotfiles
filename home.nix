@@ -50,7 +50,7 @@
     kube3d
     kubectl
     kubelogin-oidc
-    nixfmt
+    nixfmt-classic
     nix-top
     nodePackages.bash-language-server
     nodePackages.js-yaml

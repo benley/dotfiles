@@ -1,11 +1,11 @@
 # Alnilam: Thinkpad T490 (intel graphics)
 
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   imports = [
-    <nixos-hardware/lenovo/thinkpad/t490>
-    <home-manager/nixos>
+    inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t490
+    inputs.home-manager.nixosModules.default
     ./hardware-configuration.nix
     ../imports/defaults.nix
     ../imports/graphical.nix
@@ -31,10 +31,11 @@
     MulticastDNS=true
   '';
 
+  services.libinput.enable = true;
+  services.libinput.touchpad.naturalScrolling = true;
+
   services.xserver = {
     enable = true;
-    libinput.enable = true;
-    libinput.touchpad.naturalScrolling = true;
 
     videoDrivers = [ "intel" ];  # TODO: why intel instead of modesetting?
 
@@ -115,7 +116,7 @@
     openldap
     terraform-ls
     virt-manager
-    (pkgs.callPackage /home/bstaffin/m/provisioning {})
+    inputs.memsql-provisioning.packages."${pkgs.system}".memsqlaws
     virtiofsd
   ];
 
