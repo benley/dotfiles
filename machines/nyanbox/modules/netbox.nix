@@ -7,8 +7,10 @@ let cfg = config.my.netbox; in
 
   config = lib.mkIf cfg.enable {
 
-    services.oauth2_proxy.enable = true;
-    services.oauth2_proxy.nginx.virtualHosts = [ "netbox.zoiks.net" ];
+    services.oauth2-proxy = {
+      enable = true;
+      nginx.virtualHosts."netbox.zoiks.net" = {};
+    };
 
     services.nginx = {
       upstreams.netbox-wsgi.servers = { "192.168.99.2:8001" = {}; };
@@ -63,7 +65,7 @@ let cfg = config.my.netbox; in
 
         services.netbox = {
           enable = true;
-          package = pkgs.netbox_3_6;
+          package = pkgs.netbox_3_7;
           secretKeyFile = "/var/lib/netbox/.secretkey.txt";
           listenAddress = "0.0.0.0";
           settings = {

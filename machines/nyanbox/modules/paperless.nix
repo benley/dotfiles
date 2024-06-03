@@ -12,8 +12,10 @@ let cfg = config.my.paperless; in
       isSystemUser = true;
     };
 
-    services.oauth2_proxy.enable = true;
-    services.oauth2_proxy.nginx.virtualHosts = [ "paperless.zoiks.net" ];
+    services.oauth2-proxy = {
+      enable = true;
+      nginx.virtualHosts."paperless.zoiks.net" = {};
+    };
 
     services.nginx = {
       upstreams.paperless.servers = { "127.0.0.1:${toString config.services.paperless.port}" = {}; };
@@ -46,7 +48,7 @@ let cfg = config.my.paperless; in
     services.paperless = {
       enable = true;
       dataDir = "/var/lib/paperless";
-      extraConfig = {
+      settings = {
         # Hopefully tell OCR that dates are MM/DD/YYYY, not DD/MM/YYYY
         PAPERLESS_DATE_ORDER = "MDY";
         PAPERLESS_URL = "https://paperless.zoiks.net";

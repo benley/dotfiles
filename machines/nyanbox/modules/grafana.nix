@@ -10,10 +10,9 @@ let cfg = config.my.grafana; in
     services.nginx = {
       upstreams.grafana.servers = { "127.0.0.1:3000" = {}; };
 
-      virtualHosts."nyanbox.zoiks.net" = let rootExtraConfig = config.services.nginx.virtualHosts."nyanbox.zoiks.net".locations."/".extraConfig; in {
+      virtualHosts."nyanbox.zoiks.net" = {
         locations."/grafana/" = {
           proxyPass = "http://grafana/";
-          extraConfig = rootExtraConfig;
         };
       };
     };

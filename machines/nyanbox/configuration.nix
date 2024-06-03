@@ -162,14 +162,9 @@
     recommendedTlsSettings = true;
     recommendedZstdSettings = true;
 
-    # TODO: in theory the stuff that oauth2_proxy puts in the root extraConfig
-    # could actually go in the outer nginx "server" section, and then I
-    # wouldn't have to hack it into each subpath like I'm doing here.  I think
-    # it would just require adding "auth_request off" to the the location block
-    # for /.well-known/acme-challenge to keep ACME stuff working.
     virtualHosts = {
       "nyanbox.zoiks.net" = {
-        default = true;  # this is the default vhost
+        default = true;
         enableACME = true;
         forceSSL = true;
 

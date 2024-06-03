@@ -8,10 +8,9 @@ let cfg = config.my.prometheus; in
 
     services.nginx = {
       upstreams.prometheus.servers = { "127.0.0.1:9090" = {}; };
-      virtualHosts."nyanbox.zoiks.net" = let rootExtraConfig = config.services.nginx.virtualHosts."nyanbox.zoiks.net".locations."/".extraConfig; in {
+      virtualHosts."nyanbox.zoiks.net" = {
         locations."/prometheus/" = {
           proxyPass = "http://prometheus/";
-          extraConfig = rootExtraConfig;
         };
       };
     };

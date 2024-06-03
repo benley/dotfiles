@@ -34,6 +34,9 @@ let cfg = config.my.keycloak; in
       virtualHosts."nyanbox.zoiks.net" = {
         locations."/auth/" = {
           proxyPass = "http://keycloak/auth/";
+          extraConfig = ''
+            auth_request off;
+          '';
         };
       };
     };
