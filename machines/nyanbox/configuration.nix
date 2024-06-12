@@ -235,6 +235,7 @@
   system.autoUpgrade = {
     enable = true;
     flake = "/home/benley/p/dotfiles/machines/nyanbox";
+    flags = ["--update-input" "nixpkgs" "--commit-lock-file"];
   };
 
   nix.gc.automatic = true;
