@@ -105,6 +105,10 @@
       # Allow all the upnp nonsense that's impossible to handle correctly
       { from = 32767; to = 65535; }
     ];
+    # Allow tftp from the edgerouter only
+    extraCommands = ''
+      iptables -A nixos-fw -p udp -m udp --dport 69 -s 192.168.7.1/32 -j ACCEPT
+    '';
   };
 
   programs.mosh.enable = true;  # this opens UDP 60000 to 61000 in the firewall
@@ -257,5 +261,12 @@
   boot.kernel.sysctl = {
     "net.ipv4.ip_forward" = 1;
     "net.ipv6.conf.all.forwarding" = 1;
+  };
+
+  # tftpd for router config archive.
+  # See also networking.firewall.extraCommands
+  services.atftpd = {
+    enable = true;
+    root = "/srv/tftp";
   };
 }
