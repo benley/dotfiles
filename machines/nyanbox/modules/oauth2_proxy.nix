@@ -7,11 +7,6 @@ let cfg = config.my.oauth2_proxy; in
 
   config = mkIf cfg.enable {
 
-    # It seems weird that I need to do this
-    services.nginx.virtualHosts."nyanbox.zoiks.net".locations."/oauth2/".extraConfig = ''
-      auth_request off;
-    '';
-
     # TODO: consider separate proxy instances per service, in containers?
     services.oauth2-proxy = {
       enable = true;
