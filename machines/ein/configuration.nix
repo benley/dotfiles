@@ -95,6 +95,7 @@
   time.hardwareClockInLocalTime = true;  # accommodate windows bullshit
 
   programs.alvr.enable = true;
+  programs.alvr.openFirewall = true;
 
   environment.systemPackages = with pkgs; [
     mixxx

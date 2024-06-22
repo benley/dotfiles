@@ -55,7 +55,7 @@
     nodePackages.bash-language-server
     nodePackages.js-yaml
     nodePackages.jshint
-    nodePackages.pyright
+    pyright
     pandoc
     pdfarranger
     rbw
