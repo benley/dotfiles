@@ -116,7 +116,7 @@
 
   # services.throttled.enable = true;
 
-  hardware.opengl = {
+  hardware.graphics = {
     extraPackages = with pkgs;
         [ vaapiIntel libvdpau libvdpau-va-gl vaapiVdpau intel-media-driver ];
     extraPackages32 = with pkgs.pkgsi686Linux;
