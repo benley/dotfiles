@@ -25,6 +25,7 @@ let cfg = config.my.vaultwarden; in
     # TODO: sqlite -> postgres/mysql?
     services.vaultwarden = {
       enable = true;
+      backupDir = "/zfs/nyanbox/backup/vaultwarden";
       # dbBackend = "mysql";
       environmentFile = "/var/lib/bitwarden_rs/vaultwarden.env";
       config = {
