@@ -8,6 +8,7 @@
     ./modules/grafana.nix
     ./modules/home-assistant.nix
     ./modules/keycloak.nix
+    ./modules/metube.nix
     ./modules/minecraft-server
     ./modules/netbox.nix
     ./modules/nextcloud.nix
@@ -25,6 +26,7 @@
   my.grafana.enable = true;
   my.home-assistant.enable = true;
   my.keycloak.enable = true;
+  my.metube.enable = true;
   my.minecraft-server.enable = false; # OFF
   my.netbox.enable = true;
   my.nextcloud.enable = false;        # OFF
