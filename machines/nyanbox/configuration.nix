@@ -14,7 +14,7 @@
     ./modules/nextcloud.nix
     ./modules/node-exporter.nix
     ./modules/nyanbox-backups.nix
-    ./modules/oauth2_proxy.nix
+    ./modules/oauth2-proxy.nix
     ./modules/paperless.nix
     ./modules/photoprism.nix
     ./modules/prometheus.nix

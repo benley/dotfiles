@@ -51,13 +51,10 @@ with {
       scope = "openid email profile";
     };
 
-    # https://gist.github.com/benley/78a5e84c52131f58d18319bf26d52cda
     systemd.services.oauth2-proxy = {
-      # oauth2-proxy won't start until keycloak is running
-      after = (optional config.services.keycloak.enable "keycloak.service") ++
-              (optional cfg.enableRedis "redis-oauth2-proxy.service");
-      wants = optional config.services.keycloak.enable "keycloak.service";
+      after = (optional cfg.enableRedis "redis-oauth2-proxy.service");
       # Don't give up trying to start oauth2-proxy, even if keycloak isn't up yet
+      # https://gist.github.com/benley/78a5e84c52131f58d18319bf26d52cda
       startLimitIntervalSec = 0;
       serviceConfig = {
         RestartSec = 1;

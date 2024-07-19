@@ -1,27 +1,5 @@
 { config, lib, pkgs, ... }:
 
-with rec {
-  quarkus-systemd-notify = pkgs.fetchMavenArtifact {
-    groupId = "io.quarkiverse.systemd.notify";
-    artifactId = "quarkus-systemd-notify";
-    version = "1.0.1";
-    hash = "sha256-3I4j22jyIpokU4kdobkt6cDsALtxYFclA+DV+BqtmLY=";
-  };
-
-  quarkus-systemd-notify-deployment = pkgs.fetchMavenArtifact {
-    groupId = "io.quarkiverse.systemd.notify";
-    artifactId = "quarkus-systemd-notify-deployment";
-    version = "1.0.1";
-    hash = "sha256-xHxzBxriSd/OU8gEcDG00VRkJYPYJDfAfPh/FkQe+zg=";
-  };
-
-  keycloak-plugins = pkgs.runCommand "keycloak-plugins" {} ''
-      mkdir -p $out
-      cp ${quarkus-systemd-notify}/share/java/*.jar $out/
-      cp ${quarkus-systemd-notify-deployment}/share/java/*.jar $out/
-    '';
-};
-
 let cfg = config.my.keycloak; in
 
 {
@@ -46,13 +24,6 @@ let cfg = config.my.keycloak; in
       };
     };
 
-    systemd.services.keycloak = {
-      serviceConfig = {
-        Type = "notify";
-        NotifyAccess = "all";
-      };
-    };
-
     # TODO: put keycloak and its mysql instance into a nixos container
     services.keycloak = {
       enable = true;
@@ -65,7 +36,6 @@ let cfg = config.my.keycloak; in
       settings.http-port = 8078;
       settings.http-enabled = true;
       settings.proxy = "reencrypt";
-      plugins = [ keycloak-plugins ];
     };
 
     services.mysql.enable = true;
