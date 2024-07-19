@@ -32,7 +32,10 @@
   my.nextcloud.enable = false;        # OFF
   my.node-exporter.enable = true;
   my.nyanbox-backups.enable = false;  # OFF
-  my.oauth2_proxy.enable = true;
+  my.oauth2-proxy = {
+    enable = true;
+    enableRedis = true;
+  };
   my.paperless.enable = true;
   my.photoprism.enable = false;       # OFF
   my.prometheus.enable = true;
