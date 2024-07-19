@@ -36,6 +36,11 @@ let cfg = config.my.keycloak; in
           proxyPass = "http://keycloak/auth/";
           extraConfig = ''
             auth_request off;
+
+            # Default is 4k which is too small for some auth responses
+            proxy_buffer_size 16k;
+            proxy_busy_buffers_size 32k;
+            proxy_buffers 8 16k;
           '';
         };
       };
