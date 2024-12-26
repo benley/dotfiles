@@ -4,6 +4,7 @@
   imports = [
     ./hardware-configuration.nix
     ../imports/defaults.nix
+    ./modules/cadvisor.nix
     ./modules/factorio-server
     ./modules/grafana.nix
     ./modules/home-assistant.nix
@@ -22,6 +23,7 @@
     ./modules/vaultwarden.nix
   ];
 
+  my.cadvisor.enable = true;
   my.factorio-server.enable = false;  # OFF
   my.grafana.enable = true;
   my.home-assistant.enable = true;
@@ -101,6 +103,7 @@
     allowedTCPPorts = [
       80 443
       139 445 # Samba
+      8080 # shrug
     ];
     allowedUDPPorts = [
       67 68 # bootp
@@ -112,7 +115,8 @@
     ];
     # Allow tftp from the edgerouter only
     extraCommands = ''
-      iptables -A nixos-fw -p udp -m udp --dport 69 -s 192.168.7.1/32 -j ACCEPT
+      iptables  -A nixos-fw -p udp -m udp --dport 69 -s 192.168.7.1/32 -j ACCEPT
+      ip6tables -A nixos-fw -p udp -m udp --dport 69 -s fd00::/64 -j ACCEPT
     '';
   };
 
@@ -273,5 +277,13 @@
   services.atftpd = {
     enable = true;
     root = "/srv/tftp";
+  };
+
+  services.cloudflare-dyndns = {
+    enable = true;
+    ipv4 = true;
+    ipv6 = true;
+    apiTokenFile = "/root/cfdyndns-token.txt";
+    domains = ["nyanbox.zoiks.net"];
   };
 }

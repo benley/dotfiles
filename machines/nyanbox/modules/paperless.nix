@@ -60,10 +60,15 @@ let cfg = config.my.paperless; in
         PAPERLESS_USE_X_FORWARD_HOST = true;
         # PAPERLESS_USE_X_FORWARD_PORT = "true";
         PAPERLESS_FILENAME_FORMAT = "{created_year}/{correspondent}/{title}";
+        # Be more conservative about deciding to rotate pages (default is 12)
+        PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD = 15;
         PAPERLESS_OCR_USER_ARGS = builtins.toJSON {
           # I don't care about preserving signatures in OCR'd copies of documents
           invalidate_digital_signatures = true;
         };
+        # Fix worker timeout at startup, somehow?
+        # https://github.com/paperless-ngx/paperless-ngx/pull/1500 ???
+        PAPERLESS_WEBSERVER_WORKERS = 2;
         # https://github.com/NixOS/nixpkgs/issues/240591
         LD_LIBRARY_PATH="${getLib pkgs.mkl}/lib";
       };
