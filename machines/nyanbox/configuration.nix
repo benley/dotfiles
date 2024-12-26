@@ -16,6 +16,7 @@
     ./modules/node-exporter.nix
     ./modules/nyanbox-backups.nix
     ./modules/oauth2-proxy.nix
+    # ./modules/oxidized.nix
     ./modules/paperless.nix
     ./modules/photoprism.nix
     ./modules/prometheus.nix
@@ -205,44 +206,44 @@
     # reminder: Shares can be defined in other modules,
     #           like home-assistant.nix and paperless.nix
 
-    shares.scratch = {
+    settings.scratch = {
       path = "/zfs/nyanbox/scratch";
       "read only" = false;
     };
 
-    shares.downloads = {
+    settings.downloads = {
       path = "/zfs/nyanbox/downloads";
       "read only" = false;
     };
 
-    shares.software = {
+    settings.software = {
       path = "/zfs/nyanbox/software";
       "read only" = false;
     };
 
-    shares.photos = {
+    settings.photos = {
       path = "/zfs/nyanbox/photos";
     };
 
-    shares.media = {
+    settings.media = {
       path = "/zfs/nyanbox/media";
       "read only" = false;
     };
 
-    shares.archives = {
+    settings.archives = {
       path = "/zfs/nyanbox/archives";
     };
 
-    shares.backup = {
+    settings.backup = {
       path = "/zfs/nyanbox/backup";
       "read only" = false;
     };
 
-    extraConfig = ''
-      [homes]
-      read only = no
-      guest ok = no
-    '';
+    settings.homes = {
+      "read only" = "no";
+      "guest ok" = "no";
+    };
+
   };
 
   system.autoUpgrade = {

@@ -65,7 +65,7 @@ let cfg = config.my.netbox; in
 
         services.netbox = {
           enable = true;
-          package = pkgs.netbox_3_7;
+          package = pkgs.netbox_4_1;
           secretKeyFile = "/var/lib/netbox/.secretkey.txt";
           listenAddress = "0.0.0.0";
           settings = {

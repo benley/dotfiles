@@ -35,7 +35,7 @@ let cfg = config.my.keycloak; in
       settings.http-relative-path = "/auth";
       settings.http-port = 8078;
       settings.http-enabled = true;
-      settings.proxy = "reencrypt";
+      settings.proxy-headers = "xforwarded";
     };
 
     services.mysql.enable = true;

@@ -19,7 +19,7 @@ let cfg = config.my.home-assistant; in
     };
 
     services.samba.enable = true;
-    services.samba.shares.hass_backup = {
+    services.samba.settings.hass_backup = {
       path = "/zfs/nyanbox/backup/hass";
       "read only" = false;
     };

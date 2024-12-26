@@ -76,7 +76,7 @@ let cfg = config.my.paperless; in
 
     services.samba = {
       enable = true;
-      shares.paperless_consume = {
+      settings.paperless_consume = {
         path = "/var/lib/paperless/consume";
         "read only" = false;
         "force create mode" = 660;

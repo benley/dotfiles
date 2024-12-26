@@ -31,7 +31,6 @@
 
   documentation.dev.enable = true;
 
-  programs.bash.enableCompletion = true;
   programs.bash.vteIntegration = lib.mkForce false;  # I let home-manager handle this
 
   programs.iftop.enable = true;
