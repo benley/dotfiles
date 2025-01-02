@@ -8,8 +8,13 @@ let cfg = config.my.cadvisor; in
     services.cadvisor = {
       enable = true;
       port = 30141;
-      extraOptions = ["-url_base_prefix=/cadvisor"];
+      extraOptions = [
+        "-url_base_prefix=/cadvisor"
+        "-enable_metrics=process"
+      ];
     };
+    # add ps to cadvisor's path so process metrics work
+    systemd.services.cadvisor.path = [pkgs.procps];
 
     services.nginx = {
       upstreams.cadvisor.servers = { "127.0.0.1:${toString config.services.cadvisor.port}" = {}; };

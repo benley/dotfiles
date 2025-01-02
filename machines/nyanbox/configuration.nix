@@ -8,6 +8,7 @@
     ./modules/factorio-server
     ./modules/grafana.nix
     ./modules/home-assistant.nix
+    ./modules/immich.nix
     ./modules/keycloak.nix
     ./modules/metube.nix
     ./modules/minecraft-server
@@ -18,7 +19,7 @@
     ./modules/oauth2-proxy.nix
     # ./modules/oxidized.nix
     ./modules/paperless.nix
-    ./modules/photoprism.nix
+    # ./modules/photoprism.nix
     ./modules/prometheus.nix
     ./modules/transmission.nix
     ./modules/vaultwarden.nix
@@ -28,6 +29,7 @@
   my.factorio-server.enable = false;  # OFF
   my.grafana.enable = true;
   my.home-assistant.enable = true;
+  my.immich.enable = true;
   my.keycloak.enable = true;
   my.metube.enable = true;
   my.minecraft-server.enable = false; # OFF
@@ -40,7 +42,7 @@
     enableRedis = true;
   };
   my.paperless.enable = true;
-  my.photoprism.enable = false;       # OFF
+  # my.photoprism.enable = false;       # OFF
   my.prometheus.enable = true;
   my.transmission.enable = true;
   my.vaultwarden.enable = true;
