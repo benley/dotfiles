@@ -34,6 +34,15 @@ let cfg = config.my.prometheus; in
           }];
         }
         {
+          job_name = "cadvisor";
+          metrics_path = "/cadvisor/metrics";
+          static_configs = [{
+            targets = [
+              "localhost:30141"
+            ];
+          }];
+        }
+        {
           job_name = "node";
           static_configs = [{
             targets = [
