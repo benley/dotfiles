@@ -24,10 +24,6 @@ let cfg = config.my.grafana; in
           disable_login_form = true;
           signout_redirect_url = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/logout";
         };
-        "auth" = {
-          # Disable this after upgrading to grafana 10, I think?
-          oauth_allow_insecure_email_lookup = true;
-        };
         "auth.generic_oauth" = {
           auto_login = true;
           enabled = true;
