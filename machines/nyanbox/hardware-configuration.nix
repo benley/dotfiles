@@ -11,7 +11,7 @@
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" "sr_mod"];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
-
+  boot.zfs.extraPools = [ "nyanbox" ];
 
   fileSystems."/" =
     { device = "rpool/nixos/root";
@@ -38,60 +38,60 @@
       fsType = "vfat";
     };
 
-  fileSystems."/zfs/nyanbox" =
-    { device = "nyanbox";
-      fsType = "zfs";
-    };
+  # fileSystems."/zfs/nyanbox" =
+  #   { device = "nyanbox";
+  #     fsType = "zfs";
+  #   };
 
-  fileSystems."/zfs/nyanbox/archives" =
-    { device = "nyanbox/archives";
-      fsType = "zfs";
-    };
+  # fileSystems."/zfs/nyanbox/archives" =
+  #   { device = "nyanbox/archives";
+  #     fsType = "zfs";
+  #   };
 
-  fileSystems."/zfs/nyanbox/archives/maya_home" =
-    { device = "nyanbox/archives/maya_home";
-      fsType = "zfs";
-    };
+  # fileSystems."/zfs/nyanbox/archives/maya_home" =
+  #   { device = "nyanbox/archives/maya_home";
+  #     fsType = "zfs";
+  #   };
 
-  fileSystems."/zfs/nyanbox/books" =
-    { device = "nyanbox/books";
-      fsType = "zfs";
-    };
+  # fileSystems."/zfs/nyanbox/books" =
+  #   { device = "nyanbox/books";
+  #     fsType = "zfs";
+  #   };
 
-  fileSystems."/zfs/nyanbox/crashplan" =
-    { device = "nyanbox/crashplan";
-      fsType = "zfs";
-    };
+  # fileSystems."/zfs/nyanbox/crashplan" =
+  #   { device = "nyanbox/crashplan";
+  #     fsType = "zfs";
+  #   };
 
-  fileSystems."/zfs/nyanbox/downloads" =
-    { device = "nyanbox/downloads";
-      fsType = "zfs";
-    };
+  # fileSystems."/zfs/nyanbox/downloads" =
+  #   { device = "nyanbox/downloads";
+  #     fsType = "zfs";
+  #   };
 
-  fileSystems."/zfs/nyanbox/media" =
-    { device = "nyanbox/media";
-      fsType = "zfs";
-    };
+  # fileSystems."/zfs/nyanbox/media" =
+  #   { device = "nyanbox/media";
+  #     fsType = "zfs";
+  #   };
 
-  fileSystems."/zfs/nyanbox/photos" =
-    { device = "nyanbox/photos";
-      fsType = "zfs";
-    };
+  # fileSystems."/zfs/nyanbox/photos" =
+  #   { device = "nyanbox/photos";
+  #     fsType = "zfs";
+  #   };
 
-  fileSystems."/zfs/nyanbox/scratch" =
-    { device = "nyanbox/scratch";
-      fsType = "zfs";
-    };
+  # fileSystems."/zfs/nyanbox/scratch" =
+  #   { device = "nyanbox/scratch";
+  #     fsType = "zfs";
+  #   };
 
-  fileSystems."/zfs/nyanbox/software" =
-    { device = "nyanbox/software";
-      fsType = "zfs";
-    };
+  # fileSystems."/zfs/nyanbox/software" =
+  #   { device = "nyanbox/software";
+  #     fsType = "zfs";
+  #   };
 
-  fileSystems."/zfs/nyanbox/vm-images" =
-    { device = "nyanbox/vm-images";
-      fsType = "zfs";
-    };
+  # fileSystems."/zfs/nyanbox/vm-images" =
+  #   { device = "nyanbox/vm-images";
+  #     fsType = "zfs";
+  #   };
 
   swapDevices = [];
     # [ { device = "/dev/disk/by-uuid/56abc5a3-18f9-489e-a61b-623cc30de083"; } ];
