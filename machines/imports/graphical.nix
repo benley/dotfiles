@@ -16,7 +16,8 @@
   environment.etc = {
     "opt/chrome/policies/managed/test_policy.json" = {
       text = builtins.toJSON {
-        "ExtensionInstallBlacklist" = [
+        AuthServerAllowlist = "*.memcompute.com,*.memsql.com,*.singlestore.com";
+        ExtensionInstallBlocklist = [
           "khpfeaanjngmcnplbdlpegiifgpfgdco"  # Smart Card Connector (breaks gpg/ssh agent!)
         ];
       };
@@ -45,12 +46,11 @@
     signal-desktop
     slack
     telegram-desktop
-    transmission-gtk
-    gnome_mplayer
+    transmission_4-gtk
     nordic  # GTK theme
-    gnome3.gnome-themes-extra  # I think this fixes some "can't find theme engine adwaita" erorrs
-    gnome3.gnome-tweaks
-    gnome3.dconf-editor
+    gnome-themes-extra  # I think this fixes some "can't find theme engine adwaita" erorrs
+    gnome-tweaks
+    dconf-editor
     gnomeExtensions.appindicator
     gnomeExtensions.dash-to-panel
     gnomeExtensions.just-perfection
@@ -68,7 +68,7 @@
     vdpauinfo
     libva-utils     # for the vainfo command
 
-    alsaUtils       # amixer, used in .xmonad.hs
+    alsa-utils       # amixer, used in .xmonad.hs
     pavucontrol
 
     gimp

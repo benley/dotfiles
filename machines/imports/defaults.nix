@@ -33,8 +33,11 @@
 
   programs.bash.vteIntegration = lib.mkForce false;  # I let home-manager handle this
 
+  programs.htop.enable = true;
   programs.iftop.enable = true;
+  programs.iotop.enable = true;
   programs.mtr.enable = true;
+  programs.tcpdump.enable = true;
 
   services.openssh.settings.X11Forwarding = true;
   services.openssh.settings.PasswordAuthentication = false;
@@ -51,14 +54,11 @@
     file
     git
     gnupg
-    htop
-    iotop
     iw
     jq
     lsof
     mosh
     nethogs
-    nixos-option
     nix-prefetch-scripts
     nixos-option
     nmap
@@ -68,7 +68,6 @@
     pwgen
     socat
     sysstat
-    tcpdump
     inetutils
     terminfo-extras  # my custom stuff
     tig

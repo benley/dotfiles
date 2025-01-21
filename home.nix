@@ -140,10 +140,8 @@
     extraPackages = epkgs: [
       # Preinstall some non-trivial dependencies so emacs doesn't need to build
       # them from source
-      epkgs.use-package
       epkgs.vterm
       epkgs.emacsql
-      epkgs.emacsql-sqlite
     ];
   };
 

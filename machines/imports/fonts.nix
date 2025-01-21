@@ -22,24 +22,19 @@ let my-fonts = inputs.my-fonts.packages."${pkgs.system}"; in
     freefont_ttf
     font-awesome
     go-font
-    #google-fonts  # Like 1800 fonts. Whoa.
     hack-font
     hasklig
     ibm-plex
     inconsolata
     iosevka
-    # liberation_ttf  # default
     meslo-lg
-    # monoid  # broken?
     mononoki
     montserrat
-    (nerdfonts.override { fonts = ["NerdFontsSymbolsOnly"]; })
+    nerd-fonts.symbols-only
     noto-fonts
     noto-fonts-emoji
     oxygenfonts
-    # powerline-fonts
     profont
-    # proggyfonts  # bitmapped, too small on modern screens
     roboto
     source-code-pro
     source-sans-pro
@@ -49,8 +44,6 @@ let my-fonts = inputs.my-fonts.packages."${pkgs.system}"; in
     tewi-font
     ttf_bitstream_vera
     ubuntu_font_family
-    # unifont  # default
-    # vistafonts  # broken?
   ];
 
   fonts.fontconfig.defaultFonts = {

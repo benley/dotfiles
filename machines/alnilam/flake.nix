@@ -18,7 +18,7 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware";
 
     memsql-provisioning = {
-      url = "git+ssh://git@gitlab.cloud.memcompute.com/cloud/provisioning.git?ref=nix-flake";
+      url = "git+ssh://git@gitlab.cloud.memcompute.com/cloud/provisioning.git";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };

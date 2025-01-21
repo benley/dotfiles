@@ -18,7 +18,19 @@
   boot.loader.systemd-boot.configurationLimit = 10;
 
   networking.hostName = "alnilam";
+  networking.domain = "ws.memcompute.com";
   networking.hostId = "6a9e86d2";
+
+  # I will probably need this (for netgroups) if I want sudo rules to work
+  # services.nscd.enableNsncd = false;
+
+  services.sssd.config = ''
+    [sudo]
+    debug_level = 0x0070
+
+    [sssd]
+    debug_level = 0x0070
+  '';
 
   # Allow changing timezone via dbus, so GeoIP location detection can work
   time.timeZone = null;
@@ -27,9 +39,14 @@
   networking.networkmanager.enable = true;
 
   services.resolved.enable = true;
+  services.resolved.llmnr = "false";
   services.resolved.extraConfig = ''
     MulticastDNS=true
   '';
+
+  services.avahi.nssmdns4 = false;
+  services.avahi.publish.addresses = false;
+  services.avahi.publish.enable = false;
 
   services.libinput.enable = true;
   services.libinput.touchpad.naturalScrolling = true;
@@ -37,14 +54,14 @@
   services.xserver = {
     enable = true;
 
-    videoDrivers = [ "intel" ];  # TODO: why intel instead of modesetting?
+    videoDrivers = [ "modesetting" ];
 
     dpi = 144;  # gnome3 seems to completely ignore this
 
     xkb.options = "ctrl:nocaps";
   };
 
-  hardware.opengl = {
+  hardware.graphics = {
     extraPackages = with pkgs;
         [ vaapiIntel libvdpau libvdpau-va-gl vaapiVdpau ];
     extraPackages32 = with pkgs.pkgsi686Linux;
@@ -100,20 +117,12 @@
   home-manager.useUserPackages = true;
   home-manager.users.bstaffin = import ../../home.nix;
 
+  nix.gc.automatic = true;
+  nix.gc.options = "--delete-older-than 14d";
+
   nix.settings.trusted-users = [ "bstaffin" ];
 
-  # programs.sway.enable = true;
-
-  # I think this is now fixed in k3d ≥ 4.4.3
-  # https://github.com/NixOS/nixpkgs/issues/111835
-  # https://github.com/rancher/k3d/issues/493
-  # systemd.enableUnifiedCgroupHierarchy = false;
-
-  # services.fprintd.enable = true;
-
   environment.systemPackages = with pkgs; [
-    arcanist
-    openldap
     terraform-ls
     virt-manager
     inputs.memsql-provisioning.packages."${pkgs.system}".memsqlaws
@@ -125,4 +134,16 @@
   services.tailscale.enable = true;
 
   virtualisation.libvirtd.enable = true;
+
+  security.ipa = {
+    enable = true;
+    server = "ops-ova-ns-1.ops.memcompute.com";
+    realm = "OPS.MEMCOMPUTE.COM";
+    domain = "ops.memcompute.com";
+    certificate = pkgs.fetchurl {
+      url = "https://idm.cloud.memcompute.com/ipa/config/ca.crt";
+      sha256 = "0ngzrxjwsrjfp2bh4s324yij16sbrphh8c1sqgcq3nmxq1j60am6";
+    };
+    basedn = "dc=ops,dc=memcompute,dc=com";
+  };
 }
