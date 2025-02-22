@@ -95,7 +95,8 @@
   services.xserver.enableCtrlAltBackspace = false;
   services.xserver.xkb.layout = "us";
 
-  services.irqbalance.enable = true;
+  # I suspect I don't actually want this
+  # services.irqbalance.enable = true;
 
   time.timeZone = lib.mkDefault "America/New_York";
 
