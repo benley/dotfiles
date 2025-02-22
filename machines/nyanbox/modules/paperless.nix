@@ -77,6 +77,11 @@ let cfg = config.my.paperless; in
       };
     };
 
+    # systemd.services."paperless-task-queue".serviceConfig = {
+    #   MemoryMax = "16G";
+    #   CPUQuota = "200%";
+    # };
+
     services.samba = {
       enable = true;
       settings.paperless_consume = {

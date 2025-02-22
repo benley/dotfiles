@@ -33,6 +33,10 @@ let cfg = config.my.keycloak; in
 
     containers.keycloak = {
       autoStart = true;
+      extraFlags = [
+        # This doesn't work because nixos runs systemd-nspawn with --keep-unit
+        # "--property=MemoryMax=2G"
+      ];
       privateNetwork = true;
       hostAddress = "192.168.99.7";
       localAddress = "192.168.99.8";
@@ -59,6 +63,10 @@ let cfg = config.my.keycloak; in
         services.mysql.package = pkgs.mariadb;
         system.stateVersion = "24.11";
       };
+    };
+
+    systemd.services."container@keycloak".serviceConfig = {
+      MemoryMax = "2G";
     };
 
   };
