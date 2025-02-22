@@ -59,9 +59,12 @@ let cfg = config.my.paperless; in
         PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME = "HTTP_X_USERNAME";
         PAPERLESS_USE_X_FORWARD_HOST = true;
         # PAPERLESS_USE_X_FORWARD_PORT = "true";
-        PAPERLESS_FILENAME_FORMAT = "{created_year}/{correspondent}/{title}";
+        PAPERLESS_FILENAME_FORMAT = "{{created_year}}/{{correspondent}}/{{title}}";
+        # deskew seems to make things worse more often than it helps
+        PAPERLESS_OCR_DESKEW = false;
         # Be more conservative about deciding to rotate pages (default is 12)
         PAPERLESS_OCR_ROTATE_PAGES_THRESHOLD = 15;
+        PAPERLESS_OCR_SKIP_ARCHIVE_FILE = "with_text";
         PAPERLESS_OCR_USER_ARGS = builtins.toJSON {
           # I don't care about preserving signatures in OCR'd copies of documents
           invalidate_digital_signatures = true;
