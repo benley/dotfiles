@@ -82,6 +82,9 @@
       "nyanbox/photos" = {
         plan = "1w=>1d,1m=>1w,1y=>1m";
       };
+      "nyanbox/immich" = {
+        plan = "1w=>1d,1m=>1w,1y=>1m";
+      };
       "nyanbox/downloads" = {
         plan = "1w=>1d,1m=>1w,1y=>1m";
       };
