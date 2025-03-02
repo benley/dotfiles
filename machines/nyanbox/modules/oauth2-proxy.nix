@@ -15,12 +15,22 @@ with {
 
   config = mkIf cfg.enable {
 
+    sops.secrets.oauth2_proxy_client_secret = {};
+    sops.secrets.oauth2_proxy_cookie_secret = {};
+
+    sops.templates."oauth2-proxy.env" = {
+      content = lib.toShellVars {
+        OAUTH2_PROXY_CLIENT_SECRET = config.sops.placeholder.oauth2_proxy_client_secret;
+        OAUTH2_PROXY_COOKIE_SECRET = config.sops.placeholder.oauth2_proxy_cookie_secret;
+      };
+    };
+
     services.redis.servers.oauth2-proxy.enable = mkIf cfg.enableRedis true;
 
     # TODO: consider separate proxy instances per service, in containers?
     services.oauth2-proxy = {
       enable = true;
-      keyFile = "/var/lib/oauth2-proxy/oauth2-proxy.env";
+      keyFile = config.sops.templates."oauth2-proxy.env".path;
       email.domains = [ "*" ];
       nginx = {
         virtualHosts."nyanbox.zoiks.net" = {};
