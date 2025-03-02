@@ -254,7 +254,11 @@
   system.autoUpgrade = {
     enable = true;
     flake = "/home/benley/p/dotfiles/machines/nyanbox";
-    flags = ["--update-input" "nixpkgs" "--commit-lock-file"];
+    flags = [
+      "--update-input" "nixpkgs"
+      # I don't really need this, it produces too much noise in my dotfiles commit log
+      # "--commit-lock-file"
+    ];
   };
 
   nix.gc.automatic = true;
