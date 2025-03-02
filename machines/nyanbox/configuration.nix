@@ -292,11 +292,12 @@
     root = "/srv/tftp";
   };
 
+  sops.secrets.cloudflare_dyndns_apitoken_file = {};
   services.cloudflare-dyndns = {
     enable = true;
     ipv4 = true;
     ipv6 = true;
-    apiTokenFile = "/root/cfdyndns-token.txt";
+    apiTokenFile = config.sops.secrets.cloudflare_dyndns_apitoken_file.path;
     domains = ["nyanbox.zoiks.net"];
   };
 }

@@ -17,6 +17,11 @@ let cfg = config.my.grafana; in
       };
     };
 
+    sops.secrets.grafana_oauth_client_secret = {
+      owner = config.users.users.grafana.name;
+      group = config.users.users.grafana.group;
+    };
+
     services.grafana = {
       enable = true;
       settings = {
@@ -30,7 +35,7 @@ let cfg = config.my.grafana; in
           name = "Keycloak";
           allow_sign_up = true;
           client_id = "grafana";
-          client_secret = "$__file{/var/lib/grafana/.secrets/oauth_client_secret}";
+          client_secret = "$__file{${config.sops.secrets.grafana_oauth_client_secret.path}}";
           scopes = "openid email profile offline_access roles";
           auth_url = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/auth";
           token_url = "https://nyanbox.zoiks.net/auth/realms/master/protocol/openid-connect/token";
