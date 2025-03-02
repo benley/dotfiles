@@ -1,0 +1,9 @@
+keys:
+  - &admin_benley age1rpnxkp4m8w7sa959kenq2c9862js7fm3c0gua09c3snpa36ym4mqh8y9l2
+  - &machine_nyanbox age162vplhna9ete7cpmvh3py4sxqffaf9mazl6gakd0xwt2lx78tczsd9cgx0
+creation_rules:
+  - path_regex: machines/nyanbox/.*
+    key_groups:
+      - age:
+          - *machine_nyanbox
+          - *admin_benley

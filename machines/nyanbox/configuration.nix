@@ -47,6 +47,9 @@
   my.transmission.enable = true;
   my.vaultwarden.enable = true;
 
+  sops.defaultSopsFile = ./secrets.yaml;
+  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efis/nvme0n1p2";
   boot.loader.grub = {

@@ -4,6 +4,10 @@ with lib;
 let cfg = config.my.paperless; in
 {
   options.my.paperless.enable = mkEnableOption "paperless-ngx";
+  options.my.paperless.vhost = mkOption {
+    type = types.str;
+    default = "paperless.zoiks.net";
+  };
 
   config = mkIf cfg.enable {
 
@@ -12,15 +16,10 @@ let cfg = config.my.paperless; in
       isSystemUser = true;
     };
 
-    services.oauth2-proxy = {
-      enable = true;
-      nginx.virtualHosts."paperless.zoiks.net" = {};
-    };
-
     services.nginx = {
       upstreams.paperless.servers = { "127.0.0.1:${toString config.services.paperless.port}" = {}; };
 
-      virtualHosts."paperless.zoiks.net" = {
+      virtualHosts.${cfg.vhost} = {
         enableACME = true;
         forceSSL = true;
 
@@ -36,11 +35,32 @@ let cfg = config.my.paperless; in
             # according to https://github.com/paperless-ngx/paperless-ngx/wiki/Using-a-Reverse-Proxy-with-Paperless-ngx#nginx
             proxy_redirect off;
             add_header Referrer-Policy "strict-origin-when-cross-origin";
-            proxy_set_header _oauth2_proxy_0 "";
-
-            auth_request_set $username $upstream_http_x_auth_request_preferred_username;
-            proxy_set_header X-Username $username;
           '';
+        };
+
+        # Disable the django admin site, since it is a brute-force vector
+        locations."/admin/" = {
+          return = "403";
+        };
+      };
+    };
+
+    sops.secrets.paperless_oidc_client_secret = {};
+
+    sops.templates."paperless.conf" = {
+      owner = "paperless";
+      content = lib.toShellVars {
+        PAPERLESS_SOCIALACCOUNT_PROVIDERS = builtins.toJSON {
+          openid_connect = {
+            OAUTH_PKCE_ENABLED = true;
+            APPS = [{
+              provider_id = "keycloak";
+              name = "Keycloak";
+              client_id = "paperless";
+              secret = config.sops.placeholder.paperless_oidc_client_secret;
+              settings.server_url = "https://nyanbox.zoiks.net/auth/realms/master/.well-known/openid-configuration";
+            }];
+          };
         };
       };
     };
@@ -49,14 +69,17 @@ let cfg = config.my.paperless; in
       enable = true;
       dataDir = "/var/lib/paperless";
       settings = {
+        PAPERLESS_CONFIGURATION_PATH = config.sops.templates."paperless.conf".path;
+        PAPERLESS_APPS = "allauth.socialaccount.providers.openid_connect";
+        PAPERLESS_DISABLE_REGULAR_LOGIN = true;
+        PAPERLESS_REDIRECT_LOGIN_TO_SSO = true;
+
         # Hopefully tell OCR that dates are MM/DD/YYYY, not DD/MM/YYYY
         PAPERLESS_DATE_ORDER = "MDY";
-        PAPERLESS_URL = "https://paperless.zoiks.net";
-        PAPERLESS_ALLOWED_HOSTS = "paperless.zoiks.net,nyanbox.zoiks.net,localhost";
+        PAPERLESS_URL = "https://${cfg.vhost}";
+        PAPERLESS_ALLOWED_HOSTS = "${cfg.vhost},nyanbox.zoiks.net,localhost";
         # PAPERLESS_SECRET_KEY moved to /var/lib/paperless/nixos-paperless-secret-key
         PAPERLESS_TRUSTED_PROXIES = "127.0.0.1,192.168.7.24";
-        PAPERLESS_ENABLE_HTTP_REMOTE_USER = true;
-        PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME = "HTTP_X_USERNAME";
         PAPERLESS_USE_X_FORWARD_HOST = true;
         # PAPERLESS_USE_X_FORWARD_PORT = "true";
         PAPERLESS_FILENAME_FORMAT = "{{created_year}}/{{correspondent}}/{{title}}";
