@@ -24,14 +24,6 @@
   # I will probably need this (for netgroups) if I want sudo rules to work
   # services.nscd.enableNsncd = false;
 
-  services.sssd.config = ''
-    [sudo]
-    debug_level = 0x0070
-
-    [sssd]
-    debug_level = 0x0070
-  '';
-
   # Allow changing timezone via dbus, so GeoIP location detection can work
   time.timeZone = null;
 
