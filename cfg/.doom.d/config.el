@@ -147,6 +147,10 @@
         org-roam-ui-update-on-save t
         org-roam-ui-open-on-start t))
 
+(use-package! magit-status
+  :config
+  (setq magit-status-margin '(t age-abbreviated magit-log-margin-width t 18)))
+
 (after! tramp-sh
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
