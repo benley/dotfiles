@@ -23,6 +23,7 @@
   home.stateVersion = "20.09";
 
   home.packages = with pkgs; [
+    actionlint
     # azure-cli
     # mu  # maildir thing to use with emacs mh maybe?
     awscli2

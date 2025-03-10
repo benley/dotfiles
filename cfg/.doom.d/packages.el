@@ -66,3 +66,4 @@
 (package! org-roam-ui)
 (package! puppet-mode)
 (package! udev-mode)
+(package! flycheck-actionlint)

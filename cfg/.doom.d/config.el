@@ -152,3 +152,7 @@
 
 ;; font filename workaround https://github.com/doomemacs/doomemacs/issues/7431#issuecomment-1722663411
 (setq nerd-icons-font-names '("SymbolsNerdFontMono-Regular.ttf"))
+
+(use-package! flycheck-actionlint
+  :config
+  (flycheck-actionlint-setup))
