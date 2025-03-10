@@ -49,7 +49,6 @@
     binutils # strings, strip, ar, as, ...
     bc
     dnsutils
-    dstat
     ethtool
     file
     git
