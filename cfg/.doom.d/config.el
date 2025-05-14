@@ -128,6 +128,16 @@
   :config
   (setq comint-scroll-to-bottom-on-input 'this))  ;; scroll only _this_ window
 
+;; accept completion from copilot and fallback to company
+(use-package! copilot
+  :after company
+  :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("<tab>" . 'copilot-accept-completion)
+              ("TAB" . 'copilot-accept-completion)
+              ("C-TAB" . 'copilot-accept-completion-by-word)
+              ("C-<tab>" . 'copilot-accept-completion-by-word)))
+
 (use-package! lsp-mode
   :config
   (setq lsp-auto-execute-action nil))
@@ -160,3 +170,10 @@
 (use-package! flycheck-actionlint
   :config
   (flycheck-actionlint-setup))
+
+(use-package! ultra-scroll
+  :init
+  (setq scroll-conservatively 101
+        scroll-margin 0)
+  :config
+  (ultra-scroll-mode 1))

@@ -51,6 +51,10 @@
 
 (package! adoc-mode)
 (package! atomic-chrome)
+
+(package! copilot
+  :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
+
 (package! emacsql :built-in 'prefer)
 (package! emacsql-sqlite :built-in 'prefer)
 
@@ -67,3 +71,8 @@
 (package! puppet-mode)
 (package! udev-mode)
 (package! flycheck-actionlint)
+
+(package! ultra-scroll
+  :recipe (:host github
+           :repo "jdtsmith/ultra-scroll"
+           :files ("*.el")))
