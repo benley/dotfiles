@@ -3,7 +3,7 @@
 {
   imports = [
     ./fonts.nix
-    ./wacom.nix
+    # ./wacom.nix
     ./workstation.nix
   ];
 
@@ -32,9 +32,10 @@
     (hunspellWithDicts [pkgs.hunspellDicts.en-us])
     bitwarden
     chrysalis  # keyboardio config editor (requires services.udev.packages entry also)
-    discord
+    # discord
+    vesktop
     firefox-wayland
-    fritzing
+    # fritzing
     glxinfo
     (google-chrome.override {
       commandLineArgs = "--enable-features=TouchpadOverscrollHistoryNavigation";
@@ -43,7 +44,7 @@
     pdfarranger
     prismlauncher
     remmina  # RDP/VNC/NX/Spice client
-    signal-desktop
+    signal-desktop-bin
     slack
     telegram-desktop
     transmission_4-gtk
@@ -73,13 +74,8 @@
 
     gimp
 
-    breeze-icons
-    hicolor-icon-theme
-    breeze-gtk
-    breeze-qt5
-    pinentry-gnome3    # for rbw
+    # pinentry-gnome3    # for rbw
 
-    ddccontrol
     powertop
 
     razergenie
@@ -95,6 +91,9 @@
     # great alternative if I want xcursor stuff to work in non-gtk
     # emacs, xterm, etc.
     # LD_LIBRARY_PATH = ["${pkgs.xorg.libXcursor}/lib"];
+
+    # tell electron apps to use Wayland
+    NIXOS_OZONE_WL = "1";
   };
 
   environment.variables = {
@@ -123,9 +122,9 @@
   # TODO: what was I doing with uinput?
   hardware.uinput.enable = true;
 
-  hardware.pulseaudio.enable = true;
-  hardware.pulseaudio.support32Bit = true;
-  hardware.pulseaudio.package = pkgs.pulseaudioFull;  # With bluetooth support
+  # hardware.pulseaudio.enable = true;
+  # hardware.pulseaudio.support32Bit = true;
+  # hardware.pulseaudio.package = pkgs.pulseaudioFull;  # With bluetooth support
 
   hardware.bluetooth.enable = true;
 
@@ -147,4 +146,7 @@
   '';
 
   services.udev.packages = [pkgs.chrysalis];
+
+  services.geoclue2.geoProviderUrl = "https://api.beacondb.net/v1/geolocate";
+
 }

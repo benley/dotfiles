@@ -121,6 +121,13 @@
     virtiofsd
   ];
 
+  programs.obs-studio = {
+    enable = true;
+    enableVirtualCamera = true;
+  };
+
+  services.ddccontrol.enable = true;
+
   services.openssh.enable = true;
 
   services.tailscale.enable = true;
@@ -137,5 +144,6 @@
       sha256 = "0ngzrxjwsrjfp2bh4s324yij16sbrphh8c1sqgcq3nmxq1j60am6";
     };
     basedn = "dc=ops,dc=memcompute,dc=com";
+    dyndns.interface = "tailscale0";
   };
 }

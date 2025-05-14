@@ -31,13 +31,13 @@
     cabal-install
     cabal2nix
     cachix
+    copilot-language-server-fhs
     fd  # used by doom emacs (project file search)
     ctags
     curlie
     diffstat  # tanka wants this (TODO: fix upstream)
     editorconfig-core-c
     fd  # emacs projectile uses this
-    gh
     go
     google-cloud-sdk
     google-drive-ocamlfuse
@@ -59,7 +59,6 @@
     pyright
     pandoc
     pdfarranger
-    rbw
     ripgrep
     shellcheck
     sqlite  # org-roam uses this
@@ -79,7 +78,7 @@
   };
 
   gtk = {
-    enable = true;
+    enable = false;
     cursorTheme.name = "Nordic-cursors";
     cursorTheme.package = pkgs.nordic;
     # cursorTheme.size = 16;
@@ -143,7 +142,26 @@
       # them from source
       epkgs.vterm
       epkgs.emacsql
+      epkgs.treesit-grammars.with-all-grammars
     ];
+    package = pkgs.emacs-pgtk;
+  };
+
+  services.darkman = {
+    enable = true;
+    settings.usegeoclue = true;
+    darkModeScripts = {
+      gtk3-theme = ''
+        gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark
+        gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+      '';
+    };
+    lightModeScripts = {
+      gtk3-theme = ''
+        gsettings set org.gnome.desktop.interface gtk-theme Adwaita
+        gsettings set org.gnome.desktop.interface color-scheme default
+      '';
+    };
   };
 
   services.emacs = {
@@ -209,11 +227,34 @@
     includes = [{path = "~/.config/git/secret-stuff.config";}];
   };
 
+  programs.gh = {
+    enable = true;
+    settings = {
+      aliases = {
+        co = "pr checkout";
+      };
+      git_protocol = "https";
+      prompt = "enabled";
+    };
+  };
+
+  programs.rbw = {
+    enable = true;
+    settings = {
+      email = "benley@zoiks.net";
+      pinentry = pkgs.pinentry-gnome3;
+      base_url = "https://vault.zoiks.net";
+      lock_timeout = 3600;
+      sync_interval = 3600;
+    };
+  };
+
   programs.tmux = {
     enable = true;
     aggressiveResize = true;
     historyLimit = 50000;
     keyMode = "vi";
+    mouse = true;
     plugins = [
       {
         plugin = pkgs.tmuxPlugins.power-theme;
@@ -226,15 +267,6 @@
       }
     ];
     extraConfig = ''
-      # Enable true-color terminal support
-      # (I think these are no longer needed since I have patched .terminfo stuff now)
-      # set-option -ga terminal-overrides ",xterm-256color:Tc"  # for Konsole
-      # set-option -ga terminal-overrides ",xterm-24bit:Tc"     # custom stuff
-      # set-option -ga terminal-overrides ",konsole-direct:Tc"
-
-      # Mouse support
-      set-option -g mouse on
-
       # pane movement
       bind-key J command-prompt -p "join pane from:"  "join-pane -s ':%%'"
       #bind-key s command-prompt -p "send pane to:"  "join-pane -t ':%%'"
