@@ -179,3 +179,11 @@
         scroll-margin 0)
   :config
   (ultra-scroll-mode 1))
+
+;; When tabs are enabled, remap ctrl-pgup/pgdn to switch tabs
+;; and then gt/gT can be used to switch workspaces like before
+(map! (:when (modulep! :ui tabs)
+        :nvie "C-<next>" #'+tabs:next-or-goto
+        :nvie "C-<prior>" #'+tabs:previous-or-goto
+        :n "gt" #'+workspace:switch-next
+        :n "gT" #'+workspace:switch-previous))
