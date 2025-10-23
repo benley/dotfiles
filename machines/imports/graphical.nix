@@ -31,7 +31,7 @@
     # fritzing
     glxinfo
     (google-chrome.override {
-      commandLineArgs = "--enable-features=TouchpadOverscrollHistoryNavigation";
+      commandLineArgs = "--enable-features=TouchpadOverscrollHistoryNavigation --disable-features=ExtensionManifestV2Unsupported,ExtensionManifestV2Disabled";
     })
     graphviz
     pdfarranger
