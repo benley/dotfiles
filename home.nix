@@ -69,6 +69,7 @@
     whois
     xournalpp
     yq
+    zulip
   ];
 
   dconf.settings = {
