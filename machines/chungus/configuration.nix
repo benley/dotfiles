@@ -91,12 +91,6 @@
 
   system.stateVersion = "24.11"; # Don't change this post-install
 
-  users.users.benley = {
-    isNormalUser = true;
-    description = "LOCAL benley";
-    extraGroups = [ "networkmanager" "wheel" ];
-  };
-
   users.users.bstaffin = {
     isNormalUser = true;
     uid = 185476231;
@@ -132,7 +126,8 @@
   #   enableVirtualCamera = true;
   # };
 
-  services.ddccontrol.enable = true;
+  # build broken 2025-07-18
+  # services.ddccontrol.enable = true;
 
   services.openssh.enable = true;
 
@@ -142,7 +137,7 @@
 
   security.ipa = {
     enable = true;
-    server = "ops-ova-ns-1.ops.memcompute.com";
+    server = "ops-ova-ns-2.ops.memcompute.com";
     realm = "OPS.MEMCOMPUTE.COM";
     domain = "ops.memcompute.com";
     certificate = pkgs.fetchurl {

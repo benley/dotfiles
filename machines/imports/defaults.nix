@@ -97,9 +97,9 @@
 
   time.timeZone = lib.mkDefault "America/New_York";
 
-  services.logind.extraConfig = ''
-    HandlePowerKey=suspend
-  '';
+  services.logind.settings.Login = {
+    HandlePowerKey = "suspend";
+  };
 
   # https://yulistic.gitlab.io/2017/12/linux-keymapping-with-udev-hwdb/
   # https://unix.stackexchange.com/a/587975

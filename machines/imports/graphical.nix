@@ -3,15 +3,8 @@
 {
   imports = [
     ./fonts.nix
-    # ./wacom.nix
     ./workstation.nix
   ];
-
-  # services.dunst.enable = true;
-  # services.dunst.config = pkgs.callPackage ../../dunstrc.nix {};
-
-  # https://github.com/NixOS/nixpkgs/issues/47173
-  # environment.pathsToLink = [ "/share" ];
 
   environment.etc = {
     "opt/chrome/policies/managed/test_policy.json" = {
@@ -28,11 +21,11 @@
   programs.steam.remotePlay.openFirewall = true;
   programs.steam.dedicatedServer.openFirewall = true;
 
+  programs.chrysalis.enable = true;
+
   environment.systemPackages = with pkgs; [
-    (hunspellWithDicts [pkgs.hunspellDicts.en-us])
+    (hunspell.withDicts (d: [d.en-us]))
     bitwarden
-    chrysalis  # keyboardio config editor (requires services.udev.packages entry also)
-    # discord
     vesktop
     firefox-wayland
     # fritzing
@@ -115,11 +108,12 @@
     browsed.enable = false;
   };
 
+  services.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
+
   services.xserver = {
     enable = true;
     updateDbusEnvironment = true;
-    desktopManager.gnome.enable = true;
-    displayManager.gdm.enable = true;
   };
 
   hardware.graphics.enable = true;
@@ -127,10 +121,6 @@
 
   # TODO: what was I doing with uinput?
   hardware.uinput.enable = true;
-
-  # hardware.pulseaudio.enable = true;
-  # hardware.pulseaudio.support32Bit = true;
-  # hardware.pulseaudio.package = pkgs.pulseaudioFull;  # With bluetooth support
 
   hardware.bluetooth.enable = true;
 
@@ -144,14 +134,12 @@
 
   programs.gnome-terminal.enable = true;  # omfg how is this not the default with gnome
 
-  # Probably don't want this on headless machines, but workstations/laptops
-  # sure. This makes sure that things like my user dbus session don't persist
-  # across multiple logout/login cycles and mess things up.
-  services.logind.extraConfig = ''
-    KillUserProcesses=yes
-  '';
-
-  services.udev.packages = [pkgs.chrysalis];
+  services.logind.settings.Login = {
+    # Probably don't want this on headless machines, but workstations/laptops
+    # sure. This makes sure that things like my user dbus session don't persist
+    # across multiple logout/login cycles and mess things up.
+    KillUserProcesses = true;
+  };
 
   services.geoclue2.geoProviderUrl = "https://api.beacondb.net/v1/geolocate";
 

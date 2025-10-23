@@ -27,6 +27,7 @@ let my-fonts = inputs.my-fonts.packages."${pkgs.system}"; in
     ibm-plex
     inconsolata
     iosevka
+    maple-mono.NF
     meslo-lg
     mononoki
     montserrat

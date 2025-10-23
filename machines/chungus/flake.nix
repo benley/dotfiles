@@ -9,11 +9,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # my-fonts = {
-    #   url = "git+ssh://git@github.com/benley/my-fonts.git";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    #   inputs.flake-utils.follows = "flake-utils";
-    # };
+    my-fonts = {
+      url = "git+ssh://git@github.com/benley/my-fonts.git";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
 
     nixos-hardware.url = "github:NixOS/nixos-hardware";
   };

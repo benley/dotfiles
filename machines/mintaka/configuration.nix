@@ -177,10 +177,6 @@
 
   services.fwupd.enable = true;
 
-  services.logind.extraConfig = ''
-    KillUserProcesses=yes
-  '';
-
   services.flatpak.enable = true;
 
   services.znapzend = {
