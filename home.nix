@@ -180,14 +180,6 @@
 
   programs.git = {
     enable = true;
-    userName = "Benjamin Staffin";
-    userEmail = "benley@gmail.com";
-
-    aliases = {
-      st = "status";
-      lg = ''log --graph --pretty=format:'%Cblue%h%Creset %Cgreen%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative'';
-      uplog = "lg ..@{u}";
-    };
 
     lfs.enable = true;
 
@@ -197,7 +189,18 @@
       ''\#*\#''  # emacs turds
     ];
 
-    extraConfig = {
+    settings = {
+      user.name = "Benjamin Staffin";
+      user.email = "benley@gmail.com";
+
+      aliases = {
+        st = "status";
+        lg = ''log --graph --pretty=format:'%Cblue%h%Creset %Cgreen%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative'';
+        uplog = "lg ..@{u}";
+      };
+
+      init.defaultBranch = "main";
+
       merge.dpkg-changelogs = {
         name = "debian/changelog merge driver";
         driver = "dpkg-mergechangelogs -m %O %A %B %A";
