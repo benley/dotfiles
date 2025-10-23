@@ -194,7 +194,7 @@
       user.name = "Benjamin Staffin";
       user.email = "benley@gmail.com";
 
-      aliases = {
+      alias = {
         st = "status";
         lg = ''log --graph --pretty=format:'%Cblue%h%Creset %Cgreen%an%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative'';
         uplog = "lg ..@{u}";
