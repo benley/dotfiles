@@ -107,7 +107,13 @@
     "interface-name:veth*"
   ];
 
-  services.printing.enable = true;
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.hplip ];
+    # Stop cups from automatitically adding printers it detects on the network,
+    # usually in a broken state
+    browsed.enable = false;
+  };
 
   services.xserver = {
     enable = true;

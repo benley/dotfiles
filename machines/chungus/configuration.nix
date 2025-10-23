@@ -63,9 +63,6 @@
     xkb.options = "ctrl:nocaps";
   };
 
-  # alright I guess I need to print sometimes
-  services.printing.enable = true;
-
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
