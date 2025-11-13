@@ -1,6 +1,7 @@
 { config, pkgs, inputs, ... }:
 
-let my-fonts = inputs.my-fonts.packages."${pkgs.system}"; in
+# hmmm, maybe my-fonts should provide an overlay?
+let my-fonts = inputs.my-fonts.packages."${pkgs.stdenv.hostPlatform.system}"; in
 
 {
   fonts.packages = with pkgs; [
@@ -33,7 +34,7 @@ let my-fonts = inputs.my-fonts.packages."${pkgs.system}"; in
     montserrat
     nerd-fonts.symbols-only
     noto-fonts
-    noto-fonts-emoji
+    noto-fonts-color-emoji
     oxygenfonts
     profont
     roboto
@@ -44,7 +45,7 @@ let my-fonts = inputs.my-fonts.packages."${pkgs.system}"; in
     terminus_font
     tewi-font
     ttf_bitstream_vera
-    ubuntu_font_family
+    ubuntu-classic
   ];
 
   fonts.fontconfig.defaultFonts = {

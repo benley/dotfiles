@@ -25,11 +25,11 @@
 
   environment.systemPackages = with pkgs; [
     (hunspell.withDicts (d: [d.en-us]))
-    bitwarden
+    bitwarden-desktop
     vesktop
-    firefox-wayland
+    firefox
     # fritzing
-    glxinfo
+    # glxinfo
     (google-chrome.override {
       commandLineArgs = "--enable-features=TouchpadOverscrollHistoryNavigation --disable-features=ExtensionManifestV2Unsupported,ExtensionManifestV2Disabled";
     })
