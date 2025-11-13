@@ -124,6 +124,8 @@
     '';
   };
 
+  programs.fzf.enable = true;
+
   home.sessionPath = [
     "$HOME/.krew/bin"
   ];
