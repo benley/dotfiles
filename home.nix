@@ -48,7 +48,6 @@
     jsonnet
     jsonnet-language-server
     krew
-    kube3d
     kubectl
     kubelogin-oidc
     nixfmt-classic
