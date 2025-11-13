@@ -31,7 +31,7 @@
     cabal-install
     cabal2nix
     cachix
-    copilot-language-server-fhs
+    copilot-language-server
     fd  # used by doom emacs (project file search)
     ctags
     curlie
