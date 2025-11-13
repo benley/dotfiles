@@ -111,7 +111,7 @@
       # NIX_PAGER = "";
     };
     initExtra = ''
-      source ${pkgs.gitAndTools.gitFull}/share/git/contrib/completion/git-prompt.sh
+      source ${pkgs.git}/share/git/contrib/completion/git-prompt.sh
       for file in ${./bashrc.d}/*; do
         source "$file"
       done
