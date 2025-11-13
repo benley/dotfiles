@@ -12,14 +12,14 @@
     gitFull
     gnumake
     p7zip
-    python3Full
-    python3Packages.autopep8
-    python3Packages.flake8
-    python3Packages.pep8
+    python3
+    # python3Packages.autopep8
+    # python3Packages.flake8
+    # python3Packages.pep8
     python3Packages.pygments  # for LaTeX minted/pygmentex
-    python3Packages.pylint
-    python3Packages.virtualenv
-    python3Packages.virtualenvwrapper
+    # python3Packages.pylint
+    # python3Packages.virtualenv
+    # python3Packages.virtualenvwrapper
     texlive-for-orgmode
   ];
 }
