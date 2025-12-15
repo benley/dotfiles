@@ -115,7 +115,6 @@
       for file in ${./bashrc.d}/*; do
         source "$file"
       done
-      export PYTHONSTARTUP=${builtins.path {path=./cfg/.pythonrc.py; name="pythonrc.py";}};
 
       # https://felipec.wordpress.com/2021/06/05/adventures-with-man-color/
       export MANPAGER="less -M -R -i --use-color -Dd+R -Du+B -DHkC -j5"
