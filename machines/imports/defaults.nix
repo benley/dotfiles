@@ -39,7 +39,7 @@
   programs.tcpdump.enable = true;
 
   services.openssh.settings.X11Forwarding = true;
-  services.openssh.settings.PasswordAuthentication = false;
+  services.openssh.settings.PasswordAuthentication = lib.mkDefault false;
 
   programs.nano.enable = false;
 
@@ -58,7 +58,6 @@
     mosh
     nethogs
     nix-prefetch-scripts
-    nixos-option
     nmap
     openssl
     pciutils
@@ -91,9 +90,6 @@
   services.xserver.exportConfiguration = true;
   services.xserver.enableCtrlAltBackspace = false;
   services.xserver.xkb.layout = "us";
-
-  # I suspect I don't actually want this
-  # services.irqbalance.enable = true;
 
   time.timeZone = lib.mkDefault "America/New_York";
 

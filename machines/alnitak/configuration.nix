@@ -93,10 +93,6 @@
   services.openssh.enable = true;
   services.openssh.passwordAuthentication = false;
 
-  services.logind.extraConfig = ''
-    HandlePowerKey=ignore
-  '';
-
   services.xserver = {
     libinput.enable = true;
     libinput.naturalScrolling = true;

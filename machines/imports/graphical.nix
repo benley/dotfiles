@@ -17,15 +17,24 @@
     };
   };
 
-  programs.steam.enable = true;
-  programs.steam.remotePlay.openFirewall = true;
-  programs.steam.dedicatedServer.openFirewall = true;
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = true;
+    extraCompatPackages = with pkgs; [
+      proton-ge-bin
+      steamtinkerlaunch
+    ];
+  };
 
   programs.chrysalis.enable = true;
 
   environment.systemPackages = with pkgs; [
     (hunspell.withDicts (d: [d.en-us]))
     bitwarden-desktop
+    hyphenDicts.en_US
+    onlyoffice-desktopeditors
+    discord
     vesktop
     firefox
     # fritzing
@@ -40,7 +49,6 @@
     signal-desktop-bin
     slack
     telegram-desktop
-    transmission_4-gtk
     nordic  # GTK theme
     gnome-themes-extra  # I think this fixes some "can't find theme engine adwaita" erorrs
     gnome-tweaks
@@ -108,13 +116,12 @@
     browsed.enable = false;
   };
 
-  services.desktopManager.gnome.enable = true;
-  services.displayManager.gdm.enable = true;
+  services.xserver.enable = true;
+  services.xserver.updateDbusEnvironment = true;
 
-  services.xserver = {
-    enable = true;
-    updateDbusEnvironment = true;
-  };
+  services.desktopManager.gnome.enable = true;
+
+  services.displayManager.gdm.enable = true;
 
   hardware.graphics.enable = true;
   hardware.graphics.enable32Bit = true;
@@ -135,9 +142,10 @@
   programs.gnome-terminal.enable = true;  # omfg how is this not the default with gnome
 
   services.logind.settings.Login = {
-    # Probably don't want this on headless machines, but workstations/laptops
-    # sure. This makes sure that things like my user dbus session don't persist
-    # across multiple logout/login cycles and mess things up.
+    HandlePowerKey = "suspend";
+    # Clean up stuff like dbus-daemon and whatever other stale processes upon
+    # logout. This may eat tmux sessions, but on graphical workstations I don't
+    # care.
     KillUserProcesses = true;
   };
 

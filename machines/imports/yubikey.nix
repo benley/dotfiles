@@ -6,7 +6,7 @@
     # yubikey-manager
     # yubikey-manager-qt
     # yubikey-neo-manager
-    yubioath-flutter
+    # yubioath-flutter # build broken 11/4/2024
     yubico-piv-tool
   ];
 

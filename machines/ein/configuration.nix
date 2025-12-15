@@ -11,9 +11,14 @@
 
   boot.kernelModules = [ "nct6775" "drivetemp" ];
 
-  # boot.extraModprobeConfig = ''
-  #   options nvidia_drm fbdev=1 modeset=1
-  # '';
+  hardware.nvidia.open = true;
+  hardware.nvidia.modesetting.enable = true;
+  hardware.nvidia.powerManagement.enable = true;
+
+  # systemd.services.systemd-suspend.environment = {
+  #   SYSTEMD_SLEEP_FREEZE_USER_SESSIONS = "false";
+  # };
+  # if systemd-homed ever shows up, add SYSTEMD_HOME_LOCK_FREEZE_SESSION=false to it
 
   boot.loader.grub = {
     device = "nodev";
@@ -39,6 +44,8 @@
   services.zfs.autoSnapshot.enable = true;
 
   services.openssh.enable = true;
+  # you can only reach this inside my network anyway
+  services.openssh.settings.PasswordAuthentication = true;
 
   services.printing = {
     enable = true;
@@ -47,22 +54,7 @@
 
   services.xserver = {
     dpi = 137;
-
     videoDrivers = [ "nvidia" ];
-
-    # nvidia driver doesn't support wayland.  sigh
-    # displayManager.gdm.wayland = false;
-
-    # ForceCompositionPipeline supposedly reduces screen tearing
-    # screenSection = ''
-    #   Option "metamodes" "nvidia-auto-select +0+0 {ForceCompositionPipeline=On}"
-    # '';
-    # This is supposed to help with DDC but it doesn't seem to work:
-    #deviceSection = ''
-    #  Option "RegistryDwords" "RMUseSwI2c=0x01; RMI2cSpeed=100"
-    #'';
-
-    # xkbOptions = "altwin:swap_alt_win";
   };
 
   systemd.mounts = [{
@@ -79,39 +71,23 @@
 
   system.stateVersion = "17.03";
 
-  hardware.pulseaudio.extraConfig = ''
-    unload-module module-suspend-on-idle
-  '';
-
-  # environment.variables = {
-  #   VDPAU_DRIVER = "nvidia";
-  #   LIBVA_DRIVER_NAME = "vdpau";
-  # };
-
   services.fwupd.enable = true;
 
   services.tailscale.enable = true;
 
   time.hardwareClockInLocalTime = true;  # accommodate windows bullshit
 
-  programs.alvr.enable = true;
-  programs.alvr.openFirewall = true;
-
   environment.systemPackages = with pkgs; [
+    # dolphinEmuMaster
     mixxx
-    sidequest
     qpwgraph
-    pulseaudio
+    r2modman
+    # sidequest
+    # satisfactorymodmanager # build broken 2025-09-07, should be fixed soon
+    blender
+    unityhub
+    bottles
   ];
-
-  hardware.pulseaudio.enable = lib.mkForce false;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-  };
 
   services.prometheus.exporters.node = {
     enable = true;
@@ -120,4 +96,7 @@
     disabledCollectors = ["arp"];
   };
 
+  hardware.spacenavd.enable = true;
+
+  programs.gamescope.enable = true;
 }

@@ -142,7 +142,8 @@
 
 (use-package! lsp-mode
   :config
-  (setq lsp-auto-execute-action nil))
+  (setq lsp-auto-execute-action nil)
+  (setq lsp-haskell-plugin-stan-global-on nil))
 
 (use-package! web-mode
   :mode "\\.ftl\\'")
