@@ -214,6 +214,8 @@
 
       init.defaultBranch = "main";
 
+      branch.autosetuprebase = "always";
+
       merge.dpkg-changelogs = {
         name = "debian/changelog merge driver";
         driver = "dpkg-mergechangelogs -m %O %A %B %A";
