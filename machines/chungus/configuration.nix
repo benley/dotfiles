@@ -115,7 +115,8 @@
   nix.settings.trusted-users = [ "bstaffin" "benley" ];
 
   environment.systemPackages = with pkgs; [
-    terraform-ls
+    tofu-ls
+    # terraform-ls
     virt-manager
     # inputs.memsql-provisioning.packages."${pkgs.system}".memsqlaws
     virtiofsd

@@ -173,6 +173,7 @@
   :config
   (flycheck-actionlint-setup))
 
+;; TODO: doom has a smooth-scroll module that wraps ultra-scroll now
 (use-package! ultra-scroll
   :init
   (setq scroll-conservatively 101
@@ -187,3 +188,7 @@
         :nvie "C-<prior>" #'+tabs:previous-or-goto
         :n "gt" #'+workspace:switch-next
         :n "gT" #'+workspace:switch-previous))
+
+(use-package! lsp-terraform
+  :config
+  (setq lsp-terraform-ls-server "tofu-ls"))
