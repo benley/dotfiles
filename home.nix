@@ -123,7 +123,18 @@
     '';
   };
 
-  programs.fzf.enable = true;
+  programs.fzf = {
+    enable = true;
+    defaultOptions = [
+      "--height=40%"
+      # "--color=light"
+      "--layout=reverse"
+      "--margin=0,2"
+      "--list-border=rounded"
+      "--info=inline-right"
+      "--highlight-line"
+    ];
+  };
 
   home.sessionPath = [
     "$HOME/.krew/bin"
