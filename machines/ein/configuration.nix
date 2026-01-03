@@ -15,10 +15,14 @@
   hardware.nvidia.modesetting.enable = true;
   hardware.nvidia.powerManagement.enable = true;
 
-  # systemd.services.systemd-suspend.environment = {
-  #   SYSTEMD_SLEEP_FREEZE_USER_SESSIONS = "false";
-  # };
-  # if systemd-homed ever shows up, add SYSTEMD_HOME_LOCK_FREEZE_SESSION=false to it
+  # Workaround stupid nvidia thing where the system goes back to sleep
+  # immediately after waking up
+  # https://www.reddit.com/r/archlinux/comments/1oj3tlp/fix_nvidia_sleep_race_immediate_sleep_after_wake/
+  systemd.services.systemd-suspend.environment.SYSTEMD_SLEEP_FREEZE_USER_SESSIONS = "false";
+  systemd.services.systemd-hibernate.environment.SYSTEMD_SLEEP_FREEZE_USER_SESSIONS = "false";
+  systemd.services.systemd-hybrid-sleep.environment.SYSTEMD_SLEEP_FREEZE_USER_SESSIONS = "false";
+  systemd.services.systemd-suspend-then-hibernate.environment.SYSTEMD_SLEEP_FREEZE_USER_SESSIONS = "false";
+  # if systemd-homed ever shows up, add SYSTEMD_HOME_LOCK_FREEZE_SESSION=false to it too
 
   boot.loader.grub = {
     device = "nodev";
