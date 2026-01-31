@@ -43,7 +43,6 @@ let my-fonts = inputs.my-fonts.packages."${pkgs.stdenv.hostPlatform.system}"; in
     source-serif-pro
     symbola
     terminus_font
-    tewi-font
     ttf_bitstream_vera
     ubuntu-classic
   ];

@@ -27,7 +27,6 @@
     # azure-cli
     # mu  # maildir thing to use with emacs mh maybe?
     awscli2
-    blackbox
     cabal-install
     cabal2nix
     cachix
@@ -50,7 +49,7 @@
     krew
     kubectl
     kubelogin-oidc
-    nixfmt-classic
+    nixfmt
     nix-top
     nodePackages.bash-language-server
     nodePackages.js-yaml
@@ -65,6 +64,7 @@
     stack
     stern
     tanka
+    typescript-language-server
     whois
     xournalpp
     yq
@@ -189,6 +189,8 @@
       source = ./cfg/.doom.d;
     };
   };
+
+  # programs.gallery-dl.enable = true;
 
   programs.git = {
     enable = true;

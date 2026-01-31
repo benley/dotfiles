@@ -55,6 +55,8 @@
 (package! copilot
   :recipe (:host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
 
+(package! darkman)
+
 (package! emacsql :built-in 'prefer)
 (package! emacsql-sqlite :built-in 'prefer)
 

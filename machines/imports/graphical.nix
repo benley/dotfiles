@@ -131,8 +131,6 @@
 
   hardware.bluetooth.enable = true;
 
-  programs.adb.enable = true;
-
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;

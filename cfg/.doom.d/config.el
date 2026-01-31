@@ -21,14 +21,15 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-(setq doom-font (font-spec :family "PragmataPro" :height 120))
-(setq doom-serif-font (font-spec :family "Go Mono" :size 12))
-(setq doom-variable-pitch-font (font-spec :family "IBM Plex Sans" :height 120))
+(setq doom-font (font-spec :family "PragmataPro" :size 12.0))
+(setq doom-serif-font (font-spec :family "Go Mono" :size 12.0))
+(setq doom-variable-pitch-font (font-spec :family "IBM Plex Sans" :size 12.0))
+;; NOTE :size <int> is pixels, :size <float> is points
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-palenight)
+;; (setq doom-theme 'doom-palenight)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -58,6 +59,12 @@
 (use-package! auth-source
   :config
   (setq auth-sources '(default "secrets:Login")))
+
+(use-package! darkman
+  :config
+  (setq darkman-themes '(:light leuven
+                         :dark doom-palenight))
+  (darkman-mode))
 
 (use-package! frame
   :config

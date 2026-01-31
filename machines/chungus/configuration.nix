@@ -18,6 +18,11 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.configurationLimit = 10;
 
+  boot.kernelParams = [
+    # https://www.reddit.com/r/debian/comments/1mq74oh/amdgpu_crashed_on_debian_13/ maybe this will help with the amdgpu crashes???
+    "amdgpu.dcdebugmask=0x10"
+  ];
+
   networking.hostName = "chungus";
   networking.domain = "ws.memcompute.com";
   networking.hostId = "007f0200";
@@ -46,10 +51,10 @@
   networking.networkmanager.enable = true;
 
   services.resolved.enable = true;
-  services.resolved.llmnr = "false";
-  services.resolved.extraConfig = ''
-    MulticastDNS=true
-  '';
+  services.resolved.settings = {
+    Resolve.LLMNR = false;
+    Resolve.MulticastDNS = true;
+  };
 
   services.avahi.nssmdns4 = false;
   services.avahi.publish.addresses = false;
