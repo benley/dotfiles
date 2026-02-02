@@ -26,17 +26,11 @@
 (setq doom-variable-pitch-font (font-spec :family "IBM Plex Sans" :size 12.0))
 ;; NOTE :size <int> is pixels, :size <float> is points
 
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
+;; Let darkman handle theme loading instead of doom
 ;; (setq doom-theme 'doom-palenight)
 
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Documents/org/")
 
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
@@ -64,6 +58,22 @@
   :config
   (setq darkman-themes '(:light leuven
                          :dark doom-palenight))
+
+  ;; When running in daemon mode, wait for the session to be fully initialized
+  ;; before darkman does anything, just in case load-theme tries to prompt
+  ;; interactively or something.
+  (when (daemonp)
+    (add-hook 'server-after-make-frame-hook #'darkman-mode)
+    (advice-add 'darkman-mode
+                :after
+                (lambda ()
+                  (remove-hook 'server-after-make-frame-hook
+                               #'darkman-mode))))
+
+  ;; Replace darkman's theme selection with consult-theme, which is what doom
+  ;; uses behind the scenes
+  (advice-add 'darkman--load-theme :override #'consult-theme)
+
   (darkman-mode))
 
 (use-package! frame
